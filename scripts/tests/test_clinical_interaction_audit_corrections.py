@@ -410,11 +410,63 @@ def test_anticoagulant_pairs_and_rules_agree_on_the_reviewed_severity_and_scope(
         if drug_class != 'anticoagulants':
             continue
         fires = {
-            name: pge.evaluate_profile_gate(sub['profile_gate'], profile, {}, base_severity=severity).fires
+            name: bool(_anticoagulant_hits(rule_id, profile))
             for name, profile in (('warfarin', warfarin), ('unknown', unknown_blood_thinner), ('doac', apixaban))
         }
         # Warfarin-specific evidence never reaches a DOAC user; an unknown blood thinner still gets it.
         assert fires == {'warfarin': True, 'unknown': True, 'doac': not warfarin_only}, rule_id
+
+
+WARFARIN_ONLY_RULES = tuple(rule for _, rule, cls, _, only in ANTICOAGULANT_ROWS if only and cls == 'anticoagulants')
+
+
+def _anticoagulant_hits(rule_id, drug_classes):
+    """The rule's blood-thinner sub-rules whose gate fires for a profile, by drug class id."""
+    import profile_gate_evaluator as pge
+
+    profile = {'drug_classes': sorted(drug_classes['drug_classes'])}
+    return [
+        sub['drug_class_id'] for sub in _rules()[rule_id]['drug_class_rules']
+        if sub['drug_class_id'] in ('anticoagulants', 'vitamin_k_antagonists')
+        and pge.evaluate_profile_gate(sub['profile_gate'], profile, {}, base_severity=sub['severity']).fires
+    ]
+
+
+def test_warfarin_only_findings_follow_an_identified_warfarin_and_fall_back_only_when_unidentified():
+    # Profiles as the app builds them: each entered medicine adds the classes it is a member of
+    # (drug_classes.json); "Blood thinners" is the only user-selectable blood-thinner class.
+    warfarin, apixaban = {'anticoagulants', 'vitamin_k_antagonists'}, {'anticoagulants', 'doacs'}
+    profiles = {
+        'warfarin': warfarin,
+        'warfarin and apixaban': warfarin | apixaban,  # a DOAC elsewhere must not veto the warfarin finding
+        'apixaban': apixaban,
+        'blood thinner not identified': {'anticoagulants'},
+    }
+    expected = {
+        'warfarin': ['vitamin_k_antagonists'],
+        'warfarin and apixaban': ['vitamin_k_antagonists'],
+        'apixaban': [],
+        'blood thinner not identified': ['anticoagulants'],
+    }
+    for rule_id in WARFARIN_ONLY_RULES:
+        hits = {name: _anticoagulant_hits(rule_id, {'drug_classes': p}) for name, p in profiles.items()}
+        assert hits == expected, rule_id
+        # The identified and fallback sub-rules carry one decision and one text.
+        vka, fallback = (_sub(rule_id, cls) for cls in ('vitamin_k_antagonists', 'anticoagulants'))
+        strip = lambda s: {k: v for k, v in s.items() if k not in ('drug_class_id', 'profile_gate')}  # noqa: E731
+        assert strip(vka) == strip(fallback), rule_id
+    assert set(WARFARIN_ONLY_RULES) == {
+        'RULE_INGREDIENT_ST_JOHNS_WORT', 'RULE_INGREDIENT_GLUCOSAMINE', 'RULE_INGREDIENT_CRANBERRY',
+        'RULE_IQM_COQ10_HEART_DISEASE_STATINS'}
+
+
+def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():
+    pair = _pairs()['DSI_WAR_COQ10']
+    assert '17723077' in pair['source_pmids'] and 'self-reported bleeding' in _pair_text(pair)
+    for cls in ('anticoagulants', 'vitamin_k_antagonists'):
+        sub = _sub('RULE_IQM_COQ10_HEART_DISEASE_STATINS', cls)
+        assert 'mild' not in _rule_text(sub), cls
+        assert 'self-reported bleeding' in sub['mechanism'] and 'does not establish' in sub['mechanism']
 
 
 def test_reviewed_anticoagulant_records_drop_unsupported_floors_and_instructions():

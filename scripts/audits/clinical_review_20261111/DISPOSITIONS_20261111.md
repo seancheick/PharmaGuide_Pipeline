@@ -101,14 +101,22 @@ concern for the same two agents.
 
 ### Batch 3a implemented: anticoagulant scope (`apply_batch3a_anticoagulant_scope.py`)
 
-"Warfarin only" is gated as `anticoagulants` minus `doacs`: warfarin users and people whose blood thinner is not
-identified keep the finding; a DOAC user does not. Each rule's evidence level equals the tier
-`verify_interactions.py` derives for its pair (one interaction, one tier).
+"Warfarin only" is two sub-rules with one text (`apply_batch3a_vka_scope.py`, after an independent review showed
+that `anticoagulants` minus `doacs` let a DOAC elsewhere in the list veto an identified warfarin):
+`vitamin_k_antagonists` fires for an identified warfarin-type medicine whatever else is entered; `anticoagulants`
+minus `doacs` and `vitamin_k_antagonists` is the fallback for a blood thinner that is not identified ("Blood
+thinners" is the only selectable blood-thinner class). A DOAC user gets neither. Each rule's evidence level equals
+the tier `verify_interactions.py` derives for its pair (one interaction, one tier).
+
+Limits of this scope (agent finding; see "Other vitamin K antagonists" under Questions): other VKAs (phenprocoumon, acenocoumarol)
+receive the warfarin-label findings through the class; identified parenteral direct thrombin inhibitors
+(argatroban, bivalirudin) have no subclass and fall into the fallback, as before 3a; a "Blood thinners" selection
+plus an entered DOAC reads as that DOAC.
 
 | Row | Implemented as |
 |---|---|
 | A2 SJW + warfarin | Pair Major; rule contraindicated → avoid, warfarin only; UK SmPC 4.5 and DailyMed warfarin label cited; "other vitamin-K antagonists" removed (not verified) |
-| A4 CoQ10 + warfarin | Pair Moderate → Minor (background lane, a pipeline label), label evidence with low confidence (tier probable: the label's "may" example and mixed trials); rule monitor, warfarin only |
+| A4 CoQ10 + warfarin | Pair Moderate → Minor (background lane, a pipeline label), label evidence with low confidence (tier probable: the label's "may" example and mixed trials); rule monitor, warfarin only. Headline "May reduce warfarin effect" ("mildly" removed: the label says "may decrease", not how much); the cohort PMID 17723077 (CoQ10 associated with self-reported bleeding, OR 3.69; observational, does not establish cause) is cited and stated |
 | A5 ginkgo + warfarin | Pair Major → Moderate; rule caution on presence (120 mg floor removed); "do not combine" removed |
 | A6 garlic + warfarin | Pair Moderate; rule monitor → caution on presence. Removed the 600 mg floor **and** a rule-level tier the packet did not show (> 1200 mg avoid, otherwise monitor), which replaced the sub-rule severity in the enricher; its source (NCCIH garlic) states no dose. Caution now ships at every amount |
 | A7 glucosamine + warfarin | Pair Minor → Moderate; rule caution, warfarin only; "2–4 weeks" removed; PMID 18363538 and the UK SmPC cited; PMID 23946031 kept (teaching case, INR 3.9 after a glucosamine–chondroitin supplement; full text read 2026-11-11) |
@@ -155,3 +163,6 @@ Agent dispositions in the same batch (not Dr. Pham's decisions, no review record
 2. **Vitamin E.** What counts as "ordinary nutrient exposure" for the less prominent note (form, amount, frequency)?
 3. **Glucosamine with warfarin.** The UK warfarin SmPC (section 4.5) says the combination is not recommended, which is
    closer to avoid than to the caution you chose. Keep caution, or align with the UK label? Batch 3a ships caution.
+4. **Other vitamin K antagonists.** The four warfarin-only findings (A2, A4, A7, A8) cite warfarin sources. They now
+   fire for the `vitamin_k_antagonists` class, which also holds phenprocoumon and acenocoumarol where a user enters
+   them. Keep the class scope (same mechanism, no source read for those medicines), or limit the findings to warfarin?
