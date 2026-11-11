@@ -2,9 +2,10 @@
 
 The interaction audit (2026-11-11) found 79 drug-class sub-rules whose
 `profile_gate.requires.drug_classes_any` names no medication class in
-drug_classes.json, so they never fire for an entered medicine. Stage 2 repairs
-the crosswalk; until then this test lets the count fall but never rise. Lower
-the ceiling as fixes land.
+drug_classes.json, so an entered medicine never triggers them (a class picked
+in the profile still does). Stage 2 added the missing medication classes,
+leaving 8; this test lets the count fall but never rise. Lower the ceiling as
+fixes land.
 """
 
 from __future__ import annotations
@@ -17,17 +18,13 @@ DATA = Path(__file__).resolve().parents[1] / "data"
 # The app's only class crosswalk today (PharmaGuide ai
 # lib/services/medications/medication_class_bridge.dart `_profileGateClassOverrides`).
 APP_PROFILE_GATE_OVERRIDES = {"class:antiplatelet_agents": "antiplatelets"}
-CEILING = 79
+CEILING = 8
 KNOWN_UNREACHABLE_CLASSES = {
-    "hypoglycemics_high_risk",
-    "hypoglycemics_lower_risk",
-    "hypoglycemics_unknown",
-    "thyroid_medications",
-    "cardiac_glycosides",
+    # Enzyme-substrate groups and antiarrhythmics: membership needs a
+    # per-drug source review (Stage 3), not an ATC lookup.
     "cyp3a4_substrates",
     "cyp2d6_substrates",
     "antiarrhythmics",
-    "anticholinergics",
 }
 
 

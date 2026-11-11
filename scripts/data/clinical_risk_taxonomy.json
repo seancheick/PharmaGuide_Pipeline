@@ -2,14 +2,20 @@
   "_metadata": {
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
-    "schema_version": "5.5.0",
+    "schema_version": "5.6.0",
     "contract_test": "scripts/tests/test_clinical_risk_taxonomy_contract.py",
-    "last_updated": "2026-11-03",
-    "total_entries": 85,
+    "last_updated": "2026-11-11",
+    "total_entries": 87,
     "flutter_top_level_key": "clinical_risk_taxonomy",
-    "drug_classes_count": 31,
+    "drug_classes_count": 33,
     "migration": {
       "completed_migrations": [
+        {
+          "from": "5.5.0",
+          "to": "5.6.0",
+          "date": "2026-11-11",
+          "summary": "Additive: drug classes valproate and clobazam, so the cannabidiol antiseizure-medicine warning can name the two medicines its label names. Gate vocabulary only; the profile picker (drug_class_vocab.json) is unchanged."
+        },
         {
           "from": "5.4.0",
           "to": "5.5.0",
@@ -560,6 +566,18 @@
       "label": "SSRIs",
       "category": "psychiatry",
       "display_priority": 10
+    },
+    {
+      "id": "valproate",
+      "label": "Valproate",
+      "category": "neurologic",
+      "display_priority": 23
+    },
+    {
+      "id": "clobazam",
+      "label": "Clobazam",
+      "category": "neurologic",
+      "display_priority": 24
     }
   ],
   "severity_levels": [

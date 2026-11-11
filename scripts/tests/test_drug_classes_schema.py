@@ -73,6 +73,17 @@ EXPECTED_CLASSES = {
     # Existing lithium-specific profile warnings need this identity group;
     # ATC's broader N05A placement does not make lithium an antipsychotic.
     "class:lithium",
+    # Interaction audit Stage 2 (2026-11-11): one class per rule class that
+    # entered medicines could not reach. Membership cases with exclusions:
+    # test_medication_class_membership_reachability.
+    "class:cardiac_glycosides",
+    "class:thyroid_medications",
+    "class:antidepressants_ssri_snri",
+    "class:anticholinergics",
+    "class:hypoglycemics_high_risk",
+    "class:hypoglycemics_lower_risk",
+    "class:hypoglycemics_unknown",
+    "class:clobazam",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.

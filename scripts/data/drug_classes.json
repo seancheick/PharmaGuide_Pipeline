@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-10-12",
-    "total_classes": 43,
-    "total_members": 860,
+    "last_updated": "2026-11-11",
+    "total_classes": 51,
+    "total_members": 955,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 43
+    "total_entries": 51
   },
   "classes": {
     "class:statins": {
@@ -2309,6 +2309,321 @@
       "rxclass_id": null,
       "atc_codes": [],
       "notes": "Human simvastatin/atorvastatin evidence plus lovastatin CYP3A4-based inference. Exact IN identities and metabolism labels checked 2026-10-12. https://pubmed.ncbi.nlm.nih.gov/15260917/ https://pubmed.ncbi.nlm.nih.gov/17701167/"
+    },
+    "class:cardiac_glycosides": {
+      "display_name": "Cardiac glycosides (digoxin, digitoxin)",
+      "description": "Digitalis glycosides, the medicines the cardiac_glycosides rule class describes.",
+      "member_rxcuis": [
+        "132871",
+        "199",
+        "3248",
+        "235219",
+        "3403",
+        "3407",
+        "27929",
+        "6686"
+      ],
+      "member_names": [
+        "acetyldigitoxin",
+        "acetyldigoxins",
+        "deslanoside",
+        "digitalis leaf extract",
+        "digitoxin",
+        "digoxin",
+        "lanatoside c",
+        "medigoxin"
+      ],
+      "rxclass_id": "C01AA",
+      "atc_codes": [
+        "C01AA"
+      ],
+      "notes": "Live RxClass ATC C01AA membership. Selects the existing cardiac_glycosides rule class (senna, cascara, aloe ferox, ginseng). All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:thyroid_medications": {
+      "display_name": "Thyroid hormone medicines",
+      "description": "Thyroid hormone replacement (levothyroxine, liothyronine, desiccated thyroid).",
+      "member_rxcuis": [
+        "10582",
+        "10814",
+        "10572",
+        "13982"
+      ],
+      "member_names": [
+        "levothyroxine",
+        "liothyronine",
+        "thyroid (usp)",
+        "tiratricol"
+      ],
+      "rxclass_id": "H03AA",
+      "atc_codes": [
+        "H03AA"
+      ],
+      "notes": "Thyroid hormones only. Every thyroid_medications sub-rule concerns levothyroxine absorption or thyroid-hormone action, so antithyroid drugs (methimazole, propylthiouracil; ATC H03B) are not members, although the profile vocabulary's examples list methimazole (open for PharmD review). RxClass returns only tiratricol for H03AA; the other three come from exact RxNorm lookups. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:antidepressants_ssri_snri": {
+      "display_name": "Antidepressants (SSRIs and SNRIs)",
+      "description": "Selective serotonin reuptake inhibitors and serotonin-norepinephrine reuptake inhibitors.",
+      "member_rxcuis": [
+        "2556",
+        "734064",
+        "72625",
+        "321988",
+        "4493",
+        "42355",
+        "1433212",
+        "588250",
+        "32937",
+        "36437",
+        "39786"
+      ],
+      "member_names": [
+        "citalopram",
+        "desvenlafaxine",
+        "duloxetine",
+        "escitalopram",
+        "fluoxetine",
+        "fluvoxamine",
+        "levomilnacipran",
+        "milnacipran",
+        "paroxetine",
+        "sertraline",
+        "venlafaxine"
+      ],
+      "rxclass_id": "N06AB",
+      "atc_codes": [
+        "N06AB",
+        "N06AX16",
+        "N06AX17",
+        "N06AX21",
+        "N06AX23",
+        "N06AX28"
+      ],
+      "notes": "class:ssris members (ATC N06AB) plus the SNRIs venlafaxine, milnacipran, duloxetine, desvenlafaxine and levomilnacipran, matching the rule class the profile vocabulary defines. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:anticholinergics": {
+      "display_name": "Anticholinergic (antimuscarinic) medicines",
+      "description": "Medicines whose main action is muscarinic blockade: bladder antimuscarinics, anticholinergic antiparkinson agents, scopolamine and antimuscarinic antispasmodics.",
+      "member_rxcuis": [
+        "1424",
+        "1589",
+        "19610",
+        "136198",
+        "3267",
+        "3361",
+        "3816",
+        "797195",
+        "1546438",
+        "153970",
+        "29682",
+        "32675",
+        "8718",
+        "4134",
+        "55175",
+        "9601",
+        "322167",
+        "37815",
+        "119565",
+        "10811",
+        "38876",
+        "236778"
+      ],
+      "member_names": [
+        "benztropine",
+        "biperiden",
+        "bornaprine",
+        "darifenacin",
+        "dexetimide",
+        "dicyclomine",
+        "emepronium",
+        "fesoterodine",
+        "glycopyrronium",
+        "hyoscyamine",
+        "methixene",
+        "oxybutynin",
+        "procyclidine",
+        "profenamine",
+        "propiverine",
+        "scopolamine",
+        "solifenacin",
+        "terodiline",
+        "tolterodine",
+        "trihexyphenidyl",
+        "tropatepine",
+        "trospium"
+      ],
+      "rxclass_id": "G04BD",
+      "atc_codes": [
+        "G04BD",
+        "N04AA",
+        "N04AC01",
+        "A04AD01",
+        "A03AB02",
+        "A03AA07",
+        "A03BA03"
+      ],
+      "notes": "Primary antimuscarinics only. Excluded: beta-3 agonists that share ATC G04BD (mirabegron, vibegron) and flavoxate (not a clear antimuscarinic). Medicines with secondary anticholinergic effects (diphenhydramine, tricyclics), which the profile vocabulary's examples include, are left for PharmD review. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:hypoglycemics_high_risk": {
+      "display_name": "Insulin, sulfonylureas and meglitinides",
+      "description": "Diabetes medicines the profile vocabulary places in the high hypoglycemia-risk tier.",
+      "member_rxcuis": [
+        "173",
+        "2068",
+        "2404",
+        "102846",
+        "4816",
+        "25789",
+        "4821",
+        "25793",
+        "4815",
+        "51428",
+        "1670007",
+        "139825",
+        "274783",
+        "400008",
+        "1605101",
+        "86009",
+        "253182",
+        "221109",
+        "274332",
+        "73044",
+        "10633",
+        "10635"
+      ],
+      "member_names": [
+        "acetohexamide",
+        "carbutamide",
+        "chlorpropamide",
+        "glibornuride",
+        "gliclazide",
+        "glimepiride",
+        "glipizide",
+        "gliquidone",
+        "glyburide",
+        "insulin aspart, human",
+        "insulin degludec",
+        "insulin detemir",
+        "insulin glargine",
+        "insulin glulisine, human",
+        "insulin isophane",
+        "insulin lispro",
+        "insulin, regular, human",
+        "insulin, regular, pork",
+        "nateglinide",
+        "repaglinide",
+        "tolazamide",
+        "tolbutamide"
+      ],
+      "rxclass_id": "A10A",
+      "atc_codes": [
+        "A10A",
+        "A10BB",
+        "A10BX02",
+        "A10BX03"
+      ],
+      "notes": "Tier per the signed drug_class_vocab (insulin, sulfonylureas, repaglinide, nateglinide): class:insulins members plus ATC A10BB, repaglinide and nateglinide. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:hypoglycemics_lower_risk": {
+      "display_name": "Metformin, GLP-1 agonists, SGLT2 and DPP-4 inhibitors",
+      "description": "Diabetes medicines the profile vocabulary places in the lower hypoglycemia-risk tier.",
+      "member_rxcuis": [
+        "1534763",
+        "1368001",
+        "2627044",
+        "1373458",
+        "1488564",
+        "1551291",
+        "1545653",
+        "1992672",
+        "60548",
+        "1100699",
+        "475968",
+        "1440051",
+        "6809",
+        "8129",
+        "857974",
+        "1991302",
+        "593411",
+        "2638675",
+        "596554"
+      ],
+      "member_names": [
+        "albiglutide",
+        "alogliptin",
+        "bexagliflozin",
+        "canagliflozin",
+        "dapagliflozin",
+        "dulaglutide",
+        "empagliflozin",
+        "ertugliflozin",
+        "exenatide",
+        "linagliptin",
+        "liraglutide",
+        "lixisenatide",
+        "metformin",
+        "phenformin",
+        "saxagliptin",
+        "semaglutide",
+        "sitagliptin",
+        "sotagliflozin",
+        "vildagliptin"
+      ],
+      "rxclass_id": "A10BA",
+      "atc_codes": [
+        "A10BA",
+        "A10BJ",
+        "A10BK",
+        "A10BH"
+      ],
+      "notes": "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:hypoglycemics_unknown": {
+      "display_name": "Other diabetes medicines",
+      "description": "Diabetes medicines the profile vocabulary names in neither tier; they take the conservative tier.",
+      "member_rxcuis": [
+        "16681",
+        "18880",
+        "30009",
+        "33738",
+        "139953",
+        "84108",
+        "2601723",
+        "72610"
+      ],
+      "member_names": [
+        "acarbose",
+        "benfluorex",
+        "miglitol",
+        "pioglitazone",
+        "pramlintide",
+        "rosiglitazone",
+        "tirzepatide",
+        "troglitazone"
+      ],
+      "rxclass_id": "A10BG",
+      "atc_codes": [
+        "A10BG",
+        "A10BF",
+        "A10BX05",
+        "A10BX06",
+        "A10BX16"
+      ],
+      "notes": "Unknown-tier sub-rules carry the high-risk severities, so this is the conservative placement. Guar gum (ATC A10BX01) is a dietary fiber and is excluded. The tier for tirzepatide and pramlintide is open for PharmD review. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:clobazam": {
+      "display_name": "Clobazam",
+      "description": "Clobazam, kept as its own class for the antiseizure-medicine warnings that name it.",
+      "member_rxcuis": [
+        "21241"
+      ],
+      "member_names": [
+        "clobazam"
+      ],
+      "rxclass_id": "N05BA09",
+      "atc_codes": [
+        "N05BA09"
+      ],
+      "notes": "Single-medicine class (precedent: class:lithium). The cannabidiol label names clobazam; adding it to class:anticonvulsants would also reach the enzyme-induction contraceptive pair. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     }
   }
 }
