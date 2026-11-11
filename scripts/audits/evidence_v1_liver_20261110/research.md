@@ -51,7 +51,7 @@ Reference-only records are exported only as `rejected_clinical_matches` (id and 
 notes or chips (product 18296: `evidence_data.rejected_clinical_matches[0]`). Replay of 58 unique frozen labels
 (sampled for milk thistle, NAC, ALA and resveratrol plus controls; the per-ingredient samples overlap
 because multi-ingredient labels carry more than one cohort ingredient, so they do not sum to 58;
-manifest `~/pg_quality/evidence-v1-liver-20261110/ids.json`), `snapshot --full --blob`,
+IDs in `replay_ids.json` beside this file), `snapshot --full --blob`,
 base 8c47db63a vs candidate: 0 records differ in cleaned, enriched, scored or blob hashes. This batch is a
 record-consistency correction with no current product-output change.
 
