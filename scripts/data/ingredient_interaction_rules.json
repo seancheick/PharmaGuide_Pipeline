@@ -5754,18 +5754,20 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
-          "action": "Monitor blood pressure and review supplement use with clinician.",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Glycyrrhizin in licorice can raise blood pressure and lower potassium, working against blood-pressure treatment. The EU herbal monograph for licorice root says it may counteract the action of antihypertensive medicines. A meta-analysis of glycyrrhizic-acid trials found higher blood pressure and lower plasma potassium; in healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks, and people with hypertension respond more strongly. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice while taking blood-pressure medicine unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
           "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
             "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/",
             "https://pubmed.ncbi.nlm.nih.gov/38246526/",
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
-          "alert_headline": "May affect blood-pressure control",
-          "alert_body": "Licorice can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding licorice.",
-          "informational_note": "Licorice can affect blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Can work against blood-pressure medicine",
+          "alert_body": "Licorice that contains glycyrrhizin can raise blood pressure and lower potassium, working against blood-pressure medicine. If you take blood-pressure medication, avoid it unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -5785,7 +5787,54 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "A14: avoid for glycyrrhizin-containing licorice; verified DGL excluded; unknown preparation is not assumed to be DGL. Wording and sources prepared by agent from the EMA monograph and cited studies."
+          }
+        },
+        {
+          "drug_class_id": "cardiac_glycosides",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Glycyrrhizin in licorice can lower blood potassium, and low potassium makes digoxin toxicity more likely. The EU herbal monograph for licorice root says it is not to be used together with cardiac glycosides, and the digoxin (LANOXIN) label lists hypokalemia among conditions that may predispose to digoxin toxicity. A meta-analysis of glycyrrhizic-acid trials found lower plasma potassium. The sources set no amount of glycyrrhizin below which this concern does not apply. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice with digoxin or another cardiac glycoside unless your prescriber advises it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/"
+          ],
+          "alert_headline": "Can raise digoxin toxicity risk",
+          "alert_body": "Licorice that contains glycyrrhizin can lower potassium, which makes digoxin toxicity more likely. If you take digoxin, avoid it unless your prescriber advises it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "informational_note": "Licorice with glycyrrhizin can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "cardiac_glycosides"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "F4: avoid for glycyrrhizin-containing licorice with cardiac glycosides; verified DGL excluded; no glycyrrhizin floor. Wording and sources prepared by agent from the EMA monograph and LANOXIN label."
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -5823,8 +5872,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team",
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; pharmaguide_clinical_team",
       "dose_thresholds": []
     },
     {
@@ -16432,18 +16481,20 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "caution",
+          "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
-          "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
+          "mechanism": "Glycyrrhizin in licorice can raise blood pressure and lower potassium, working against blood-pressure treatment. The EU herbal monograph for licorice root says it may counteract the action of antihypertensive medicines. A meta-analysis of glycyrrhizic-acid trials found higher blood pressure and lower plasma potassium; in healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks, and people with hypertension respond more strongly. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice while taking blood-pressure medicine unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/",
             "https://pubmed.ncbi.nlm.nih.gov/38246526/",
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
-          "alert_headline": "May reduce blood-pressure medication effect",
-          "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
-          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Can work against blood-pressure medicine",
+          "alert_body": "Licorice that contains glycyrrhizin can raise blood pressure and lower potassium, working against blood-pressure medicine. If you take blood-pressure medication, avoid it unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -16463,7 +16514,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "A14: avoid for glycyrrhizin-containing licorice; verified DGL excluded; unknown preparation is not assumed to be DGL. Wording and sources prepared by agent from the EMA monograph and cited studies."
+          }
         }
       ],
       "dose_thresholds": [
@@ -16539,8 +16596,8 @@
           "https://pubmed.ncbi.nlm.nih.gov/28158597/"
         ]
       },
-      "last_reviewed": "2026-04-09",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED",

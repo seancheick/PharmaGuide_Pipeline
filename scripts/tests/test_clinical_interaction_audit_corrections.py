@@ -1,4 +1,5 @@
 """Source-supported safety regressions from the October clinical audit."""
+import functools
 import json
 from pathlib import Path
 
@@ -263,8 +264,8 @@ def test_same_contraindication_is_exact_for_tranylcypromine_and_inferred_for_oth
     assert rule['clinical_review']['file'] == REVIEW_FILE and 'ask 1' in rule['clinical_review']['notes']
 
 
-def _verified(pair_id):
-    """The pair as verify_interactions.py emits it for the build (evidence tier and canonical ids recomputed)."""
+@functools.lru_cache(maxsize=1)
+def _verify_context():
     import sys
     sys.path.insert(0, str(DATA.parent / 'api_audit'))
     import verify_interactions as vi
@@ -276,8 +277,13 @@ def _verified(pair_id):
         load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
         banned_recalled=load('banned_recalled_ingredients.json'),
         harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
-    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
-    return vi.verify_entry(dict(_pairs()[pair_id]), ctx, vi.VerificationReport())
+    return vi, vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
+
+
+def _verified(pair_id, row=None):
+    """The pair as verify_interactions.py emits it for the build (evidence tier and canonical ids recomputed)."""
+    vi, ctx = _verify_context()
+    return vi.verify_entry(dict(row or _pairs()[pair_id]), ctx, vi.VerificationReport())
 
 
 def test_same_evidence_tier_after_verification_matches_what_each_record_supports():
@@ -503,3 +509,127 @@ def test_garlic_with_a_blood_thinner_is_caution_at_every_amount():
         return next(h['severity'] for h in alert['drug_class_hits'] if h['drug_class_id'] == 'anticoagulants')
 
     assert {q: severity(q) for q in (300.0, 1500.0, None)} == {300.0: 'caution', 1500.0: 'caution', None: 'caution'}
+
+
+# Batch 3b part 2 of Dr. Pham's 2026-11-11 review: licorice (A14, F4) and levodopa + iron (F2).
+EMA_LICORICE = (
+    'https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-'
+    'glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf'
+)
+LANOXIN = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc'
+SINEMET = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66'
+LICORICE_RULES = ('RULE_IQM_LICORICE_HYPERTENSION', 'RULE_BOTANICAL_LICORICE_ROOT')
+
+
+def _licorice_alerts(canonical_id, source_db):
+    """The enricher's licorice alerts for a one-row product: {rule_id: {drug_class_id: severity}}."""
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    row = {'name': canonical_id, 'raw_source_text': canonical_id, 'standard_name': canonical_id,
+           'canonical_id': canonical_id, 'canonical_source_db': source_db,
+           'raw_source_path': 'ingredientRows[0]', 'quantity': None, 'unit': None}
+    product = {'dsld_id': 'TEST_LICORICE', 'product_name': 't', 'ingredient_quality_data': {
+        'ingredients_scorable': [row], 'ingredients': [row], 'ingredients_skipped': []}}
+    alerts = SupplementEnricherV3()._collect_interaction_profile(product)['ingredient_alerts']
+    return {a['rule_id']: {h['drug_class_id']: h['severity'] for h in a['drug_class_hits']}
+            for a in alerts if a['rule_id'] in LICORICE_RULES}
+
+
+def test_licorice_with_blood_pressure_medicine_is_avoid_unless_verified_dgl():
+    import profile_gate_evaluator as pge
+
+    pair = _pairs()['DSI_ANTIHYP_LICORICE']
+    assert APP_SEVERITY[pair['severity']] == 'avoid'
+    iqm, botanical = (_sub(rule_id, 'antihypertensives') for rule_id in LICORICE_RULES)
+    # A licorice_root label meets both rules (its IQM twin), so both carry one decision and one text.
+    assert iqm == botanical
+    assert iqm['severity'] == 'avoid' and iqm['materiality'] == 'presence'
+    assert iqm['evidence_level'] == _verified('DSI_ANTIHYP_LICORICE')['evidence_level']
+    assert EMA_LICORICE in iqm['sources']
+    assert iqm['clinical_review']['file'] == REVIEW_FILE
+    text = _rule_text(iqm)
+    assert 'dgl' in text and 'does not say' in text, 'unknown preparation is not assumed to be DGL'
+    assert 'does not apply to dgl' not in text and 'is unaffected' not in text
+    assert 'discontinue' not in text and 'monitor blood pressure and review' not in text
+    import re
+    assert not re.search(r'\bsafe\b', text)
+    assert pge.evaluate_profile_gate(iqm['profile_gate'], {'drug_classes': ['antihypertensives']}, {},
+                                     base_severity='avoid').fires
+
+
+def test_licorice_with_cardiac_glycosides_is_avoid_from_the_ema_monograph():
+    import profile_gate_evaluator as pge
+
+    pair = _pairs()['DSI_CARDIACGLYC_LICORICE']
+    assert (pair['type'], pair['agent1_id'], pair['agent2_id'], pair['severity']) == (
+        'Med-Sup', 'class:cardiac_glycosides', 'C0086555', 'Major')
+    assert {EMA_LICORICE, LANOXIN} <= set(pair['source_urls'])
+    assert '28660884' in pair['source_pmids']
+    sub = _sub('RULE_IQM_LICORICE_HYPERTENSION', 'cardiac_glycosides')
+    assert sub['severity'] == 'avoid' and sub['materiality'] == 'presence'
+    assert sub.get('min_effective_dose') is None
+    assert {EMA_LICORICE, LANOXIN} <= set(sub['sources'])
+    assert sub['clinical_review']['file'] == REVIEW_FILE
+    assert sub['evidence_level'] == _verified('DSI_CARDIACGLYC_LICORICE')['evidence_level']
+    # No glycyrrhizin floor: no tier, amount or "small amounts" reassurance for this pair.
+    rule = _rules()['RULE_IQM_LICORICE_HYPERTENSION']
+    assert not [t for t in rule.get('dose_thresholds') or [] if t.get('target_id') == 'cardiac_glycosides']
+    for text in (_rule_text(sub), _pair_text(pair)):
+        assert ' mg' not in text and 'small amount' not in text
+        assert 'dgl' in text and 'does not say' in text
+    assert pge.evaluate_profile_gate(sub['profile_gate'], {'drug_classes': ['cardiac_glycosides']}, {},
+                                     base_severity='avoid').fires
+
+
+def test_glycyrrhizin_licorice_identities_reach_both_warnings_and_verified_dgl_does_not():
+    from identity.interaction import interaction_subject_ids
+
+    assert interaction_subject_ids('chinese_licorice') == ['chinese_licorice', 'licorice']
+    for canonical_id, source_db in (('licorice', 'ingredient_quality_map'),
+                                    ('licorice_root', 'botanical_ingredients'),
+                                    ('chinese_licorice', 'botanical_ingredients')):
+        hits = _licorice_alerts(canonical_id, source_db)['RULE_IQM_LICORICE_HYPERTENSION']
+        assert hits['antihypertensives'] == 'avoid' and hits['cardiac_glycosides'] == 'avoid', canonical_id
+    assert _licorice_alerts('dgl_deglycyrrhizinated_licorice', 'botanical_ingredients') == {}
+    # A bare species name is not a DGL claim: only labels that state the preparation route to DGL.
+    botanicals = json.loads((DATA / 'botanical_ingredients.json').read_text())['botanical_ingredients']
+    dgl = next(b for b in botanicals if b['id'] == 'dgl_deglycyrrhizinated_licorice')
+    assert 'glycyrrhiza glabra' not in {a.lower() for a in dgl['aliases']}
+
+
+def test_levodopa_iron_is_caution_from_the_carbidopa_levodopa_label():
+    import re
+
+    pair = _pairs()['DSI_LEVODOPA_IRON']
+    assert (pair['type'], pair['agent1_id'], pair['agent2_id'], pair['severity']) == (
+        'Med-Sup', '6375', 'C0302583', 'Moderate')
+    assert SINEMET in pair['source_urls']
+    text = _pair_text(pair)
+    assert 'chelate' in text
+    # The label gives no spacing interval, so the record states none.
+    assert not re.search(r'\b\d+\s*(hours?|hrs?|h)\b', text)
+    normalized = _verified('DSI_LEVODOPA_IRON')
+    assert normalized['agent2_canonical_id'] == 'iron'
+    assert normalized['evidence_level'] == 'established'
+
+
+def test_curated_supplement_canonical_ids_are_the_ones_verification_ships():
+    """verify_interactions.py derives a supplement side's canonical id from its CUI and ignores the
+    stored one, so a stored id that differs misstates which products the pair reaches."""
+    from identity.interaction import normalize_interaction_canonical_id as norm
+
+    def ids(row, stored):
+        out = []
+        for side in ('agent1', 'agent2'):
+            value = row.get(f'{side}_canonical_id')
+            if stored and value is None and str(row[f'{side}_id']).startswith('ref:'):
+                value = str(row[f'{side}_id']).removeprefix('ref:')  # the verifier's reference fallback
+            out.append(norm(value) or '')
+        return sorted(out)
+
+    drifted = {}
+    for pair_id, row in _pairs().items():
+        shipped = _verified(pair_id, row)
+        if shipped is not None and ids(row, True) != ids(shipped, False):
+            drifted[pair_id] = (ids(row, True), ids(shipped, False))
+    assert drifted == {}

@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-11",
     "total_entries": 560,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -4751,7 +4751,6 @@
         "deglycyrrhizinated licorice",
         "dgl licorice",
         "de-glycyrrhizinated licorice",
-        "Glycyrrhiza glabra",
         "deglycyrrhizinated licorice root extract",
         "licorice root extract, deglycyrrhizinated",
         "dgl licorice root",
