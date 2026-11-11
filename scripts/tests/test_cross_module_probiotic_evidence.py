@@ -186,7 +186,12 @@ class TestCrossModuleExactStrainDisposition:
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
         # A finished native review does not finish the principal protein research.
-        assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+        # The production scorer is owner-scoped: the open protein row keeps the
+        # product pending even though the rice-protein review itself finished.
+        from score_supplements_v4 import score_product_v4
+        scored_evidence = score_product_v4(p)["quality_pillars_v4"]["evidence"]
+        assert scored_evidence["evidence_result_state"] == "clinical_review_not_covered"
+        assert scored_evidence["display_state"] == "not_yet_reviewed"
         from evidence_resolver import resolve_product_evidence
         assert any(row.canonical_id in {"protein", "rice_protein"} and row.blocking_reasons
                    for row in resolve_product_evidence(p, owner_scoped=True).resolutions)
