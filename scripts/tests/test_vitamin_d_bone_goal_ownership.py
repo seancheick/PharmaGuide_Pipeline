@@ -70,20 +70,21 @@ def test_vitamin_d3_clinical_record_makes_no_bone_claim():
 
     assert BONE_GOAL not in entry["health_goals_supported"]
     assert not any("bone" in k.lower() for k in entry["key_endpoints"])
-    assert not any("bone" in o.lower()
-                   for o in entry["applicability"]["supported_outcomes"])
+    # Reference-only since 2026-11-11: the benefit-scope applicability block is gone.
+    assert "applicability" not in entry
     # The refuting citation stays attached — it is why the claim is gone.
-    assert "30293909" in entry["applicability"]["source_pmids"]
+    assert "30293909" in {ref["pmid"] for ref in entry["references_structured"]}
 
 
 def test_vitamin_d3_studied_population_is_population_metadata_only():
     """It describes who was studied. Interpretation and open questions
     belong in notes, not mixed into a population field."""
-    population = _record("INGR_VITAMIN_D3")["applicability"]["studied_population"]
-
-    assert population.startswith("Adults")
-    for leaked in ("OPEN:", "health_goals_supported", "pending", "NOT creditable"):
-        assert leaked not in population, f"{leaked!r} leaked into studied_population"
+    populations = [c["population"]["description"] for c in _record("INGR_VITAMIN_D3")["study_contexts"]
+                   if "population" in c]
+    assert populations
+    for population in populations:
+        for leaked in ("OPEN:", "health_goals_supported", "pending", "NOT creditable"):
+            assert leaked not in population, f"{leaked!r} leaked into studied_population"
 
 
 # ── 2. the nutrient-function owner still carries the relationship ─────────────

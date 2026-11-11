@@ -1829,10 +1829,12 @@ def test_carnitine_fumarate_exclusion_remains_finished_despite_noncredit_source(
     row, product = _excluded_preparation_product("L-Carnitine", "l_carnitine", "l-carnitine fumarate", pid=pid, ref=ref)
     source = {"id": "INGR_L_CARNITINE", "matched_canonical_ids": ["l_carnitine"], "matched_source_row_refs": [ref]}
     scope = ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)
-    assert scope == {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
+    # INGR_L_CARNITINE is reference-only since 2026-11-11: the fumarate row finishes at
+    # its no-credit reference conclusion rather than the legacy preparation exclusion.
+    assert scope == {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code in {"clinical_preparation_mismatch", "clinical_form_mismatch"}
+    assert result.reason_code == "reference_only_clinical_record"
     assert _resolved_evidence_assessment(result)[0] == "evaluated_limited_or_negative"
 
 
@@ -1993,7 +1995,7 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
             product, source, assess_amount=False, require_claim_alignment=False,
         )['reason_code']
     assert decisions == {
-        'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
+        'INGR_L_CARNITINE': 'reference_only_clinical_record',  # reference-only since 2026-11-11
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
         'BRAND_CARNIPURE': 'clinical_form_excluded',
     }
@@ -2049,6 +2051,8 @@ def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion(m
     import clinical_applicability as ca
     records = ca.reviewed_entries()
     record = copy.deepcopy(records["INGR_L_CARNITINE"])
+    # Reference-only since 2026-11-11; the mechanics vehicle keeps its earlier eligible shape.
+    record.update(evidence_level="ingredient-human", study_type="systematic_review_meta")
     record["study_contexts"][-1]["review_status"] = "source_verified_pending_clinical_review"
     monkeypatch.setattr(ca, "reviewed_entries", lambda: {**records, record["id"]: record})
     original = er._backed_studies_index()
@@ -2509,6 +2513,8 @@ def test_pending_source_preserves_only_previously_qualified_preparation_exclusio
     import clinical_applicability as ca
     from assessment_readiness import _resolved_evidence_assessment
     record = copy.deepcopy(next(s for s in er._load_backed_studies() if s["id"] == "INGR_L_CARNITINE"))
+    # Reference-only since 2026-11-11; the mechanics vehicle keeps its earlier eligible shape.
+    record.update(evidence_level="ingredient-human", study_type="systematic_review_meta")
     context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["32359762"])
     context["review_status"] = "source_verified_pending_clinical_review"
     if damage == "unscoped":
