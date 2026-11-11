@@ -2952,6 +2952,17 @@ def test_msm_same_chemistry_spellings_reach_reviewed_msm_evidence(label):
     assert score_evidence(control)['score'] > 0
 
 
+@pytest.mark.parametrize('label', [
+    'Dimethyl Sulfone with DMSO', 'Dimethyl Sulfone (Dimethyl Sulfoxide)', 'MSM and DMSO',
+])
+def test_msm_required_spelling_cannot_carry_an_excluded_dmso_row(label):
+    """A required MSM spelling on the same row as DMSO stays excluded, never credited."""
+    _, product = _joint_row_product('INGR_MSM', 'msm', label, 1500)
+    assert score_evidence(product)['score'] == 0
+    _, control = _joint_row_product('INGR_MSM', 'msm', label.split(' with ')[0].split(' (')[0].split(' and ')[0], 1500)
+    assert score_evidence(control)['score'] > 0
+
+
 def test_milk_thistle_record_text_matches_signed_a092(completion_source_records):
     """ADR-0007 liver batch: signed A092 rejected 'liver protection and enzyme normalization'
     and kept only a narrow NAFLD/NASH research reading with no credit. The record's own

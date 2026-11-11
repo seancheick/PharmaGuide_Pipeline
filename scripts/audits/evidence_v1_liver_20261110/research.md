@@ -48,8 +48,10 @@ sentence states exactly that.
 ## Output impact (measured)
 
 Reference-only records are exported only as `rejected_clinical_matches` (id and reason code), never with
-notes or chips (product 18296: `evidence_data.rejected_clinical_matches[0]`). Replay of 58 frozen labels
-(25 milk thistle, 20 NAC, 6 ALA, 6 resveratrol samples plus 6 earlier controls), `snapshot --full --blob`,
+notes or chips (product 18296: `evidence_data.rejected_clinical_matches[0]`). Replay of 58 unique frozen labels
+(sampled for milk thistle, NAC, ALA and resveratrol plus controls; the per-ingredient samples overlap
+because multi-ingredient labels carry more than one cohort ingredient, so they do not sum to 58;
+manifest `~/pg_quality/evidence-v1-liver-20261110/ids.json`), `snapshot --full --blob`,
 base 8c47db63a vs candidate: 0 records differ in cleaned, enriched, scored or blob hashes. This batch is a
 record-consistency correction with no current product-output change.
 
