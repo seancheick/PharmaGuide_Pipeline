@@ -54,3 +54,57 @@ basis?
 
 - `RULE_IQM_PSYLLIUM_DIABETES`: its only source never mentions psyllium.
 - Ginger + anticoagulants (both records); fish oil + NSAIDs; cranberry pair's dead MHRA source.
+
+## G. Stage 4: volume drivers, theoretical rules, held timing (review lists)
+
+Full tables: `stage4_review_list.md` (regenerate with `stage4_review_list.py`). Volumes come from the 4,000-product
+baseline sample and only rank rules for review; they are not a false-positive rate. No severity, scope or dose gate
+changes without a decision here. A dose gate is added only where a source sets the number, or as a product policy
+you approve and we label as policy.
+
+### G1. Decide first (largest effect on what a user sees)
+
+| Rule | Fires for | Question |
+|---|---|---|
+| `RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS` anticoagulants | 534 of 4,000 products (any vitamin E) | Text says "above 400 IU/day", but nothing gates on amount, so a 30 IU multivitamin gets the bleeding caution. The cited ODS sheet (read 2026-11-11): amounts needed for clinically significant effects "are unknown but probably exceed 400 IU/day". Gate at 400 IU/day on that basis (below it: monitor or informational), or keep presence-based? |
+| `RULE_IQM_DHA_BLEEDING`, `RULE_IQM_EPA_BLEEDING` anticoagulants/antiplatelets | 226 / 203 | caution, evidence theoretical, any amount. Monitor, or caution only above a sourced amount? |
+| `RULE_INGREDIENT_VITAMIN_D` anticoagulants | 187 | monitor, theoretical; text names 10,000 IU, not gated |
+| `RULE_IQM_MAGNESIUM_HYPERTENSION` kidney_disease, `RULE_IQM_POTASSIUM_HYPERTENSION` kidney_disease | 484 / 411 | avoid on any amount. The app does not know CKD stage. Avoid, or caution with "depends on kidney function; ask your nephrologist"? |
+| `RULE_IQM_CALCIUM`, `RULE_IQM_ZINC`, `RULE_IQM_MAGNESIUM_HYPERTENSION`, `RULE_IQM_CHROMIUM_GLUCOSE`, `RULE_IQM_IRON_HYPERTENSION` thyroid_medications | 684 / 597 / 484 / 370 / 265 | All caution. These are absorption interactions managed by spacing. Zinc's evidence is theoretical with one source. One message with the spacing as the management; severity per mineral? |
+| `RULE_IQM_VITAMIN_B6_LACTATION` lactation | 499 | caution, theoretical; text names 50 mg and 600 mg, not gated |
+| `RULE_IQM_NIACIN_DIABETES` | 513 | caution, established; text names 1 g, not gated: most products carry nutrient amounts of niacin |
+| `RULE_IQM_GREEN_TEA_HYPERTENSION`, `RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES` | 82 / 56 | caution, theoretical; text names amounts, not gated |
+
+### G2. Theoretical or limited evidence at caution or above (109 sub-rules)
+
+Listed individually in `stage4_review_list.md`. Decision per row: keep, lower, narrow scope, or source it. Rows
+already in section A keep their section A decision. Notable: `RULE_INGREDIENT_ST_JOHNS_WORT` maois contraindicated
+on theoretical evidence; `RULE_IQM_CITRUS_BERGAMOT_CHOLESTEROL` immunosuppressants contraindicated on limited
+evidence; four MAOI contraindications (phenylethylamine, hordenine, L-tyrosine, St. John's wort) rest on one or two
+sources each.
+
+### G3. The 13 held timing rules
+
+Each stays unpublished until a decision: approve, narrow, replace the unsupported precision, or reject. Batch 1 made
+sure no other record restates a held interval (gate `TestHeldIntervalsStayUnpublished`).
+
+| Rule | Held for |
+|---|---|
+| `timing_iron_calcium_separate`, `timing_iron_zinc_separate`, `timing_thyroid_med_magnesium_separate`, `timing_thyroid_med_soy_separate` | interval not in the cited source (magnesium: see C, D27) |
+| `timing_calcium_vitamin_d_together`, `timing_psyllium_water_med_spacing`, `timing_quercetin_vitamin_c_together`, `timing_l_theanine_caffeine_together` | awaiting clinician decision |
+| `timing_melatonin_before_bed`, `timing_bromelain_timing_by_purpose` | citation not content-verified |
+| `timing_probiotics_by_formulation`, `timing_calcium_carbonate_with_food` | canonical identity unresolved |
+| `timing_egcg_iron_separate` | form-specific evidence missing |
+
+### G4. App behaviour checked (code read, app SHA on `claude/interaction-matching`)
+
+- Stack tier (`StackIntelligence.deriveTier`): counts only contraindicated, avoid, caution and monitor; an
+  informational finding never lowers the tier. Any caution caps the stack at "Decent", so each G1 caution that
+  becomes monitor also lifts the tier for those users. No code change needed.
+- Kidney disease: the profile stores kidney disease as one condition with no stage, so every kidney rule fires as
+  if disease were present and significant. Options: word kidney rules as "depends on kidney function", or add a
+  stage to the profile (a new profile field: Sean's call).
+- Anonymous users (`build_final_db.py::_INTERACTION_DISPLAY_MODE`, sprint E1.1.2): with no profile, "avoid"
+  condition and drug-class rules show as a neutral note, while "contraindicated" ones are hidden. Intentional per
+  its comment (condition-specific copy should not reach users it does not apply to), but the same reasoning applies
+  to "avoid" copy such as pregnancy wording. Decide: suppress both without a profile, or show both as neutral notes.
