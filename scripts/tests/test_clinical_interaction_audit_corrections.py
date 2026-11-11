@@ -555,3 +555,28 @@ def test_garlic_with_a_blood_thinner_is_caution_at_every_amount():
         return next(h['severity'] for h in alert['drug_class_hits'] if h['drug_class_id'] == 'anticoagulants')
 
     assert {q: severity(q) for q in (300.0, 1500.0, None)} == {300.0: 'caution', 1500.0: 'caution', None: 'caution'}
+
+
+def test_enricher_user_alerts_honor_the_profile_gate():
+    """The enricher's user-alert path must apply each hit's profile_gate.
+    A DOAC user (anticoagulants + doacs) must not get the warfarin-only
+    fallback row; a warfarin user gets the VKA row (CodeRabbit on #448)."""
+    import sys
+    sys.path.insert(0, str(DATA.parent))
+    from enrich_supplements_v3 import SupplementEnricherV3
+    owner = SupplementEnricherV3.__new__(SupplementEnricherV3)
+    owner.unit_converter = None
+    owner.databases = {name: json.loads((DATA / (name + '.json')).read_text()) for name in ('clinical_risk_taxonomy', 'ingredient_quality_map', 'botanical_ingredients', 'other_ingredients')}
+    rule = _rules()['RULE_INGREDIENT_GLUCOSAMINE']
+    owner.databases['ingredient_interaction_rules'] = {'interaction_rules': [rule]}
+    canonical = rule['subject_ref']['canonical_id']
+    ingredient = {'name': canonical, 'canonical_id': canonical, 'canonical_source_db': rule['subject_ref']['db'], 'quantity': 100, 'unit': 'mg'}
+    product = {'ingredient_quality_data': {'ingredients': [ingredient]}, 'servingSizes': [{'minDailyServings': 1, 'maxDailyServings': 1}]}
+
+    def alerts(drug_classes):
+        profile = owner._collect_interaction_profile(product, user_profile={'drug_classes': drug_classes})
+        return [a['drug_class_id'] for a in profile['user_condition_alerts']['alerts'] if a['type'] == 'drug_class']
+
+    assert alerts(['anticoagulants', 'doacs']) == []
+    assert alerts(['anticoagulants', 'vitamin_k_antagonists']) == ['vitamin_k_antagonists']
+    assert alerts(['anticoagulants']) == ['anticoagulants']
