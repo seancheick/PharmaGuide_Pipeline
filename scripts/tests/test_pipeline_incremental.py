@@ -1722,3 +1722,14 @@ def test_unchanged_dataset_plan_skips_clinical_identity_derivation(tmp_path, mon
     mod.run_incremental(runner, raw, prefix)  # seed the verified generation
     planned = mod.run_incremental(runner, raw, prefix, plan_only=True)
     assert planned["stages"] == {"clean": [], "enrich": [], "score": []}
+
+
+def test_plan_reasons_follow_reference_path_order_not_set_hashing():
+    old = baseline()
+    paths = [f"scripts/data/ref_{letter}.json" for letter in "edcba"]
+    for path in paths:
+        old["references"][path] = {"kind": "global", "entries": {}, "fingerprint": "old"}
+    new = deepcopy(old)
+    for path in paths:
+        new["references"][path]["fingerprint"] = "new"
+    assert plan(old, new)["reasons"] == [f"broad reference changed: {path}" for path in sorted(paths)]

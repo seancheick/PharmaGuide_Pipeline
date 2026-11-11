@@ -377,7 +377,7 @@ def plan_changes(old, current, raw, dependency_rows, *, resolve_clinical=None):
                if key != REFERENCE_FINGERPRINT_KEY):
             selected[index].update(ids)
             reasons.append(f"{stage} code or runtime dependency changed")
-    for path in set(old["references"]) | set(current["references"]):
+    for path in sorted(set(old["references"]) | set(current["references"])):
         before = old["references"].get(path)
         after = current["references"].get(path)
         if before == after:
