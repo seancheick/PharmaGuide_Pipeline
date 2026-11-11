@@ -714,10 +714,14 @@ def test_same_maoi_rule_cites_serotonergic_sources_not_an_efficacy_meta_analysis
     maois = _sub_rule(rule, "drug_class_id", "maois")
 
     # 38423354 is a SAMe-for-depression efficacy meta-analysis.
-    assert maois["sources"] == [NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
-    assert (maois["severity"], maois["evidence_level"]) == ("avoid", "limited")
+    parnate = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    assert maois["sources"] == [parnate, NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
+    assert _pmid("38423354") not in maois["sources"]
+    # Dr. Pham 2026-11-11 (A3): the tranylcypromine label contraindicates SAMe; evidence certainty stays limited.
+    assert (maois["severity"], maois["evidence_level"]) == ("contraindicated", "limited")
     assert "clomipramine" in maois["mechanism"]
-    assert rule["last_reviewed"] == "2026-04-30"  # agent re-sourcing, not a clinical review
+    assert rule["last_reviewed"] == "2026-11-11"
+    assert maois["clinical_review"]["reviewer"] == "Dr. Pham"
 
 
 def test_chinese_skullcap_pregnancy_rule_reports_the_animal_data_it_cites():

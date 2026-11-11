@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-11",
-    "total_entries": 91,
+    "total_entries": 92,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -1883,26 +1883,28 @@
       "agent2_id": "C0036002",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "SAMe may interact with medicines that increase serotonin. Combining it with an MAOI raises a potential serotonin-syndrome concern; a quantified human combination risk is not established by the cited guidance.",
+      "mechanism": "SAMe raises serotonin activity. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because combining it with the MAOI can cause serotonin syndrome. No study of SAMe with an MAOI was found.",
       "management": "Do not combine SAMe with an MAOI. Do not stop or change a prescribed MAOI to use SAMe; the prescriber must manage any medication change or product-specific washout.",
       "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
         "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "PARNATE label read on DailyMed; other MAOI labels checked for SAMe. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
-      "evidence_notes": "NCCIH advises caution with serotonin-increasing medicines. This is a precaution, not a quantified human combination risk.",
+      "evidence_notes": "PARNATE (tranylcypromine) §4.1 and §7 list S-adenosyl-L-methionine (SAM-e) as contraindicated (serotonin syndrome). The labels for phenelzine (NARDIL), isocarboxazid (MARPLAN) and selegiline (EMSAM, ZELAPAR) do not name SAMe (read 2026-11-11); applying the contraindication to every MAOI is a documented class inference awaiting Dr. Pham's per-drug decision. NCCIH says SAMe might interact with serotonin-raising medicines.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",
@@ -3396,6 +3398,44 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_NITROGLYCERIN_NAC",
+      "type": "Med-Sup",
+      "agent1_name": "Nitroglycerin",
+      "agent1_id": "4917",
+      "agent2_name": "N-Acetyl Cysteine (NAC)",
+      "agent2_id": "C0001047",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "NAC (acetylcysteine) can add to the blood-vessel-widening effect of nitroglycerin. An acetylcysteine product label says using them together causes significant low blood pressure, which can be severe, and headache. In a trial of oral NAC with nitroglycerin patches, side effects (mainly intolerable headache) were almost twice as common as with nitroglycerin alone.",
+      "management": "If you use nitroglycerin, talk to your prescriber before taking NAC. If you use both, ask your prescriber how your blood pressure should be checked, and watch for dizziness, light-headedness, fainting or a severe headache; get medical help if they happen.",
+      "source_urls": [
+        "https://www.medicines.org.uk/emc/product/2488/smpc",
+        "https://pubmed.ncbi.nlm.nih.gov/9120179/"
+      ],
+      "source_pmids": [
+        "9120179"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "UK SmPC §4.5 read on EMC; PMID 9120179 abstract read; C0001047 (UMLS) and RxCUI 4917 checked live. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
+      "evidence_notes": "UK SmPC, Acetylcysteine 200 mg Powder for Oral Solution, §4.5 (read 2026-11-11): concurrent use causes significant hypotension and headache; monitor and warn for hypotension. US acetylcysteine labels (Acetadote, inhalation solution) do not mention nitroglycerin. PMID 9120179 (n=200, transdermal nitroglycerin with oral NAC) reports headache, not blood pressure. No source was read for other nitrates, so the pair names nitroglycerin only. No dose boundary is established.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "nac",
       "direction": "harmful",
       "materiality": "presence"
     }

@@ -83,7 +83,8 @@ M_FAMILY = [
     ("M5",  "ingredient_quality_map",        "yohimbe",           "maois", "contraindicated"),
     ("M6",  "ingredient_quality_map",        "ginseng",           "maois", "caution"),
     ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "maois", "contraindicated"),
-    ("M8",  "ingredient_quality_map",        "same",              "maois", "avoid"),
+    # Raised from avoid by Dr. Pham 2026-11-11: the PARNATE label lists SAMe as contraindicated.
+    ("M8",  "ingredient_quality_map",        "same",              "maois", "contraindicated"),
     ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "maois", "contraindicated"),
 ]
 
