@@ -471,21 +471,9 @@ def test_reviewed_anticoagulant_records_cite_the_sources_that_support_them():
 
 def test_anticoagulant_rule_evidence_matches_the_verified_pair_tier():
     # One interaction, one evidence tier: the rule states what verify_interactions.py derives for its pair.
-    import sys
-    sys.path.insert(0, str(DATA.parent / 'api_audit'))
-    import verify_interactions as vi
-
-    load = lambda name: json.loads((DATA / name).read_text())
-    index = vi.build_iqm_cui_index(
-        load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
-        banned_recalled=load('banned_recalled_ingredients.json'),
-        harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
-    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
-    pairs = _pairs()
     tiers = {}
     for pair_id, rule_id, drug_class, _, _ in ANTICOAGULANT_ROWS:
-        normalized = vi.verify_entry(dict(pairs[pair_id]), ctx, vi.VerificationReport())
-        tiers[pair_id] = normalized['evidence_level']
+        tiers[pair_id] = _verified(pair_id)['evidence_level']
         assert _sub(rule_id, drug_class)['evidence_level'] == tiers[pair_id], (pair_id, rule_id)
     # The warfarin label's CoQ10 line is an example ("may"), with mixed clinical data: not established.
     assert tiers['DSI_WAR_COQ10'] == 'probable'
