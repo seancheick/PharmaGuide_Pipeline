@@ -90,3 +90,17 @@ controls), base b47db48cc vs candidate c68f6ba63, `--full --blob`. Outputs in
   `quality_assessment_status` partial → complete; finishing rows expose their existing no-credit
   drivers (`product_specific_nct_absent`, `nutrition_authority_evidence_floor`).
 - The change finishes reviews at no credit; it grants and removes no points.
+
+## 6. Held sources stay held (PR 439 CI, 2026-11-11)
+
+The taken-over Codex batch added a resolver clause that treated every signed context marked
+`scoring_eligible: false` with a complete source review as a finished no-credit decision. In this
+corpus that marker is an explicit hold: the 2026-10-28 register (`clinical_review_holds.csv`)
+holds INGR_OMEGA3 ("closing it drops them to 0"), INGR_VITAMIN_D3, BRAND_ASTAREAL, BRAND_TESTOFEN,
+INGR_ELDERBERRY (13179d11b: "preserving clinical hold") and INGR_L_CARNITINE. The clause closed all
+six by a zero (ADR-0007 amendment 3 forbids it); the A9 hold tests caught it in CI.
+
+Fix: the clause is reverted to main's rule (only reference-only records finish this way). Effects:
+elderberry, fish oil and L-carnitine (bare and printed base) stay open; taurine, grape seed and rice
+protein are unchanged. Finishing a signed-ineligible context needs an explicit per-record
+marker, which would be a new semantic field (Sean's decision); not built.

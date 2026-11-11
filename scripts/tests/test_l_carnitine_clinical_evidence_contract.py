@@ -414,7 +414,9 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
 
 @pytest.mark.parametrize('name, expected', [
     ('L-Carnitine', 'not_yet_evaluated'),
-    ('L-Carnitine (Free Base)', 'evaluated_limited_or_negative'),
+    # The base's signed contexts are scoring_eligible False holds (2026-10-28 register:
+    # declared meta-analyses lack full text), so a printed base stays open too.
+    ('L-Carnitine (Free Base)', 'not_yet_evaluated'),
 ])
 def test_finished_base_review_does_not_borrow_tartrate_credit(name, expected):
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
@@ -426,8 +428,8 @@ def test_finished_base_review_does_not_borrow_tartrate_credit(name, expected):
     result = score_evidence(product, apply_primary_floor=True)
     assert result["score"] == 0
     assert result["metadata"]["recovered_matches"] == []
-    # A printed base can finish its own noncredit review. A bare label retains
-    # the independent preparation hold; an enriched form is not label proof.
+    # Neither label borrows tartrate credit, and neither is closed by a zero while
+    # the base's source hold stands; an enriched form is not label proof.
     resolution = resolve_evidence_for_row(
         product["ingredient_quality_data"]["ingredients_scorable"][0], product,
     )

@@ -206,8 +206,11 @@ def test_fiber_review_stays_out_of_the_data():
 
 
 @pytest.mark.parametrize("cid, name, reason", [
-    # Bare L-carnitine keeps its preparation hold after the 2026-11-10 four-group batch.
-    ("l_carnitine", "L-Carnitine", "clinical_source_row_unresolved"),
+    # Signed contexts marked scoring_eligible False are holds (2026-10-28 register), not
+    # finished zeros: L-carnitine's missing full texts, and elderberry, whose 13179d11b
+    # source review explicitly preserved the clinical hold.
+    ("l_carnitine", "L-Carnitine", "clinical_sources_ineligible"),
+    ("elderberry", "Elderberry", "clinical_sources_ineligible"),
     ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
 ])
 def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
@@ -222,9 +225,8 @@ def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
 
 @pytest.mark.parametrize("cid, name, reason, state, points", [
     # Finished by the 2026-11-10 four-group batch (independently checked source reviews):
-    # elderberry and grape seed finish without credit; taurine qualifies its adult
-    # blood-pressure context only.
-    ("elderberry", "Elderberry", "reference_only_clinical_record", "evaluated_limited_or_negative", False),
+    # grape seed finishes without credit; taurine qualifies its adult blood-pressure
+    # context only.
     ("grape_seed_extract", "Grape Seed Extract", "reference_only_clinical_record",
      "evaluated_limited_or_negative", False),
     ("taurine", "Taurine", "reviewed_human_clinical_evidence_matched", "evaluated_supported", True),
