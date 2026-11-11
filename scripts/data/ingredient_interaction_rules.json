@@ -20459,7 +20459,7 @@
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98e451e1-e4d7-4439-a675-c5457ba20975"
           ],
           "alert_headline": "Works against anticholinergic medications",
-          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it — these effects cancel. If you take an anticholinergic medication, talk to your prescriber before use.",
+          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it, so the two can work against each other. If you take an anticholinergic medication, talk to your prescriber before use.",
           "informational_note": "Huperzine A boosts acetylcholine — relevant to people on anticholinergic medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -20510,8 +20510,8 @@
           "drug_class_id": "anticholinergics",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect, potentially reducing the therapeutic efficacy of anticholinergics (e.g., overactive bladder treatment with oxybutynin) or creating unpredictable CNS effects.",
-          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. The therapeutic effect of anticholinergics may be reduced. Monitor for loss of efficacy.",
+          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect. For medicines taken for their anticholinergic action (e.g., oxybutynin for overactive bladder), that could reduce their therapeutic effect; for medicines whose anticholinergic effect is a side effect (e.g., diphenhydramine, tricyclic antidepressants), the practical effect of the combination is not established.",
+          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. If the medicine is taken for its anticholinergic action (for example, oxybutynin for overactive bladder), watch for it working less well.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36950691/"
           ],
