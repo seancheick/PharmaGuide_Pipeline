@@ -278,9 +278,12 @@
       "management": "Tell your anticoagulation team before you start, stop or substantially change CoQ10, so they can decide whether your INR needs extra checks.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
-        "https://www.nccih.nih.gov/health/coenzyme-q10"
+        "https://www.nccih.nih.gov/health/coenzyme-q10",
+        "https://pubmed.ncbi.nlm.nih.gov/17723077/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "17723077"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-11-11",
@@ -301,7 +304,7 @@
       "materiality": "presence",
       "display_layer": "background",
       "background_rationale": "Warfarin-label example of a botanical that may reduce warfarin's effect, with mixed clinical data; an INR monitoring signal rather than an avoid instruction (Dr. Pham, 2026-11-11).",
-      "evidence_notes": "Warfarin label section 7: some botanicals may decrease warfarin's effect (co-enzyme Q10, St. John's wort, ginseng); perform more frequent INR monitoring when starting or stopping botanicals. Scope is warfarin only; the label does not cover other anticoagulants."
+      "evidence_notes": "Warfarin label section 7: some botanicals may decrease warfarin's effect (co-enzyme Q10, St. John's wort, ginseng); perform more frequent INR monitoring when starting or stopping botanicals. Scope is warfarin only; the label does not cover other anticoagulants. PMID 17723077: In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause."
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",

@@ -34,7 +34,7 @@ FIXTURE = (
 # test/services/warnings/profile_gate_fixture_sync_test.dart.
 # To change the fixture: edit it, recompute `shasum -a 256`, update this pin
 # AND the app pin, and re-copy the file into the app repo.
-PINNED_SHA256 = "2224be625854bcca5eb0aa0bdb9a8f704d35d2b31ca5e66ac35d7c8f631413f5"
+PINNED_SHA256 = "a7fbac8c0e766837a19acb685d9edbd239f781ff6105ef18da4ed0570c71698d"
 
 
 def test_canonical_fixture_matches_pinned_hash():
