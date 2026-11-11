@@ -36,8 +36,16 @@ PROFILES = [
 ]
 
 
-def _sha(path: Path) -> str:
-    return subprocess.check_output(["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
+def _checksum(manifest: dict) -> str:
+    """Raw hex from either manifest form (`checksum_sha256` or `sha256:`-prefixed `checksum`)."""
+    return (manifest.get("checksum_sha256") or manifest["checksum"]).removeprefix("sha256:")
+
+
+def _base_sha(path: Path) -> str:
+    """The main commit this checkout builds on, so a branch commit never moves the pin."""
+    return subprocess.check_output(
+        ["git", "-C", str(path), "merge-base", "HEAD", "origin/main"], text=True
+    ).strip()
 
 
 def _shown(warning: dict) -> bool:
@@ -71,30 +79,35 @@ def main() -> None:
     worst = {p: collections.Counter() for p in PROFILES}
     drivers = {p: collections.Counter() for p in PROFILES}
     for path in sample:
-        best: dict[str, tuple[int, str, str]] = {}
+        # Per profile: the worst severity shown and every subject tied at it.
+        best: dict[str, tuple[int, str, set[str]]] = {}
         for w in json.loads(path.read_text()).get("warnings") or []:
             if not _shown(w):
                 continue
             ids = set(w.get("drug_class_ids") or []) | set(w.get("condition_ids") or [])
             subject = w.get("ingredient_canonical_id") or w.get("title") or "?"
+            rank = RANK[w["severity"]]
             for p in PROFILES:
-                rank = RANK[w["severity"]]
-                if p in ids and (p not in best or rank > best[p][0]):
-                    best[p] = (rank, w["severity"], subject)
-        for p, (_, severity, subject) in best.items():
+                if p not in ids:
+                    continue
+                if p not in best or rank > best[p][0]:
+                    best[p] = (rank, w["severity"], {subject})
+                elif rank == best[p][0]:
+                    best[p][2].add(subject)
+        for p, (_, severity, subjects) in best.items():
             worst[p][severity] += 1
-            drivers[p][subject] += 1
+            drivers[p].update(subjects)
 
     n = len(sample)
     baseline = {
         "pins": {
-            "pipeline_sha": _sha(REPO),
-            "app_sha": _sha(args.app),
+            "pipeline_base_sha": _base_sha(REPO),
+            "app_base_sha": _base_sha(args.app),
             "interaction_db_version": interaction["interaction_db_version"],
-            "interaction_db_checksum": interaction["checksum_sha256"],
+            "interaction_db_checksum": _checksum(interaction),
             "profile_warning_rules_count": interaction["profile_warning_rules_count"],
             "blob_build": export["db_version"],
-            "blob_build_checksum": export["checksum_sha256"],
+            "blob_build_checksum": _checksum(export),
             "blob_count": len(files),
         },
         "sample": {"size": n, "seed": SEED, "selection": "random.sample over sorted detail_blobs paths"},
