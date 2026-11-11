@@ -74,7 +74,6 @@ def main():
         "effect_direction_rationale": MILK_THISTLE_RATIONALE,
         "key_endpoints": [],
         "health_goals_supported": [],
-        "primary_outcome": "",
         "endpoint_relevance_tags": [],
         "published_studies": ["38579127", "17943794"],
         "total_enrollment": None,
@@ -82,6 +81,8 @@ def main():
         "last_updated": TODAY,
     })
     assert not any(r.get("type") == "nccih" for r in mt["references_structured"])
+    # No primary_outcome: A092 leaves no benefit category (the vocab contract allows an absent key).
+    mt.pop("primary_outcome")
     mt["references_structured"].append(NCCIH_REF)
 
     nac = rows["INGR_NAC"]

@@ -2961,7 +2961,7 @@ def test_milk_thistle_record_text_matches_signed_a092(completion_source_records)
     assert 'Clinical studies support liver protection' not in r['notes']
     assert 'A092' in r['notes'] and 'does not establish a qualifying benefit' in r['notes']
     assert r['key_endpoints'] == [] and r['health_goals_supported'] == []
-    assert r['primary_outcome'] == '' and r['endpoint_relevance_tags'] == []
+    assert 'primary_outcome' not in r and r['endpoint_relevance_tags'] == []
     assert r['effect_direction'] == 'mixed'
     assert all(t in r['effect_direction_rationale'] for t in ('38579127', '17943794', 'A092'))
     assert 'Kalopitas' not in r['notable_studies'] and 'Li et al.' in r['notable_studies']
