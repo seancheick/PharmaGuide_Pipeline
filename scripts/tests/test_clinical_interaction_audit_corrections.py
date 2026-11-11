@@ -119,6 +119,20 @@ def test_consumer_copy_preserves_the_actual_transplant_hazard():
         assert 'immune-modulating' not in row['alert_body']
         assert 'drug' in row['alert_body'].lower()
 
+def test_cbd_immunosuppressant_text_names_the_everolimus_label_finding():
+    """EPIDIOLEX 7.2 measures everolimus (about 2.5-fold) and names sirolimus and tacrolimus; it does not say
+    CBD affects immune function. Everolimus (RxCUI 141704) reaches the sub-rule through its class."""
+    row = next(x for x in _rules()['RULE_BANNED_CBD_INTERACTIONS']['drug_class_rules']
+               if x['drug_class_id'] == 'immunosuppressants')
+    for drug in ('everolimus', 'sirolimus', 'tacrolimus'):
+        assert drug in row['mechanism'] and drug in row['action'] and drug in row['informational_note'], drug
+    assert '2.5-fold' in row['mechanism']
+    assert 'immune function' not in row['informational_note']
+    assert row['severity'] == 'caution'
+    assert any('8bf27097-4870-43fb-94f0-f3d0871d1eec' in url for url in row['sources'])
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+    assert '141704' in classes['class:immunosuppressants']['member_rxcuis']
+
 def test_potassium_bp_warning_is_about_potassium_retention():
     row = _rules()['RULE_IQM_POTASSIUM_HYPERTENSION']['drug_class_rules'][0]
     assert 'potassium' in row['alert_body'].lower()
