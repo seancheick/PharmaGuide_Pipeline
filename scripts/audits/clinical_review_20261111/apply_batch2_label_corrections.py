@@ -20,6 +20,7 @@ import data_batch  # noqa: E402
 CURATED = REPO / "scripts/data/curated_interactions/curated_interactions_v1.json"
 MED_MED = REPO / "scripts/data/curated_interactions/med_med_pairs_v1.json"
 RULES = REPO / "scripts/data/ingredient_interaction_rules.json"
+IQM = REPO / "scripts/data/ingredient_quality_map.json"
 
 REVIEW_FILE = "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
 REVIEW_NOTE = f"Severity decided by Dr. Pham (clinical review 2026-11-11, {REVIEW_FILE}); label passages read by agent."
@@ -206,8 +207,9 @@ NAC_PAIR = {
         "common as with nitroglycerin alone."
     ),
     "management": (
-        "If you use nitroglycerin, talk to your prescriber before taking NAC. If you use both, watch for dizziness, "
-        "light-headedness, fainting or a severe headache, and get medical help if they happen."
+        "If you use nitroglycerin, talk to your prescriber before taking NAC. If you use both, ask your prescriber how "
+        "your blood pressure should be checked, and watch for dizziness, light-headedness, fainting or a severe "
+        "headache; get medical help if they happen."
     ),
     "source_urls": [UK_ACETYLCYSTEINE, "https://pubmed.ncbi.nlm.nih.gov/9120179/"],
     "source_pmids": ["9120179"],
@@ -254,7 +256,23 @@ def rules(blob: dict) -> None:
     same_rule(next(r for r in blob["interaction_rules"] if r["id"] == "RULE_IQM_SAME"))
 
 
+def iqm(blob: dict) -> None:
+    # verify_interactions.py maps a supplement CUI to its canonical id through this map, so the NAC pair keeps
+    # canonical "nac" only if NAC's entry carries the CUI. C3181855 (a peptide) was rightly removed in October;
+    # the exact concept was never restored.
+    nac = blob["nac"]
+    assert nac["cui"] is None and nac["rxcui"] == "197" and nac["external_ids"]["unii"] == "WYQ7N0BPYC"
+    nac["cui"] = "C0001047"
+    nac["cui_status"] = "verified"
+    nac["cui_note"] = (
+        "C0001047 = acetylcysteine (UMLS-verified 2026-11-11): atoms include RXNORM 197 (this entry's RxCUI), "
+        "MSH D000111 N-Acetyl-L-cysteine and NCI C200 N-Acetyl Cysteine; UNII WYQ7N0BPYC is Acetylcysteine in GSRS. "
+        "C3181855 (N-acetyl cysteine proline cysteine amide) was a different peptide."
+    )
+
+
 if __name__ == "__main__":
     edit(CURATED, curated)
     edit(MED_MED, med_med)
     edit(RULES, rules)
+    edit(IQM, iqm)

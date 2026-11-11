@@ -288,6 +288,8 @@ def test_nac_nitroglycerin_warns_about_hypotension_from_the_acetylcysteine_label
     text = _pair_text(row)
     assert 'low blood pressure' in text and 'headache' in text
     assert 'isosorbide' not in text, 'no source was read for other nitrates'
+    # The SmPC: if both are required, patients should be monitored for hypotension.
+    assert 'blood pressure should be checked' in row['management']
 
 
 def test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning():
@@ -317,3 +319,22 @@ def test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning():
                     overlaps.append((row['id'], hit['id']))
                     assert rank[hit['severity']] >= rank[row['severity']], (row['id'], hit['id'])
     assert ('DDI_STATIN_GEMFIBROZIL', 'DDI_SIMVASTATIN_GEMFIBROZIL') in overlaps
+
+
+def test_nac_nitroglycerin_keeps_its_nac_canonical_id_through_verification():
+    # verify_interactions.py replaces an authored supplement canonical id with the
+    # ingredient-map lookup by CUI, so NAC's map entry must carry C0001047.
+    import sys
+    sys.path.insert(0, str(DATA.parent / 'api_audit'))
+    import verify_interactions as vi
+
+    load = lambda name: json.loads((DATA / name).read_text())
+    index = vi.build_iqm_cui_index(
+        load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
+        banned_recalled=load('banned_recalled_ingredients.json'),
+        harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
+    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
+    report = vi.VerificationReport()
+    normalized = vi.verify_entry(dict(_pairs()['DSI_NITROGLYCERIN_NAC']), ctx, report)
+    assert normalized is not None
+    assert normalized['agent2_canonical_id'] == 'nac'

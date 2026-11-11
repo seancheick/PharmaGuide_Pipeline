@@ -39,6 +39,8 @@ def test_iqm_exact_cui_corrections_are_pinned():
         "monolaurin": "C4534743",
         "undecylenic_acid": "C0041660",
         "silica": "C0037098",
+        # 2026-11-11: acetylcysteine; its RXNORM atom is 197, this entry's RxCUI.
+        "nac": "C0001047",
     }
 
     for entry_id, cui in expected.items():
@@ -232,7 +234,7 @@ def test_all_iqm_null_cui_entries_have_status_and_note():
 def test_withheld_mismatched_concepts_keep_explicit_unresolved_match_status():
     iqm = load_iqm()
     reviewed = {
-        'gallocatechin', 'verbascoside', 'nac', 'lactobacillus_rhamnosus',
+        'gallocatechin', 'verbascoside', 'lactobacillus_rhamnosus',
         'lactobacillus_casei', 'dha', 'chia_protein', 'beta_carotene',
         'palmitoylethanolamide', 'anise', 'l_pyroglutamic_acid', 'paeoniflorin',
         'phenylethylamine', 'lactobacillus_reuteri',
