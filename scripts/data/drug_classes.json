@@ -19,9 +19,8 @@
       "update_frequency": "annual_or_on_demand"
     },
     "seed_runbook": {
-      "summary": "Regenerate via: python3 scripts/api_audit/seed_drug_classes.py --live",
-      "dry_run_command": "python3 scripts/api_audit/seed_drug_classes.py --dry-run",
-      "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
+      "summary": "Curated by hand from verified sources (receipts under scripts/audits/). The original RxClass seeder was deleted on 2026-11-11 because rerunning it would drop curated classes.",
+      "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
     "total_entries": 51

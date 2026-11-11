@@ -125,7 +125,7 @@ RXCUI_PATTERN = re.compile(r"^\d+$")
 @pytest.fixture(scope="module")
 def data() -> dict:
     assert DRUG_CLASSES_PATH.exists(), (
-        f"{DRUG_CLASSES_PATH} missing — run scripts/api_audit/seed_drug_classes.py --live"
+        f"{DRUG_CLASSES_PATH} missing — restore it from git; memberships are curated by hand"
     )
     with DRUG_CLASSES_PATH.open() as f:
         return json.load(f)
@@ -278,7 +278,7 @@ def test_canonical_anchors_present(classes, class_id, expected):
     for drug in expected:
         assert drug in names, (
             f"{class_id} is missing canonical anchor {drug!r}; "
-            f"RxClass ATC may have changed — re-run seed_drug_classes.py --live"
+            f"check the class against RxNorm with scripts/api_audit/verify_drug_class_rxcuis.py"
         )
 
 
