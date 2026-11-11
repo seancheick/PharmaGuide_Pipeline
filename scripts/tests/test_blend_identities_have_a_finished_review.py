@@ -366,3 +366,28 @@ def test_blend_identity_cannot_complete_held_source(enriched, pid, canonical):
     assert not owner.points_eligible
     evidence = build_scored_artifact(enriched[pid])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
+
+
+def test_golden_milk_compatibility_projection_retains_original_child_source(enriched):
+    """A legacy index stays the projection's provenance (main's blend contract), but its
+    lineage must resolve to the undosed child's retained source row for Evidence."""
+    from scoring_input_contract import get_evidence_subject_rows, _resolve_source_tree_path
+    from dose_assessment import positive_clinical_benchmark
+
+    product = enriched['243271']
+    original = next(row for row in product['activeIngredients']
+                    if row.get('canonical_id') == 'ashwagandha')
+    assert original['raw_source_path'] == 'ingredientRows[4].nestedRows[4]'
+    assert original['quantity'] == 0
+    assert original['unit'] == 'NP'
+    rows = [row for row in get_evidence_subject_rows(product)
+            if row.get('canonical_id') == 'ashwagandha']
+    projections = [row for row in rows if row.get('scoring_input_kind') == 'product_level_evidence']
+    assert projections
+    for row in projections:
+        lineage = {_resolve_source_tree_path(product, path) for path in row['linked_rows']}
+        assert original['raw_source_path'] in lineage
+        assert positive_clinical_benchmark(product, row) is None
+    # The production Evidence seam must admit that retained child row through the anchor.
+    from clinical_applicability import _evidence_subject_refs
+    assert original['raw_source_path'] in _evidence_subject_refs(product, include_anchor_lineage=True)

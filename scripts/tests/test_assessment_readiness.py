@@ -1690,6 +1690,22 @@ def test_missing_source_review_or_label_proof_is_not_a_completed_negative_review
     assert result['ingredient_assessments'][0]['reason_code'] == reason
 
 
+def test_unspecified_literature_preparation_stays_unreviewed():
+    """PR433 review: the V1 preparation-uncertainty completion belongs to backed
+    ingredient-general reviews only. An unspecified prebiotic reaches the literature
+    record, whose label-form requirement (inulin/FOS) is unmet, and stays open."""
+    from assessment_readiness import evaluate_evidence_assessment
+    from evidence_resolver import resolve_evidence_for_row
+    row = _row('Prebiotic Blend', 'prebiotics', quantity=2000)
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text='Prebiotic Blend')
+    product = _product(row)
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.reason_code == 'clinical_source_label_unresolved'
+    assert resolution.blocking_reasons
+    assessment = evaluate_evidence_assessment(product, module='generic')['ingredient_assessments'][0]
+    assert assessment['state'] == 'not_yet_evaluated'
+
+
 def test_glycine_retained_label_proof_uses_completed_source_review():
     from assessment_readiness import evaluate_evidence_assessment
     row = _row('L-Glycine', 'l_glycine', quantity=3000)

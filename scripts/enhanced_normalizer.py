@@ -8817,6 +8817,8 @@ class EnhancedDSLDNormalizer:
             score_exclusion_reason = "inactive"
             dose_class = "none"
         raw_taxonomy = {
+            # Literal DSLD source notes, separate from later curated IQM prose.
+            "source_notes": ing.get("notes") if isinstance(ing.get("notes"), str) else None,
             "category": ing.get("category"),
             "ingredientGroup": ing.get("ingredientGroup"),
             "ingredientId": ing.get("ingredientId"),

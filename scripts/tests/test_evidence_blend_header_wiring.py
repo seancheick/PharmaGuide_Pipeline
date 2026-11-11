@@ -52,7 +52,7 @@ def test_parent_total_alone_yields_no_assessable_actives():
     assert result["metadata"]["evidence_result_state"] == "no_assessable_actives"
 
 
-def test_proprietary_blend_with_children_ignores_header_and_assesses_children():
+def test_proprietary_blend_with_children_ignores_header_and_assesses_children(monkeypatch):
     """A 'Proprietary Blend 1000 mg' containing ashwagandha + rhodiola must ignore
     the parent row and assess the children.
 
@@ -86,6 +86,9 @@ def test_proprietary_blend_with_children_ignores_header_and_assesses_children():
         "unit": None,
         "mapped": True,
     }
+    # No synthetic source is declared: live botanical reviews must not decide
+    # this structural header/child coverage test.
+    monkeypatch.setattr("evidence_resolver._backed_studies_index", lambda: {})
     product = _product(ingredients=[blend_header, ashwagandha, rhodiola], matches=[])
     result = score_evidence(product)
     assert result["score"] == 0.0
@@ -128,6 +131,8 @@ def test_proprietary_blend_with_child_evidence_earns_credit(monkeypatch, qualifi
     from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
     source, = _use_approved_mechanics_sources(monkeypatch, match)
     source["study_contexts"][0]["scoring_eligible"] = qualified
+    monkeypatch.setattr("evidence_resolver._backed_studies_index",
+                        lambda: {"ashwagandha": [source]})
     product = _product(ingredients=[blend_header, ashwagandha], matches=[source])
     result = score_evidence(product)
     assert (result["score"] > 0) is qualified
@@ -163,7 +168,7 @@ def test_blend_headers_excluded_from_competing_active_rows():
     assert "Vitamin C" in competing_names
 
 
-def test_proprietary_blend_ashwagandha_rhodiola_canary():
+def test_proprietary_blend_ashwagandha_rhodiola_canary(monkeypatch):
     """Canary: Proprietary Blend 1000 mg with Ashwagandha and Rhodiola (no child doses).
 
     Pins:
@@ -205,6 +210,9 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
         "unit": None,
         "mapped": True,
     }
+
+    # Live preparation reviews are outside this structural no-source canary.
+    monkeypatch.setattr("evidence_resolver._backed_studies_index", lambda: {})
 
     # 1. Check assessable active identities: parent is excluded, children are retained
     product_bare = _product(ingredients=[blend_header, ashwagandha, rhodiola], matches=[])

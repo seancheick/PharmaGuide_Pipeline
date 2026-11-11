@@ -7444,3 +7444,20 @@ def test_schema3_keeps_pipeline_targeted_copy_when_registry_copy_differs():
     [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == rule_id]
     assert warning["alert_body"] == "Pipeline target-specific context"
     assert not any(ref["rule_id"] == rule_id for ref in blob["warning_rule_refs"])
+
+
+def test_detail_blob_keeps_informational_research_without_clinical_credit():
+    enriched = make_enriched()
+    research = [{'ingredient': 'Recognized ingredient',
+                 'summary': 'Limited human research on particular preparations.',
+                 'applicability_note': 'Product applicability is unestablished.',
+                 'studied_uses': [{'outcome': 'Stress', 'summary': 'Short-term studies.'}],
+                 'references_structured': [{'pmid': '23439798', 'title': 'Source'}]}]
+    enriched['evidence_data'] = {'clinical_matches': [], 'match_count': 0,
+                                 'ingredient_research': research}
+    scored = make_scored()
+    before = build_core_row(enriched, scored, '2026-11-10T00:00:00Z')
+    blob = build_detail_blob(enriched, scored)
+    assert blob['evidence_data']['ingredient_research'] == research
+    assert blob['evidence_data']['clinical_matches'] == []
+    assert build_core_row(enriched, scored, '2026-11-10T00:00:00Z') == before

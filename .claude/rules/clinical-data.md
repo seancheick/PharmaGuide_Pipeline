@@ -14,6 +14,11 @@ Curated data is medical-grade: one corrupt entry discredits the whole product.
   scientific applicability. New policy/threshold/severity decisions and named clinical holds
   remain with their owner. Do not turn legacy review-status wording into a blanket signature gate.
 
+- **Evidence reviews follow ADR-0007's one-pass standard:** identity, normally NIH ODS/NCCIH,
+  then Cochrane or the latest systematic review, then EFSA or a guideline (a starting point, not
+  a ceiling); every identifier content-verified; conclusion, studied uses, limits and sources
+  recorded; independent second check. Full Methods, registry reconciliation and meta-analysis
+  reconstruction are not required for a no-credit conclusion.
 - **Use the `data-fix` skill** for curated-data work: batch related entries by topic, check each
   entry's identity and sources on its own and record a result per entry, apply the batch with one
   script through `scripts/data_batch.py` (load, explicit per-entry patch, save), prove it with

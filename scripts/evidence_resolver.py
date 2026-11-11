@@ -1281,6 +1281,12 @@ def _resolve_evidence_for_row(
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
+        # Recognition and source attribution survive unresolved applicability and
+        # reference-only records; this inventory grants no credit. A record under
+        # an explicit hold (scoring_eligible False) never re-enters it.
+        inventory = [s for s in deduped_studies if s.get("scoring_eligible") is not False]
+        if inventory:
+            owner_facts["backed_clinical_studies"] = _clinical_owner_facts(inventory)
         from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
         # The shared scope owner checks known preparation exclusions before
         # a source hold. A finished material mismatch grants no credit and
@@ -1329,7 +1335,7 @@ def _resolve_evidence_for_row(
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
-            or ((is_reference_only(study)
+            or (((is_reference_only(study) and decision.get("status") == "not_applicable")
                  or (not clinical_record_sources_eligible(study)
                      and decision.get("reason_code") == "clinical_sources_ineligible"))
                 and assess_clinical_source_review(study)["is_complete"])
@@ -1435,6 +1441,29 @@ def _resolve_evidence_for_row(
                     points_eligible=False, applicability_status="applicability_unestablished",
                     reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["label_purpose_evidence_mismatch"],
+                )
+            if (not has_applicable
+                    and set(unresolved_reasons) == {"clinical_source_label_unresolved"}
+                    and all(isinstance(study.get("applicability"), Mapping)
+                            and study["applicability"].get("preparation_uncertainty_reviewed") is True
+                            and assess_clinical_source_review(study)["is_complete"]
+                            and any(context.get("scoring_eligible") is True
+                                    for context in study.get("study_contexts") or [])
+                            and all(context.get("identity_scope") == "ingredient_general"
+                                    for context in study.get("study_contexts") or []
+                                    if context.get("scoring_eligible") is True)
+                            for study in deduped_studies)):
+                owner_facts["backed_clinical_studies"]["preparation_uncertainty_reviewed"] = True
+                # V1: a bounded ingredient-general review can finish while the label's
+                # preparation correspondence remains unknown. This is no
+                # efficacy credit and no claim the product was studied. Missing
+                # identity, source rows or unfinished siblings still hold below.
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="clinical_source_label_unresolved", owner_facts=owner_facts,
                 )
             if not has_applicable and unresolved_reasons:
                 return EvidenceResolution(
@@ -2109,6 +2138,19 @@ def resolve_product_evidence(
                 for row in get_evidence_subject_rows(prod_dict)
                 if str(row.get("canonical_id") or "").strip().lower() in owners
             ]
+
+    # Reconciled physical totals remain available to module/Dose owners, but
+    # cannot create another individual literature obligation beside their
+    # fully disclosed source components. Reuse the lineage/mass owner; opaque
+    # or unlinked projections and every real source row remain assessable.
+    if any(row.get("scoring_input_kind") == "product_level_evidence"
+           for row in assessable_rows):
+        from scoring_input_contract import profile_owner_candidate_rows
+        independent = profile_owner_candidate_rows(assessable_rows, product=prod_dict)
+        independent_ids = {id(row) for row in independent}
+        assessable_rows = [row for row in assessable_rows
+                           if row.get("scoring_input_kind") != "product_level_evidence"
+                           or id(row) in independent_ids]
 
     if not assessable_rows:
         return ProductEvidenceResolution(

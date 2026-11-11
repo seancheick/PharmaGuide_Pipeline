@@ -146,7 +146,7 @@
       "field_kind": "raw_provenance",
       "source_data_files": ["raw DSLD product JSON DSLD ingredient taxonomy fields"],
       "consumers": ["scripts/enrich_supplements_v3.py", "scripts/ingredient_category_normalizer.py", "scripts/supplement_taxonomy.py"],
-      "forbidden_recomputation": ["DSLD category, ingredientGroup, ingredientId, forms, parent blend, nesting, and quantity variants must be carried forward from cleaner provenance"],
+      "forbidden_recomputation": ["DSLD category, ingredientGroup, ingredientId, forms, parent blend, nesting, quantity variants and literal source_notes must be carried forward from cleaner provenance; source_notes is original DSLD row prose, never enriched IQM notes"],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py cleaner",
       "tests": ["scripts/tests/test_cleaner_first_contract_canary.py"],
@@ -658,7 +658,7 @@
         "Enrichment produces descriptive research-exposure correspondence in rda_ul_data; scoring and pillar facts project the same assessment without recalculating it",
         "studied_regimens describe source-reviewed exposures and must not supply positive adequacy or safety points",
         "verify_literature_records.verify_reference_citations produces content-bound reference_citations proof; dose_assessment.verified_reference_citations validates it for general Dose only. Empty clinical-study lists, source verification, or a neutral Dose reference never establish Evidence approval; invalidated dependencies remain held across retries",
-        "row_exposure owns daily serving and unit conversion; clinical_applicability owns the reviewed preparation, population and outcome decision; evidence_record_matches_declared_purpose reuses that decision with a purpose requirement for Dose. Evidence uses the same owner without a marketing-claim gate. Unknown member amount, frequency or preparation cannot borrow a blend total or a generic trial range"
+        "row_exposure owns daily serving and unit conversion; clinical_applicability owns the reviewed preparation, population and outcome decision; evidence_record_matches_declared_purpose reuses that decision with a purpose requirement for Dose. Evidence uses the same owner without a marketing-claim gate. Unknown member amount, frequency or preparation cannot borrow a blend total or a generic trial range. Evidence V1 required_form_groups adds conjunctive preparation proof on one retained source row; existing required_form_terms remains OR. Canonical backed_clinical_studies.consumer_research owns informational ingredient findings, studied uses, limitations and citations; enrichment emits evidence_data.ingredient_research even when preparation applicability is unestablished. Export and Flutter render that attribution without computing eligibility, points, Dose or safety"
       ],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
