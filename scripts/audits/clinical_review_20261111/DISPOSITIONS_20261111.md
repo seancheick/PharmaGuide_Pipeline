@@ -109,9 +109,11 @@ thinners" is the only selectable blood-thinner class). A DOAC user gets neither.
 the tier `verify_interactions.py` derives for its pair (one interaction, one tier).
 
 Limits of this scope (agent finding; see "Other vitamin K antagonists" under Questions): other VKAs (phenprocoumon, acenocoumarol)
-receive the warfarin-label findings through the class; identified parenteral direct thrombin inhibitors
-(argatroban, bivalirudin) have no subclass and fall into the fallback, as before 3a; a "Blood thinners" selection
-plus an entered DOAC reads as that DOAC.
+receive the warfarin-label findings through the class; five identified medicines in `anticoagulants` sit in neither
+`doacs` nor `vitamin_k_antagonists` (the injected direct thrombin inhibitors argatroban, bivalirudin, desirudin and
+lepirudin, and the oral factor Xa inhibitor betrixaban), so they fall into the fallback, as before 3a, and see the
+warfarin-addressed text ("If you take warfarin, ..."); a "Blood thinners" selection plus an entered DOAC reads as that
+DOAC. Narrowing the fallback needs a class membership or a new class, and so Dr. Pham's sign-off (question 7).
 
 | Row | Implemented as |
 |---|---|
@@ -212,3 +214,6 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
 7. **Other vitamin K antagonists.** The four warfarin-only findings (A2, A4, A7, A8) cite warfarin sources. They now
    fire for the `vitamin_k_antagonists` class, which also holds phenprocoumon and acenocoumarol where a user enters
    them. Keep the class scope (same mechanism, no source read for those medicines), or limit the findings to warfarin?
+   Also: argatroban, bivalirudin, desirudin, lepirudin and betrixaban are identified but reach the unidentified
+   blood-thinner fallback and its warfarin-addressed text. Should betrixaban join `doacs`, and should the four
+   injected direct thrombin inhibitors get a class of their own that the fallback excludes?
