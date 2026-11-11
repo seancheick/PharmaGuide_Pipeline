@@ -1667,3 +1667,69 @@ def test_current_snapshot_refuses_reference_changes_during_capture(tmp_path, mon
     monkeypatch.setattr(mod, 'reference_snapshot', snapshot)
     with pytest.raises(mod.StageManifestError, match='Reference data changed'):
         mod.current_snapshot(tmp_path)
+
+
+def test_reference_identifiers_match_a_naive_walk_and_visit_every_dict_once():
+    from pipeline_incremental import reference_identifiers
+    product = {"id": "P", "rows": [{"canonical_id": "a", "forms": [{"form_id": "b", "ids": ["c", 1]}]},
+                                   {"nested": {"record_ids": ["d", "e"], "other": "x"}}],
+               "evidence_data": {"context_id": "f", "list": [[{"source_id": "g"}]]}}
+    visited = []
+    assert reference_identifiers(product, visit=visited.append) == {"P", "a", "b", "c", "d", "e", "f", "g"}
+    assert len(visited) == 7 and len({id(value) for value in visited}) == 7
+    assert reference_identifiers(product, keys={"id", "context_id"}) == {"P", "f"}
+
+
+def test_planning_derives_clinical_identity_only_for_a_clinical_entry_change(tmp_path, monkeypatch):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch)
+    old = baseline()
+    old["references"] = mod.reference_snapshot(tmp_path)
+    raw = {key: {"id": key} for key in ("1", "2", "3")}
+    old["raw"] = {key: digest(value) for key, value in raw.items()}
+    deps = {"1": {"identifiers": ["CONTEXT_A"], "unresolved": True},
+            "2": {"identifiers": ["unrelated"], "unresolved": True},
+            "3": {"identifiers": [], "unresolved": False}}
+    resolved = []
+
+    def resolve(key):
+        resolved.append(key)
+        return key == "3"
+
+    assert plan_changes(old, deepcopy(old), raw, deepcopy(deps), resolve_clinical=resolve)["stages"] == {
+        "clean": [], "enrich": [], "score": []}
+    assert resolved == []
+    payload["clinically_relevant_strains"][0]["study_contexts"].append(
+        {"context_id": "NEW_CONTEXT", "review_status": "approved"})
+    path.write_text(json.dumps(payload))
+    new = deepcopy(old)
+    new["references"] = mod.reference_snapshot(tmp_path)
+    lazy = plan_changes(old, new, raw, deepcopy(deps), resolve_clinical=resolve)
+    eager = plan_changes(old, new, raw, {key: {**row, "clinical_unresolved": key == "3"}
+                                         for key, row in deps.items()})
+    assert lazy == eager and lazy["stages"]["enrich"] == ["1", "3"]
+    assert sorted(resolved) == ["1", "2", "3"]
+
+
+def test_unchanged_dataset_plan_skips_clinical_identity_derivation(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+
+    def forbidden(product):
+        raise AssertionError("clinical identity derived for an unchanged dataset")
+
+    monkeypatch.setattr(mod, "clinical_unresolved", forbidden)
+    assert mod.dependencies({"id": "1"}, clinical=False) == {
+        "identifiers": ["1"], "names": [], "unresolved": False, "clock_refresh_required": False}
+    mod.run_incremental(runner, raw, prefix)  # seed the verified generation
+    planned = mod.run_incremental(runner, raw, prefix, plan_only=True)
+    assert planned["stages"] == {"clean": [], "enrich": [], "score": []}
+
+
+def test_plan_reasons_follow_reference_path_order_not_set_hashing():
+    old = baseline()
+    paths = [f"scripts/data/ref_{letter}.json" for letter in "edcba"]
+    for path in paths:
+        old["references"][path] = {"kind": "global", "entries": {}, "fingerprint": "old"}
+    new = deepcopy(old)
+    for path in paths:
+        new["references"][path]["fingerprint"] = "new"
+    assert plan(old, new)["reasons"] == [f"broad reference changed: {path}" for path in sorted(paths)]

@@ -140,19 +140,30 @@ def write_clean_holds(root, holds, fingerprints):
 def reference_identifiers(value, *, keys=None, visit=None):
     """IDs in emitted or curated records, including rejected/list/context refs."""
     result = set()
-    if isinstance(value, dict):
-        if visit is not None:
-            visit(value)
-        for key, item in value.items():
-            if (keys is None or key in keys) and (key in {"id", "ids"} or key.endswith("_id") or key.endswith("_ids")):
+    # One accumulator and an explicit stack: merging a child set into every
+    # ancestor made this walk quadratic in nesting depth on large products.
+    # Key names repeat across thousands of rows, so classify each name once.
+    id_keys = {}
+    stack = [value]
+    while stack:
+        value = stack.pop()
+        if isinstance(value, dict):
+            if visit is not None:
+                visit(value)
+            for key, item in value.items():
+                is_id = id_keys.get(key)
+                if is_id is None:
+                    is_id = id_keys[key] = ((keys is None or key in keys) and (
+                        key in {"id", "ids"} or key.endswith("_id") or key.endswith("_ids")))
                 if isinstance(item, str):
-                    result.add(item)
-                elif isinstance(item, list):
-                    result.update(part for part in item if isinstance(part, str))
-            result.update(reference_identifiers(item, keys=keys, visit=visit))
-    elif isinstance(value, list):
-        for item in value:
-            result.update(reference_identifiers(item, keys=keys, visit=visit))
+                    if is_id:
+                        result.add(item)
+                elif isinstance(item, (dict, list)):
+                    if is_id and isinstance(item, list):
+                        result.update(part for part in item if isinstance(part, str))
+                    stack.append(item)
+        elif isinstance(value, list):
+            stack.extend(item for item in value if isinstance(item, (dict, list)))
     return result
 
 
@@ -272,8 +283,27 @@ def lookup_vocabulary(value):
     return value
 
 
-def dependencies(product):
-    """Use all emitted identities and reference IDs, including excluded source rows."""
+def clinical_unresolved(product):
+    """True when an Evidence or score-eligible active row lacks a resolved identity."""
+    from scoring_input_contract import (get_evidence_subject_rows, get_source_score_eligible_active_rows,
+                                        scoring_input_scope)
+    quality = product.get("ingredient_quality_data")
+    if (not isinstance(quality, dict) or not isinstance(quality.get("ingredients_scorable"), list)
+            or not isinstance(product.get("evidence_data"), dict)):
+        return True
+    with scoring_input_scope(product):
+        return any(
+            not row.get("canonical_id") or row.get("identity_disposition") in {"ambiguous", "identity_conflict"}
+            for row in [*get_evidence_subject_rows(product),
+                        *get_source_score_eligible_active_rows(product)])
+
+
+def dependencies(product, *, clinical=True):
+    """Use all emitted identities and reference IDs, including excluded source rows.
+
+    ``clinical=False`` omits ``clinical_unresolved``; the planner derives it on
+    demand only when a clinical assessment record actually changed.
+    """
     from dose_assessment import _identity_text
     names = set()
     unresolved = False
@@ -309,23 +339,14 @@ def dependencies(product):
     from scoring_reference_resolver import nutrition_reference_dependencies
     for identifier in tuple(identifiers):
         identifiers.update(nutrition_reference_dependencies(identifier))
-    from scoring_input_contract import (get_evidence_subject_rows, get_source_score_eligible_active_rows,
-                                        scoring_input_scope)
-    quality = product.get("ingredient_quality_data")
-    clinical_unresolved = (not isinstance(quality, dict)
-                           or not isinstance(quality.get("ingredients_scorable"), list)
-                           or not isinstance(product.get("evidence_data"), dict))
-    if not clinical_unresolved:
-        with scoring_input_scope(product):
-            clinical_unresolved = any(
-                not row.get("canonical_id") or row.get("identity_disposition") in {"ambiguous", "identity_conflict"}
-                for row in [*get_evidence_subject_rows(product),
-                            *get_source_score_eligible_active_rows(product)])
-    return {"identifiers": sorted(identifiers), "names": sorted(names), "unresolved": unresolved,
-            "clinical_unresolved": clinical_unresolved, "clock_refresh_required": clock_refresh_required}
+    result = {"identifiers": sorted(identifiers), "names": sorted(names), "unresolved": unresolved,
+              "clock_refresh_required": clock_refresh_required}
+    if clinical:
+        result["clinical_unresolved"] = clinical_unresolved(product)
+    return result
 
 
-def plan_changes(old, current, raw, dependency_rows):
+def plan_changes(old, current, raw, dependency_rows, *, resolve_clinical=None):
     ids = set(raw)
     previous = set(old["raw"])
     selected = [set(), set(), set()]
@@ -356,7 +377,7 @@ def plan_changes(old, current, raw, dependency_rows):
                if key != REFERENCE_FINGERPRINT_KEY):
             selected[index].update(ids)
             reasons.append(f"{stage} code or runtime dependency changed")
-    for path in set(old["references"]) | set(current["references"]):
+    for path in sorted(set(old["references"]) | set(current["references"])):
         before = old["references"].get(path)
         after = current["references"].get(path)
         if before == after:
@@ -376,6 +397,10 @@ def plan_changes(old, current, raw, dependency_rows):
             elif changed:
                 reference_ids = {identifier for snapshot in (before, after) for key in changed
                                  for identifier in snapshot.get("record_ids", {}).get(key, [])}
+                if resolve_clinical is not None:
+                    for key in ids & set(dependency_rows):
+                        if "clinical_unresolved" not in dependency_rows[key]:
+                            dependency_rows[key]["clinical_unresolved"] = resolve_clinical(key)
                 affected = {key for key in ids if key not in dependency_rows
                             or dependency_rows[key].get("clinical_unresolved", True)
                             or not isinstance(dependency_rows[key].get("identifiers"), list)
@@ -664,7 +689,7 @@ def _refresh_candidate_clock(runner, repo, raw_dir, candidate_prefix, current, r
         state = json.loads((candidate_prefix / ".incremental_state.json").read_text())
         if all(state.get(key) == live.get(key)
                for key in ("evaluation_date", "evaluation_local_date")):
-            if refreshed and any(dependencies(row)["clock_refresh_required"] for row in
+            if refreshed and any(dependencies(row, clinical=False)["clock_refresh_required"] for row in
                     stage_products(stage_directories(candidate_prefix)[1], "enrich").values()):
                 raise StageManifestError("Date-sensitive candidate remained stale after freshness refresh")
             return refreshed
@@ -785,9 +810,10 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
         held = {pid for rows in clean_holds.values() for pid in rows}
         if held & set(products["clean"]) or held | set(products["clean"]) != set(raw):
             raise StageManifestError("Fresh Clean successful/held input inventory is inconsistent")
-    dependency_rows = {key: dependencies(value) for key, value in products["enrich"].items()}
+    dependency_rows = {key: dependencies(value, clinical=False) for key, value in products["enrich"].items()}
     planned_old = planning_snapshot(old, current, baseline_repo=baseline_repo)
-    plan = plan_changes(planned_old, current, raw, dependency_rows)
+    plan = plan_changes(planned_old, current, raw, dependency_rows,
+                        resolve_clinical=lambda key: clinical_unresolved(products["enrich"][key]))
     if state_path.exists() and raw_binding != old["inputs"]["clean"]:
         # Parsed equality cannot establish byte/path lineage. Re-run Clean
         # for changed source files, then let actual Clean changes select
