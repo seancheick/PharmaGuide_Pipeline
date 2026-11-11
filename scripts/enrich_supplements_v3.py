@@ -169,6 +169,7 @@ from rda_ul_calculator import RDAULCalculator, label_child_ul_ages, label_popula
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
+from profile_gate_evaluator import evaluate_profile_gate
 from match_ledger import (
     MatchLedgerBuilder,
     DOMAIN_INGREDIENTS,
@@ -22806,12 +22807,25 @@ class SupplementEnricherV3:
             "highest_severity": None,
         }
         user_highest_weight = -1.0
+        raw_flags = user_profile.get("profile_flags") if isinstance(user_profile, dict) else None
+        gate_profile = {
+            "conditions": conditions_checked,
+            "drug_classes": drug_classes_checked,
+            "profile_flags": [f.strip().lower() for f in raw_flags or [] if isinstance(f, str) and f.strip()],
+        }
+
+        def gate_fires(hit: Dict) -> bool:
+            # The shared evaluator decides a gated hit, so its excludes (a DOAC
+            # user and a warfarin-only row, say) hold here as on every surface.
+            gate = hit.get("profile_gate")
+            return not gate or evaluate_profile_gate(gate, gate_profile, {}).fires
+
         for ingredient_alert in profile["ingredient_alerts"]:
             ingredient_name = ingredient_alert.get("ingredient_name", "unknown")
             rule_id = ingredient_alert.get("rule_id")
             for condition_hit in ingredient_alert.get("condition_hits", []):
                 condition_id = condition_hit.get("condition_id")
-                if condition_id in conditions_checked:
+                if condition_id in conditions_checked and gate_fires(condition_hit):
                     severity = condition_hit.get("severity")
                     weight = severity_weights.get(severity, 0.0)
                     user_alerts["alerts"].append({
@@ -22827,7 +22841,7 @@ class SupplementEnricherV3:
                         user_alerts["highest_severity"] = severity
             for drug_hit in ingredient_alert.get("drug_class_hits", []):
                 drug_class_id = drug_hit.get("drug_class_id")
-                if drug_class_id in drug_classes_checked:
+                if drug_class_id in drug_classes_checked and gate_fires(drug_hit):
                     severity = drug_hit.get("severity")
                     weight = severity_weights.get(severity, 0.0)
                     user_alerts["alerts"].append({
