@@ -8083,8 +8083,13 @@ def build_detail_blob(
     # alert-level severity on device when the user's profile matches
     # the rule's condition_id / drug_class_id.
     #
-    #   contraindicated → "suppress" (was "critical" pre-E1.1.2; Flutter
-    #                                  promotes to critical on profile match)
+    #   contraindicated → "informational" (Dr. Pham G4, 2026-11-11: show
+    #                                       avoid and contraindicated as
+    #                                       conditional notes when
+    #                                       applicability is unknown; was
+    #                                       "suppress" since E1.1.2 and
+    #                                       "critical" before. Flutter
+    #                                       promotes on profile match)
     #   avoid           → "informational" (show as neutral note without
     #                                       profile; Flutter promotes to
     #                                       "alert" if profile matches)
@@ -8096,7 +8101,7 @@ def build_detail_blob(
     # rules, untouched for contraindicated so the promoted render is
     # still alarming when profile matches.
     _INTERACTION_DISPLAY_MODE = {
-        "contraindicated": "suppress",
+        "contraindicated": "informational",
         "avoid": "informational",
         "caution": "suppress",
         "monitor": "suppress",
