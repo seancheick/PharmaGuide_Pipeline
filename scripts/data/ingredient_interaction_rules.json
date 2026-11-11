@@ -5873,7 +5873,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-11",
-      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; pharmaguide_clinical_team",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; original rule by pharmaguide_clinical_team",
       "dose_thresholds": []
     },
     {
@@ -16766,7 +16766,7 @@
         ]
       },
       "last_reviewed": "2026-11-11",
-      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; original rule by pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED",
@@ -22238,8 +22238,8 @@
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May increase exposure to some transplant drugs",
-          "alert_body": "CBD can increase exposure to certain transplant drugs. Talk to your transplant prescriber before use; appropriate drug-level monitoring or prescribed dose adjustment may be needed.",
+          "alert_headline": "May raise levels of some immunosuppressant medicines",
+          "alert_body": "CBD can raise levels of certain immunosuppressant medicines, such as everolimus, tacrolimus or sirolimus. Talk to the prescriber of that medicine before use; drug-level monitoring or a prescribed dose adjustment may be needed.",
           "informational_note": "Prescription CBD raised everolimus levels in a label study; relevant to people taking everolimus, tacrolimus or sirolimus.",
           "profile_gate": {
             "gate_type": "drug_class",

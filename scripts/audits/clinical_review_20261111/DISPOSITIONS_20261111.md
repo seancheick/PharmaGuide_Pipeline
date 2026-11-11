@@ -156,6 +156,39 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
   interfere"). Alpha-GPC's text is now scoped to medicines taken for their anticholinergic action; huperzine A's
   says the two "can work against each other". Severities unchanged (alpha-GPC caution, huperzine A avoid); ask 6.
 
+### Batch 3b part 2 implemented: licorice, levodopa + iron, CBD/everolimus (`apply_batch3b_part2_*.py`)
+
+| Row | Implemented as |
+|---|---|
+| A14 licorice + antihypertensives | Both sub-rules (`RULE_IQM_LICORICE_HYPERTENSION`, `RULE_BOTANICAL_LICORICE_ROOT`) caution → avoid with one shared text; EMA liquorice monograph (EMA/HMPC/108399/2024 Rev. 1, 4.5) cited. Verified DGL is excluded by identity; an unknown preparation is not assumed to be DGL |
+| F4 cardiac glycosides + licorice | New `cardiac_glycosides` avoid sub-rule and pair `DSI_CARDIACGLYC_LICORICE` (Major): EMA 4.5, the LANOXIN hypokalemia warning, PMID 28660884. No glycyrrhizin floor |
+| Licorice identity | Chinese licorice (G. uralensis, inside the monograph's scope) now twins to licorice, and "Glycyrrhiza uralensis root" / "... root extract" reach it; DGL lost its bare "Glycyrrhiza glabra" alias, which belongs to whole licorice, and gained the DGL names that were unmapped ("Licorice Root Extract, DGL", "GutGard Deglycyrrhizinated Licorice (DGL) root extract", "standardized Deglycyrrhized Licorice extract"). Not fixed: "Licorice root extract (deglycyrrhizinated)" still maps to whole licorice, because the cleaner resolves the name before its parenthetical (over-warning; no current label). No current label names G. inflata |
+| F2 levodopa + iron | Pair `DSI_LEVODOPA_IRON` (Moderate), keyed on levodopa's ingredient RxCUI 6375, from the SINEMET label; no interval (the label gives none). The label names iron salts, including multivitamins that contain them; the pair covers every iron form as a precaution and says so. Carbidopa/levodopa (SCD 197444) and carbidopa/entacapone/levodopa (SCD 403851) reach it through their ingredients; carbidopa alone does not (app test). Inhaled levodopa (INBRIJA) also matches the ingredient; its users take oral carbidopa/levodopa as well, so the warning still applies |
+
+Agent dispositions in the same batch (not Dr. Pham's decisions):
+- **GutGard.** It keeps routing to DGL. The source (PMID 39929150) describes a deglycyrrhizinated extract with
+  glycyrrhizin ≤3.0% w/w, and the one DSLD label (229935, on market) states <1%. The exemption rests on your DGL policy,
+  not on interaction-safety evidence for that glycyrrhizin level.
+- **CBD + immunosuppressants.** Everolimus (RxCUI 141704) is already in `class:immunosuppressants`, so it reaches
+  the CBD caution. The text named only tacrolimus and sirolimus and said "CBD affects immune function", which the
+  label does not say. It now follows EPIDIOLEX 7.2: oral everolimus exposure about 2.5-fold, other oral
+  P-glycoprotein substrates may rise, monitor levels and adjust the dose; not generalized to every CYP3A4
+  substrate. The headline and body no longer say "transplant" (everolimus is also used for tuberous sclerosis and
+  cancer). Severity and gate unchanged. Two gaps go to ask 5.
+- **Licorice citation.** `RULE_BOTANICAL_LICORICE_ROOT` dropped PMID 31605160 and its "failed BP control" claim: the
+  paper is a glycyrrhizin-metabolite biomarker study, not an interaction study.
+- **Twelve stored canonical ids** that differed from what the build ships, one disposition each. Nothing shipped
+  changes; a test keeps stored and shipped ids equal.
+
+| Pair(s) | Stored → now | Why |
+|---|---|---|
+| DSI_ANTICOAG_VINPOCETINE | `nootropic_vinpocetine` → `vinpocetine` | stale stored id; shipped id correct |
+| DSI_IMMUNOSUP_PROBIOTICS | `probiotic_unspecified` → `probiotics` | stale stored id; shipped id correct |
+| DSI_BETABLOCK_EPHEDRA | `ephedra` → `BANNED_EPHEDRA` | product-side id (banned list); 0 products |
+| DSI_MAOI_TYRAMINE | `tyramine` → `ADD_TYRAMINE_RICH_EXTRACT` | product-side id (additive); 0 products |
+| DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE | `grapefruit` / `coffee` → none | food advisories; no supplement id by design |
+| DSI_STATINS_RYR; DSI_ANTICOAG_CBD, DSI_ANTIHYP_CBD, DSI_STATINS_CBD | unchanged | stored and shipped ids normalize to the same supplement (`BANNED_RED_YEAST_RICE` / `RISK_RED_YEAST_RICE` → red yeast rice; `cbd` / `BANNED_CBD_US` → cbd) |
+
 ## Batch 4: noise reductions (after quantity checks)
 
 | Row | Decision |
@@ -191,6 +224,9 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
    anticholinergic effects only above 6 mg. Membership is by ingredient, so neither strength nor route can be told
    apart (topical diphenhydramine and doxepin products also match). Keep doxepin in the class, or leave it out? And
    is the topical match acceptable, as with ciprofloxacin drops in batch 2?
+   **Release blocker:** the wider class ships no further than this branch until asks 4 and 6 are answered. No
+   SILENOR strength cutoff is derived meanwhile: membership is by ingredient, and the label sets no supplement
+   threshold.
 5. **CBD split (F7): wording for two new rule classes.** Separate clobazam and valproate rules need two rule-only
    vocabulary entries. Proposed copy, for your sign-off:
    - `clobazam`: group label "Seizure medications"; "Commonly used to help prevent seizures, including in
@@ -205,6 +241,10 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
    anticonvulsant class (stiripentol and cannabidiol included) plus clobazam and valproate. Should the split add a
    stiripentol rule, and should it end the warning for the other anticonvulsants, for which the label reports no
    effect of cannabidiol on the medicine? The seizure-disorder condition rule stays either way.
+   Two related gaps from the everolimus check: `class:immunosuppressants` also holds injected biologics the
+   EPIDIOLEX label does not concern, and digoxin (a P-glycoprotein substrate the label names) has no CBD rule.
+   Should the CBD immunosuppressant rule be limited to oral small-molecule immunosuppressants, and should digoxin
+   get a CBD finding?
 6. **Rules the wider anticholinergic class reaches.** Huperzine A (avoid, "do not combine") and alpha-GPC (caution)
    now reach every diphenhydramine and tricyclic user, including combination sleep aids. Should both reach medicines
    whose anticholinergic effect is a side effect, or only the primary antimuscarinics? Narrowing either needs a

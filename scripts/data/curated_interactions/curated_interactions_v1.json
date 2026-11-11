@@ -3561,7 +3561,7 @@
       "agent2_id": "C0302583",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Iron salts can form chelates with levodopa and carbidopa and so reduce how much of the medicine is available to the body. The carbidopa/levodopa (SINEMET) label says this applies to iron supplements and to multivitamins that contain iron salts.",
+      "mechanism": "Iron salts can form chelates with levodopa and carbidopa and so reduce how much of the medicine is available to the body. The carbidopa/levodopa (SINEMET) label names iron salts, including multivitamins that contain them; this finding covers every iron supplement as a precaution.",
       "management": "If you take carbidopa/levodopa, talk to your prescriber or pharmacist before starting an iron supplement or a multivitamin with iron; the label says to take them together with caution. The label gives no spacing interval, so ask how to time them.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66"

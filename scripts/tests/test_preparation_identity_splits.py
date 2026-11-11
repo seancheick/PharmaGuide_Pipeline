@@ -218,10 +218,19 @@ def test_dgl_aliases_are_owned_by_the_distinct_preparation():
         "Deglycyrrhized Licorice",
         "Gutgard DGL",
         "deglycyrrhizinated licorice root extract",
+        # Word orders and current label names that state deglycyrrhizination (review of #449).
+        "Licorice Root Extract, DGL",
+        "GutGard Deglycyrrhizinated Licorice (DGL) root extract",
+        "standardized Deglycyrrhized Licorice extract",
     ):
         standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(raw_name, [])
-        assert mapped is True
-        assert standard_name == "DGL (Deglycyrrhizinated Licorice)"
+        assert mapped is True, raw_name
+        assert standard_name == "DGL (Deglycyrrhizinated Licorice)", raw_name
+
+    # G. uralensis root is liquorice root in the EU monograph; it reaches the licorice twin.
+    for raw_name in ("Glycyrrhiza uralensis root", "Glycyrrhiza uralensis root extract", "Glycyrrhiza uralensis"):
+        standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(raw_name, [])
+        assert (standard_name, mapped) == ("Chinese Licorice", True), raw_name
 
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("licorice root extract", [])
     assert mapped is True

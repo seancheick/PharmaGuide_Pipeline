@@ -128,6 +128,8 @@ def test_cbd_immunosuppressant_text_names_the_everolimus_label_finding():
         assert drug in row['mechanism'] and drug in row['action'] and drug in row['informational_note'], drug
     assert '2.5-fold' in row['mechanism']
     assert 'immune function' not in row['informational_note']
+    # Everolimus is also used for tuberous sclerosis and cancer, so the copy is not transplant-only.
+    assert 'transplant' not in (row['alert_headline'] + row['alert_body']).lower()
     assert row['severity'] == 'caution'
     assert any('8bf27097-4870-43fb-94f0-f3d0871d1eec' in url for url in row['sources'])
     classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
@@ -672,8 +674,11 @@ def test_levodopa_iron_is_caution_from_the_carbidopa_levodopa_label():
     assert SINEMET in pair['source_urls']
     text = _pair_text(pair)
     assert 'chelate' in text
+    # The label names iron salts, including multivitamins that contain them; covering every iron form is ours.
+    assert 'says this applies to iron supplements' not in text
+    assert 'names iron salts' in text and 'as a precaution' in text
     # The label gives no spacing interval, so the record states none.
-    assert not re.search(r'\b\d+\s*(hours?|hrs?|h)\b', text)
+    assert not re.search(r'\b(\d+|one|two|three|four|six)\s*(hours?|hrs?|h)\b', text)
     normalized = _verified('DSI_LEVODOPA_IRON')
     assert normalized['agent2_canonical_id'] == 'iron'
     assert normalized['evidence_level'] == 'established'
