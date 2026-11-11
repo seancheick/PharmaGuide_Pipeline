@@ -1,0 +1,355 @@
+{
+  "pins": {
+    "pipeline_sha": "a01269d6b41da42a55c7cfe99ea76f8bc2f1e8ae",
+    "app_sha": "a094763d59571c54f24f2f3188a8e2c2c25757b5",
+    "interaction_db_version": "1.0.15",
+    "interaction_db_checksum": "aa115b645efefffc1f4b5d5bcf4e24a7c9e1e16ce846d8a8a405eee98ae16020",
+    "profile_warning_rules_count": 154,
+    "blob_build": "2026.11.02.191010",
+    "blob_build_checksum": "48d66f1bab8858f74587b4f6dbf3bea93de6be1e5b94655846cfd993cb473ead",
+    "blob_count": 15447
+  },
+  "sample": {
+    "size": 4000,
+    "seed": 1,
+    "selection": "random.sample over sorted detail_blobs paths"
+  },
+  "profiles": {
+    "anticoagulants": {
+      "share_of_products_warned": 0.3857,
+      "worst_severity_share": {
+        "avoid": 0.0057,
+        "caution": 0.2823,
+        "contraindicated": 0.0015,
+        "monitor": 0.0963
+      },
+      "top_subjects": [
+        [
+          "vitamin_e",
+          534
+        ],
+        [
+          "vitamin_d",
+          187
+        ],
+        [
+          "fish_oil",
+          88
+        ],
+        [
+          "epa",
+          75
+        ],
+        [
+          "glucosamine",
+          71
+        ],
+        [
+          "coq10",
+          69
+        ],
+        [
+          "turmeric",
+          49
+        ],
+        [
+          "ginger",
+          49
+        ]
+      ]
+    },
+    "antihypertensives": {
+      "share_of_products_warned": 0.252,
+      "worst_severity_share": {
+        "avoid": 0.0085,
+        "caution": 0.182,
+        "monitor": 0.0615
+      },
+      "top_subjects": [
+        [
+          "potassium",
+          272
+        ],
+        [
+          "iron",
+          257
+        ],
+        [
+          "magnesium",
+          159
+        ],
+        [
+          "green_tea_extract",
+          61
+        ],
+        [
+          "l_theanine",
+          48
+        ],
+        [
+          "l_arginine",
+          34
+        ],
+        [
+          "yohimbe",
+          22
+        ],
+        [
+          "tribulus",
+          16
+        ]
+      ]
+    },
+    "pregnancy": {
+      "share_of_products_warned": 0.4073,
+      "worst_severity_share": {
+        "avoid": 0.1037,
+        "caution": 0.02,
+        "contraindicated": 0.0107,
+        "monitor": 0.2727
+      },
+      "top_subjects": [
+        [
+          "vitamin_b6_pyridoxine",
+          445
+        ],
+        [
+          "calcium",
+          278
+        ],
+        [
+          "zinc",
+          86
+        ],
+        [
+          "magnesium",
+          82
+        ],
+        [
+          "potassium",
+          47
+        ],
+        [
+          "ashwagandha",
+          41
+        ],
+        [
+          "iron",
+          39
+        ],
+        [
+          "saw_palmetto",
+          37
+        ]
+      ]
+    },
+    "lactation": {
+      "share_of_products_warned": 0.4625,
+      "worst_severity_share": {
+        "avoid": 0.076,
+        "caution": 0.155,
+        "monitor": 0.2315
+      },
+      "top_subjects": [
+        [
+          "vitamin_b6_pyridoxine",
+          499
+        ],
+        [
+          "vitamin_c",
+          215
+        ],
+        [
+          "calcium",
+          193
+        ],
+        [
+          "vitamin_d",
+          172
+        ],
+        [
+          "magnesium",
+          67
+        ],
+        [
+          "vitamin_e",
+          58
+        ],
+        [
+          "vitamin_a",
+          55
+        ],
+        [
+          "ashwagandha",
+          45
+        ]
+      ]
+    },
+    "diabetes": {
+      "share_of_products_warned": 0.182,
+      "worst_severity_share": {
+        "caution": 0.1608,
+        "monitor": 0.0213
+      },
+      "top_subjects": [
+        [
+          "vitamin_b3_niacin",
+          513
+        ],
+        [
+          "alpha_lipoic_acid",
+          33
+        ],
+        [
+          "ginseng",
+          25
+        ],
+        [
+          "fenugreek",
+          24
+        ],
+        [
+          "cinnamon",
+          19
+        ],
+        [
+          "stinging_nettle",
+          13
+        ],
+        [
+          "tribulus",
+          13
+        ],
+        [
+          "olive_leaf",
+          13
+        ]
+      ]
+    },
+    "kidney_disease": {
+      "share_of_products_warned": 0.1782,
+      "worst_severity_share": {
+        "avoid": 0.1668,
+        "caution": 0.0075,
+        "monitor": 0.004
+      },
+      "top_subjects": [
+        [
+          "magnesium",
+          474
+        ],
+        [
+          "potassium",
+          191
+        ],
+        [
+          "tribulus",
+          16
+        ],
+        [
+          "dandelion",
+          16
+        ],
+        [
+          "senna",
+          5
+        ],
+        [
+          "ADD_CASCARA_SAGRADA",
+          3
+        ],
+        [
+          "cascara_sagrada",
+          3
+        ],
+        [
+          "creatine_monohydrate",
+          3
+        ]
+      ]
+    },
+    "heart_disease": {
+      "share_of_products_warned": 0.136,
+      "worst_severity_share": {
+        "avoid": 0.0138,
+        "caution": 0.119,
+        "monitor": 0.0032
+      },
+      "top_subjects": [
+        [
+          "potassium",
+          401
+        ],
+        [
+          "l_arginine",
+          53
+        ],
+        [
+          "calcium",
+          34
+        ],
+        [
+          "vitamin_d",
+          23
+        ],
+        [
+          "hawthorn",
+          13
+        ],
+        [
+          "guarana",
+          12
+        ],
+        [
+          "yerba_mate_leaf",
+          4
+        ],
+        [
+          "yerba_mate",
+          2
+        ]
+      ]
+    },
+    "thyroid_medications": {
+      "share_of_products_warned": 0.283,
+      "worst_severity_share": {
+        "caution": 0.281,
+        "monitor": 0.002
+      },
+      "top_subjects": [
+        [
+          "calcium",
+          675
+        ],
+        [
+          "zinc",
+          194
+        ],
+        [
+          "magnesium",
+          121
+        ],
+        [
+          "iron",
+          74
+        ],
+        [
+          "chromium",
+          30
+        ],
+        [
+          "l_tyrosine",
+          17
+        ],
+        [
+          "bacopa",
+          8
+        ],
+        [
+          "iodine",
+          8
+        ]
+      ]
+    }
+  }
+}
