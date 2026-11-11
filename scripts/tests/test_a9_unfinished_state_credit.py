@@ -13,7 +13,8 @@ import pytest
 from build_final_db import build_decision_highlights, generate_share_metadata
 
 FIXTURES = Path(__file__).parent / "fixtures"
-PARTIAL_LABEL = "a9_completion_293417_raw.json"
+# 293417 (elderberry) finished on 2026-11-11; 256990 keeps chamomile and lemon balm unread.
+PARTIAL_LABEL = "a9_completion_256990_raw.json"
 COMPLETE_LABEL = "form_association_12012_raw.json"
 
 
@@ -61,7 +62,7 @@ def test_open_evidence_review_does_not_present_as_assessed(partial_full_evidence
     assert scored["quality_assessment_status"] == "partial"
     assert "evidence_assessment_incomplete" in release["blockers"]
     # The retained credit is left alone; only the claim that review ended moves.
-    assert evidence["score"] == 16.5
+    assert evidence["score"] == 15.6
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "still open" in evidence["reason"]
     assert "Established nutritional authority" not in evidence["reason"]

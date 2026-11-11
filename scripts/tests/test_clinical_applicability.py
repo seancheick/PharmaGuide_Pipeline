@@ -2339,12 +2339,13 @@ def test_product_positioning_counts_against_an_ingredient_only_when_attributable
     assert result['status'] == status
 
 
-@pytest.mark.parametrize('rid,canonical,name,quantity,unit,authority', [
-    ('INGR_VITAMIN_D3', 'vitamin_d', 'Vitamin D3', 25, 'mcg', 10.0),
-    ('BRAND_TESTOFEN', 'fenugreek', 'Testofen Fenugreek Extract', 600, 'mg', 0.0),
-    ('INGR_LACTOFERRIN', 'lactoferrin', 'Lactoferrin', 200, 'mg', 0.0),
+@pytest.mark.parametrize('rid,canonical,name,quantity,unit,authority,status', [
+    # Vitamin D3 and Testofen finished as reference-only on 2026-11-11 (no credit either way).
+    ('INGR_VITAMIN_D3', 'vitamin_d', 'Vitamin D3', 25, 'mcg', 10.0, 'not_applicable'),
+    ('BRAND_TESTOFEN', 'fenugreek', 'Testofen Fenugreek Extract', 600, 'mg', 0.0, 'not_applicable'),
+    ('INGR_LACTOFERRIN', 'lactoferrin', 'Lactoferrin', 200, 'mg', 0.0, 'unresolved'),
 ])
-def test_explicitly_ineligible_contexts_cannot_supply_legacy_clinical_credit(rid, canonical, name, quantity, unit, authority):
+def test_explicitly_ineligible_contexts_cannot_supply_legacy_clinical_credit(rid, canonical, name, quantity, unit, authority, status):
     from scoring_v4.scored_artifact import build_scored_artifact
     row = _row(canonical, name, quantity=quantity, unit=unit)
     record = reviewed_entries()[rid]
@@ -2353,7 +2354,7 @@ def test_explicitly_ineligible_contexts_cannot_supply_legacy_clinical_credit(rid
              'matched_source_row_refs': ['ingredientRows[0]']}
     product = {'product_name': name, 'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
                'activeIngredients': [row], 'evidence_data': {'clinical_matches': [entry]}}
-    assert assess_clinical_applicability(product, entry)['status'] == 'unresolved'
+    assert assess_clinical_applicability(product, entry)['status'] == status
     assert filter_clinical_matches(product, [entry])[0] == []
     matches, _ = resolved_clinical_matches(product)
     assert not matches

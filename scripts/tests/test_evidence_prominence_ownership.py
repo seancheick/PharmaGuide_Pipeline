@@ -246,7 +246,9 @@ def test_ingredient_recovery_is_independent_of_relative_mass(primary_mg, monkeyp
     from scoring_v4.modules import generic_evidence
     current = reviewed_entries()
     from tests.test_evidence_resolver import _approved_test_source
+    # Reference-only since 2026-11-11; the mechanics vehicle keeps its earlier eligible shape.
     source = _approved_test_source({**deepcopy(current['INGR_L_CARNITINE']),
+        'evidence_level': 'ingredient-human', 'study_type': 'systematic_review_meta',
         'references_structured': [{'pmid': '28661438', 'retracted': False}]},
         name='L-Carnitine')
     verified = generic_evidence._verified_ingredient_human_evidence_entries()

@@ -37,7 +37,6 @@ HELD = [
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
     pytest.param("a9_completion_12853_raw.json", EVIDENCE, id="title_owner_valerian"),
     pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
-    pytest.param("a9_completion_293417_raw.json", EVIDENCE, id="elderberry_owner_retained_credit"),
     pytest.param("a9_completion_322514_raw.json", EVIDENCE, id="enzyme_owner_behind_product_row"),
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),
     pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="named_blend_member"),
@@ -183,8 +182,6 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
 
 
 @pytest.mark.parametrize("label, open_row", [
-    pytest.param("a9_title_subject_293389_raw.json", "elderberry", id="genus_sambucus"),
-    pytest.param("a9_title_subject_251695_raw.json", "elderberry", id="genus_sambucus_with_vitamin_c_credit"),
     pytest.param("a9_title_subject_178674_raw.json", "fish_oil", id="source_fish"),
     pytest.param("a9_title_subject_243141_raw.json", "reishi", id="class_mushroom"),
     pytest.param("a9_title_subject_25921_raw.json", "maca", id="brand_reparagen"),
@@ -527,7 +524,6 @@ def test_a_hidden_amount_hold_can_still_publish_its_retained_score(pipeline):
 
 
 @pytest.mark.parametrize("label, open_row", [
-    pytest.param("a9_panel_primary_250328_raw.json", "elderberry", id="title_names_elderberry"),
     pytest.param("a9_panel_primary_49568_raw.json", "keratin", id="title_names_keratin"),
     pytest.param("a9_panel_primary_204802_raw.json", "fish_oil", id="title_names_omega3"),
 ])

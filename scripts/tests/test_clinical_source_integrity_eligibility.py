@@ -776,7 +776,7 @@ def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
     assert record['effect_direction'] == 'mixed'
     assert record['endpoint_relevance_tags'] == []
     assert 'immune response ↑' not in record['key_endpoints']
-    assert record['health_goals_supported'] == ['Immune Support']
+    assert record['health_goals_supported'] == []  # reference-only since 2026-11-11
     assert contexts['ingr_elderberry_33827515_scoped_source']['clinical_review']['reviewer'] == 'Dr. Pham'
     assert not er.clinical_record_sources_eligible(record)
     assert assess_clinical_source_review(record)['is_complete']
@@ -2812,6 +2812,9 @@ def test_finite_noncredit_review_cannot_hide_unfinished_or_unbound_source(monkey
     import clinical_applicability as ca
     records = copy.deepcopy(ca.reviewed_entries())
     record = records['INGR_L_CARNITINE']
+    # Reference-only since 2026-11-11; this vehicle keeps its earlier shape so the
+    # noncredit-scope coverage rules are what the mutations exercise.
+    record.update(evidence_level='ingredient-human', study_type='systematic_review_meta')
     context = record['study_contexts'][-1]
     if mutation == 'pending':
         context['review_status'] = 'source_verified_pending_clinical_review'
