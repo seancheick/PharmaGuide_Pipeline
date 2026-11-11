@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-07-02",
+    "last_updated": "2026-11-11",
     "total_entries": 10,
     "purpose": "Wave 8 critical-only drug-supplement interaction additions",
     "selection_policy": "Only interactions with label-backed avoid guidance, narrow-therapeutic-index treatment-failure risk, severe electrolyte risk, antibiotic treatment-failure risk, or human PK evidence. No Minor/monitor entries.",
@@ -304,7 +304,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
       ],
       "source_pmids": [],
@@ -339,7 +339,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
       ],
       "source_pmids": [],
