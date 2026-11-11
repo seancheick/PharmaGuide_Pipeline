@@ -214,3 +214,106 @@ def test_psyllium_lithium_sources_and_advice_match_actual_medicine():
     assert 'lithium' in row['alert_body'].lower()
     assert 'monitor' in row['action'].lower()
     assert row['alert_headline'] == 'May lower lithium levels'
+
+
+# Dr. Pham review 2026-11-11 (scripts/audits/clinical_review_20261111), batch 2: label-backed corrections.
+PARNATE = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27'
+UK_ACETYLCYSTEINE_SMPC = 'https://www.medicines.org.uk/emc/product/2488/smpc'
+REVIEW_FILE = 'audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md'
+STATIN_LABELS = {  # each marketed statin's own gemfibrozil instruction, read 2026-11-11
+    'simvastatin': '8f55d5de-5a4f-4a39-8c84-c53976dd6af9', 'rosuvastatin': '325a5d0e-9a72-4015-9fcd-1655fb504cee',
+    'atorvastatin': 'a60cc18b-0631-4cf0-b021-9f52224ece65', 'pravastatin': '42ccbca7-fa52-4df9-8f1a-ea7da7312883',
+    'lovastatin': 'df7ddf4f-d569-431e-81f1-9129d7043150', 'fluvastatin': '726ea2db-f1b0-4b73-a515-02157db88a42',
+    'pitavastatin': '44dcbf97-99ec-427c-ba50-207e0069d6d2',
+}
+
+
+def _pairs():
+    out = {}
+    for name in ('curated_interactions_v1.json', 'med_med_pairs_v1.json'):
+        for row in json.loads((DATA / 'curated_interactions' / name).read_text())['interactions']:
+            out[row['id']] = row
+    return out
+
+
+def _pair_text(row):
+    return ' '.join(row.get(k) or '' for k in ('mechanism', 'management', 'evidence_notes')).lower()
+
+
+def test_same_maoi_contraindication_follows_the_tranylcypromine_label_in_both_records():
+    pair = _pairs()['DSI_MAOI_SAME']
+    rule = next(r for r in _rules()['RULE_IQM_SAME']['drug_class_rules'] if r['drug_class_id'] == 'maois')
+    assert pair['severity'] == 'Contraindicated'
+    assert rule['severity'] == 'contraindicated', 'the profile rule must not be weaker than the label'
+    assert PARNATE in pair['source_urls'] and PARNATE in rule['sources']
+    # The class-wide scope is an inference from one label, and the record says so.
+    assert 'class inference' in _pair_text(pair)
+    assert rule['clinical_review']['file'] == REVIEW_FILE
+    copy = ' '.join(rule[k] for k in ('action', 'alert_headline', 'alert_body')).lower()
+    assert 'unless cleared' not in copy and 'avoid combining' not in copy
+    assert 'do not combine' in copy
+
+
+def test_statin_gemfibrozil_is_split_by_statin_label():
+    pairs = _pairs()
+    simva = pairs['DDI_SIMVASTATIN_GEMFIBROZIL']
+    assert (simva['agent1_id'], simva['agent2_id'], simva['severity']) == ('36567', '4719', 'Contraindicated')
+    assert any(STATIN_LABELS['simvastatin'] in u for u in simva['source_urls'])
+    cls = pairs['DDI_STATIN_GEMFIBROZIL']
+    assert cls['agent1_id'] == 'class:statins' and cls['severity'] == 'Major'
+    for statin, setid in STATIN_LABELS.items():
+        assert any(setid in u for u in cls['source_urls']), statin
+    text = _pair_text(cls)
+    # The old advice contradicted the pravastatin label ("avoid") and chose a drug for the user.
+    assert 'use pravastatin' not in text and 'fenofibrate' not in text
+    assert all('fda-drug-safety-communication' not in u for u in cls['source_urls']), 'the FDA page is 404'
+
+
+def test_ciprofloxacin_theophylline_is_avoid_with_label_management_only():
+    row = _pairs()['DDI_THEOPHYLLINE_CIPRO']
+    assert row['severity'] == 'Major'
+    text = _pair_text(row)
+    assert '30–50%' not in text and '30-50%' not in text, 'the label gives no fixed dose cut'
+    assert 'azithromycin' not in text
+    assert 'theophylline level' in text
+    # Medicines carry no route, so drops are flagged too, with the scope stated rather than silently excluded.
+    assert 'eye or ear drops' in text
+
+
+def test_nac_nitroglycerin_warns_about_hypotension_from_the_acetylcysteine_label():
+    row = _pairs()['DSI_NITROGLYCERIN_NAC']
+    assert (row['agent1_id'], row['agent2_id'], row['agent2_canonical_id']) == ('4917', 'C0001047', 'nac')
+    assert row['severity'] == 'Moderate'
+    assert UK_ACETYLCYSTEINE_SMPC in row['source_urls'] and '9120179' in row['source_pmids']
+    text = _pair_text(row)
+    assert 'low blood pressure' in text and 'headache' in text
+    assert 'isosorbide' not in text, 'no source was read for other nitrates'
+
+
+def test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning():
+    # The app shows only the exact pair when both match the same two agents
+    # (stack_interaction_checker.dart), so the exact pair must not be weaker.
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+    rank = {'Minor': 1, 'Moderate': 2, 'Major': 3, 'Contraindicated': 4}
+
+    def members(agent):
+        agent = str(agent)
+        if agent.startswith('class:'):
+            return set(map(str, classes[agent]['member_rxcuis']))
+        return {agent}
+
+    rows = list(_pairs().values()) + json.loads(
+        (DATA / 'curated_interactions' / 'batch_critical_2026_05.json').read_text())['interactions']
+    exact = {frozenset((str(r['agent1_id']), str(r['agent2_id']))): r for r in rows
+             if not str(r['agent1_id']).startswith('class:') and not str(r['agent2_id']).startswith('class:')}
+    overlaps = []
+    for row in rows:
+        if not (str(row['agent1_id']).startswith('class:') or str(row['agent2_id']).startswith('class:')):
+            continue
+        for a in members(row['agent1_id']):
+            for b in members(row['agent2_id']):
+                hit = exact.get(frozenset((a, b)))
+                if hit:
+                    overlaps.append((row['id'], hit['id']))
+                    assert rank[hit['severity']] >= rank[row['severity']], (row['id'], hit['id'])
+    assert ('DDI_STATIN_GEMFIBROZIL', 'DDI_SIMVASTATIN_GEMFIBROZIL') in overlaps

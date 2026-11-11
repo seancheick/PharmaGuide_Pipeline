@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.1.0",
     "last_updated": "2026-11-11",
-    "total_entries": 30,
+    "total_entries": 31,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
       "DailyMed (dailymed.nlm.nih.gov) — FDA-approved drug labeling",
@@ -613,30 +613,32 @@
       "agent1_id": "10438",
       "agent2_name": "Ciprofloxacin",
       "agent2_id": "2551",
-      "severity": "Moderate",
+      "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Ciprofloxacin inhibits CYP1A2, the primary enzyme responsible for theophylline metabolism. CYP1A2 inhibition can double theophylline plasma levels, causing theophylline toxicity: nausea, vomiting, tachycardia, seizures.",
-      "management": "If ciprofloxacin is required in a patient on theophylline, reduce theophylline dose by 30–50% and monitor serum theophylline levels. Use an alternative antibiotic when possible (azithromycin has minimal CYP1A2 inhibition).",
+      "mechanism": "Ciprofloxacin blocks CYP1A2, the main enzyme that clears theophylline, so theophylline levels rise. The ciprofloxacin label reports serious and fatal reactions with the combination, including cardiac arrest, seizures and respiratory failure.",
+      "management": "The ciprofloxacin label says to avoid this combination. If your prescriber decides it cannot be avoided, they will check your theophylline levels and adjust the dose. Do not change either medicine yourself. This warning is for ciprofloxacin tablets, liquid or IV; if you use ciprofloxacin only as eye or ear drops, ask your pharmacist whether it applies.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "CIPRO §5.10 and §7 read on DailyMed. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "CIPRO §5.10 (serious and fatal reactions) and §7 (Theophylline: Avoid Use; if unavoidable, monitor serum theophylline and adjust dosage) for systemic ciprofloxacin. The otic label has no interaction section. Saved medicines do not record route, so the pair applies to every ciprofloxacin entry and the text states the scope."
     },
     {
       "id": "DDI_ANTICOAG_ACETAMINOPHEN",
@@ -909,31 +911,39 @@
       "agent1_id": "class:statins",
       "agent2_name": "Gemfibrozil",
       "agent2_id": "4719",
-      "severity": "Moderate",
+      "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Gemfibrozil inhibits CYP2C8 and OATP1B1 hepatic uptake transporter, dramatically increasing plasma concentrations of many statins (especially simvastatin, cerivastatin, rosuvastatin). Elevated statin levels substantially increase the risk of myopathy and rhabdomyolysis. This combination caused cerivastatin's market withdrawal in 2001.",
-      "management": "Avoid gemfibrozil with most statins. If combined lipid-lowering therapy is required, fenofibrate has significantly lower interaction potential. If gemfibrozil is necessary, use pravastatin at the lowest effective dose with vigilant myopathy monitoring.",
+      "mechanism": "Gemfibrozil raises blood levels of several statins and can cause muscle damage on its own. Together they increase the risk of myopathy and rhabdomyolysis; the gemfibrozil label says this muscle toxicity has led, in a high proportion of cases, to acute kidney failure and death.",
+      "management": "Statin labels say to avoid gemfibrozil (the atorvastatin and pitavastatin labels say it is not recommended). For rosuvastatin, if the prescriber decides the combination cannot be avoided, the label limits the rosuvastatin dose. Do not stop or change either medicine yourself; ask your prescriber whether this combination is right for you. Report unexplained muscle pain, tenderness or weakness promptly.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cf32b795-bf42-4861-b273-06d27de3f21d",
-        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8f55d5de-5a4f-4a39-8c84-c53976dd6af9",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=325a5d0e-9a72-4015-9fcd-1655fb504cee",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a60cc18b-0631-4cf0-b021-9f52224ece65",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=42ccbca7-fa52-4df9-8f1a-ea7da7312883",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=df7ddf4f-d569-431e-81f1-9129d7043150",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=726ea2db-f1b0-4b73-a515-02157db88a42",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=44dcbf97-99ec-427c-ba50-207e0069d6d2"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "Gemfibrozil and seven statin labels read on DailyMed; dead FDA 2011 page removed. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Each marketed statin's own label, read 2026-11-11: simvastatin contraindicated (ZOCOR §4; also the gemfibrozil label); rosuvastatin avoid, and if unavoidable start at 5 mg and do not exceed 10 mg (CRESTOR); lovastatin avoid; fluvastatin avoid (LESCOL XL); pravastatin avoid; pitavastatin avoid / not recommended (LIVALO); atorvastatin not recommended (LIPITOR). Cerivastatin is withdrawn. Simvastatin has its own pair, DDI_SIMVASTATIN_GEMFIBROZIL, which replaces this class pair for simvastatin."
     },
     {
       "id": "DDI_ANTIHYP_NSAID",
@@ -1030,6 +1040,40 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "evidence_notes": "Current DailyMed cholestyramine labeling states that cholestyramine may delay or reduce warfarin absorption and directs other oral drugs at least one hour before or four to six hours after cholestyramine.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DDI_SIMVASTATIN_GEMFIBROZIL",
+      "type": "Med-Med",
+      "agent1_name": "Simvastatin",
+      "agent1_id": "36567",
+      "agent2_name": "Gemfibrozil",
+      "agent2_id": "4719",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Gemfibrozil raises simvastatin levels and can cause muscle damage on its own. The simvastatin and gemfibrozil labels both list the combination as contraindicated because of the risk of myopathy and rhabdomyolysis.",
+      "management": "Simvastatin and gemfibrozil should not be used together. Do not stop or change either medicine yourself; contact your prescriber, who will decide what to change. Report unexplained muscle pain, tenderness or weakness promptly.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8f55d5de-5a4f-4a39-8c84-c53976dd6af9",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cf32b795-bf42-4861-b273-06d27de3f21d"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "ZOCOR §4 and the gemfibrozil Contraindications read on DailyMed. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",

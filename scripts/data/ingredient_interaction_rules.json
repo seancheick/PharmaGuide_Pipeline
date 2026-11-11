@@ -22944,18 +22944,19 @@
       "drug_class_rules": [
         {
           "drug_class_id": "maois",
-          "severity": "avoid",
+          "severity": "contraindicated",
           "evidence_level": "limited",
-          "mechanism": "SAMe is a methyl donor studied as an antidepressant. It is listed among serotomimetic agents that can cause serotonin syndrome alone or combined with MAO inhibitors, and a toxic interaction with the antidepressant clomipramine has been reported. NCCIH notes SAMe might interact with drugs that raise serotonin, such as antidepressants. No study of SAMe with an MAOI was found; the risk is inferred from these reports.",
-          "action": "If you take an MAOI, avoid SAMe unless cleared by your prescriber. Allow washout if switching.",
+          "mechanism": "SAMe is a methyl donor studied as an antidepressant. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because combining it with the MAOI can cause serotonin syndrome, and a toxic interaction with the antidepressant clomipramine has been reported. Other MAOI labels do not name SAMe, so applying this to every MAOI is a class inference. No study of SAMe with an MAOI was found.",
+          "action": "If you take an MAOI, do not combine it with SAMe. Do not stop or change your MAOI to use SAMe; your prescriber manages any change and the washout time.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
             "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
             "https://pubmed.ncbi.nlm.nih.gov/7854515/",
             "https://pubmed.ncbi.nlm.nih.gov/8434674/"
           ],
-          "alert_headline": "Avoid combining with MAOIs",
-          "alert_body": "If you take MAO inhibitors, do not combine with this product. SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
-          "informational_note": "SAMe is serotonergic — relevant to anyone on MAOIs or other antidepressants.",
+          "alert_headline": "Do not combine with MAOIs",
+          "alert_body": "If you take an MAO inhibitor, do not combine it with this product. The tranylcypromine label lists SAMe as contraindicated because the combination can cause serotonin syndrome.",
+          "informational_note": "SAMe raises serotonin activity, which matters for anyone taking an MAOI or another antidepressant.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -22975,7 +22976,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         }
       ],
       "dose_thresholds": [],
@@ -22990,8 +22996,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-30",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, MAOI severity); label passages read by agent; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_SODIUM",
