@@ -1,0 +1,172 @@
+[
+  {
+    "pair": "DSI_ANTIHYP_LICORICE",
+    "pair_severity": "avoid",
+    "drug": "class:antihypertensives",
+    "supplement": "licorice",
+    "rule": "RULE_IQM_LICORICE_HYPERTENSION/drug_class_rules[0]",
+    "rule_class": "antihypertensives",
+    "rule_severity": "caution",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_CALCIUM_CIPROFLOXACIN",
+    "pair_severity": "avoid",
+    "drug": "2551",
+    "supplement": "calcium",
+    "rule": "RULE_IQM_CALCIUM/drug_class_rules[1]",
+    "rule_class": "fluoroquinolones",
+    "rule_severity": "caution",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_IMMUNO_ASTRAGALUS",
+    "pair_severity": "caution",
+    "drug": "class:immunosuppressants",
+    "supplement": "astragalus",
+    "rule": "RULE_INGREDIENT_ASTRAGALUS__AUTOIMMUNE/drug_class_rules[0]",
+    "rule_class": "immunosuppressants",
+    "rule_severity": "avoid",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_IMMUNO_CATSCLAW",
+    "pair_severity": "caution",
+    "drug": "class:immunosuppressants",
+    "supplement": "cat_s_claw",
+    "rule": "RULE_INGREDIENT_CAT_S_CLAW/drug_class_rules[3]",
+    "rule_class": "immunosuppressants",
+    "rule_severity": "avoid",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_MAOI_SAME",
+    "pair_severity": "contraindicated",
+    "drug": "class:maois",
+    "supplement": "same",
+    "rule": "RULE_IQM_SAME/drug_class_rules[0]",
+    "rule_class": "maois",
+    "rule_severity": "avoid",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_NADOLOL_GREEN_TEA",
+    "pair_severity": "avoid",
+    "drug": "7226",
+    "supplement": "green_tea_extract",
+    "rule": "RULE_IQM_GREEN_TEA_HYPERTENSION/drug_class_rules[0]",
+    "rule_class": "antihypertensives",
+    "rule_severity": "caution",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_NSAID_FISHOIL",
+    "pair_severity": "caution",
+    "drug": "class:nsaids",
+    "supplement": "fish_oil",
+    "rule": "RULE_INGREDIENT_FISH_OIL/drug_class_rules[2]",
+    "rule_class": "nsaids",
+    "rule_severity": "monitor",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_OC_SJW",
+    "pair_severity": "avoid",
+    "drug": "class:oral_contraceptives",
+    "supplement": "st_johns_wort",
+    "rule": "RULE_INGREDIENT_ST_JOHNS_WORT/drug_class_rules[7]",
+    "rule_class": "oral_contraceptives",
+    "rule_severity": "contraindicated",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_SEDATIVES_ASHWAGANDHA",
+    "pair_severity": "monitor",
+    "drug": "class:sedatives",
+    "supplement": "ashwagandha",
+    "rule": "RULE_IQM_ASHWAGANDHA/drug_class_rules[0]",
+    "rule_class": "sedatives",
+    "rule_severity": "caution",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_WAR_COQ10",
+    "pair_severity": "caution",
+    "drug": "11289",
+    "supplement": "coq10",
+    "rule": "RULE_IQM_COQ10_HEART_DISEASE_STATINS/drug_class_rules[0]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "monitor",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_WAR_CRANBERRY",
+    "pair_severity": "caution",
+    "drug": "11289",
+    "supplement": "cranberry",
+    "rule": "RULE_INGREDIENT_CRANBERRY/drug_class_rules[0]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "monitor",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_WAR_GARLIC",
+    "pair_severity": "caution",
+    "drug": "11289",
+    "supplement": "garlic",
+    "rule": "RULE_INGREDIENT_GARLIC/drug_class_rules[0]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "monitor",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_WAR_GINGER",
+    "pair_severity": "monitor",
+    "drug": "11289",
+    "supplement": "ginger",
+    "rule": "RULE_IQM_GINGER_BLEEDING/drug_class_rules[0]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "caution",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_WAR_GINKGO",
+    "pair_severity": "avoid",
+    "drug": "11289",
+    "supplement": "ginkgo",
+    "rule": "RULE_IQM_GINKGO_HYPERTENSION/drug_class_rules[1]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "caution",
+    "gap": 1
+  },
+  {
+    "pair": "DSI_WAR_GLUCOSAMINE",
+    "pair_severity": "monitor",
+    "drug": "11289",
+    "supplement": "glucosamine",
+    "rule": "RULE_INGREDIENT_GLUCOSAMINE/drug_class_rules[0]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "caution",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_WAR_SJW",
+    "pair_severity": "avoid",
+    "drug": "11289",
+    "supplement": "st_johns_wort",
+    "rule": "RULE_INGREDIENT_ST_JOHNS_WORT/drug_class_rules[1]",
+    "rule_class": "anticoagulants",
+    "rule_severity": "contraindicated",
+    "gap": -1
+  },
+  {
+    "pair": "DSI_ZINC_FLUOROQUINOLONE",
+    "pair_severity": "avoid",
+    "drug": "class:fluoroquinolones",
+    "supplement": "zinc",
+    "rule": "RULE_IQM_ZINC/drug_class_rules[1]",
+    "rule_class": "fluoroquinolones",
+    "rule_severity": "caution",
+    "gap": 1
+  }
+]

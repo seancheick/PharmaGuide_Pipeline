@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-11-03",
+    "last_updated": "2026-11-11",
     "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 155,
@@ -5499,7 +5499,7 @@
           "mechanism": "Iron can chelate fluoroquinolone antibiotics in the gut, reducing absorption and risking treatment failure during an active infection.",
           "action": "Separate iron supplements from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval on the antibiotic label or prescriber instructions.",
           "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
           ],
           "alert_headline": "Separate from fluoroquinolone antibiotics",
@@ -6098,7 +6098,7 @@
           "mechanism": "Magnesium can chelate fluoroquinolone antibiotics in the gut, reducing absorption and risking treatment failure during an active infection.",
           "action": "Separate magnesium supplements or antacids from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval on the antibiotic label or prescriber instructions.",
           "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
           ],
           "alert_headline": "Separate from fluoroquinolone antibiotics",
@@ -6425,7 +6425,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Soluble viscous fiber delays gastric emptying and slows carbohydrate absorption, which can reduce postprandial glucose spikes.",
-          "action": "Separate dosing from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Monitor glucose.",
+          "action": "Talk to your clinician before adding psyllium, and monitor glucose, especially in the first weeks.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6461,7 +6461,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6495,7 +6495,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6563,7 +6563,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -12779,7 +12779,7 @@
           "mechanism": "Calcium can chelate fluoroquinolone antibiotics in the gut, reducing absorption and risking treatment failure during an active infection.",
           "action": "Separate calcium supplements from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval on the antibiotic label or prescriber instructions.",
           "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
           ],
           "alert_headline": "Separate from fluoroquinolone antibiotics",
@@ -12969,7 +12969,7 @@
           "mechanism": "Zinc can chelate fluoroquinolone antibiotics in the gut, reducing absorption and risking treatment failure during an active infection.",
           "action": "Separate zinc supplements from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval on the antibiotic label or prescriber instructions.",
           "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
           ],
           "alert_headline": "Separate from fluoroquinolone antibiotics",
@@ -21994,7 +21994,9 @@
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticonvulsants"
+                "anticonvulsants",
+                "clobazam",
+                "valproate"
               ],
               "profile_flags_any": []
             },

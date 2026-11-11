@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-11-11",
     "total_entries": 30,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
@@ -553,7 +553,7 @@
       "mechanism": "Beta blockers reduce heart rate and AV conduction via beta-1 blockade. Verapamil (non-dihydropyridine calcium channel blocker) independently slows SA and AV node conduction. Combined, additive negative chronotropic and dromotropic effects can produce severe bradycardia, heart block, or asystole — particularly with IV administration.",
       "management": "Use together only when clinically necessary with careful monitoring. Avoid IV verapamil in patients on beta blockers. Monitor heart rate and ECG at initiation and dose changes. Dose reductions of one or both agents may be required.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=af1249b0-e889-4f02-bdc2-54862de0545e",
         "https://pubmed.ncbi.nlm.nih.gov/6127992/"
       ],
       "verification": {
@@ -586,8 +586,7 @@
       "mechanism": "Amiodarone inhibits P-glycoprotein and CYP3A4, reducing renal and non-renal digoxin clearance. Digoxin plasma levels can rise 70–100% within days of starting amiodarone, pushing into the toxic range (>2 ng/mL). Digoxin toxicity causes bradycardia, heart block, and potentially fatal arrhythmias.",
       "management": "Reduce the digoxin dose by 30–50% when starting amiodarone. Monitor digoxin levels closely within 1 week and again after 1 month. Maintain levels in the 0.5–0.9 ng/mL therapeutic range for heart failure.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0e83dd12-eaf9-4764-8039-eae5d6a9bd87",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
       ],
       "verification": {
         "status": "verified",
@@ -619,8 +618,7 @@
       "mechanism": "Ciprofloxacin inhibits CYP1A2, the primary enzyme responsible for theophylline metabolism. CYP1A2 inhibition can double theophylline plasma levels, causing theophylline toxicity: nausea, vomiting, tachycardia, seizures.",
       "management": "If ciprofloxacin is required in a patient on theophylline, reduce theophylline dose by 30–50% and monitor serum theophylline levels. Use an alternative antibiotic when possible (azithromycin has minimal CYP1A2 inhibition).",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0de62b3e-de08-4fbb-afcb-3b7dae3b4ca7",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
       ],
       "verification": {
         "status": "verified",
@@ -688,8 +686,7 @@
       "mechanism": "Enzyme-inducing anticonvulsants (carbamazepine, phenytoin, phenobarbital, oxcarbazepine, topiramate) upregulate CYP3A4 and conjugation enzymes, markedly accelerating metabolism of ethinyl estradiol and progestins in combined oral contraceptives. The result is reduced OC plasma levels and failure to suppress ovulation — unintended pregnancy.",
       "management": "Counsel patients on the interaction. Consider higher-dose OC formulations, additional barrier contraception, or switch to a non-hormonal or long-acting reversible contraceptive (IUD, implant) that is not affected by enzyme induction.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d5b3c5ca-6064-4bc4-b46f-f45a41f0a4f6",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d409411-aa9f-4f3a-a52c-fbcb0c3ec053"
       ],
       "verification": {
         "status": "verified",
@@ -721,7 +718,7 @@
       "mechanism": "A complex bidirectional interaction: valproic acid displaces phenytoin from protein binding (raising free phenytoin transiently) and inhibits CYP2C9-mediated phenytoin metabolism (raising total phenytoin). Simultaneously, phenytoin induces valproate metabolism, lowering valproate levels. Net effect is unpredictable changes in both drug levels, risking toxicity or loss of seizure control.",
       "management": "Monitor both free phenytoin and valproate levels when used together. Dose adjustments for both agents are typically required. Neurologist oversight is essential. Avoid initiating both simultaneously — introduce one at a time with careful level monitoring.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a6b7c8d9-e0f1-4a2b-3c4d-5e6f7a8b9c0d",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=08a65cf4-7749-4ceb-6895-8f4805e2b01f",
         "https://pubmed.ncbi.nlm.nih.gov/6776391/"
       ],
       "verification": {
@@ -885,7 +882,7 @@
       "management": "Monitor serum potassium and magnesium regularly in patients on digoxin plus loop or thiazide diuretics. Replace electrolytes promptly. Consider potassium-sparing strategies. Target potassium >4.0 mEq/L in digoxin-treated patients.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
       ],
       "verification": {
         "status": "verified",
@@ -917,7 +914,7 @@
       "mechanism": "Gemfibrozil inhibits CYP2C8 and OATP1B1 hepatic uptake transporter, dramatically increasing plasma concentrations of many statins (especially simvastatin, cerivastatin, rosuvastatin). Elevated statin levels substantially increase the risk of myopathy and rhabdomyolysis. This combination caused cerivastatin's market withdrawal in 2001.",
       "management": "Avoid gemfibrozil with most statins. If combined lipid-lowering therapy is required, fenofibrate has significantly lower interaction potential. If gemfibrozil is necessary, use pravastatin at the lowest effective dose with vigilant myopathy monitoring.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09b2febc-cc26-40c4-aeda-5a04a5e2a93c",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cf32b795-bf42-4861-b273-06d27de3f21d",
         "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor"
       ],
       "verification": {

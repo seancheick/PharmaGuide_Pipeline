@@ -73,6 +73,17 @@ EXPECTED_CLASSES = {
     # Existing lithium-specific profile warnings need this identity group;
     # ATC's broader N05A placement does not make lithium an antipsychotic.
     "class:lithium",
+    # Interaction audit Stage 2 (2026-11-11): one class per rule class that
+    # entered medicines could not reach. Membership cases with exclusions:
+    # test_medication_class_membership_reachability.
+    "class:cardiac_glycosides",
+    "class:thyroid_medications",
+    "class:antidepressants_ssri_snri",
+    "class:anticholinergics",
+    "class:hypoglycemics_high_risk",
+    "class:hypoglycemics_lower_risk",
+    "class:hypoglycemics_unknown",
+    "class:clobazam",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -114,7 +125,7 @@ RXCUI_PATTERN = re.compile(r"^\d+$")
 @pytest.fixture(scope="module")
 def data() -> dict:
     assert DRUG_CLASSES_PATH.exists(), (
-        f"{DRUG_CLASSES_PATH} missing — run scripts/api_audit/seed_drug_classes.py --live"
+        f"{DRUG_CLASSES_PATH} missing — restore it from git; memberships are curated by hand"
     )
     with DRUG_CLASSES_PATH.open() as f:
         return json.load(f)
@@ -267,7 +278,7 @@ def test_canonical_anchors_present(classes, class_id, expected):
     for drug in expected:
         assert drug in names, (
             f"{class_id} is missing canonical anchor {drug!r}; "
-            f"RxClass ATC may have changed — re-run seed_drug_classes.py --live"
+            f"check the class against RxNorm with scripts/api_audit/verify_drug_class_rxcuis.py"
         )
 
 

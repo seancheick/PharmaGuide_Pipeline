@@ -614,3 +614,94 @@ class TestTimingDataQuality:
             allowed = {"EGCG", "CoQ10", "DHA", "EPA", "ALA", "IU"}
             offenders = [w for w in shouted if w not in allowed]
             assert not offenders, f"{r['id']} shouts: {offenders}"
+
+
+# ── A held interval is not published elsewhere ─────────────────────
+# review_status gates timing rules, but the same pair can also be published
+# through a curated interaction's `management` or an interaction rule's action
+# text. An interval held as unsupported must not ship through those routes
+# (interaction audit 2026-11-11, finding 5).
+
+# Intervals an owner decision approved for publication in pair text while the
+# timing card stays held. Each entry names the decision.
+APPROVED_HELD_INTERVALS = {
+    # D27, Sean 2026-10-01: "one interval everywhere: at least 4 hours", the
+    # levothyroxine label's interval for magnesium-containing antacids
+    # (scripts/audits/levo_grapefruit_severity_20261001/research.md).
+    "timing_thyroid_med_magnesium_separate",
+}
+
+PUBLISHED_RULE_FIELDS = ("action", "alert_headline", "alert_body", "informational_note")
+
+
+def _published_texts():
+    """(label, haystack for identity terms, text a reader sees) for every published instruction."""
+    out = []
+    for path in sorted((DATA_DIR / "curated_interactions").glob("*.json")):
+        for item in json.loads(path.read_text())["interactions"]:
+            names = " ".join(
+                str(item.get(k) or "")
+                for k in ("agent1_name", "agent2_name", "agent1_canonical_id", "agent2_canonical_id")
+            )
+            text = f"{item.get('management') or ''} {item.get('mechanism') or ''}"
+            out.append((f"{path.name}:{item['id']}", f"{names} {text}", text))
+    rules_doc = json.loads((DATA_DIR / "ingredient_interaction_rules.json").read_text())
+    for rule in rules_doc["interaction_rules"]:
+        subject = (rule.get("subject_ref") or {}).get("canonical_id") or ""
+        for kind in ("drug_class_rules", "condition_rules", "dose_thresholds"):
+            for i, sub in enumerate(rule.get(kind) or []):
+                text = " ".join(str(sub.get(k) or "") for k in PUBLISHED_RULE_FIELDS)
+                out.append((f"{rule['id']}/{kind}[{i}]", f"{subject} {text}", text))
+    return out
+
+
+def _terms(rule, side):
+    tags = rule.get(f"ingredient{side}_tags") or [rule.get(f"ingredient{side}") or ""]
+    return {t.replace("_", " ").lower() for t in tags if t}
+
+
+def held_interval_leaks(timing_rules, published, approved=APPROVED_HELD_INTERVALS):
+    import re as _re
+
+    leaks = []
+    for rule in timing_rules:
+        relation = rule["timing_relation"]
+        if rule["review_status"] == "verified" or relation["type"] not in BINARY_RELATION_TYPES:
+            continue
+        if rule["id"] in approved:
+            continue
+        hours = relation.get("minimum_hours")
+        if not hours:
+            continue
+        figure = _re.compile(rf"\b{hours:g}\s*(?:[-–]|to)?\s*\d*\s*(?:hours?|hrs?)\b", _re.I)
+        first, second = _terms(rule, 1), _terms(rule, 2)
+        for label, haystack, text in published:
+            lowered = haystack.lower()
+            if any(t in lowered for t in first) and any(t in lowered for t in second) and figure.search(text):
+                leaks.append(f"{label} publishes the {hours:g} h interval held on {rule['id']}")
+    return leaks
+
+
+class TestHeldIntervalsStayUnpublished:
+    def test_no_published_text_restates_a_held_interval(self, rules):
+        assert held_interval_leaks(rules, _published_texts()) == []
+
+    def test_control_a_restated_held_interval_is_reported(self):
+        held = [{
+            "id": "timing_x", "review_status": "needs_revision",
+            "timing_relation": {"type": "separate_from", "minimum_hours": 2},
+            "ingredient1_tags": ["iron"], "ingredient2_tags": ["calcium"],
+        }]
+        published = [
+            ("leak", "iron calcium", "Take them at least 2 hours apart."),
+            ("other pair", "iron zinc", "Take them at least 2 hours apart."),
+            ("no figure", "iron calcium", "Take them at different times of the day."),
+        ]
+        assert held_interval_leaks(held, published) == [
+            "leak publishes the 2 h interval held on timing_x"
+        ]
+        assert held_interval_leaks(held, published, approved={"timing_x"}) == []
+
+    def test_approved_exceptions_name_held_rules(self, rules):
+        held = {r["id"] for r in rules if r["review_status"] != "verified"}
+        assert APPROVED_HELD_INTERVALS <= held
