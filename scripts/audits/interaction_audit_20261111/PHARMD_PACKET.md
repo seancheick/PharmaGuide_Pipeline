@@ -108,3 +108,22 @@ sure no other record restates a held interval (gate `TestHeldIntervalsStayUnpubl
   condition and drug-class rules show as a neutral note, while "contraindicated" ones are hidden. Intentional per
   its comment (condition-specific copy should not reach users it does not apply to), but the same reasoning applies
   to "avoid" copy such as pregnancy wording. Decide: suppress both without a profile, or show both as neutral notes.
+
+## F. Stage 3 proposed additions (not applied)
+
+Receipts with full proposed records: `additions_receipts_a.md`, `additions_receipts_b.md` (agent research). "Verified"
+means the main agent re-read the label passage on 2026-11-11. Nothing below is in the data until approved.
+
+| Proposal | Severity proposed | Basis | Open for you |
+|---|---|---|---|
+| `DSI_ISOTRETINOIN_VITAMIN_A` (isotretinoin RxCUI 6064 + vitamin A) | Major | Absorica §7.1: "Avoid concomitant use … with supplements containing vitamin A". Verified | RxCUI covers all routes (topical too); include beta-carotene? |
+| `DSI_LEVODOPA_IRON` (levodopa 6375 + iron) | Moderate | Sinemet: iron salts "should be coadministered with caution"; chelation lowers absorption. Verified. No interval stated, none supplied | does the matcher map carbidopa/levodopa products to 6375? |
+| `DSI_CALCIUM_BISPHOSPHONATE` (class:bisphosphonates + calcium) | Major, matching `DSI_MAGNESIUM_BISPHOSPHONATE` | each label's own spacing: alendronate ≥½ h after dose; risedronate IR ≥30 min before, calcium another time of day; ibandronate 60 min | class includes IV zoledronic acid (same gap as the magnesium pair) |
+| `DSI_CARDIAC_GLYCOSIDE_LICORICE` (class:cardiac_glycosides + glycyrrhizin licorice; DGL is a separate id) | Major (judgment) | LANOXIN: hypokalemia "may predispose to digoxin toxicity"; PMID 28660884 glycyrrhizin lowers potassium; one case report (title only) | severity on an inferred chain |
+| Lamotrigine + ethinyl estradiol (RxCUI 4124, not class:oral_contraceptives, which holds progestins only) | Moderate | Lamictal: ethinylestradiol "increased the clearance of lamotrigine up to 2-fold"; progestin-only pills "had no effect". Verified | lands together with narrowing `DDI_ANTICONV_OCP` |
+| `DDI_ANTICONV_OCP` narrowed to class:enzyme_inducing_antiseizure_medications (carbamazepine, phenobarbital, phenytoin, primidone) | unchanged | its text describes inducers | its text names oxcarbazepine and topiramate: oxcarbazepine needs its own pair (Trileptal label warning); topiramate is dose-dependent |
+| CBD: split `RULE_BANNED_CBD_INTERACTIONS` anticonvulsants into clobazam and valproate sub-rules | caution | Epidiolex label (8bf27097): clobazam active-metabolite rise; valproate transaminase rise | current text is accurate but generic; clobazam also raises transaminases less often |
+| Ashwagandha + thyroid_medications sub-rule | monitor, limited | NCCIH "might interact with … thyroid hormone medications"; PMID 28829155 raised T3/T4 off levothyroxine | the existing condition rule says "Contraindicated in hyperthyroidism"; NCCIH says "not recommended" |
+| NAC + nitroglycerin (4917) | Minor | PMID 9120179: oral NAC with transdermal nitroglycerin, side effects mainly headache, about twice nitroglycerin alone | NAC CUI needs UMLS check; no nitrate class |
+| Psyllium + digoxin | none recommended | PMID 3038494: ispaghula "had no influence"; LANOXIN names bran meals, not psyllium | optional general spacing record |
+| `RULE_IQM_PSYLLIUM_DIABETES` source | replace ghost NCCIH link with PMID 38844885 (2024 meta-analysis, 19 trials) | glucose-lowering supported | no human source for "fiber delays absorption of metformin/sulfonylureas": remove that claim |
