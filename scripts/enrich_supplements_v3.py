@@ -22808,10 +22808,15 @@ class SupplementEnricherV3:
         }
         user_highest_weight = -1.0
         raw_flags = user_profile.get("profile_flags") if isinstance(user_profile, dict) else None
+        # A checked condition carries the flag the taxonomy derives from it
+        # (surgery_scheduled, pregnant, breastfeeding, trying_to_conceive), so
+        # a gate that requires that flag still fires.
+        profile_flags = {f.strip().lower() for f in raw_flags or [] if isinstance(f, str) and f.strip()}
+        profile_flags.update(derived_flags_by_condition[c] for c in conditions_checked if c in derived_flags_by_condition)
         gate_profile = {
             "conditions": conditions_checked,
             "drug_classes": drug_classes_checked,
-            "profile_flags": [f.strip().lower() for f in raw_flags or [] if isinstance(f, str) and f.strip()],
+            "profile_flags": sorted(profile_flags),
         }
 
         def gate_fires(hit: Dict) -> bool:
