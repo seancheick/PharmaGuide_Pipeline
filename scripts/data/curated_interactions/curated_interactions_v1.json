@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-11",
-    "total_entries": 92,
+    "total_entries": 93,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -1883,8 +1883,45 @@
       "agent2_id": "C0036002",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "SAMe raises serotonin activity. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because combining it with the MAOI can cause serotonin syndrome. No study of SAMe with an MAOI was found.",
+      "mechanism": "SAMe raises serotonin activity. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because the combination can cause serotonin syndrome. The other MAOI labels do not name SAMe; for them this warning is applied by class inference while a clinician reviews each medicine. No study of SAMe with an MAOI was found.",
       "management": "Do not combine SAMe with an MAOI. Do not stop or change a prescribed MAOI to use SAMe; the prescriber must manage any medication change or product-specific washout.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa",
+        "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "PARNATE and NARDIL labels read on DailyMed. Dr. Pham's contraindication covers tranylcypromine; the class severity is the published value, kept pending ask 1 (audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md)."
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class",
+      "evidence_notes": "Class record. Tranylcypromine has its own exact pair (DSI_TRANYLCYPROMINE_SAME). The labels for phenelzine (NARDIL), isocarboxazid (MARPLAN) and selegiline (EMSAM, ZELAPAR) do not name SAMe (read 2026-11-11). NARDIL contraindicates concomitant serotoninergic agents as a category; whether SAMe falls under it is part of ask 1 to Dr. Pham. The class severity is kept, not lowered, until that decision.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_TRANYLCYPROMINE_SAME",
+      "type": "Med-Sup",
+      "agent1_name": "Tranylcypromine",
+      "agent1_id": "10734",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "SAMe raises serotonin activity. The tranylcypromine (PARNATE) label lists S-adenosyl-L-methionine (SAM-e) as contraindicated because combining it with tranylcypromine can cause serotonin syndrome.",
+      "management": "Do not take SAMe with tranylcypromine. Do not stop or change tranylcypromine to use SAMe; your prescriber manages any medication change and the washout time.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
         "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
@@ -1899,12 +1936,12 @@
           "pubmed": true
         },
         "method": "agent_label_content_review_2026_11_11",
-        "notes": "PARNATE label read on DailyMed; other MAOI labels checked for SAMe. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); label passages read by agent."
+        "notes": "PARNATE sections 4.1 and 7 read on DailyMed; RxCUI 10734 (tranylcypromine, IN) checked on RxNav. Severity decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md)."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "evidence_notes": "PARNATE (tranylcypromine) §4.1 and §7 list S-adenosyl-L-methionine (SAM-e) as contraindicated (serotonin syndrome). The labels for phenelzine (NARDIL), isocarboxazid (MARPLAN) and selegiline (EMSAM, ZELAPAR) do not name SAMe (read 2026-11-11); applying the contraindication to every MAOI is a documented class inference awaiting Dr. Pham's per-drug decision. NCCIH says SAMe might interact with serotonin-raising medicines.",
+      "applies_to": "specific_drug",
+      "evidence_notes": "PARNATE (tranylcypromine) sections 4.1 and 7 list SAM-e as contraindicated (serotonin syndrome).",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",

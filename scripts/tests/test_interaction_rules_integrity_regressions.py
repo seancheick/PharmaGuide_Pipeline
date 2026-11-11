@@ -715,10 +715,13 @@ def test_same_maoi_rule_cites_serotonergic_sources_not_an_efficacy_meta_analysis
 
     # 38423354 is a SAMe-for-depression efficacy meta-analysis.
     parnate = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
-    assert maois["sources"] == [parnate, NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
+    nardil = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+    assert maois["sources"] == [parnate, nardil, NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
     assert _pmid("38423354") not in maois["sources"]
-    # Dr. Pham 2026-11-11 (A3): the tranylcypromine label contraindicates SAMe; evidence certainty stays limited.
-    assert (maois["severity"], maois["evidence_level"]) == ("contraindicated", "limited")
+    # Dr. Pham 2026-11-11 (A3) contraindicates SAMe for tranylcypromine (exact pair DSI_TRANYLCYPROMINE_SAME).
+    # This class rule keeps its published avoid while the other MAOIs are pending (ask 1); its evidence
+    # level matches the class pair's verifier-derived tier.
+    assert (maois["severity"], maois["evidence_level"]) == ("avoid", "moderate")
     assert "clomipramine" in maois["mechanism"]
     assert rule["last_reviewed"] == "2026-11-11"
     assert maois["clinical_review"]["reviewer"] == "Dr. Pham"
