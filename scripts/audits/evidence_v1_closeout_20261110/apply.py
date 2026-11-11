@@ -118,6 +118,35 @@ def patch_backed():
     print(data_batch.save(BACKED, blob))
 
 
+CURCUMIN_NOTABLE = (
+    "Under signed A130 these syntheses are noncredit context, not support for a generic curcumin "
+    "benefit: PMID 39478418 (103-trial multi-outcome meta-analysis), PMID 38945354 (inflammatory, "
+    "oxidative-stress and endothelial biomarker review) and PMID 38576215 (osteoarthritis umbrella "
+    "review). PMID 40615851 (21 RCTs in knee osteoarthritis) reports lower CRP and TNF-alpha, with no "
+    "significant effect on ESR, IL-1 beta, IL-6 or PGE2."
+)
+
+
+def patch_review_followup():
+    """PR 439 review: curcumin notable_studies still carried A130-rejected benefit language, and the
+    reference-only rice-protein record still listed a goal its rejected contexts do not support."""
+    blob = data_batch.load(BACKED)
+    rows = {row["id"]: row for row in blob["backed_clinical_studies"]}
+    cur = rows["PRECLIN_CURCUMIN_GENERIC"]
+    assert "high-credibility" in cur["notable_studies"]
+    cur["notable_studies"] = CURCUMIN_NOTABLE
+    rice = rows["INGR_RICE_PROTEIN"]
+    assert rice["study_type"] == "reference" and not any(
+        c.get("scoring_eligible") for c in rice["study_contexts"])
+    rice["health_goals_supported"] = []
+    rice["last_updated"] = TODAY
+    print(data_batch.save(BACKED, blob))
+
+
 if __name__ == "__main__":
-    patch_literature()
-    patch_backed()
+    import sys
+    if sys.argv[1:] == ["review-followup"]:
+        patch_review_followup()
+    else:
+        patch_literature()
+        patch_backed()

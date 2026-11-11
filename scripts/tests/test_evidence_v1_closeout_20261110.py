@@ -57,12 +57,26 @@ def test_generic_curcumin_carries_no_rejected_benefit_claim(records):
     assert r["key_endpoints"] == [] and r["health_goals_supported"] == []
     assert "primary_outcome" not in r
     assert "broad meta-analytic support" not in r["notes"] and "A130" in r["notes"]
+    for stale in ("high-credibility", "supports anti-inflammatory", "symptom benefit"):
+        assert stale not in r["notable_studies"]
+    assert "A130" in r["notable_studies"] and "noncredit" in r["notable_studies"]
+
+
+def test_reference_only_rice_protein_lists_no_supported_goal(records):
+    """Both rice-protein contexts are rejected sources, so no goal is supported."""
+    r = records["INGR_RICE_PROTEIN"]
+    assert not any(c.get("scoring_eligible") for c in r["study_contexts"])
+    assert r["health_goals_supported"] == []
 
 
 def test_curcumin_text_reconciliation_moves_no_evidence():
     from assessment_readiness import _resolved_evidence_assessment
     from evidence_resolver import resolve_evidence_for_canonical
+    previous = logging.root.manager.disable
     logging.disable(logging.WARNING)
-    resolution = resolve_evidence_for_canonical("curcumin", name="Curcumin")
+    try:
+        resolution = resolve_evidence_for_canonical("curcumin", name="Curcumin")
+    finally:
+        logging.disable(previous)
     assert resolution.points_eligible is False
     assert _resolved_evidence_assessment(resolution)[0] == "evaluated_limited_or_negative"

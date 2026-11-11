@@ -31590,7 +31590,7 @@
         "meta-analysis"
       ],
       "last_updated": "2026-11-10",
-      "notable_studies": "A comprehensive 103-trial meta-analysis found high-credibility evidence for improvements in fasting glucose, CRP, HDL, and body weight, with significant effects across 23 of 42 pooled outcomes (PMID 39478418). Additional umbrella-style work supports anti-inflammatory and endothelial-function biomarker effects (PMID 38945354) and osteoarthritis symptom benefit (PMID 38576215), while newer disease-specific syntheses continue to show reductions in CRP and TNF-alpha in knee osteoarthritis (PMID 40615851).",
+      "notable_studies": "Under signed A130 these syntheses are noncredit context, not support for a generic curcumin benefit: PMID 39478418 (103-trial multi-outcome meta-analysis), PMID 38945354 (inflammatory, oxidative-stress and endothelial biomarker review) and PMID 38576215 (osteoarthritis umbrella review). PMID 40615851 (21 RCTs in knee osteoarthritis) reports lower CRP and TNF-alpha, with no significant effect on ESR, IL-1 beta, IL-6 or PGE2.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -54038,9 +54038,7 @@
       "key_endpoints": [
         "Rice-versus-whey training comparisons; positive time changes and mainly null between-active differences"
       ],
-      "health_goals_supported": [
-        "Muscle Growth & Recovery"
-      ],
+      "health_goals_supported": [],
       "notes": "Valid controlled human training research exists for defined rice protein preparations. Two full primary reports support a completed limited noncredit numerical-transfer assessment: active-whey comparative null findings coexist with positive time changes and a secondary bone-content difference. Neither isolated rice-versus-placebo efficacy nor formal equivalence is established. Nutritional role, preparation-specific Formulation, Dose and safety remain separate.",
       "last_updated": "2026-11-10",
       "references_structured": [

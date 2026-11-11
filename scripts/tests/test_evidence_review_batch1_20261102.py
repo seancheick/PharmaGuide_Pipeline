@@ -304,3 +304,22 @@ def test_turmeric_keeps_its_dose_reference(records):
     assert semantics["curve"] == "completed_no_benchmark_neutral"
     assert semantics["source_ids"] == ["PMID:38576215", "PMID:38945354", "PMID:40615851"]
     assert records["turmeric"]["verification_provenance"]["reference_citations"]["is_complete"] is True
+
+
+@pytest.mark.parametrize("cid, name", UNDECLARED_PREPARATIONS)
+def test_attested_literature_cannot_close_a_row_with_a_held_backed_source(monkeypatch, cid, name):
+    """A held clinical source outside the literature review is an unresolved fact, not a zero."""
+    import evidence_resolver
+    held = {"id": "TEST_HELD_UNREVIEWED_SOURCE", "ingredient": name, "canonical_id": cid,
+            "standard_name": name, "study_type": "rct_single", "evidence_level": "ingredient-human",
+            "effect_direction": "positive_weak", "scoring_eligible": False,
+            "references_structured": [{"pmid": "99999999", "scoring_eligible": False}]}
+    index = {key: list(studies) for key, studies in evidence_resolver._backed_studies_index().items()}
+    for key in {cid, name.lower(), cid.replace("_", " ")}:
+        index.setdefault(key, []).append(held)
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: index)
+    resolution = _resolve_label_row(cid, name)
+    assert resolution.points_eligible is False
+    assert resolution.blocking_reasons
+    assert "preparation_uncertainty_reviewed" not in (resolution.owner_facts.get("literature_evidence") or {})
+    assert _review_state(resolution) == "not_yet_evaluated"
