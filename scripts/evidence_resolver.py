@@ -485,6 +485,19 @@ def _held_clinical_source_pmids(entry: Mapping[str, Any]) -> Set[str]:
     return held
 
 
+def _reviewed_general_conclusion(context) -> bool:
+    """ADR-0007: a finished, attributable, schema-valid ingredient-level conclusion.
+    Credit-bearing or not; a raw approval status alone is not enough."""
+    if not isinstance(context, Mapping) or context.get("identity_scope") != "ingredient_general":
+        return False
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import clinical_review_provenance_valid, context_review_finished
+    return (context.get("review_status") == "clinician_approved"
+            and context_review_finished(context)
+            and clinical_review_provenance_valid(context)
+            and not validate_ingredient_context(context, require_complete_review=True))
+
+
 def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
     """Honor source holds, joined to the context and optional signed source scope."""
     if entry.get("scoring_eligible") is False or is_reference_only(entry):
@@ -1447,13 +1460,13 @@ def _resolve_evidence_for_row(
                     and all(isinstance(study.get("applicability"), Mapping)
                             and study["applicability"].get("preparation_uncertainty_reviewed") is True
                             and assess_clinical_source_review(study)["is_complete"]
-                            and any(context.get("scoring_eligible") is True
+                            # ADR-0007: the record's own reviewed ingredient-level
+                            # conclusion, credit-bearing or not. Exact/branded
+                            # contexts may coexist; they never transfer here.
+                            and any(_reviewed_general_conclusion(context)
                                     for context in study.get("study_contexts") or [])
-                            and all(context.get("identity_scope") == "ingredient_general"
-                                    for context in study.get("study_contexts") or []
-                                    if context.get("scoring_eligible") is True)
                             for study in deduped_studies)):
-                owner_facts["backed_clinical_studies"]["preparation_uncertainty_reviewed"] = True
+                owner_facts.setdefault("backed_clinical_studies", {})["preparation_uncertainty_reviewed"] = True
                 # V1: a bounded ingredient-general review can finish while the label's
                 # preparation correspondence remains unknown. This is no
                 # efficacy credit and no claim the product was studied. Missing

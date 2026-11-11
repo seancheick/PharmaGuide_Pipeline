@@ -6975,7 +6975,7 @@
         "Joint & Bone Health"
       ],
       "notes": "Human MSM research includes distinct knee populations and regimens. PMID 37447322 tested distilled OptiMSM at 2 g/day for 12 weeks in adults with mild knee discomfort, with a borderline positive primary JKOM score and null JOA and inflammatory-marker findings. The full primary paper for PMID 16309928 also identifies OptiMSM, supplied by Cardinal Nutrition, but used a one-week titration to 6 g/day in knee osteoarthritis. Pain and physical-function findings were positive, while stiffness, total WOMAC symptoms and global assessments were not significantly different. These studies do not establish a continuous 2–6 g/day efficacy range, a universal minimum, general anti-inflammatory benefit or long-term safety. PMID 21708034 now has a completed bounded RCT-transfer exclusion because allocation explicitly alternated; its positive and null controlled-human findings remain retained. PMID17516722 now has a completed narrow source assessment: the paper explicitly names joint mobility as a main outcome and reports significant standalone-MSM improvement versus placebo with Healers-supplied capsules at1.5g/day for12weeks. The principal composite responder counts/Fisher test remain unreported, not null or positive. Within-arm VAS/Lequesne changes, ambiguous global ratings and the swelling text/Figure2 conflict do not supply causal credit. No exact between-arm effect, p value, clinical-importance threshold, general anti-inflammatory benefit or OptiMSM manufacturing equivalence is invented. Full review of this documented nonreporting completes the source assessment; it does not claim that missing results became available. The1.5,2and titrated6g regimens remain discrete studied facts, never a continuous Dose curve or universal minimum. The original signed finding for PMID 37447322 and all separate Dose and Safety decisions remain unchanged. PMIDs 37447322 and 16309928 are independently qualified through their separate source contexts, with different populations and regimens; they are not a continuous efficacy range. The source-level chemical identity/application check for this generic record was performed by Codex /root and independently by /root/grouped_correctness_check on 2026-11-08. This does not assert retail purity, manufacturing, altered-delivery, dose or safety equivalence. Dr. Pham's original limited OptiMSM decision and date remain intact in BRAND_OPTIMSM.",
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-10",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
         {
@@ -7516,7 +7516,13 @@
         "required_form_terms": [
           "OptiMSM",
           "MSM",
-          "methylsulfonylmethane"
+          "methylsulfonylmethane",
+          "methyl sulfonyl methane",
+          "methylsulfonyl methane",
+          "methyl sulphonyl methane",
+          "methylsulphonylmethane",
+          "methysulfonylmethane",
+          "dimethyl sulfone"
         ],
         "source_pmids": [
           "37447322",
@@ -7527,8 +7533,8 @@
           "Joint & Bone Health"
         ],
         "studied_population": "Distinct source contexts: mild knee discomfort at 2 g/day, symptomatic knee OA after titration to 6 g/day, and mild-to-moderate radiographic knee OA with main joint-mobility findings at 1.5 g/day. These populations, outcomes, preparations and discrete regimens are not interchangeable or a continuous dose range.",
-        "reviewed_at": "2026-11-09",
-        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence.",
+        "reviewed_at": "2026-11-10",
+        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence. Same-chemistry label spellings of methylsulfonylmethane (dimethyl sulfone, PubChem CID 6213, CAS 67-71-0), already mapped by the identity owner, satisfy the form term; DMSO stays excluded.",
         "excluded_form_terms": [
           "dimethyl sulfoxide",
           "DMSO",
@@ -10598,7 +10604,7 @@
       "health_goals_supported": [
         "Skin, Hair & Nails"
       ],
-      "notes": "The three retained references assess oral hyaluronic acid for skin hydration, elasticity and wrinkle outcomes, not osteoarthritis or joint-lubrication efficacy. PMID 28761365 and PMID 34203487 used specific 120 mg/day preparations for 12 weeks in selected adult skin populations. PMID 40911749 pools seven skin trials; hydration, elasticity and wrinkle depth improved, while firmness, wrinkle volume and transepidermal water loss did not differ significantly. Source preparation, molecular weight and clinical applicability remain distinct; this review does not establish that no joint research exists elsewhere.",
+      "notes": "ADR-0007 one-pass review (agent review by Claude with an independent agent check, 2026-11-10): oral hyaluronic acid has limited human research. Skin: a 2025 meta-analysis of 7 small, heterogeneous RCTs (PMID 40911749) reported improved hydration, elasticity and wrinkle depth, with no significant change in firmness, wrinkle volume or transepidermal water loss. Joint: a 2024 systematic review (PMID 39886281) found 11 small studies (597 adults, mostly knee OA, 30-300 mg/day); 9 reported improvement and its authors concluded that oral HA seems safe and effective for OA, but only 2 studies gave HA alone, nothing was pooled or graded for bias, and 2 found no difference. A 2026 review (PMID 42914415) finds that undefined molecular weight, heterogeneous doses and multi-ingredient products prevent HA-specific attribution. EFSA (2012, doi:10.2903/j.efsa.2012.2806) found no cause-and-effect relationship for protecting skin against dehydration, and no NIH ODS, NCCIH or MedlinePlus monograph covers oral HA. Conclusion: limited research and no ingredient-level points; a label that does not name the studied preparation finishes here with no points. The signed A077 exact Hyabest (S) LF-P 120 mg/day capsule skin context (PMID 34203487) stays the only credit-bearing scope, and PMID 28761365 remains a separate preparation context. This does not claim that hyaluronic acid is ineffective.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-11-10",
       "notable_studies": "PMID 28761365 randomized 60 adults with crow-feet wrinkles to two molecular-weight hyaluronan preparations or placebo for12weeks. PMID 34203487 randomized 40 adults to120mg/day hyaluronan or placebo for12weeks for skin outcomes. PMID 40911749 is a seven-RCT skin meta-analysis with heterogeneous and partly null outcomes. None of these retained references studies OA symptoms.",
@@ -10690,6 +10696,59 @@
           "verification_source": "pubmed_eutils",
           "scoring_eligible": false,
           "notes": "Retained separate preparation/review context; not the accepted exact 34203487 Hyabest (S) LF-P source relationship. Do not transfer molecular-weight-specific or heterogeneous pooled outcomes without its own qualifying scoped assessment."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39886281",
+          "doi": "10.31138/mjr.240724.oha",
+          "title": "Oral Hyaluronic Acid in Osteoarthritis and Low Back Pain: A Systematic Review.",
+          "citation": "Mediterranean journal of rheumatology (2024-12-31)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39886281/",
+          "published_date": "2024-12-31",
+          "publication_types": [
+            "Journal Article",
+            "Review"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "ADR-0007 ingredient-level conclusion source: limited research, no points. 2 of 11 studies gave HA alone; not pooled."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42914415",
+          "doi": "10.1016/j.foodres.2026.120695",
+          "title": "Hyaluronic acid in functional foods and oral supplements: linking molecular weight, bioavailability, and food matrix effects to clinical translation.",
+          "citation": "Food research international (2026-12-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42914415/",
+          "published_date": "2026-12-01",
+          "publication_types": [
+            "Journal Article",
+            "Review"
+          ],
+          "mesh_terms": [
+            "Hyaluronic Acid",
+            "Humans",
+            "Biological Availability",
+            "Molecular Weight",
+            "Dietary Supplements",
+            "Functional Food",
+            "Administration, Oral",
+            "Animals"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Narrative review cited only for the limitation that HA-specific attribution is not established."
         }
       ],
       "effect_direction": "mixed",
@@ -10854,6 +10913,105 @@
             "reviewed_at": "2026-10-26",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_hyaluronic_acid_v1_39886281_oral_joint_review",
+          "source_pmids": [
+            "39886281"
+          ],
+          "components": [
+            "INGR_HYALURONIC_ACID"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Oral hyaluronic acid in 11 human studies at 30-300 mg/day; 2 of 11 gave HA alone, 9 combined it with other actives (glucosamine/chondroitin, Boswellia serrata, krill oil and astaxanthin, chondroitin and keratin peptides, collagen matrix with MSM) or procedures."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Claude agent source review with independent agent check; Sean-approved ADR-0007 V1 policy",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ADR-0007 one-pass review (Sean accepted 2026-11-10). Agent review, not clinician review; clinician_approved is the existing compatibility status. Full text read on PMC11778613."
+          },
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_39886281",
+          "population": {
+            "age_group": "adult",
+            "description": "597 adults aged about 40-80 in 11 studies: knee OA (9), knee and hip OA (1), low back pain (1); follow-up 4 weeks to 12 months (Results; Table 1)."
+          },
+          "study_design": "Systematic review without meta-analysis or formal risk-of-bias grading; PubMed, EMBASE and SciELO searched 1966 to May 2024 per full-text Methods (the abstract names PubMed only). Included 6 randomized double-blind placebo-controlled trials, 4 randomized controlled trials and 1 double-blind placebo-controlled trial.",
+          "outcomes": [
+            {
+              "name": "9 of 11 studies reported improvement in pain, WOMAC, function, Lequesne, stiffness or SF-36, within or between groups; 2 found no between-group difference; results were not pooled",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed"
+            }
+          ],
+          "limitations": [
+            "ADR-0007 one-pass conclusion: limited research for oral hyaluronic acid in general. This context records the ingredient-level conclusion and earns no points.",
+            "The review's authors concluded that oral HA seems safe and effective for OA; this record does not adopt that conclusion because only 2 of 11 studies gave HA alone and 9 used multi-ingredient products or procedures, so the reported improvements are not attributable to HA.",
+            "No meta-analysis, risk-of-bias assessment or certainty grading; small samples (20-100), short follow-up in most studies, and heterogeneous doses, comparators and preparations.",
+            "PMID 42914415 (2026 review) likewise finds that incomplete molecular characterization, heterogeneous doses and formulations, short trials and multi-ingredient products prevent HA-specific attribution.",
+            "No NIH ODS, NCCIH or MedlinePlus monograph covers oral HA, and EFSA (2012, doi:10.2903/j.efsa.2012.2806) found no cause-and-effect relationship for protection of the skin against dehydration.",
+            "The signed A077 exact Hyabest (S) LF-P skin context remains separate and is not transferred."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              30,
+              50,
+              80,
+              120,
+              150,
+              200,
+              300
+            ],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Mostly once daily (Table 1)",
+            "dosage_forms": [
+              "capsule",
+              "oral liquid"
+            ],
+            "co_therapies": [
+              "Co-actives in 9 of 11 studies; comparators included placebo, no treatment, intra-articular HA, arthrocentesis, kinesiotherapy and a glucosamine-chondroitin product (Table 1)"
+            ],
+            "source_provenance": {
+              "pmid": "39886281",
+              "location": "Methods (search, PRISMA screening); Results; Table 1 (design, HA dosage/day, comparator, outcome)",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11778613/"
+            },
+            "reported_regimen": "30-300 mg/day oral HA for 4 weeks to 12 months (Table 1)",
+            "normalization": {
+              "basis": "Per-study HA mass only; co-active amounts are not normalized."
+            }
+          },
+          "included_study_pmids": [
+            "37686801",
+            "33592868",
+            "34622845",
+            "33213125",
+            "27681813",
+            "26550817",
+            "24899570",
+            "23226979",
+            "18208600",
+            "33568038",
+            "38707049"
+          ]
         }
       ],
       "applicability": {
@@ -10875,8 +11033,9 @@
         "supported_outcomes": [
           "Skin, Hair & Nails"
         ],
-        "reviewed_at": "2026-10-26",
-        "reason": "Signed A077 limited source interpretation for the exact Hyabest (S) LF-P oral material. Equal bounds describe correspondence to one tested 120 mg/day regimen, not a universal efficacy minimum, optimal dose or safety ceiling. Unspecified oral HA and different molecular-weight preparations are not assumed equivalent."
+        "reviewed_at": "2026-11-10",
+        "reason": "Signed A077 limited source interpretation for the exact Hyabest (S) LF-P oral material. Equal bounds describe correspondence to one tested 120 mg/day regimen, not a universal efficacy minimum, optimal dose or safety ceiling. Unspecified oral HA and different molecular-weight preparations are not assumed equivalent. ADR-0007 (2026-11-10): preparation uncertainty reviewed; a label that does not name the studied preparation finishes as limited research with no points, never as Hyabest credit.",
+        "preparation_uncertainty_reviewed": true
       }
     },
     {
@@ -13074,7 +13233,7 @@
         "Muscle soreness immediately afterexercise:MD0.02,95%CI−0.36to0.39,P=.93 (oral exercise subset, PMID39632267)"
       ],
       "health_goals_supported": [],
-      "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous. Signed A094 accepts limited oral exercise-soreness findings only. Current38label cohort contains immune,respiratory,liver,antioxidant/glutathione,or dose-only positioning;none claims postexercise soreness ormuscle recovery in retainedsource text. The exercise research is retained as nonaffirmative reference for those currentcatalog purposes.24h soreness benefit is separate from immediate null and adverse functional-recovery findings;less soreness isnot proven bettertrainingadaptation. No universalNACdosecurve or blanketinefficacy conclusion is created.",
+      "notes": "NAC is a glutathione precursor. A 2024 meta-analysis (PMID 39632267) reports lower TBARS and higher glutathione after exercise; a single 1997 randomized trial (PMID 9230243; 262 adults, 78% aged 65 or older, 600 mg twice daily for 6 months) reported fewer and milder influenza-like episodes without preventing infection. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous. Signed A094 accepts limited oral exercise-soreness findings only. Current38label cohort contains immune,respiratory,liver,antioxidant/glutathione,or dose-only positioning;none claims postexercise soreness ormuscle recovery in retainedsource text. The exercise research is retained as nonaffirmative reference for those currentcatalog purposes.24h soreness benefit is separate from immediate null and adverse functional-recovery findings;less soreness isnot proven bettertrainingadaptation. No universalNACdosecurve or blanketinefficacy conclusion is created.",
       "notable_studies": "A 6-month randomized, double-blind, 20-centre trial (PMID 9230243, n=262, NAC 600 mg twice daily, 78% aged 65+) significantly reduced the frequency and severity of influenza-like episodes and shifted cell-mediated immunity from anergy toward normoergy; notably it did not prevent A/H1N1 infection, but only 25% of infected participants on NAC developed symptomatic illness versus 79% on placebo. A 2024 systematic review/meta-analysis of 20 supplementation studies (PMID 39632267) found significantly increased glutathione and reduced TBARS and IL-6, with no significant effect on TNF-alpha, creatine kinase or GSSG. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
       "study_type": "reference",
       "last_updated": "2026-11-10",
@@ -18951,21 +19110,16 @@
       "category": "liver_detox",
       "evidence_level": "reference",
       "published_studies": [
-        "RCT",
-        "meta-analysis"
+        "38579127",
+        "17943794"
       ],
       "score_contribution": "tier_1",
-      "key_endpoints": [
-        "liver enzymes ↓",
-        "hepatoprotection ↑"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Clinical studies support liver protection and enzyme normalization.",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "The reviewed research does not establish a qualifying benefit. Dr. Pham's signed A092 (2026-10-28) rejects the earlier 'liver protection and enzyme normalization' claim and keeps only a narrower NAFLD/NASH research reading, with no Evidence credit: a 2024 meta-analysis (PMID 38579127; 26 RCTs, 2,375 patients) reports favorable lipid, liver-enzyme and steatosis changes, but gives no silymarin dose and mostly tests silymarin added to other active therapy. A Cochrane review of alcoholic and hepatitis B/C liver disease (PMID 17943794; 18 RCTs, 1,088 patients, mostly low quality) found no significant effect on mortality, complications or liver histology. NCCIH (fact sheet updated February 2025) describes liver-disease trial results as conflicting or too limited for conclusions, and its two funded trials (hepatitis C, NASH) showed no benefit. Agent reconciliation of this text with A092, 2026-11-10; not clinician review.",
       "study_type": "reference",
-      "last_updated": "2026-10-28",
-      "notable_studies": "Kalopitas et al. (2024, PMID 38579127) meta-analysis of 26 RCTs in NAFLD/NASH found silymarin improved ALT, AST, several lipid markers, and steatosis-related measures. Older Cochrane-style pooled evidence in alcoholic or viral liver disease (PMID 17943794) was less encouraging for hard outcomes, so the human signal is strongest in metabolic-liver contexts rather than universal liver benefit.",
+      "last_updated": "2026-11-10",
+      "notable_studies": "Li et al. (2024, PMID 38579127) pooled 26 NAFLD/NASH RCTs (2,375 patients, 8-48 weeks): silymarin added to lifestyle or drug therapy was associated with lower ALT, AST, total and LDL cholesterol and triglycerides, higher HDL cholesterol and better steatosis grade, with very high heterogeneity and no reported silymarin dose. Rambaldi et al. (2007 Cochrane, PMID 17943794) found no significant effect on mortality, complications or histology in alcoholic or viral liver disease and questioned the benefit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19024,20 +19178,34 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "nccih",
+          "authority": "NIH National Center for Complementary and Integrative Health",
+          "title": "Milk Thistle",
+          "citation": "NCCIH fact sheet (last updated February 2025)",
+          "url": "https://www.nccih.nih.gov/health/milk-thistle",
+          "published_date": "2025-02",
+          "publication_types": [],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "reference",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "nccih",
+          "scoring_eligible": false,
+          "notes": "Liver-disease trial results conflicting or too limited for conclusions; two NCCIH-funded trials (hepatitis C, NASH) showed no benefit. Read 2026-11-10."
         }
       ],
       "external_ids": {
         "unii": "U946SH95EE"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 200,
-      "registry_completed_trials_count": 29,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis; registry_completed_trials_count=29; total_enrollment=200; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ],
+      "effect_direction": "mixed",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Reference-only under signed A092 (Dr. Pham, 2026-10-28). Descriptive direction mixed: NAFLD/NASH surrogate improvements without a reported dose, mostly as add-on therapy (PMID 38579127), and a null Cochrane review on hard outcomes in alcoholic/viral liver disease (PMID 17943794). Earlier positive_strong, 'liver protection' and healthy-aging tags were removed because A092 rejected them.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_id": "ingr_milk_thistle_38579127_nafld_no_dose",
