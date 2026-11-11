@@ -43,6 +43,14 @@ def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
     sources = {}
     for source_id in ("INGR_L_CARNITINE", "BRAND_CARNIPURE"):
         original = deepcopy(clinical_entries[source_id])
+        if source_id == "INGR_L_CARNITINE":
+            # Published record is reference-only since 2026-11-11; the mechanics
+            # fixture keeps its earlier eligible shape.
+            original.update(evidence_level="ingredient-human", study_type="systematic_review_meta")
+        if source_id == "INGR_L_CARNITINE":
+            # Published record is reference-only since 2026-11-11; the mechanics
+            # fixture keeps its earlier eligible shape.
+            original.update(evidence_level="ingredient-human", study_type="systematic_review_meta")
         source = _approved_test_source(original, name=original["standard_name"],
             pmid=original["references_structured"][0]["pmid"], outcome="Muscle soreness after exercise")
         context = source["study_contexts"][0]
@@ -93,18 +101,16 @@ def test_generic_l_carnitine_record_is_mixed_and_dose_scoped(
 ) -> None:
     entry = clinical_entries["INGR_L_CARNITINE"]
 
-    assert entry["evidence_level"] == "ingredient-human"
-    assert entry["study_type"] == "systematic_review_meta"
+    # Finished as reference-only on 2026-11-11 (signed noncredit review; ADR-0007).
+    assert entry["evidence_level"] == "reference"
+    assert entry["study_type"] == "reference"
     assert entry["effect_direction"] == "mixed"
     assert entry["min_clinical_dose"] == 1000
     assert entry["max_studied_clinical_dose"] == 4000
     assert entry["dose_unit"] == "mg"
     assert entry["exclude_alias_match_mode"] == "bounded_phrase"
     assert entry["evidence_group_id"] == "l_carnitine"
-    assert entry["health_goals_supported"] == [
-        "Muscle Growth & Recovery",
-        "Weight Management",
-    ]
+    assert entry["health_goals_supported"] == []
     assert {
         ref["pmid"] for ref in entry["references_structured"]
     } == {"32958033", "32154768", "32359762"}
@@ -414,9 +420,9 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
 
 @pytest.mark.parametrize('name, expected', [
     ('L-Carnitine', 'not_yet_evaluated'),
-    # The base's signed contexts are scoring_eligible False holds (2026-10-28 register:
-    # declared meta-analyses lack full text), so a printed base stays open too.
-    ('L-Carnitine (Free Base)', 'not_yet_evaluated'),
+    # The base record finished as reference-only on 2026-11-11, so a printed base
+    # finishes at no credit; it still borrows no tartrate credit.
+    ('L-Carnitine (Free Base)', 'evaluated_limited_or_negative'),
 ])
 def test_finished_base_review_does_not_borrow_tartrate_credit(name, expected):
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
@@ -428,8 +434,8 @@ def test_finished_base_review_does_not_borrow_tartrate_credit(name, expected):
     result = score_evidence(product, apply_primary_floor=True)
     assert result["score"] == 0
     assert result["metadata"]["recovered_matches"] == []
-    # Neither label borrows tartrate credit, and neither is closed by a zero while
-    # the base's source hold stands; an enriched form is not label proof.
+    # Neither label borrows tartrate credit; an enriched form is not label proof,
+    # so the unprinted salt stays open.
     resolution = resolve_evidence_for_row(
         product["ingredient_quality_data"]["ingredients_scorable"][0], product,
     )

@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-10",
+    "last_updated": "2026-11-11",
     "total_entries": 224,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
@@ -2495,7 +2495,7 @@
         "astareal"
       ],
       "category": "eye_health",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "human trial"
@@ -2504,13 +2504,11 @@
       "key_endpoints": [
         "Skin findings: uncontrolled oral-plus-topical treatment in women and a separate placebo-controlled oral study in men (PMID: 22428137)"
       ],
-      "health_goals_supported": [
-        "Skin, Hair & Nails"
-      ],
-      "notes": "Natural astaxanthin from H. pluvialis with explicit human evidence for skin-aging endpoints; broader exercise and eye-strain claims are supported less directly. PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished. Retained-source scope and limitations: Skin findings: women received combined oral and topical astaxanthin without a control; a separate male oral study was placebo controlled. No retained eye-strain/endurance endpoint (PMID: 22428137)",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-10-28",
-      "notable_studies": "Tominaga et al. (2012, PMID 22428137) reported selected skin endpoints: an uncontrolled oral-plus-topical study in 30 women and a placebo-controlled oral study in 36 men. Exact AstaReal preparation and broader eye-strain or exercise outcomes require separate source verification.",
+      "health_goals_supported": [],
+      "notes": "The only human study of this astaxanthin preparation (PMID 22428137), written entirely by staff of the manufacturer, reported some skin wrinkle, elasticity and moisture-loss improvements in a small six-week placebo-controlled trial in men and in an uncontrolled oral-plus-topical study in women; no independent trial has confirmed these skin effects. No eye-strain or exercise outcome is supported by this record. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded. Agent review with an independent agent check, 2026-11-11; not clinician review. Reference-only under ADR-0007: the review is finished and carries no Evidence points.",
+      "study_type": "reference",
+      "last_updated": "2026-11-11",
+      "notable_studies": "Tominaga et al. (2012, PMID 22428137), Fuji Chemical Industry authors: a placebo-controlled oral study in 36 men and an uncontrolled oral-plus-topical study in 30 women reported selected skin endpoints. No independent replication.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2549,15 +2547,13 @@
       "external_ids": {
         "unii": "8XPW32PR7I"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": null,
       "primary_outcome": "Skin, Hair & Nails",
       "total_enrollment": null,
-      "registry_completed_trials_count": 12,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
-      "endpoint_relevance_tags": [
-        "skin_health"
-      ],
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "No descriptive direction: one manufacturer-authored publication, one arm uncontrolled, no independent trial. The earlier strong-benefit label and registry aggregate are removed.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -4592,8 +4588,8 @@
       ],
       "exclude_alias_match_mode": "bounded_phrase",
       "category": "sports_performance",
-      "evidence_level": "ingredient-human",
-      "study_type": "systematic_review_meta",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "systematic_review",
         "meta-analysis",
@@ -4605,12 +4601,9 @@
         "modest body-weight change in adults with overweight or obesity",
         "mixed physical-performance outcomes in healthy adults"
       ],
-      "health_goals_supported": [
-        "Muscle Growth & Recovery",
-        "Weight Management"
-      ],
-      "notes": "Human evidence exists but is endpoint-, population-, form-, and dose-specific. A seven-RCT meta-analysis reported less post-exercise soreness and short-lived improvement in muscle-damage markers, especially in resistance-training and untrained groups. A 37-RCT meta-analysis reported a modest average body-weight effect, strongest in adults with overweight or obesity and around 2 g/day. A separate systematic review of prolonged use in healthy adults found effects only under specific conditions and raised unresolved long-term TMAO questions. This record is not broad proof of energy, cardiovascular, fat-burning, or athletic-performance efficacy. The declared 32359762 published-synthesis review is now finished as a bounded noncredit preparation-transfer assessment. Its reported weight/BMI positives and leave-one-study-out robustness remain; the constituent 26666519 expression of concern is not cleared. No new raw-data/reanalysis prerequisite, chemical-form equivalence, pooled credit or individual-primary review claim.",
-      "last_updated": "2026-11-10",
+      "health_goals_supported": [],
+      "notes": "Meta-analyses report less post-exercise soreness and short-lived falls in muscle-damage markers (PMID 32154768) and a modest average weight loss of about 1.2 kg, mainly in adults with overweight or obesity (PMID 32359762), but these pooled mixed carnitine forms with inconsistent regimens. Longer-term studies show performance effects only in specific settings and raised fasting TMAO (PMID 32958033). NIH ODS describes the performance and weight evidence as mixed or equivocal. This record is not proof of energy, cardiovascular, fat-burning or athletic-performance efficacy. Included trial 26666519 carries expression of concern 36852455. Agent review with an independent agent check, 2026-11-11; not clinician review. Reference-only under ADR-0007: the review is finished and carries no Evidence points.",
+      "last_updated": "2026-11-11",
       "notable_studies": "PMID 32154768 pooled seven randomized trials of exercise-induced muscle damage and reported improvements in soreness and some 24-hour biomarkers, while calling for further research. PMID 32359762 pooled 37 randomized trials (2,292 participants) and found modest weight and BMI changes, particularly in adults with overweight or obesity; its dose-response analysis suggested the largest body-weight effect near 2 g/day. PMID 32958033 reviewed 11 prolonged-supplementation studies in healthy adults using 1-4 g/day for 12-24 weeks and concluded that physical-performance effects occur only in specific conditions.",
       "min_clinical_dose": 1000,
       "max_studied_clinical_dose": 4000,
@@ -4718,12 +4711,9 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Muscle Growth & Recovery",
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Mixed is a high-confidence classification of content-verified, outcome-specific systematic reviews. Recovery and modest weight outcomes were favorable, but physical-performance findings were conditional and inconsistent, study populations differed, and long-term TMAO implications remain unresolved. The classification must not be presented as universal energy, cardiovascular, weight-loss, or sports-performance efficacy.",
-      "endpoint_relevance_tags": [
-        "muscle_recovery",
-        "weight_management"
-      ],
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Descriptive direction mixed: recovery and modest weight outcomes were favorable in pooled analyses of mixed forms and regimens, while performance findings were conditional and long-term TMAO implications are unresolved. Not presented as universal efficacy.",
+      "endpoint_relevance_tags": [],
       "reference_semantics": {
         "reference_type": "no_benchmark",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
@@ -4794,7 +4784,7 @@
           "limitations": [
             "Mixed randomized and non-randomized designs; narrative synthesis only, not a pooled RCT estimate. Not credit-bearing.",
             "Dose range is 1-4 g/day in the abstract but 1 to 4.5 g/day in Results; discrepancy retained.",
-            "Declared meta-analyses 32154768 and 32359762 now have retained full-body source packets and source-specific contexts. Recovery review 32154768 has a completed non-credit source representation preserving primary-regimen/randomization discrepancies and preparation/population boundaries. Weight review 32359762 remains pending an attributable constituent-integrity/sensitivity and primary extraction disposition; included trial 26666519 has formal expression of concern 36852455. Neither meta-analysis is classified as retracted. Do not infer product equivalence, universal efficacy or general Dose benchmarks.",
+            "Declared meta-analyses 32154768 and 32359762 now have retained full-body source packets and source-specific contexts. Recovery review 32154768 has a completed non-credit source representation preserving primary-regimen/randomization discrepancies and preparation/population boundaries. Weight review 32359762 is finished as a bounded noncredit preparation-transfer assessment; included trial 26666519 has formal expression of concern 36852455. Neither meta-analysis is classified as retracted. Do not infer product equivalence, universal efficacy or general Dose benchmarks.",
             "Do not transfer centenarian findings to ordinary healthy adults or add overlapping older-women reports as independent cohorts.",
             "Despite restrictive abstract wording, the source table includes carbohydrate and leucine cointerventions; these cannot be ignored.",
             "Physical dosage form is not specified uniformly by the source table; no capsule assumption.",
@@ -15155,7 +15145,7 @@
         "vitamin d"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "meta-analysis",
@@ -15163,30 +15153,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "immunity ↑",
-        "upper respiratory infection risk ↓"
+        "Acute respiratory infection risk: reduced in a 2017 pooled analysis, not significant in the larger 2025 update (PMIDs 28202713, 39993397)",
+        "Fractures, falls and BMD: no meaningful benefit (PMID 30293909)"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
-      "applicability": {
-        "scope": "ingredient",
-        "supported_outcomes": [
-          "immune_support",
-          "respiratory_infection_risk"
-        ],
-        "studied_population": "Adults supplemented with vitamin D, across the trial populations pooled by PMID 28202713; the acute respiratory infection benefit was clearest in participants who were vitamin-D deficient at baseline.",
-        "reviewed_at": "2026-09-18",
-        "source_pmids": [
-          "28202713",
-          "30293909"
-        ]
-      },
-      "notes": "Scope is supplementation outcomes only. PMID 28202713 supports reduced acute respiratory infection risk, clearest in people deficient at baseline. Mood and bone claims were removed because this record does not support them: no mood trial is cited at all, and its musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome and needs its own supporting trial before a bone goal returns here; INGR_CALCIUM and other records still carry Joint & Bone Health. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations. OWNERSHIP: this file owns INTERVENTION evidence (what a trial showed). Product-facing goal_matches are owned by the bone_health synergy cluster in synergy_cluster.json, which carries the NUTRIENT-FUNCTION relationship (vitamin D aids calcium absorption, NIH ODS) and is unaffected by this record. Do not restore a bone goal here to 'fix' a goal_matches question.",
-      "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
-      "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "health_goals_supported": [],
+      "notes": "Scope is supplementation outcomes only. An earlier pooled analysis found vitamin D3 modestly lowered the risk of acute respiratory infections (PMID 28202713), but the larger 2025 update by the same researchers (40 trials, 61,589 participants) found no statistically significant protection (PMID 39993397), and a review in older adults found little or no difference (PMID 38787821). The musculoskeletal reference (PMID 30293909) found no fracture or fall prevention and no clinically meaningful BMD gain from supplementation. Vitamin D's physiological role in calcium absorption is well established but is not a supplementation outcome; products still receive vitamin D's nutrition-authority Evidence floor. OWNERSHIP: this file owns INTERVENTION evidence (what a trial showed). Product-facing goal_matches are owned by the bone_health synergy cluster in synergy_cluster.json, which carries the NUTRIENT-FUNCTION relationship (vitamin D aids calcium absorption, NIH ODS) and is unaffected by this record. Do not restore a bone goal here to 'fix' a goal_matches question. Agent review with an independent agent check, 2026-11-11; not clinician review. Reference-only under ADR-0007: the review is finished and carries no Evidence points.",
+      "notable_studies": "Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis reported fewer acute respiratory infections, clearest in deficient individuals. Jolliffe et al. (2025, PMID 39993397), the updated analysis of 40 trials and 61,589 participants, found no statistically significant protection (OR 0.94, 95% CI 0.88 to 1.00). Bolland et al. (2018, PMID 30293909) found that vitamin D did not prevent fractures or falls or meaningfully improve BMD.",
+      "study_type": "reference",
+      "last_updated": "2026-11-11",
       "references_structured": [
         {
           "type": "pubmed",
@@ -15249,15 +15223,13 @@
       "external_ids": {
         "unii": "9VU1KI44GP"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 576,
-      "registry_completed_trials_count": 2067,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "immune_support"
-      ],
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Descriptive direction mixed, low confidence: the 2017 pooled benefit (PMID 28202713) was not confirmed by the larger 2025 update (PMID 39993397). The earlier automated strong-benefit classification and its unverified registry and enrollment aggregates are removed.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -20093,7 +20065,7 @@
         "elderberry"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "meta-analysis",
@@ -20101,17 +20073,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cold duration ↓",
-        "flu symptoms ↓",
-        "upper respiratory symptoms ↓"
+        "Cold and flu symptom duration: low to very low certainty evidence (PMID 33827515)",
+        "Cold incidence: no clear effect (PMID 33827515)"
       ],
-      "health_goals_supported": [
-        "Immune Support"
-      ],
-      "notes": "Human evidence for elderberry in upper-respiratory illness is promising but still limited by small trial counts and heterogeneous preparations. The data do not justify strong antiviral or oseltamivir-equivalence claims.",
-      "notable_studies": "The 2021 review indexed as PMID 33827515 found limited evidence for symptom-duration reduction without support for cytokine-storm concerns. Earlier pooled respiratory-symptom evidence is indexed as PMID 30670267. Overall, the trial base remains small and formulation-specific.",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-11-06",
+      "health_goals_supported": [],
+      "notes": "Small randomized trials of proprietary elderberry extracts suggest possible shorter or milder colds and flu, but a GRADE-rated systematic review (PMID 33827515) judged this evidence low to very low certainty and found no clear effect on getting a cold; an earlier pooled analysis of 180 participants (PMID 30670267) reported larger benefits but does not change that assessment. NCCIH describes the evidence as preliminary. The data do not justify antiviral or oseltamivir-equivalence claims. Agent review with an independent agent check, 2026-11-11; not clinician review. Reference-only under ADR-0007: the review is finished and carries no Evidence points.",
+      "notable_studies": "PMID 33827515 (2021 systematic review, GRADE): low to very low certainty evidence of shorter symptom duration; no clear effect on cold incidence; no support for cytokine-storm concerns. PMID 30670267 (2019 pooled analysis, 180 participants): reported reduced upper-respiratory symptoms. Trials are small and preparation-specific.",
+      "study_type": "reference",
+      "last_updated": "2026-11-11",
       "references_structured": [
         {
           "type": "pubmed",
@@ -20188,10 +20157,10 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 204,
-      "registry_completed_trials_count": 13,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification for the two declared upper-respiratory reviews: small trial counts, heterogeneous formulations and positive, null or uncertain respiratory findings. These sources do not establish cognition, glycemic-control, digestive-treatment or a general immune-response increase. Existing clinical hold and non-scoring source dispositions remain. Legacy registry/enrollment numbers are not independently reconciled trial-family totals.",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Descriptive direction mixed, low confidence: positive findings come from small preparation-specific trials that the GRADE-rated review (PMID 33827515) judged low to very low certainty. Legacy registry and enrollment totals were not reconciled trial-family counts and are removed.",
       "endpoint_relevance_tags": [],
       "study_contexts": [
         {
@@ -33819,8 +33788,8 @@
         "fenuside"
       ],
       "category": "sports_performance",
-      "evidence_level": "branded-rct",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "RCT",
         "double-blind"
@@ -33831,8 +33800,8 @@
         "Androgen-symptom questionnaire, sexual function and testosterone measures (PMID: 26791805)"
       ],
       "health_goals_supported": [],
-      "notes": "Fenugreek extract with PubMed-indexed randomized evidence for libido, androgen-deficiency symptoms, and selected testosterone-related outcomes in men. Retained-source scope and limitations: Libido findings from a Testofen-plus-mineral formulation; muscle-strength satisfaction was self-reported, not measured strength (PMID: 21312304) Androgen-symptom questionnaire, sexual-function and testosterone measures in older men (PMID: 26791805)",
-      "last_updated": "2026-10-28",
+      "notes": "A sponsor-funded 12-week trial of this fenugreek extract reported improved aging-male symptom scores, sexual function and testosterone (PMID 26791805), but a later trial of a standardised fenugreek extract at the same 600 mg/day in men with prostate enlargement found no change in testosterone (PMID 31828857), and a 2026 meta-analysis found at most a small total-testosterone effect, rated very low certainty, and concluded the evidence does not support testosterone-boosting claims (PMID 42688439). PMID 21312304 tested Testofen with added minerals and measured libido and self-reported satisfaction, not objective strength. Agent review with an independent agent check, 2026-11-11; not clinician review. Reference-only under ADR-0007: the review is finished and carries no Evidence points.",
+      "last_updated": "2026-11-11",
       "notable_studies": "PMID 21312304: 60 men, 600 mg/day Testofen with minerals for 6 weeks; libido and self-reported satisfaction, not objective strength/body-composition testing. PMID 26791805: 120 older men, 600 mg/day for 12 weeks; AMS, sexual function and testosterone measures.",
       "references_structured": [
         {
@@ -33910,12 +33879,12 @@
       "external_ids": {
         "unii": "654825W09Z"
       },
-      "effect_direction": "positive_strong",
-      "total_enrollment": 150,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction": "mixed",
+      "total_enrollment": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Descriptive direction mixed, low confidence: sponsor-funded positive findings (PMIDs 26791805, 21312304) are not supported for testosterone by a later trial in men with prostate enlargement (PMID 31828857) or a 2026 meta-analysis (PMID 42688439). The earlier strong-benefit label is removed.",
       "endpoint_relevance_tags": [],
-      "registry_completed_trials_count": 1,
+      "registry_completed_trials_count": null,
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",

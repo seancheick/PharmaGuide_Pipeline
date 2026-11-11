@@ -206,11 +206,9 @@ def test_fiber_review_stays_out_of_the_data():
 
 
 @pytest.mark.parametrize("cid, name, reason", [
-    # Signed contexts marked scoring_eligible False are holds (2026-10-28 register), not
-    # finished zeros: L-carnitine's missing full texts, and elderberry, whose 13179d11b
-    # source review explicitly preserved the clinical hold.
-    ("l_carnitine", "L-Carnitine", "clinical_sources_ineligible"),
-    ("elderberry", "Elderberry", "clinical_sources_ineligible"),
+    # The L-carnitine base record finished as reference-only on 2026-11-11, but a
+    # canonical query has no printed salt, so the Carnipure tartrate source stays open.
+    ("l_carnitine", "L-Carnitine", "clinical_source_row_unresolved"),
     ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
 ])
 def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
@@ -230,6 +228,9 @@ def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
     ("grape_seed_extract", "Grape Seed Extract", "reference_only_clinical_record",
      "evaluated_limited_or_negative", False),
     ("taurine", "Taurine", "reviewed_human_clinical_evidence_matched", "evaluated_supported", True),
+    # Finished as reference-only on 2026-11-11 (Sean's request; supersedes the hold kept
+    # in 13179d11b): no credit.
+    ("elderberry", "Elderberry", "reference_only_clinical_record", "evaluated_limited_or_negative", False),
 ])
 def test_four_group_batch_finished_source_reviews(cid, name, reason, state, points):
     from evidence_resolver import resolve_evidence_for_canonical
