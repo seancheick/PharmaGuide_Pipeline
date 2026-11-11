@@ -10600,7 +10600,7 @@
       ],
       "notes": "The three retained references assess oral hyaluronic acid for skin hydration, elasticity and wrinkle outcomes, not osteoarthritis or joint-lubrication efficacy. PMID 28761365 and PMID 34203487 used specific 120 mg/day preparations for 12 weeks in selected adult skin populations. PMID 40911749 pools seven skin trials; hydration, elasticity and wrinkle depth improved, while firmness, wrinkle volume and transepidermal water loss did not differ significantly. Source preparation, molecular weight and clinical applicability remain distinct; this review does not establish that no joint research exists elsewhere.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID 28761365 randomized 60 adults with crow-feet wrinkles to two molecular-weight hyaluronan preparations or placebo for12weeks. PMID 34203487 randomized 40 adults to120mg/day hyaluronan or placebo for12weeks for skin outcomes. PMID 40911749 is a seven-RCT skin meta-analysis with heterogeneous and partly null outcomes. None of these retained references studies OA symptoms.",
       "references_structured": [
         {
@@ -10803,7 +10803,8 @@
           "source_integrity": "none",
           "trial_family": "ingr_hyaluronic_acid_34203487",
           "population": {
-            "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm"
+            "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm",
+            "age_group": "adult"
           },
           "study_design": "randomized double-blind placebo-controlled trial",
           "outcomes": [
@@ -13076,7 +13077,7 @@
       "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous. Signed A094 accepts limited oral exercise-soreness findings only. Current38label cohort contains immune,respiratory,liver,antioxidant/glutathione,or dose-only positioning;none claims postexercise soreness ormuscle recovery in retainedsource text. The exercise research is retained as nonaffirmative reference for those currentcatalog purposes.24h soreness benefit is separate from immediate null and adverse functional-recovery findings;less soreness isnot proven bettertrainingadaptation. No universalNACdosecurve or blanketinefficacy conclusion is created.",
       "notable_studies": "A 6-month randomized, double-blind, 20-centre trial (PMID 9230243, n=262, NAC 600 mg twice daily, 78% aged 65+) significantly reduced the frequency and severity of influenza-like episodes and shifted cell-mediated immunity from anergy toward normoergy; notably it did not prevent A/H1N1 infection, but only 25% of infected participants on NAC developed symptomatic illness versus 79% on placebo. A 2024 systematic review/meta-analysis of 20 supplementation studies (PMID 39632267) found significantly increased glutathione and reduced TBARS and IL-6, with no significant effect on TNF-alpha, creatine kinase or GSSG. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
       "study_type": "reference",
-      "last_updated": "2026-08-08",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -13272,7 +13273,8 @@
           "source_integrity": "none",
           "trial_family": "nac_exercise_soreness_review2024_oral_subset",
           "population": {
-            "description": "Six controlled oral-supplement reports in healthy active/recreationallytrained men or semielite male rugbyplayers undertaking damaging or repeatedexercise protocols;not infection,psychiatric or respiratorydisease cohorts."
+            "description": "Six controlled oral-supplement reports in healthy active/recreationallytrained men or semielite male rugbyplayers undertaking damaging or repeatedexercise protocols;not infection,psychiatric or respiratorydisease cohorts.",
+            "age_group": "adult"
           },
           "study_design": "Systematicreview/meta-analysis;oral muscle-soreness subset comprises sixreports including pairmatched and randomized/crossover designs,not six uniformly independentRCTs.",
           "included_study_pmids": [
@@ -17328,7 +17330,7 @@
       "notes": "The cited reviews concern curcumin preparations for osteoarthritis symptoms and inflammatory, oxidative-stress and endothelial biomarkers. Findings differ by outcome and preparation. They do not establish stress/anxiety or longevity benefits, or equivalence between generic turmeric powder and the studied curcumin formulations. Study preparation and product applicability remain unreviewed.",
       "notable_studies": "PMID 38576215 is an umbrella review of curcumin for osteoarthritis pain, stiffness and physical function. PMID 38945354 reviews inflammatory, oxidative-stress and endothelial biomarkers. PMID 40615851 reviews inflammatory biomarkers in knee osteoarthritis, with reported CRP and TNF-alpha reductions but no significant effects on ESR, IL-1 beta, IL-6 or PGE2; it is not the cited source for osteoarthritis pain outcomes. These studies do not establish stress/anxiety benefits.",
       "study_type": "reference",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -17421,12 +17423,12 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 90,
-      "registry_completed_trials_count": 216,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "The cited evidence concerns osteoarthritis outcomes and biomarkers, not stress/anxiety. The existing aggregate direction and confidence have not been reassessed in this factual attribution correction and do not establish preparation or product applicability. Completed-trial and enrollment aggregates require separate verification.",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Reference-only under signed A115 (Dr. Pham), which rejects broad preparation-wide approval. Descriptive direction mixed: the retained knee-osteoarthritis biomarker meta-analysis (PMID 40615851) reports lower CRP and TNF-alpha but no significant effect on ESR, IL-1 beta, IL-6 or PGE2. The earlier positive_strong and unverified registry/enrollment aggregates were removed; preparation applicability remains unestablished.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -23636,7 +23638,7 @@
       "health_goals_supported": [],
       "notes": "Full review33352740 and original trial identities inspected. Limited short-term anxiety findings are retained; benzodiazepine active-comparator null differences do not establish equivalence. NEURAPAS combination and2g/250mLtea sleep evidence are not isolated-extract anxiety qualification. Current six saved labels contain undisclosed blends or Bulk4:1aerial extracts without established trial-material correspondence. The current general-catalog record is reference-only, not a universal no-benefit conclusion. No universal500mg benchmark or volume-to-mass conversion. Preserve pregnancy, sedation, perioperative and other independent safety warnings; NCCIH April2025 guidance checked.",
       "study_type": "reference",
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID33352740:9heterogeneous trials; limited scoped anxiety synthesis, not general focus, long-term anxiety treatment or exact extract equivalence. PMID21294203: separate tea sleep study, retained noncontributing history.",
       "references_structured": [
         {
@@ -23757,7 +23759,8 @@
           "source_integrity": "none",
           "trial_family": "janda_2020_passionflower_review",
           "population": {
-            "description": "Adults in short procedural anxiety studies or one28daygeneralizedanxiety pilot; not chronic universal-use or long-term safety evidence."
+            "description": "Adults in short procedural anxiety studies or one28daygeneralizedanxiety pilot; not chronic universal-use or long-term safety evidence.",
+            "age_group": "adult"
           },
           "study_design": "Systematicreviewof9heterogeneoustrials; scopedanxietyassessment excludes isolated-component attribution fromNEURAPAScombination and separates tea sleep context.",
           "included_study_pmids": [
@@ -31407,14 +31410,9 @@
       "category": "anti_inflammatory",
       "evidence_level": "reference",
       "score_contribution": "tier_1",
-      "key_endpoints": [
-        "inflammation ↓",
-        "antioxidant ↑"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Curcumin has one of the largest human supplement trial literatures, with broad meta-analytic support for inflammatory, osteoarthritis, and some metabolic endpoints. However, formulation quality and bioavailability matter materially, and the strongest effects are generally seen with enhanced-delivery products rather than unformulated spice-level curcumin (PMID 39478418, PMID 38945354, PMID 38576215, PMID 40615851).",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "Signed A130 (Dr. Pham, 2026-10-28) rejects broad superiority and generic benefit language for curcumin, so the multi-outcome syntheses (PMIDs 39478418, 38945354, 38576215) carry no credit for a generic healthy-aging claim. The retained context is a meta-analysis of 21 RCTs in 1,705 knee-osteoarthritis patients (PMID 40615851) reporting lower CRP and TNF-alpha, with no significant effect on ESR, IL-1 beta, IL-6 or PGE2. Effects depend on preparation and outcome. Agent reconciliation of this text with A130, 2026-11-10; not clinician review.",
       "study_type": "reference",
       "published_studies": [
         "mechanistic",
@@ -31423,7 +31421,7 @@
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "notable_studies": "A comprehensive 103-trial meta-analysis found high-credibility evidence for improvements in fasting glucose, CRP, HDL, and body weight, with significant effects across 23 of 42 pooled outcomes (PMID 39478418). Additional umbrella-style work supports anti-inflammatory and endothelial-function biomarker effects (PMID 38945354) and osteoarthritis symptom benefit (PMID 38576215), while newer disease-specific syntheses continue to show reductions in CRP and TNF-alpha in knee osteoarthritis (PMID 40615851).",
       "references_structured": [
         {
@@ -31544,15 +31542,12 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 90,
-      "registry_completed_trials_count": 216,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=216; total_enrollment=90; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood"
-      ],
+      "effect_direction": "mixed",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Reference-only under signed A130 (Dr. Pham, 2026-10-28). Descriptive direction mixed: the retained knee-osteoarthritis biomarker meta-analysis (PMID 40615851) reports lower CRP and TNF-alpha but no significant effect on ESR, IL-1 beta, IL-6 or PGE2. The earlier positive_strong, healthy-aging and stress/mood tags and unverified registry/enrollment aggregates were removed because A130 rejected them.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -39919,7 +39914,7 @@
       "notes": "Systematic-review-level evidence supports honey for acute upper-respiratory symptom relief, especially cough severity, cough frequency, and sleep disruption in children. The evidence is for short-term symptomatic relief and does not justify broader immune or anti-infective claims (PMID 32817011, PMID 22419319, PMID 22869830, PMID 36126325). Limited pediatric short-term nocturnal cough findings are retained as reference. They do not qualify arbitrary adult or combination honey products for immune/infection benefit. Current293387and304687 age/preparation/regimens differ from verified single10g plainhoney trial. Existing infant-under-one and all productlabel warnings remain.",
       "notable_studies": "A BMJ systematic review and meta-analysis found honey superior to usual care for combined URTI symptoms, cough frequency, and cough severity (PMID 32817011). Cochrane review and pediatric randomized trials also support short-term nocturnal cough relief relative to no treatment or some comparators (PMID 22419319; PMID 22869830; PMID 36126325).",
       "study_type": "reference",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -40094,7 +40089,8 @@
           "source_integrity": "none",
           "trial_family": "cohen_2012_honey_child_nocturnal_cough",
           "population": {
-            "description": "300 children aged1–5 with URI, nocturnal cough and illness<=7days in six community pediatric clinics; asthma,pneumonia,laryngotracheobronchitis,sinusitis,allergicrhinitis and cough/coldmedication the precedingnight excluded."
+            "description": "300 children aged1–5 with URI, nocturnal cough and illness<=7days in six community pediatric clinics; asthma,pneumonia,laryngotracheobronchitis,sinusitis,allergicrhinitis and cough/coldmedication the precedingnight excluded.",
+            "age_group": "child"
           },
           "study_design": "randomized double-blind four-arm parallel placebo-controlled trial;three separate honey varieties versus silan date-extract placebo",
           "outcomes": [
@@ -40716,7 +40712,7 @@
         "Muscle Growth & Recovery"
       ],
       "notes": "The accepted A062 finding concerns creatine monohydrate with full-body resistance training and body-composition outcomes in the studied populations (PMID 39074168). The pooled strength review 39519498 includes other creatine forms and is retained as noncontributing context, not exact-monohydrate qualification. Trial regimens, populations and source reporting discrepancies are retained in the source context; no universal regimen or minimum is inferred. Sean attests Dr. Pham signed the explicit limited A062 decision on 2026-10-26; source acceptance does not establish every retail product or purpose.",
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID39074168:monohydrate plus full-body resistance training,12trials;lean-body-mass increase1.14kg(95%CI0.69–1.59) with preparation,population,bias and heterogeneous-regimen limits. PMID39519498:contextual strength synthesis with mixed creatine forms;not independent exact-monohydrate qualification.",
       "references_structured": [
         {
@@ -40867,7 +40863,8 @@
           "source_integrity": "none",
           "trial_family": "desai_2024_creatine_resistance_training_review",
           "population": {
-            "description": "Review intended apparently healthy adults aged18–50 undertaking full-body resistance training, trained and untrained; predominantly men. Included Burke2003 report itself recruited19–55, so the stated under50 criterion must not be presented as verified for every participant."
+            "description": "Review intended apparently healthy adults aged18–50 undertaking full-body resistance training, trained and untrained; predominantly men. Included Burke2003 report itself recruited19–55, so the stated under50 criterion must not be presented as verified for every participant.",
+            "age_group": "adult"
           },
           "study_design": "systematic review and random-effects meta-analysis of12 randomized trials; carbohydrate coadministration permitted; no other additional nutritional interventions intended",
           "included_study_pmids": [
@@ -43328,7 +43325,7 @@
       ],
       "health_goals_supported": [],
       "notes": "Limited disease-context monotherapy and add-on research,nothealthyadultcognitiveenhancement.Four ASCOMALVA publications are overlapping trial-familyreports,notfourindependentRCTs.Moreno2003monotherapyRCT is separate;no universal nootropicdose. Signed A035 accepts only a limited disease-context finding. This catalog record is reference-only to prevent that finding from becoming healthy-person focus credit. Explicit source contexts and overlap limitations remain traceable; reference classification does not mean the ingredient has no disease-context research.",
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID 36683513 includes Moreno 2003 (PMID 12637119) monotherapy and overlapping ASCOMALVA add-on publications. These are not four independent confirmatory trials. The exact accepted subset and reporting limitations are retained in study_contexts.",
       "references_structured": [
         {
@@ -43395,7 +43392,8 @@
           "source_integrity": "none",
           "trial_family": "moreno_2003_alzheimer_monotherapy",
           "population": {
-            "description": "261patients aged60–80withmild-to-moderateAlzheimer-type dementia,132active129placebo;nothealthyadultscognitiveenhancement."
+            "description": "261patients aged60–80withmild-to-moderateAlzheimer-type dementia,132active129placebo;nothealthyadultscognitiveenhancement.",
+            "age_group": "adult"
           },
           "study_design": "Source review reports one180day placebo-controlled monotherapyRCT;underlyingprimary12637119liveabstractalsoverified. This is not the pooleddonepeziladd-onanalysis.",
           "included_study_pmids": [
