@@ -6425,7 +6425,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Soluble viscous fiber delays gastric emptying and slows carbohydrate absorption, which can reduce postprandial glucose spikes.",
-          "action": "Separate dosing from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Monitor glucose.",
+          "action": "Talk to your clinician before adding psyllium, and monitor glucose, especially in the first weeks.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6461,7 +6461,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6495,7 +6495,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
@@ -6563,7 +6563,7 @@
           "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
-          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "action": "Talk to your prescriber before adding psyllium, and monitor your glucose more closely at first.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],

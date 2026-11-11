@@ -24,7 +24,9 @@ DIGOXIN, CLOBAZAM, VALPROIC_ACID, VENLAFAXINE, DULOXETINE = "3407", "21241", "11
 HELD_INTERVALS = [
     # (timing rule held for an unsupported interval, curated pair publishing it)
     ("timing_iron_calcium_separate", "SSI_IRON_CALCIUM"),
-    ("timing_thyroid_med_magnesium_separate", "DSI_LEVOTHYROXINE_MAGNESIUM"),
+    # Magnesium + levothyroxine is not a leak: Sean approved "at least 4 hours"
+    # for the pair text on 2026-10-01 (D27); only the timing card stays held.
+    ("timing_thyroid_med_soy_separate", "DSI_LEVOTHYROXINE_SOY"),
 ]
 
 

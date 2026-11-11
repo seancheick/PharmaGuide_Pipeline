@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-11-11",
     "total_entries": 91,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -1437,10 +1437,9 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Soy isoflavones and soy protein can impair levothyroxine absorption and may also affect thyroid hormone metabolism. The effect is most pronounced in infants but relevant at high supplemental doses in adults.",
-      "management": "Separate levothyroxine from soy-rich foods or supplements by at least 4 hours. Patients with hypothyroidism on stable levothyroxine should have TSH re-checked if starting high-dose soy isoflavone supplements.",
+      "management": "Take levothyroxine at a different time from soy-rich foods or supplements, and ask your prescriber how far apart. Patients with hypothyroidism on stable levothyroxine should have TSH re-checked if starting high-dose soy isoflavone supplements.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/16571087/",
-        "https://ods.od.nih.gov/factsheets/Soy-HealthProfessional/"
+        "https://pubmed.ncbi.nlm.nih.gov/16571087/"
       ],
       "source_pmids": [
         "16571087"
@@ -2411,7 +2410,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Calcium competitively inhibits iron absorption in the small intestine by competing for DMT1 (divalent metal transporter 1) and potentially forming insoluble complexes. Both heme and non-heme iron absorption are reduced when taken simultaneously with calcium.",
-      "management": "Take iron and calcium supplements at different times — at least 2 hours apart. Iron is best absorbed on an empty stomach in the morning. Calcium can be taken with meals or at bedtime.",
+      "management": "Take iron and calcium supplements at different times of the day. Iron is best absorbed on an empty stomach in the morning. Calcium can be taken with meals or at bedtime.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
         "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
