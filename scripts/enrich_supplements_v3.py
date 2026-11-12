@@ -10352,9 +10352,11 @@ class SupplementEnricherV3:
 
         exact_candidates = _build_exact_candidates()
         normalized_candidates = _build_normalized_candidates()
+        # A copy: disclosed forms below are preparation proof only, never
+        # identity candidates for the row itself.
         source_candidates = (_build_normalized_candidates(raw_source_text)
                              if raw_source_text is not None and raw_source_text != ing_name
-                             else normalized_candidates)
+                             else list(normalized_candidates))
         for disclosed_form in cleaned_forms or []:
             if isinstance(disclosed_form, dict) and disclosed_form.get("name"):
                 source_candidates.extend(
