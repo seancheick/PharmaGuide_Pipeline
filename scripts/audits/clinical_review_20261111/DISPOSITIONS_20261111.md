@@ -451,7 +451,17 @@ No shared scoring runtime changed; no score/amount/role delta was observed.
 App route exclusions, decimal RxNorm ranking and omega presentation have focused regressions.
 The full app checkpoint found stale vocabulary/schema test expectations and a Git LFS pointer in
 the worktree; expectations now match the authored contract and the existing catalog was downloaded.
-All affected failure files pass; final combined app checkpoint and exact candidate CI remain pending.
+All affected failure files pass. Full app `make check` passed: 5,632 passed, two declared skips,
+analyzer clean. A further 47 taxonomy/display checks passed after the integration reconciliation.
+Paired app PR: seancheick/Pharmaguide.ai#234.
+
+Reconciled with origin/main dd4a441b7, preserving the injected-anticoagulant category and the
+EPA/DHA theoretical evidence. Rebased owner slice: 729 passed; local: 564 passed, 24 declared
+opt-in skips, skip guard passed. Strict citations and safety copy pass. All 17 frozen comparisons
+were repeated against dd4a441b7: cleaned/scored records unchanged, 16 intentional blob changes.
+Qualification CI is tracked on pipeline PR468 and app PR234; merge only after the exact candidate
+passes. CBD source correction PR467 is rebased at 689102aea; its earlier source candidate passed
+CI and local checks, and its current candidate has a fresh qualification run.
 Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
 release or main push authorized.
 
