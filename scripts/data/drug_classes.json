@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-11-12",
-    "total_classes": 56,
-    "total_members": 971,
+    "total_classes": 57,
+    "total_members": 985,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -23,7 +23,7 @@
       "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 56
+    "total_entries": 57
   },
   "classes": {
     "class:statins": {
@@ -1681,7 +1681,7 @@
     },
     "class:anticoagulants": {
       "display_name": "Anticoagulants",
-      "description": "Vitamin K antagonists, direct thrombin inhibitors, and direct Factor Xa inhibitors",
+      "description": "Vitamin K antagonists, direct oral anticoagulants, injected heparins and fondaparinux, and injected direct thrombin inhibitors",
       "member_rxcuis": [
         "154",
         "1364430",
@@ -1689,14 +1689,19 @@
         "1927851",
         "60819",
         "1037042",
+        "67109",
         "114934",
         "1598",
         "1599538",
+        "67108",
         "50097",
+        "321208",
+        "5224",
         "237057",
         "8130",
         "8150",
         "1114195",
+        "69646",
         "163426",
         "11289"
       ],
@@ -1707,24 +1712,31 @@
         "betrixaban",
         "bivalirudin",
         "dabigatran etexilate",
+        "dalteparin",
         "desirudin",
         "dicumarol",
         "edoxaban",
+        "enoxaparin",
         "fluindione",
+        "fondaparinux",
+        "heparin",
         "lepirudin",
         "phenindione",
         "phenprocoumon",
         "rivaroxaban",
+        "tinzaparin",
         "tioclomarol",
         "warfarin"
       ],
       "rxclass_id": "B01AA",
       "atc_codes": [
         "B01AA",
+        "B01AB",
         "B01AE",
-        "B01AF"
+        "B01AF",
+        "B01AX05"
       ],
-      "notes": "Critical for supplement interactions: warfarin vs vitamin K, ginkgo, fish oil, garlic"
+      "notes": "Critical for supplement interactions: warfarin vs vitamin K, ginkgo, fish oil, garlic. Heparin, enoxaparin, dalteparin, tinzaparin (ATC B01AB) and fondaparinux (B01AX05) added 2026-11-12 (RxNav ingredient RxCUIs); with the injected direct thrombin inhibitors they are also in class:injectable_anticoagulants, which keeps them out of warfarin-addressed fallbacks (Dr. Pham Q7; Part B 3D)."
     },
     "class:fluoroquinolones": {
       "display_name": "Fluoroquinolones",
@@ -2647,6 +2659,39 @@
         "N05BA09"
       ],
       "notes": "Single-medicine class (precedent: class:lithium). The cannabidiol label names clobazam; adding it to class:anticonvulsants would also reach the enzyme-induction contraceptive pair. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:injectable_anticoagulants": {
+      "display_name": "Injected anticoagulants",
+      "description": "Heparins, fondaparinux and injected direct thrombin inhibitors (not vitamin K antagonists or oral DOACs)",
+      "member_names": [
+        "argatroban",
+        "bivalirudin",
+        "dalteparin",
+        "desirudin",
+        "enoxaparin",
+        "fondaparinux",
+        "heparin",
+        "lepirudin",
+        "tinzaparin"
+      ],
+      "member_rxcuis": [
+        "15202",
+        "60819",
+        "67109",
+        "114934",
+        "67108",
+        "321208",
+        "5224",
+        "237057",
+        "69646"
+      ],
+      "rxclass_id": "B01AB/B01AE/B01AX",
+      "atc_codes": [
+        "B01AB",
+        "B01AE",
+        "B01AX05"
+      ],
+      "notes": "Identified subgroup for Dr. Pham's Q7 (signed 2026-11-12): these medicines stay anticoagulants and keep general bleeding findings, but are excluded from the unidentified-warfarin fallback sub-rules and never receive warfarin INR or oral-inducer instructions. From ATC B01AE only argatroban, bivalirudin, desirudin and lepirudin are members; dabigatran (B01AE) is oral and a DOAC. Heparin's ingredient RxCUI also covers topical and eye products (ATC C05BA, S01XA); membership is by ingredient, so those users are treated as injected-anticoagulant users. RxCUIs read on RxNav 2026-11-12."
     },
     "class:stiripentol": {
       "display_name": "Stiripentol",

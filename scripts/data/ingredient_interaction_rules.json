@@ -2794,7 +2794,7 @@
             "https://www.nccih.nih.gov/health/feverfew"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Feverfew has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding feverfew and ask about INR or bleeding checks.",
+          "alert_body": "Feverfew has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding feverfew and ask about bleeding checks.",
           "informational_note": "Feverfew can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -3542,8 +3542,8 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
-          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type medicine, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding. The evidence is from warfarin; for other warfarin-type medicines it is inferred.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/15801937/"
@@ -3574,16 +3574,17 @@
           "min_effective_dose": null,
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference, in both ginger records."
           }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
-          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type medicine, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding. The evidence is from warfarin; for other warfarin-type medicines it is inferred.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/15801937/"
@@ -3604,7 +3605,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -3617,8 +3619,9 @@
           "min_effective_dose": null,
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference, in both ginger records."
           }
         },
         {
@@ -3667,7 +3670,7 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -4169,13 +4172,13 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Mixed evidence — some studies show reduced INR (efficacy reduction); others null. Effect appears variable across products and individuals.",
-          "action": "If you take warfarin, talk to your prescriber before using ginseng. INR may need re-checking after starting.",
+          "mechanism": "Mixed evidence in warfarin users — some studies show reduced INR (efficacy reduction); others null. Effect appears variable across products and individuals.",
+          "action": "If you take warfarin, talk to your prescriber before using ginseng, as your INR may need re-checking after you start it.",
           "sources": [
             "https://www.nccih.nih.gov/health/asian-ginseng"
           ],
           "alert_headline": "May affect warfarin levels",
-          "alert_body": "Panax ginseng has mixed evidence for changing how warfarin works. INR monitoring is recommended if you start a ginseng supplement.",
+          "alert_body": "Panax ginseng has mixed evidence for changing how warfarin works. If you take warfarin, ask about INR checks when you start a ginseng supplement.",
           "informational_note": "Ginseng may interact with warfarin — relevant to anyone on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -6797,16 +6800,18 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
-          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
+          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation; the acenocoumarol (Sinthrome, UK) and phenprocoumon (Marcumar, Germany) labels describe the same weakened effect. For other vitamin K antagonists this is a precautionary class inference. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
+          "action": "If you take warfarin or another warfarin-type blood thinner (a vitamin K antagonist), avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
           "sources": [
             "https://www.medicines.org.uk/emc/product/14333/smpc",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://pubmed.ncbi.nlm.nih.gov/15089812/",
-            "https://www.nccih.nih.gov/health/st-johns-wort"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://www.medicines.org.uk/emc/product/2058/smpc",
+            "https://www.fachinfo.de/pdf/003056"
           ],
-          "alert_headline": "Avoid St. John's wort with warfarin",
-          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
+          "alert_headline": "Avoid St. John's wort with warfarin-type blood thinners",
+          "alert_body": "If you take warfarin or another warfarin-type blood thinner, avoid St. John's wort: it can weaken the medicine's effect. Tell your prescriber about any use or change so INR checks can be planned.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -6830,24 +6835,27 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7 and section 2: avoid for warfarin, acenocoumarol and phenprocoumon, each with its own label (exact pairs DSI_WAR_SJW, DSI_ACENOCOUMAROL_SJW, DSI_PHENPROCOUMON_SJW); other vitamin K antagonists by stated precautionary class inference. Injected anticoagulants are excluded from the unidentified fallback."
           }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
-          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
+          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation; the acenocoumarol (Sinthrome, UK) and phenprocoumon (Marcumar, Germany) labels describe the same weakened effect. For other vitamin K antagonists this is a precautionary class inference. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
+          "action": "If you take warfarin or another warfarin-type blood thinner (a vitamin K antagonist), avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
           "sources": [
             "https://www.medicines.org.uk/emc/product/14333/smpc",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://pubmed.ncbi.nlm.nih.gov/15089812/",
-            "https://www.nccih.nih.gov/health/st-johns-wort"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://www.medicines.org.uk/emc/product/2058/smpc",
+            "https://www.fachinfo.de/pdf/003056"
           ],
-          "alert_headline": "Avoid St. John's wort with warfarin",
-          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
+          "alert_headline": "Avoid St. John's wort with warfarin-type blood thinners",
+          "alert_body": "If you take warfarin or another warfarin-type blood thinner, avoid St. John's wort: it can weaken the medicine's effect. Tell your prescriber about any use or change so INR checks can be planned.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -6862,7 +6870,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -6874,8 +6883,9 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7 and section 2: avoid for warfarin, acenocoumarol and phenprocoumon, each with its own label (exact pairs DSI_WAR_SJW, DSI_ACENOCOUMAROL_SJW, DSI_PHENPROCOUMON_SJW); other vitamin K antagonists by stated precautionary class inference. Injected anticoagulants are excluded from the unidentified fallback."
           }
         },
         {
@@ -7124,12 +7134,14 @@
           "drug_class_id": "doacs",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "St. John's wort induces P-gp and CYP3A pathways that can lower direct oral anticoagulant exposure, reducing protection against stroke or clot formation.",
+          "mechanism": "St. John's wort induces P-gp and CYP3A pathways that can lower direct oral anticoagulant exposure, reducing protection against stroke or clot formation. The apixaban and rivaroxaban labels name St. John's wort among inducers to avoid, and the dabigatran label says P-gp inducers should generally be avoided. Edoxaban's UK label says to use caution with P-gp inducers including St. John's wort; for edoxaban, avoid is PharmaGuide precautionary policy.",
           "action": "Avoid combining St. John's wort with apixaban, rivaroxaban, dabigatran, or edoxaban unless the prescriber explicitly manages the interaction.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1523ab32-2c2c-6501-e063-6394a90aa0b3",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=291011aa-60eb-4109-b59c-1c521fbeac4f",
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ba74e3cd-b06f-4145-b284-5fd6b84ff3c9"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ba74e3cd-b06f-4145-b284-5fd6b84ff3c9",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e77d3400-56ad-11e3-949a-0800200c9a66",
+            "https://www.medicines.org.uk/emc/product/6905/smpc"
           ],
           "alert_headline": "May reduce DOAC clot protection",
           "alert_body": "If you take a DOAC blood thinner such as apixaban or rivaroxaban, St. John's wort can lower drug levels and reduce protection against stroke or clots.",
@@ -7153,7 +7165,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: avoid for apixaban, rivaroxaban, dabigatran and betrixaban; for edoxaban avoid is retained as precautionary policy (UK label: caution; exact pair DSI_EDOXABAN_SJW). No INR instruction for DOAC users."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -9044,8 +9062,8 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
-          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type medicine, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding. The evidence is from warfarin; for other warfarin-type medicines it is inferred.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/15801937/"
@@ -9072,14 +9090,20 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference, in both ginger records."
+          }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
-          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type medicine, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding. The evidence is from warfarin; for other warfarin-type medicines it is inferred.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/15801937/"
@@ -9100,7 +9124,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -9109,7 +9134,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference, in both ginger records."
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -9123,7 +9154,7 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-11-11",
+      "last_reviewed": "2026-11-12",
       "review_owner": "Source-content review (agent), 2026-11-11: aligned with RULE_IQM_GINGER_BLEEDING (Dr. Pham A9, ginger + warfarin); the NCCIH ginger page it cited does not mention bleeding",
       "dose_thresholds": []
     },
@@ -10333,14 +10364,14 @@
           "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Omega-3 fatty acids may enhance warfarin's anticoagulant effect through two mechanisms: (1) additive antiplatelet activity via TXA2 pathway suppression, and (2) possible reduction in vitamin K-dependent coagulation factor VII levels. Multiple case reports document INR elevation (from therapeutic range to >4) when fish oil dose was doubled or added to stable warfarin therapy. One case documented INR of 8.06 after initiating fish oil with warfarin.",
-          "action": "Inform your warfarin prescriber about omega-3 supplements. Ask about INR monitoring when starting, stopping or changing them.",
+          "action": "If you take warfarin, tell your prescriber about omega-3 supplements and ask about INR monitoring when starting, stopping or changing them.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/14742793/",
             "https://pubmed.ncbi.nlm.nih.gov/17923275/",
             "https://pubmed.ncbi.nlm.nih.gov/28033135/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Omega-3 has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Omega-3 and ask about INR or bleeding checks.",
+          "alert_body": "Omega-3 has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Omega-3 and ask about bleeding checks.",
           "informational_note": "Omega-3 can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -10534,7 +10565,7 @@
           "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Antiplatelet/antithrombotic at high dose. Most dietary doses (1-2 g/day EPA+DHA) clinically insignificant; ≥3 g/day raises bleeding risk in patients on warfarin or antiplatelets.",
-          "action": "Tell your warfarin prescriber about omega-3 (EPA/DHA) supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "action": "If you take warfarin, tell your prescriber about omega-3 (EPA/DHA) supplements and ask about INR monitoring when starting, stopping or changing them.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
@@ -11020,7 +11051,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/21274401/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Boswellia has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding boswellia and ask about INR or bleeding checks.",
+          "alert_body": "Boswellia has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding boswellia and ask about bleeding checks.",
           "informational_note": "Boswellia can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -11224,7 +11255,7 @@
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/evening-primrose-oil"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Evening primrose oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding evening primrose oil and ask about INR or bleeding checks.",
+          "alert_body": "Evening primrose oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding evening primrose oil and ask about bleeding checks.",
           "informational_note": "Evening primrose oil can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -11568,13 +11599,13 @@
           "severity": "monitor",
           "evidence_level": "theoretical",
           "mechanism": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
-          "action": "Tell your warfarin prescriber about changes in vitamin D supplementation. The retained evidence does not establish a dose-specific warfarin interaction.",
+          "action": "If you take warfarin, tell your prescriber about changes in vitamin D supplementation. The retained evidence does not establish a dose-specific warfarin interaction.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8983860/",
             "https://pubmed.ncbi.nlm.nih.gov/35718837/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
+          "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about bleeding checks.",
           "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -11860,17 +11891,19 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
           "evidence_level": "moderate",
-          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
-          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown. The UK acenocoumarol (Sinthrome) label reports a raised INR with glucosamine and oral vitamin K antagonists, and the German phenprocoumon (Marcumar) label says glucosamine can strengthen their effect; both advise close monitoring when glucosamine is started or stopped. For other vitamin K antagonists this is an inference.",
+          "action": "Do not start glucosamine while taking warfarin or another warfarin-type blood thinner unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels advise against this combination.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/23946031/",
-            "https://www.medicines.org.uk/emc/product/14333/smpc"
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://www.medicines.org.uk/emc/product/2058/smpc",
+            "https://www.fachinfo.de/pdf/003056"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
-          "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Can raise INR with warfarin-type blood thinners",
+          "alert_body": "If you take warfarin or another warfarin-type blood thinner, do not start glucosamine unless your anticoagulation clinician agrees and plans INR checks.",
+          "informational_note": "Glucosamine can raise INR in people taking warfarin-type blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -11894,25 +11927,28 @@
           "min_effective_dose": null,
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q3: caution kept, with the do-not-start-without-agreement action; no recheck interval; not a contraindication. Q7: warfarin, acenocoumarol and phenprocoumon labels support it (exact pairs); other vitamin K antagonists by inference."
           }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "moderate",
-          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
-          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown. The UK acenocoumarol (Sinthrome) label reports a raised INR with glucosamine and oral vitamin K antagonists, and the German phenprocoumon (Marcumar) label says glucosamine can strengthen their effect; both advise close monitoring when glucosamine is started or stopped. For other vitamin K antagonists this is an inference.",
+          "action": "Do not start glucosamine while taking warfarin or another warfarin-type blood thinner unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels advise against this combination.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/23946031/",
-            "https://www.medicines.org.uk/emc/product/14333/smpc"
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://www.medicines.org.uk/emc/product/2058/smpc",
+            "https://www.fachinfo.de/pdf/003056"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
-          "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Can raise INR with warfarin-type blood thinners",
+          "alert_body": "If you take warfarin or another warfarin-type blood thinner, do not start glucosamine unless your anticoagulation clinician agrees and plans INR checks.",
+          "informational_note": "Glucosamine can raise INR in people taking warfarin-type blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -11926,7 +11962,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -11939,8 +11976,9 @@
           "min_effective_dose": null,
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q3: caution kept, with the do-not-start-without-agreement action; no recheck interval; not a contraindication. Q7: warfarin, acenocoumarol and phenprocoumon labels support it (exact pairs); other vitamin K antagonists by inference."
           }
         },
         {
@@ -12023,7 +12061,7 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-24",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -12074,13 +12112,13 @@
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Chamomile contains natural coumarins (herniarin, umbelliferone) that may have additive anticoagulant effect with warfarin. A systematic review of 149 herb-warfarin interaction reports specifically identifies chamomile tea as causing warfarin potentiation with bleeding events. The 2000 AJHP review (Heck et al.) lists chamomile among herbs that may potentially increase bleeding or potentiate warfarin effects.",
-          "action": "Avoid large amounts of chamomile tea (>4 cups/day) or concentrated chamomile extracts while on warfarin. Inform your prescriber. Monitor INR if chamomile consumption is substantial or newly started.",
+          "action": "If you take warfarin, avoid large amounts of chamomile tea (>4 cups/day) or concentrated chamomile extracts, tell your prescriber, and ask about INR checks if your use is substantial or new.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Chamomile has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chamomile and ask about INR or bleeding checks.",
+          "alert_body": "Chamomile has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chamomile and ask about bleeding checks.",
           "informational_note": "Chamomile can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -12265,8 +12303,8 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
-          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type blood thinner, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates. The studies used warfarin; for other warfarin-type blood thinners the concern is inferred.",
           "sources": [
             "https://www.nccih.nih.gov/health/cranberry",
             "https://www.medicines.org.uk/emc/product/14333/smpc",
@@ -12298,16 +12336,17 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference."
           }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
-          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type blood thinner, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates. The studies used warfarin; for other warfarin-type blood thinners the concern is inferred.",
           "sources": [
             "https://www.nccih.nih.gov/health/cranberry",
             "https://www.medicines.org.uk/emc/product/14333/smpc",
@@ -12330,7 +12369,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -12342,8 +12382,9 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference."
           }
         },
         {
@@ -12427,7 +12468,7 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -12479,13 +12520,13 @@
           "severity": "monitor",
           "evidence_level": "theoretical",
           "mechanism": "Flaxseed's ALA-derived EPA may modestly affect platelet TXA2 production. The conversion rate from ALA to EPA in humans is limited (~5-10%), so anticoagulant potentiation is less likely than with direct EPA/DHA (fish oil) supplementation. No case reports of flaxseed altering warfarin INR have been identified.",
-          "action": "Tell your warfarin prescriber about flaxseed or flaxseed oil supplements and ask whether monitoring is appropriate when changing use.",
+          "action": "If you take warfarin, tell your prescriber about flaxseed or flaxseed oil supplements and ask whether monitoring is appropriate when changing use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18689552/",
             "https://pubmed.ncbi.nlm.nih.gov/7774533/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Flaxseed has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding flaxseed and ask about INR or bleeding checks.",
+          "alert_body": "Flaxseed has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding flaxseed and ask about bleeding checks.",
           "informational_note": "Flaxseed can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -12674,13 +12715,13 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "In vitro, cat's claw (Uncaria tomentosa) leaf and bark extracts showed slight antiplatelet activity, slightly prolonged thrombin time and inhibited thrombin; procyanidins B2 and C1 bound thrombin most strongly in silico. NCCIH notes cat's claw may slow blood clotting and that there are theoretical reasons it might interact with anticoagulant and antiplatelet drugs. No clinical study with anticoagulants was found, so an additive effect is theoretical.",
-          "action": "Inform your prescriber if taking cat's claw while on anticoagulant therapy. Monitor for signs of excessive anticoagulation (unusual bruising, prolonged bleeding). Avoid in patients requiring tight INR control.",
+          "action": "Tell your prescriber if you take cat's claw with a blood thinner, and watch for unusual bruising or prolonged bleeding. If you take warfarin and need tight INR control, avoid it.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/",
             "https://www.nccih.nih.gov/health/cats-claw"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Cat's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cat's claw and ask about INR or bleeding checks.",
+          "alert_body": "Cat's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cat's claw and ask about bleeding checks.",
           "informational_note": "Cat's claw can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -12866,12 +12907,12 @@
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Devil's claw is listed among herbal products with documented reports of potential warfarin interaction in the AJHP systematic review (Heck et al., 2000), which covers 20 alternative therapy agents with established or theoretical warfarin interactions. The mechanism may involve COX/LOX pathway modulation by harpagoside, affecting platelet function and potentially coagulation factor activity.",
-          "action": "Inform your prescriber if taking devil's claw while on warfarin or other anticoagulants. Monitor INR if starting or stopping devil's claw supplementation.",
+          "action": "Tell your prescriber if you take devil's claw with a blood thinner. If you take warfarin, ask about INR checks when starting or stopping it.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Devil's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding devil's claw and ask about INR or bleeding checks.",
+          "alert_body": "Devil's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding devil's claw and ask about bleeding checks.",
           "informational_note": "Devil's claw can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -14426,15 +14467,15 @@
           "drug_class_id": "vitamin_k_antagonists",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
-          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type blood thinner, tell your anticoagulation team before you start, stop or substantially change CoQ10, so they can decide whether your INR needs extra checks. The label evidence is for warfarin; for other warfarin-type blood thinners it is inferred.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/coenzyme-q10",
             "https://pubmed.ncbi.nlm.nih.gov/17723077/"
           ],
           "alert_headline": "May reduce warfarin effect",
-          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
+          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. If you take warfarin or another warfarin-type blood thinner, ask whether INR checks are needed when your CoQ10 use changes.",
           "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -14458,23 +14499,24 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference."
           }
         },
         {
           "drug_class_id": "anticoagulants",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
-          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause. The studies concern warfarin; applying them to other vitamin K antagonists is an inference.",
+          "action": "If you take warfarin or another warfarin-type blood thinner, tell your anticoagulation team before you start, stop or substantially change CoQ10, so they can decide whether your INR needs extra checks. The label evidence is for warfarin; for other warfarin-type blood thinners it is inferred.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/coenzyme-q10",
             "https://pubmed.ncbi.nlm.nih.gov/17723077/"
           ],
           "alert_headline": "May reduce warfarin effect",
-          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
+          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. If you take warfarin or another warfarin-type blood thinner, ask whether INR checks are needed when your CoQ10 use changes.",
           "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -14489,7 +14531,8 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "doacs",
-                "vitamin_k_antagonists"
+                "vitamin_k_antagonists",
+                "injectable_anticoagulants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -14501,8 +14544,9 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an inference."
           }
         },
         {
@@ -14554,7 +14598,7 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -16463,7 +16507,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23134458/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Yerba mate has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding yerba mate and ask about INR or bleeding checks.",
+          "alert_body": "Yerba mate has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding yerba mate and ask about bleeding checks.",
           "informational_note": "Yerba mate can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -17077,7 +17121,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23292890/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Andrographis has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding andrographis and ask about INR or bleeding checks.",
+          "alert_body": "Andrographis has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding andrographis and ask about bleeding checks.",
           "informational_note": "Andrographis can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -17346,7 +17390,7 @@
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Red clover has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding red clover and ask about INR or bleeding checks.",
+          "alert_body": "Red clover has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding red clover and ask about bleeding checks.",
           "informational_note": "Red clover can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -17490,13 +17534,13 @@
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Chondroitin sulfate shares structural similarities with heparin (both are sulfated glycosaminoglycans), and case reports have documented clinically significant INR elevation in warfarin-treated patients taking chondroitin-glucosamine combination products. The exact mechanism may involve inhibition of vitamin K-dependent clotting factors or direct potentiation of antithrombin III activity. In one case report, INR rose from 2.3 to 3.9 about three weeks after the patient increased glucosamine to 1500 mg and chondroitin to 1200 mg twice daily (Knudsen & Sokol 2008).",
-          "action": "Monitor INR in warfarin-treated patients who initiate chondroitin supplements. Alert prescriber to supplement use. Consider avoiding chondroitin if INR is already at the upper therapeutic range.",
+          "action": "Tell your prescriber about chondroitin. If you take warfarin, ask about INR checks when you start it, and ask whether to avoid it if your INR is already at the top of your range.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Chondroitin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chondroitin and ask about INR or bleeding checks.",
+          "alert_body": "Chondroitin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chondroitin and ask about bleeding checks.",
           "informational_note": "Chondroitin can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -19447,7 +19491,7 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "In an in vitro assay, thymoquinone moderately inhibited CYP2C9, the main enzyme that clears S-warfarin. This laboratory finding suggests a possible interaction, but does not establish its magnitude in human users or a uniform clinical effect for every anticoagulant.",
-          "action": "Monitor INR if combining black seed oil with warfarin or other anticoagulants. Alert prescriber to use.",
+          "action": "Tell your prescriber about black seed oil. If you take warfarin, ask whether INR checks are needed when your use changes.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
@@ -19661,12 +19705,12 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "Platelet-related experimental effects of omega-3 preparations do not establish consistent clinically significant INR elevations or a uniform clinical bleeding increase from every isolated EPA or DHA product. Preparation, dose and concomitant therapy require individual appraisal.",
-          "action": "Tell your warfarin prescriber about DHA supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "action": "If you take warfarin, tell your prescriber about DHA supplements and ask about INR monitoring when starting, stopping or changing them.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
+          "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about bleeding checks.",
           "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -19758,7 +19802,7 @@
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about INR or bleeding checks.",
+          "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about bleeding checks.",
           "informational_note": "EPA can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -20507,7 +20551,7 @@
           "severity": "caution",
           "evidence_level": "theoretical",
           "mechanism": "The retained ODS carnitine page does not establish acetyl-L-carnitine anticoagulant activity or the asserted warfarin/acenocoumarol case mechanism. The clinical interaction remains uncertain.",
-          "action": "Monitor INR when starting or stopping ALCAR in patients on anticoagulants. Alert prescriber to use.",
+          "action": "Tell your prescriber about acetyl-L-carnitine. If you take warfarin, ask whether INR checks are needed when you start or stop it.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
           ],
@@ -21152,7 +21196,7 @@
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/forskolin"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Forskolin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding forskolin and ask about INR or bleeding checks.",
+          "alert_body": "Forskolin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding forskolin and ask about bleeding checks.",
           "informational_note": "Forskolin can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -21817,7 +21861,7 @@
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/cordyceps"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Cordyceps has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cordyceps and ask about INR or bleeding checks.",
+          "alert_body": "Cordyceps has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cordyceps and ask about bleeding checks.",
           "informational_note": "Cordyceps can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -21874,7 +21918,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/20637576/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Lion's mane has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding lion's mane and ask about INR or bleeding checks.",
+          "alert_body": "Lion's mane has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding lion's mane and ask about bleeding checks.",
           "informational_note": "Lion's mane can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -21962,13 +22006,13 @@
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Quercetin inhibits CYP2C9 and CYP3A4, the enzymes that metabolise warfarin, and P-glycoprotein. In rats, 14 days of quercetin before a warfarin dose raised warfarin exposure (AUC) by 63% and cut its clearance by 41%. In people, 150-300 mg quercetin inhibited platelet aggregation within 30 minutes. No clinical study of quercetin with warfarin was found.",
-          "action": "Monitor INR frequently when starting or stopping quercetin supplementation in patients on warfarin. Alert prescriber to dose and any INR changes.",
+          "action": "If you take warfarin, ask about INR checks when starting or stopping quercetin, and tell your prescriber the dose.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36239716/",
             "https://pubmed.ncbi.nlm.nih.gov/15613018/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about INR or bleeding checks.",
+          "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about bleeding checks.",
           "informational_note": "Quercetin can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -22624,7 +22668,7 @@
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Case reports describe INR increases during cannabinoid use with warfarin. Evidence quality is low, and this does not establish a uniform anticoagulant-class effect or direct antiplatelet activity.",
-          "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
+          "action": "Tell your prescriber about CBD. If you take warfarin, ask about closer INR checks when starting or stopping it.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33016308/",
             "https://pubmed.ncbi.nlm.nih.gov/35012687/",
