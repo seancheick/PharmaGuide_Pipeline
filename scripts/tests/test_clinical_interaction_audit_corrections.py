@@ -1,7 +1,10 @@
 """Source-supported safety regressions from the October clinical audit."""
 import functools
 import json
+import re
 from pathlib import Path
+
+import pytest
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
 
@@ -536,6 +539,9 @@ GLUCOSAMINE_Q3 = (
     'advise against this combination.'
 )
 CONSUMER_FIELDS = ('action', 'alert_headline', 'alert_body', 'informational_note')
+FALLBACK_RULES = ('RULE_INGREDIENT_ST_JOHNS_WORT', 'RULE_INGREDIENT_GLUCOSAMINE', 'RULE_INGREDIENT_CRANBERRY',
+                  'RULE_IQM_COQ10_HEART_DISEASE_STATINS', 'RULE_IQM_GINGER_BLEEDING',
+                  'RULE_OTHER_GINGER_EXTRACT_BLEEDING')
 
 
 def _classes():
@@ -593,22 +599,51 @@ def test_a_warfarin_type_medicine_keeps_its_findings_next_to_another_anticoagula
         assert sjw == sorted(['vitamin_k_antagonists', *(['doacs'] if apixaban in regimen else [])]), regimen
 
 
-def test_no_inr_instruction_reaches_a_doac_or_injected_anticoagulant_user_unqualified():
-    """Section 2 and Q7: no INR instructions for DOAC or injected-anticoagulant users. Every consumer sentence that
-    mentions INR in a finding they can see is addressed to warfarin-type medicines."""
-    import re
+WARFARIN_QUALIFIER = re.compile(
+    r"if you take warfarin|warfarin users?\b|in (?:a |people taking )?warfarin|with warfarin|warfarin-type|"
+    r"vitamin K antagonist|warfarin-treated", re.I)
 
-    def unqualified(text):
-        return [s for s in re.split(r'(?<=[.;])\s+', text or '')
-                if 'INR' in s and not re.search(r'warfarin|vitamin K antagonist', s, re.I)]
 
-    for rxcui in ('1364430', '1114195', '1037042', '1599538', *INJECTED.values()):
-        for rule_id, sub in _firing_subs(_profile_of(rxcui)):
-            for field in CONSUMER_FIELDS:
-                assert not unqualified(sub.get(field)), (rxcui, rule_id, sub['drug_class_id'], field)
+def _warfarin_only_sentences(text):
+    """Consumer sentences that address the reader as a warfarin user: an INR sentence not qualified to warfarin,
+    or one that speaks of "your warfarin"."""
+    return [s for s in re.split(r'(?<=[.;])\s+', text or '')
+            if re.search(r'\byour warfarin\b', s, re.I) or ('INR' in s and not WARFARIN_QUALIFIER.search(s))]
+
+
+@pytest.mark.parametrize('rxcui', ['1364430', '1114195', '1037042', '1599538', *INJECTED.values()])
+def test_no_warfarin_instruction_reaches_a_doac_or_injected_anticoagulant_user_unqualified(rxcui):
+    """Section 2 and Q7: no INR instructions for DOAC or injected-anticoagulant users; Part B 3D: adding the heparins
+    must not widen warfarin-specific instructions. Every rule and pair such a user can reach is checked."""
+    profile = _profile_of(rxcui)
+    for rule_id, sub in _firing_subs(profile):
+        for field in CONSUMER_FIELDS:
+            assert not _warfarin_only_sentences(sub.get(field)), (rxcui, rule_id, sub['drug_class_id'], field)
+    reachable = {rxcui, *(f'class:{c}' for c in profile)}
     for pair in _pairs().values():
-        if pair['agent1_id'] in ('class:anticoagulants', 'class:doacs', '1599538'):
-            assert not unqualified(pair['management']), pair['id']
+        if pair['agent1_id'] in reachable:
+            assert not _warfarin_only_sentences(pair['management']), (rxcui, pair['id'])
+
+
+def test_warfarin_only_sentence_check_catches_the_reviewed_failures():
+    """The check above is not vacuous: the sentences it was written against fail it."""
+    for text in ('Tell your warfarin prescriber about changes in vitamin D supplementation.',
+                 'INR may need to be checked more frequently and warfarin dose adjusted.',
+                 'Monitor INR more frequently when starting or stopping CBD.'):
+        assert _warfarin_only_sentences(text), text
+    assert not _warfarin_only_sentences('If you take warfarin, ask about INR checks when you start it.')
+
+
+def test_warfarin_type_findings_name_one_warfarin_type_term():
+    """Review of batch 2: "a similar blood thinner" read as any blood thinner (a DOAC user who picked only "Blood
+    thinners" would follow an INR instruction). The VKA and fallback copy qualifies the class as warfarin-type, the
+    vocabulary's own term (ginger says "medicine", since its copy never claims other blood thinners)."""
+    for rule_id in FALLBACK_RULES:
+        for cls in ('vitamin_k_antagonists', 'anticoagulants'):
+            sub = _sub(rule_id, cls)
+            for vague in ('similar blood thinner', 'similar medicine'):
+                assert vague not in _rule_text(sub), (rule_id, cls, vague)
+            assert 'warfarin-type' in sub['action'], (rule_id, cls)
 
 
 def test_st_johns_wort_with_vkas_cites_each_label_and_marks_the_class_inference():
@@ -654,7 +689,8 @@ def test_glucosamine_with_warfarin_type_medicines_uses_the_signed_q3_action():
     labels support the precaution; no invented recheck interval; not a contraindication."""
     pairs = _pairs()
     # Q3's action, followed by the existing bleeding-report instruction (not softened).
-    assert pairs['DSI_WAR_GLUCOSAMINE']['management'] == GLUCOSAMINE_Q3 + ' Report unusual bruising or bleeding.'
+    assert pairs['DSI_WAR_GLUCOSAMINE']['management'] == (
+        GLUCOSAMINE_Q3 + ' This includes glucosamine-chondroitin products. Report unusual bruising or bleeding.')
     assert pairs['DSI_WAR_GLUCOSAMINE']['severity'] == 'Moderate'
     for pair_id, rxcui, source in (('DSI_ACENOCOUMAROL_GLUCOSAMINE', '154', SINTHROME),
                                    ('DSI_PHENPROCOUMON_GLUCOSAMINE', '8150', MARCUMAR)):

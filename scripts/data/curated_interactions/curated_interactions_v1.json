@@ -422,7 +422,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "An FDA pharmacovigilance review found 20 reports of altered coagulation, such as a higher INR or bleeding, when glucosamine or glucosamine-chondroitin was used with warfarin; one report described a bleed in the brain. The mechanism is unknown.",
-      "management": "Do not start glucosamine while taking warfarin unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels advise against this combination. Report unusual bruising or bleeding.",
+      "management": "Do not start glucosamine while taking warfarin unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels advise against this combination. This includes glucosamine-chondroitin products. Report unusual bruising or bleeding.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/18363538/",
         "https://www.medicines.org.uk/emc/product/14333/smpc",
@@ -3064,7 +3064,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Very-low-quality case reports describe INR changes with cannabinoids and warfarin. The retained review found no clinical evidence for other anticoagulants. The Epidiolex label does not establish a warfarin-specific warning; its tested CYP2C9 and CYP3A4 substrates did not show clinically significant exposure changes.",
-      "management": "Monitor INR closely if CBD is started or stopped with warfarin. Dose adjustment of warfarin may be required. Inform prescriber of all CBD use including oils and capsules.",
+      "management": "Tell your prescriber about all CBD use, including oils and capsules. If you take warfarin, ask about closer INR checks when CBD is started or stopped; your prescriber may need to adjust the warfarin dose.",
       "source_urls": [
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
         "https://pubmed.ncbi.nlm.nih.gov/37740600/"
@@ -3460,7 +3460,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Panax ginseng may reduce the anticoagulant effect of warfarin. A controlled trial found ginseng reduced warfarin AUC and INR. The mechanism may involve CYP induction or direct procoagulant ginsenoside effects.",
-      "management": "Monitor INR closely if taking ginseng with warfarin. INR may need to be checked more frequently and warfarin dose adjusted.",
+      "management": "If you take warfarin, tell your prescriber before taking ginseng: your INR may need checking more often, and your prescriber may adjust the warfarin dose.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/asian-ginseng"
       ],

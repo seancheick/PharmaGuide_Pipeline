@@ -20,7 +20,7 @@ Authority: DR_PHAM_ANSWERS_20261112.md Part A (Q3, Q7, section 2 "St. John's wor
   addressed to warfarin. Every anticoagulant sub-rule's "ask about INR or bleeding checks" becomes "ask about
   bleeding checks"; INR instructions in actions are addressed to warfarin users.
 
-Agent review (label passages read 2026-11-12); not attributed to Dr. Pham except where his signed answer decides.
+Agent review (label passages read 2026-11-12); attributed to Dr. Pham only where Dr. Pham's signed answer decides.
 """
 
 from __future__ import annotations
@@ -102,7 +102,7 @@ def classes(blob: dict) -> None:
             "thrombin inhibitors"
         ),
         "atc_codes": sorted({*anticoag["atc_codes"], "B01AB", "B01AX05"}),
-        "notes": anticoag["notes"] + (
+        "notes": anticoag["notes"].rstrip().rstrip(".") + "." + (
             " Heparin, enoxaparin, dalteparin, tinzaparin (ATC B01AB) and fondaparinux (B01AX05) added 2026-11-12 "
             "(RxNav ingredient RxCUIs); with the injected direct thrombin inhibitors they are also in "
             "class:injectable_anticoagulants, which keeps them out of warfarin-addressed fallbacks (Dr. Pham Q7; "
@@ -141,6 +141,8 @@ def taxonomy(blob: dict) -> None:
     assert meta["schema_version"] == "5.6.0"
     meta["schema_version"] = "5.7.0"
     meta["drug_classes_count"] = len(blob["drug_classes"])
+    assert meta["total_entries"] == 87
+    meta["total_entries"] = sum(len(v) for v in blob.values() if isinstance(v, list))
     meta["migration"]["completed_migrations"].insert(0, {
         "from": "5.6.0", "to": "5.7.0", "date": TODAY,
         "summary": (
@@ -246,8 +248,13 @@ def curated(blob: dict) -> None:
     by_id = {r["id"]: r for r in rows}
     war_glucosamine = by_id["DSI_WAR_GLUCOSAMINE"]
     assert war_glucosamine["management"].startswith("Tell your anticoagulation team before you start")
-    war_glucosamine["management"] = GLUCOSAMINE_Q3 + " Report unusual bruising or bleeding."
+    war_glucosamine["management"] = (
+        GLUCOSAMINE_Q3 + " This includes glucosamine-chondroitin products. Report unusual bruising or bleeding."
+    )
     war_glucosamine["verification"]["notes"] += f" Management: Dr. Pham Q3, {ANSWERS} (2026-11-12)."
+    for pair_id, (old, new) in PAIR_REWRITES.items():
+        assert by_id[pair_id]["management"] == old, pair_id
+        by_id[pair_id]["management"] = new
 
     new_after = {
         "DSI_WAR_SJW": [
@@ -330,11 +337,11 @@ def rules(blob: dict) -> None:
     shared_vka_text(sjw, {
         "alert_headline": "Avoid St. John's wort with warfarin-type blood thinners",
         "alert_body": (
-            "If you take warfarin or a similar blood thinner, avoid St. John's wort: it can weaken the medicine's "
+            "If you take warfarin or another warfarin-type blood thinner, avoid St. John's wort: it can weaken the medicine's "
             "effect. Tell your prescriber about any use or change so INR checks can be planned."
         ),
         "action": (
-            "If you take warfarin or a similar blood thinner (a vitamin K antagonist), avoid St. John's wort. If you "
+            "If you take warfarin or another warfarin-type blood thinner (a vitamin K antagonist), avoid St. John's wort. If you "
             "already take both, tell your anticoagulation team before stopping either, because starting or stopping "
             "it can change your INR."
         ),
@@ -368,11 +375,11 @@ def rules(blob: dict) -> None:
     shared_vka_text(by_id["RULE_INGREDIENT_GLUCOSAMINE"], {
         "alert_headline": "Can raise INR with warfarin-type blood thinners",
         "alert_body": (
-            "If you take warfarin or a similar blood thinner, do not start glucosamine unless your anticoagulation "
+            "If you take warfarin or another warfarin-type blood thinner, do not start glucosamine unless your anticoagulation "
             "clinician agrees and plans INR checks."
         ),
         "action": (
-            "Do not start glucosamine while taking warfarin or a similar blood thinner unless your anticoagulation "
+            "Do not start glucosamine while taking warfarin or another warfarin-type blood thinner unless your anticoagulation "
             "clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or "
             "changing glucosamine. Some warfarin labels advise against this combination."
         ),
@@ -390,9 +397,9 @@ def rules(blob: dict) -> None:
 
     shared_vka_text(by_id["RULE_INGREDIENT_CRANBERRY"], {
         "action": (
-            "If you take warfarin or a similar blood thinner, contact your anticoagulation team before starting, "
+            "If you take warfarin or another warfarin-type blood thinner, contact your anticoagulation team before starting, "
             "stopping or materially changing cranberry supplements or concentrates. The studies used warfarin; for "
-            "similar blood thinners the concern is inferred."
+            "other warfarin-type blood thinners the concern is inferred."
         ),
         "mechanism": lambda s: s["mechanism"] + INFERENCE,
     }, "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an "
@@ -400,13 +407,13 @@ def rules(blob: dict) -> None:
 
     shared_vka_text(by_id["RULE_IQM_COQ10_HEART_DISEASE_STATINS"], {
         "alert_body": (
-            "Evidence for a CoQ10–warfarin interaction is mixed. If you take warfarin or a similar blood thinner, ask "
+            "Evidence for a CoQ10–warfarin interaction is mixed. If you take warfarin or another warfarin-type blood thinner, ask "
             "whether INR checks are needed when your CoQ10 use changes."
         ),
         "action": (
-            "If you take warfarin or a similar blood thinner, tell your anticoagulation team before you start, stop "
+            "If you take warfarin or another warfarin-type blood thinner, tell your anticoagulation team before you start, stop "
             "or substantially change CoQ10, so they can decide whether your INR needs extra checks. The label evidence "
-            "is for warfarin; for similar blood thinners it is inferred."
+            "is for warfarin; for other warfarin-type blood thinners it is inferred."
         ),
         "mechanism": lambda s: s["mechanism"] + INFERENCE,
     }, "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as an "
@@ -415,20 +422,18 @@ def rules(blob: dict) -> None:
     for rule_id in ("RULE_IQM_GINGER_BLEEDING", "RULE_OTHER_GINGER_EXTRACT_BLEEDING"):
         shared_vka_text(by_id[rule_id], {
             "action": (
-                "If you take warfarin or a warfarin-type medicine, talk to your prescriber before using ginger "
+                "If you take warfarin or another warfarin-type medicine, talk to your prescriber before using ginger "
                 "supplements or concentrates, and report unusual bruising or bleeding. The evidence is from warfarin; "
-                "for similar medicines it is inferred."
+                "for other warfarin-type medicines it is inferred."
             ),
             "mechanism": lambda s: s["mechanism"] + INFERENCE,
         }, "Q7: the direct evidence is warfarin-specific; the extension to other vitamin K antagonists is stated as "
            "an inference, in both ginger records.")
 
     inr_copy_pass(by_id)
-    for rule_id in {*FALLBACK_RULES, "RULE_INGREDIENT_GINSENG", "RULE_INGREDIENT_OMEGA_3", "RULE_INGREDIENT_FISH_OIL",
-                    "RULE_INGREDIENT_CHAMOMILE", "RULE_INGREDIENT_CAT_S_CLAW", "RULE_INGREDIENT_DEVILS_CLAW",
-                    "RULE_IQM_CHONDROITIN", "RULE_IQM_BLACK_SEED_OIL_DIABETES", "RULE_IQM_DHA_BLEEDING",
-                    "RULE_IQM_ALCAR_THYROID", "RULE_IQM_QUERCETIN_THYROID", "RULE_BANNED_CBD_INTERACTIONS",
-                    *TEMPLATE_RULES}:
+    # last_reviewed marks a clinical review: only the rules carrying Dr. Pham's signed decisions. The INR copy pass
+    # (Part B 3D) is agent wording and leaves last_reviewed alone.
+    for rule_id in FALLBACK_RULES:
         by_id[rule_id]["last_reviewed"] = TODAY
 
 
@@ -520,6 +525,32 @@ ACTION_REWRITES = {
         "Tell your prescriber about CBD. If you take warfarin, ask about closer INR checks when starting or stopping "
         "it.",
     )},
+    # Part B 3D: "Adding them must not widen warfarin-specific instructions" (not only INR sentences).
+    "RULE_INGREDIENT_VITAMIN_D": {"action": (
+        "Tell your warfarin prescriber about changes in vitamin D supplementation.",
+        "If you take warfarin, tell your prescriber about changes in vitamin D supplementation.",
+    )},
+    "RULE_INGREDIENT_FLAXSEED": {"action": (
+        "Tell your warfarin prescriber about flaxseed or flaxseed oil supplements",
+        "If you take warfarin, tell your prescriber about flaxseed or flaxseed oil supplements",
+    )},
+}
+
+# Whole-class anticoagulant pairs reach DOAC and injected-anticoagulant users too: their warfarin sentences are
+# addressed to warfarin users (old text asserted).
+PAIR_REWRITES = {
+    "DSI_ANTICOAG_GINSENG": (
+        "Monitor INR closely if taking ginseng with warfarin. INR may need to be checked more frequently and warfarin "
+        "dose adjusted.",
+        "If you take warfarin, tell your prescriber before taking ginseng: your INR may need checking more often, and "
+        "your prescriber may adjust the warfarin dose.",
+    ),
+    "DSI_ANTICOAG_CBD": (
+        "Monitor INR closely if CBD is started or stopped with warfarin. Dose adjustment of warfarin may be required. "
+        "Inform prescriber of all CBD use including oils and capsules.",
+        "Tell your prescriber about all CBD use, including oils and capsules. If you take warfarin, ask about closer "
+        "INR checks when CBD is started or stopped; your prescriber may need to adjust the warfarin dose.",
+    ),
 }
 
 

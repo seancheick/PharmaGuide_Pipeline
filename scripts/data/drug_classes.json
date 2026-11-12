@@ -1736,7 +1736,7 @@
         "B01AF",
         "B01AX05"
       ],
-      "notes": "Critical for supplement interactions: warfarin vs vitamin K, ginkgo, fish oil, garlic Heparin, enoxaparin, dalteparin, tinzaparin (ATC B01AB) and fondaparinux (B01AX05) added 2026-11-12 (RxNav ingredient RxCUIs); with the injected direct thrombin inhibitors they are also in class:injectable_anticoagulants, which keeps them out of warfarin-addressed fallbacks (Dr. Pham Q7; Part B 3D)."
+      "notes": "Critical for supplement interactions: warfarin vs vitamin K, ginkgo, fish oil, garlic. Heparin, enoxaparin, dalteparin, tinzaparin (ATC B01AB) and fondaparinux (B01AX05) added 2026-11-12 (RxNav ingredient RxCUIs); with the injected direct thrombin inhibitors they are also in class:injectable_anticoagulants, which keeps them out of warfarin-addressed fallbacks (Dr. Pham Q7; Part B 3D)."
     },
     "class:fluoroquinolones": {
       "display_name": "Fluoroquinolones",
