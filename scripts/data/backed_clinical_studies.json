@@ -21189,22 +21189,25 @@
           "source_pmids": [
             "37739728"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex /root source-access/content review; independent /root/mct_pomegranate_sources. Agent review, not clinician review; full source review remains pending.",
-            "reviewed_at": "2026-11-09",
+            "reviewer": "Codex agent source/applicability review; prior independent source check retained.",
+            "reviewed_at": "2026-11-11",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Exact live PMID/DOI/abstract verified. Actual full Methods/Results/included tables remain unretrieved after official publisher, TDM, institutional and author-linked routes; metadata/preview is not full content. No inferred ten-study membership, preparation, population, regimen, independence or completed review."
+            "basis": "The review included ten articles on phytosterol capsules or tablets in adults with hypercholesterolemia. Most studies reported lower cholesterol, with the authors describing potential LDL reduction over generally short interventions. Full Methods, included-trial membership, overlap and preparation-specific effect estimates remain unverified. No additional pooled numerical credit, independent-trial depth, enrollment or Dose benchmark is established. Prior independent source check by Codex /root/mct_pomegranate_sources retained in the existing source receipt. Sean authorized this bounded disposition on 2026-11-11."
           },
           "limitations": [
-            "Abstract reports10includedarticles; exact preparations,trial-family overlap and full risk-of-bias methods remain unverified. Do not count reviews and their primaries as independent replication."
+            "Abstract reports10includedarticles; exact preparations,trial-family overlap and full risk-of-bias methods remain unverified. Do not count reviews and their primaries as independent replication.",
+            "The review included ten articles on phytosterol capsules or tablets in adults with hypercholesterolemia. Most studies reported lower cholesterol, with the authors describing potential LDL reduction over generally short interventions.",
+            "Full Methods, included-trial membership, overlap and preparation-specific effect estimates remain unverified. No additional pooled numerical credit, independent-trial depth, enrollment or Dose benchmark is established.",
+            "Sean authorized the limited no-additional-credit numerical-transfer assessment on 2026-11-11. Existing qualified sources and preparation boundaries retain their own decisions."
           ],
           "dose": {
             "source_provenance": {
               "pmid": "37739728",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
-              "location": "Live identity and abstract verified November9; actual full Methods/Results/included tables not retrieved. Publisher/TDM/author-linked access diagnostics retained; lack of retrieval is not proof unavailable."
+              "location": "Official publication abstract. The review included ten articles on phytosterol capsules or tablets in adults with hypercholesterolemia. Most studies reported lower cholesterol, with the authors describing potential LDL reduction over generally short interventions. Full Methods, included-trial membership, overlap and preparation-specific effect estimates remain unverified. No additional pooled numerical credit, independent-trial depth, enrollment or Dose benchmark is established."
             }
           }
         }
@@ -51527,7 +51530,7 @@
           "component_registration_status": "fully_registered",
           "condition": "healthy_cognition",
           "purpose": "cognitive_support",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "human_status": "confirmed",
           "source_integrity": "none",
@@ -51563,7 +51566,10 @@
           "limitations": [
             "Laboratory task; dose not in the abstract.",
             "Abstract as read on PubMed; full text not read.",
-            "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+            "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed.",
+            "In 26 healthy young adults, the double-blind within-person experiment reported less consciously perceived Simon-task conflict, no Flanker-task improvement, and greater subliminal conflict when conscious conflict was also present.",
+            "Full Methods and dose remain unread. These mixed laboratory task findings do not establish broader cognitive benefit, retail exposure applicability or independent replication.",
+            "Sean authorized the limited no-additional-credit numerical-transfer assessment on 2026-11-11. Existing qualified sources and preparation boundaries retain their own decisions."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -51584,8 +51590,15 @@
             },
             "source_provenance": {
               "pmid": "29980424",
-              "location": "Abstract"
+              "location": "Official publication abstract. In 26 healthy young adults, the double-blind within-person experiment reported less consciously perceived Simon-task conflict, no Flanker-task improvement, and greater subliminal conflict when conscious conflict was also present. Full Methods and dose remain unread. These mixed laboratory task findings do not establish broader cognitive benefit, retail exposure applicability or independent replication.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/29980424/"
             }
+          },
+          "clinical_review": {
+            "reviewer": "Codex agent source/applicability review; prior independent source check retained.",
+            "reviewed_at": "2026-11-11",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "In 26 healthy young adults, the double-blind within-person experiment reported less consciously perceived Simon-task conflict, no Flanker-task improvement, and greater subliminal conflict when conscious conflict was also present. Full Methods and dose remain unread. These mixed laboratory task findings do not establish broader cognitive benefit, retail exposure applicability or independent replication. Prior independent Europe PMC source-content check retained in l-tyrosine-review/FINDINGS.md. Sean authorized this bounded disposition on 2026-11-11."
           }
         },
         {

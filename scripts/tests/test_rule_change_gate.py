@@ -66,10 +66,15 @@ def _rule(*, severity="caution", gate_ids=("fake_class",), mechanism="Fictional.
     }
 
 
-def _db(path: Path, rows=(), rules=()) -> Path:
+def _db(path: Path, rows=(), rules=(), classes=None) -> Path:
     path.unlink(missing_ok=True)
     con = sqlite3.connect(path)
     con.executescript(bid.SCHEMA_SQL)
+    for class_id, rxcuis in (classes or {}).items():
+        con.execute(
+            "INSERT INTO drug_class_map VALUES (?, ?, ?, ?, ?, ?)",
+            (class_id, class_id, json.dumps(rxcuis), "[]", "fake", "2026-11-01"),
+        )
     columns = {c[1]: c for c in con.execute("PRAGMA table_info(interactions)")}
     for row in rows:
         filled = {
@@ -123,11 +128,11 @@ def _alerts_dir(tmp_path, *records, attestations=()):
 
 
 def _check(tmp_path, base_rows=(), cand_rows=(), base_rules=(), cand_rules=(), records=(),
-           attestations=(), live_revisions=None):
+           attestations=(), live_revisions=None, base_classes=None, cand_classes=None):
     (tmp_path / "b").mkdir(exist_ok=True)
     (tmp_path / "c").mkdir(exist_ok=True)
-    baseline = _db(tmp_path / "b" / "db.sqlite", base_rows, base_rules)
-    candidate = _db(tmp_path / "c" / "db.sqlite", cand_rows, cand_rules)
+    baseline = _db(tmp_path / "b" / "db.sqlite", base_rows, base_rules, base_classes)
+    candidate = _db(tmp_path / "c" / "db.sqlite", cand_rows, cand_rules, cand_classes)
     return gate.check_rule_changes(
         candidate,
         baseline,
@@ -136,8 +141,9 @@ def _check(tmp_path, base_rows=(), cand_rows=(), base_rules=(), cand_rules=(), r
     )
 
 
-def _fp(tmp_path, rows=(), rules=(), key=KEY):
-    db = _db(tmp_path / f"fp_{hashlib.sha256(repr((rows, rules)).encode()).hexdigest()[:8]}.sqlite", rows, rules)
+def _fp(tmp_path, rows=(), rules=(), key=KEY, classes=None):
+    name = hashlib.sha256(repr((rows, rules, classes)).encode()).hexdigest()[:8]
+    db = _db(tmp_path / f"fp_{name}.sqlite", rows, rules, classes)
     return gate.rule_fingerprint(db, key)
 
 
@@ -373,6 +379,58 @@ def test_profile_drug_class_rule_is_compared_per_sub_rule(tmp_path):
         records=[_alert(_fp(tmp_path, rules=[rule], key=DRUG_KEY), rule_id=DRUG_KEY)],
     )
     assert covered.ok, covered.errors
+
+
+GROWN = {"class:fake_class": ["111", "222"], "class:fake_test_medications": ["333", "444"]}
+SAME = {"class:fake_class": ["111"], "class:fake_test_medications": ["333"]}
+
+
+def test_class_membership_growth_widens_a_hard_profile_rule(tmp_path):
+    """A medicine added to a class the gate names now gets the warning: same rule, different people."""
+    rule = _rule(severity="avoid")
+    result = _check(tmp_path, base_rules=[rule], cand_rules=[rule], base_classes=SAME, cand_classes=GROWN)
+    assert not result.ok
+    assert DRUG_KEY in result.errors[0] and "applies to different people" in result.errors[0]
+
+    covered = _check(
+        tmp_path, base_rules=[rule], cand_rules=[rule], base_classes=SAME, cand_classes=GROWN,
+        records=[_alert(_fp(tmp_path, rules=[rule], key=DRUG_KEY, classes=GROWN), rule_id=DRUG_KEY)],
+    )
+    assert covered.ok, covered.errors
+
+
+def test_class_membership_growth_widens_a_hard_class_pair(tmp_path):
+    row = _row(severity="contraindicated", agent1_id="class:fake_test_medications")
+    result = _check(tmp_path, [row], [row], base_classes=SAME, cand_classes=GROWN)
+    assert not result.ok
+    assert KEY in result.errors[0] and "applies to different people" in result.errors[0]
+
+
+def test_class_membership_changes_the_rule_does_not_name_or_below_hard_are_not_material(tmp_path):
+    other = {**SAME, "class:unrelated": ["999"]}
+    hard = _rule(severity="avoid")
+    assert _check(tmp_path, base_rules=[hard], cand_rules=[hard], base_classes=SAME, cand_classes=other).ok
+    soft = _rule(severity="caution")
+    assert _check(tmp_path, base_rules=[soft], cand_rules=[soft], base_classes=SAME, cand_classes=GROWN).ok
+
+
+def test_rules_without_class_references_keep_their_fingerprint(tmp_path):
+    """Existing attestations on condition, dose and life-stage rules stay bound to the same fingerprint."""
+    rule = _rule(severity="avoid", gate_ids=())
+    rule["drug_class_rules"][0]["drug_class_id"] = "not_in_the_map"
+    assert _fp(tmp_path, rules=[rule], key=f"{PROFILE_RULE}#drug_class:not_in_the_map") == _fp(
+        tmp_path, rules=[rule], key=f"{PROFILE_RULE}#drug_class:not_in_the_map", classes=GROWN)
+
+
+def test_profile_class_ids_follow_the_app_crosswalk(tmp_path):
+    """The app maps class:antiplatelet_agents to profile id `antiplatelets`; membership follows it."""
+    rule = _rule(severity="avoid", gate_ids=("antiplatelets",))
+    rule["drug_class_rules"][0]["drug_class_id"] = "antiplatelets"
+    key = f"{PROFILE_RULE}#drug_class:antiplatelets"
+    result = _check(tmp_path, base_rules=[rule], cand_rules=[rule],
+                    base_classes={"class:antiplatelet_agents": ["1"]},
+                    cand_classes={"class:antiplatelet_agents": ["1", "2"]})
+    assert not result.ok and key in result.errors[0]
 
 
 def test_profile_review_metadata_alone_is_not_a_change(tmp_path):
