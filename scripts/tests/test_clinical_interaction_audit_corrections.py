@@ -380,7 +380,7 @@ ANTICOAGULANT_ROWS = (
     ('DSI_WAR_GARLIC', 'RULE_INGREDIENT_GARLIC', 'anticoagulants', 'caution', False),
     ('DSI_WAR_GLUCOSAMINE', 'RULE_INGREDIENT_GLUCOSAMINE', 'anticoagulants', 'caution', True),
     ('DSI_WAR_CRANBERRY', 'RULE_INGREDIENT_CRANBERRY', 'anticoagulants', 'caution', True),
-    ('DSI_WAR_GINGER', 'RULE_IQM_GINGER_BLEEDING', 'anticoagulants', 'caution', False),
+    ('DSI_WAR_GINGER', 'RULE_IQM_GINGER_BLEEDING', 'anticoagulants', 'caution', True),
     ('DSI_NSAID_FISHOIL', 'RULE_INGREDIENT_FISH_OIL', 'nsaids', 'monitor', False),
 )
 
@@ -458,7 +458,35 @@ def test_warfarin_only_findings_follow_an_identified_warfarin_and_fall_back_only
         assert strip(vka) == strip(fallback), rule_id
     assert set(WARFARIN_ONLY_RULES) == {
         'RULE_INGREDIENT_ST_JOHNS_WORT', 'RULE_INGREDIENT_GLUCOSAMINE', 'RULE_INGREDIENT_CRANBERRY',
-        'RULE_IQM_COQ10_HEART_DISEASE_STATINS'}
+        'RULE_IQM_COQ10_HEART_DISEASE_STATINS', 'RULE_IQM_GINGER_BLEEDING'}
+
+
+def test_ginger_blood_thinner_findings_carry_the_warfarin_evidence_and_scope():
+    # A9 is ginger + warfarin: the cohort studied warfarin users and the crossover healthy men, and no
+    # retained source covers another blood thinner. The ginger-extract rule is the same subject; it
+    # cited the NCCIH ginger page, which never mentions bleeding (read 2026-11-11).
+    reviewed = _sub('RULE_IQM_GINGER_BLEEDING', 'anticoagulants')
+    for rule_id in ('RULE_IQM_GINGER_BLEEDING', 'RULE_OTHER_GINGER_EXTRACT_BLEEDING'):
+        hits = {
+            name: _anticoagulant_hits(rule_id, {'drug_classes': p}) for name, p in (
+                ('warfarin', {'anticoagulants', 'vitamin_k_antagonists'}),
+                ('apixaban', {'anticoagulants', 'doacs'}),
+                ('blood thinner not identified', {'anticoagulants'}),
+            )
+        }
+        assert hits == {
+            'warfarin': ['vitamin_k_antagonists'], 'apixaban': [],
+            'blood thinner not identified': ['anticoagulants'],
+        }, rule_id
+        for cls in ('vitamin_k_antagonists', 'anticoagulants'):
+            sub = _sub(rule_id, cls)
+            text = _rule_text(sub)
+            assert 'warfarin' in sub['action'].lower() and 'warfarin' in sub['alert_body'].lower(), (rule_id, cls)
+            assert 'blood thinner' not in text and 'anticoagulant activity' not in text, (rule_id, cls)
+            assert set(sub['sources']) == {
+                'https://pubmed.ncbi.nlm.nih.gov/17723077/', 'https://pubmed.ncbi.nlm.nih.gov/15801937/'}, rule_id
+            for key in ('severity', 'evidence_level', 'mechanism', 'action', 'alert_headline', 'alert_body'):
+                assert sub[key] == reviewed[key], (rule_id, cls, key)
 
 
 def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():

@@ -3539,18 +3539,58 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
+          "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
           "evidence_level": "limited",
           "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
-          "action": "If you take a blood thinner, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/15801937/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Ginger supplements may add to bleeding risk with blood thinners; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
-          "informational_note": "Ginger supplements may affect bleeding risk — relevant to people on anticoagulants.",
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
+          ],
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -3562,7 +3602,10 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -8941,17 +8984,52 @@
       ],
       "drug_class_rules": [
         {
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
+          ],
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Potential additive bleeding tendency.",
-          "action": "Monitor with clinician guidance.",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/ginger"
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Ginger extract has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger extract and ask about INR or bleeding checks.",
-          "informational_note": "Ginger extract can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8963,7 +9041,10 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -8985,8 +9066,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-02-28",
-      "review_owner": "pharmaguide_clinical_team",
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Source-content review (agent), 2026-11-11: aligned with RULE_IQM_GINGER_BLEEDING (Dr. Pham A9, ginger + warfarin); the NCCIH ginger page it cited does not mention bleeding",
       "dose_thresholds": []
     },
     {
