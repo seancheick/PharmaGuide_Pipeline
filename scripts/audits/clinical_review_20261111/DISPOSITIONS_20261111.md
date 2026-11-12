@@ -401,3 +401,70 @@ history.
    Also: argatroban, bivalirudin, desirudin and lepirudin are identified but reach the unidentified blood-thinner
    fallback and its warfarin-addressed text. Should these four injected direct thrombin inhibitors get a class of
    their own that the fallback excludes? (Betrixaban now reads as a DOAC: its label and ATC code place it there.)
+
+## Codex remaining interaction batches (2026-11-12)
+
+Authority: Sean's handoff and instruction to fix all verified defects encountered; existing F1/F3/G1/G3
+clinical decisions remain governing. New wording/research below is agent work, not clinician review.
+Sean explicitly approved the optional `excluded_member_rxcuis` timing field and companion app fix in
+chat on 2026-11-12. The field extends the existing timing owner; it does not establish a new interval,
+severity, relation type or clinical policy. Other named clinical holds remain held.
+
+Owner: curated pair registry, drug_classes, medication_depletions, timing_rules/rejected and ingredient
+interaction rules; evidence: matrix interaction_rules/interaction_db plus existing apply scripts and
+consumer readers. Will NOT create: an alternative scorer, registry or clinical decision owner.
+
+- Open-PR chores: #459/#461/#462/#464 descriptions now include Validation and Remaining release work.
+  #465 exact f676212cf and #466 exact b3ab4424c passed all eight fast shards and merge readiness;
+  no CI defect required a code change on those heads. Later rebases need their own qualification.
+- Batch 6a/6b: source implementation and focused checks are in `BATCH6_RESEARCH_20261112.md`.
+  Isotretinoin/vitamin A and separate beta-carotene records; formulation-specific calcium/magnesium
+  bisphosphonate guidance; zoledronic acid and verified IV ibandronate product exclusions; hidden
+  SINEMET B6 source record and no-blanket-B6 regression. Brand lookup is not consumer hydration proof.
+- Batch 7: `batch7_timing_research.md` owns per-entry source/identity results. Approved magnesium
+  precaution and three scoped psyllium records; two rejected together claims. Consumer route bug
+  is being fixed under Sean's explicit field approval; not release-qualified yet.
+- Batch 8: signed source corrections are in progress. Kidney care-team caution, neutral theanine and
+  zinc information, and conditional warfarin/vitamin-D-deficiency-treatment copy have focused proof.
+  The vitamin D gate remains the existing VKA group with explicitly conditional warfarin wording;
+  this is not a claim of exact-warfarin targeting. No unknown amount enables a downgrade.
+- Additional confirmed bug: CBD/sirolimus was incorrectly described as never measured. A seven-patient
+  sirolimus subgroup in PMID 31924480 supplies observational evidence. Narrow correction prepared on
+  `codex/cbd-sirolimus-source` (78a0a7c24, PR #467), keeping caution/management/matching unchanged.
+
+Validation class: behavioral clinical data and consumer contract. Fail-first and per-entry source
+checks are recorded in receipts. Completed owner/consumer slice: 786 passed. Local checkpoint:
+564 passed, 24 declared live-stack opt-in skips; skip guard passed. Strict changed-rule citations
+PASS; safety-copy validator OK with zero warnings. Parent reviewed all source decisions and diffs;
+research agents independently checked route IDs and chromium form applicability.
+
+Frozen raw-label replay covers 17 products (14 original plus fish oil1024, B-complex219244 and
+complex green-tea27350). Every cleaned and scored record is identical before/after; warning copy,
+severity, source and scope changes are intentional. All17 enriched records carry taxonomy metadata
+changes; 16 detail blobs change and aloe control267819 retains its blob. Chromium chloride69497,
+histidinate219950 and brown-rice-chelate219244 lose the picolinate thyroid finding; picolinate3234
+retains it. Omega products1024 and complex27350, niacinamide219244 and B6-containing labels cover
+the remaining changed owners. Full paths and frozen manifests are under
+`/Users/seancheick/pg_quality/interaction-remaining-20261112`; source fingerprints accompany snapshots.
+No shared scoring runtime changed; no score/amount/role delta was observed.
+
+App route exclusions, decimal RxNorm ranking and omega presentation have focused regressions.
+The full app checkpoint found stale vocabulary/schema test expectations and a Git LFS pointer in
+the worktree; expectations now match the authored contract and the existing catalog was downloaded.
+All affected failure files pass; final combined app checkpoint and exact candidate CI remain pending.
+Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
+release or main push authorized.
+
+### Remaining clinical decisions and recommendations
+
+The consolidated source-supported recommendations are in `HELD_RESEARCH_20261112.md`; Batch 6b adds
+exact-regimen levodopa/B6, IV-calcium-only digoxin evidence, nitrates/PDE5 with amino acids, and charcoal.
+The INBRIJA example in the old handoff is corrected: its indicated use accompanies carbidopa/levodopa,
+so the inhaler's single ingredient does not prove absence of a decarboxylase inhibitor in the regimen.
+Do not call these agent recommendations Dr. Pham approvals or silently activate held warnings.
+
+Product recommendation: do not add a new together/non-precise timing relation solely to clear three
+held rows. Iron/calcium, iron/zinc and theanine/caffeine retain their specific source/contract holds;
+no bonus or invented interval. Likewise, do not infer latex content from unknown aloe processing or
+create a new preparation verdict merely to remove uncertainty. A future uncertainty display requires
+an explicit meaning and consumer contract; existing preparation evidence stays honest meanwhile.

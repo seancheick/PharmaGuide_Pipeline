@@ -633,7 +633,8 @@ def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
     # 18296328 (EEG) and 35378276 (anxiety NMA) measure no blood pressure.
     assert antihypertensives["sources"] == [_pmid("23107346"), _pmid("17891480")]
     assert sedatives["sources"] == [_pmid("18296328"), _pmid("35378276")]
-    assert (antihypertensives["severity"], sedatives["severity"]) == ("caution", "caution")
+    assert (antihypertensives["severity"], sedatives["severity"]) == ("informational", "caution")
+    assert antihypertensives["direction"] == "neutral"  # Signed G1: no demonstrated harmful drug interaction.
     assert "caffeine" in antihypertensives["mechanism"]
     assert "without inducing drowsiness" in sedatives["mechanism"]
     # The action must not assert a driving impairment its sources contradict.
@@ -1014,11 +1015,17 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
 def test_green_tea_nadolol_rules_cite_the_primary_trial():
     rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
     for sub in (_sub_rule(rule, "condition_id", "hypertension"),
-                _sub_rule(rule, "drug_class_id", "antihypertensives")):
-        assert sub["sources"] == [_pmid("24419562"), _pmid("25312732")]
+                _sub_rule(rule, "drug_class_id", "nadolol")):
+        assert _pmid("24419562") in sub["sources"]
         assert "85%" in sub["mechanism"]
         assert "OATP1A2" in sub["mechanism"]
-    assert rule["last_reviewed"] == "2026-04-23"  # agent re-sourcing, not a clinical review
+    nadolol = _sub_rule(rule, "drug_class_id", "nadolol")
+    assert nadolol["severity"] == "avoid"
+    assert nadolol["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert not {"antihypertensives", "beta_blockers"}.intersection(
+        r["drug_class_id"] for r in rule["drug_class_rules"]
+    )
+    assert rule["last_reviewed"] == "2026-04-23"  # authoring does not invent clinician review
 
 
 # Wrong-topic citations removed by the 2026-09 triage: (PMID, rule, sub-rule).

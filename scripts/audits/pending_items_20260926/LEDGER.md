@@ -5394,3 +5394,13 @@ Running the raw check at each first-parent merge from #417 (33/33 unchanged) sho
 Each PMID was content-checked against PubMed. The stored outputs from the 2026-11-11 corpus run already carried
 these values. After the refresh, raw and stored checks are both 33/33. The fixture and manifest consumer tests
 pass (168). Cause details are in the manifest changelog entry.
+
+## November 12 — Codex remaining interaction batches (in progress)
+
+User requested remaining batches 6–8, held-item research and all verified bugs encountered. Worktree
+`codex/interaction-remaining`, source baseline1890f4e2d; independent CBD source-fix PR467 (78a0a7c24).
+Owner/authority/per-entry receipts and remaining clinical holds: clinical_review_20261111 DISPOSITIONS,
+BATCH6_RESEARCH, batch7_timing_research and HELD_RESEARCH. Will NOT create a second clinical engine.
+Sean approved optional timing `excluded_member_rxcuis` plus the app reader on2026-11-12. This is a
+behavioral data/consumer contract batch. PR465f676212cf/466b3ab4424c CI green; four older PR bodies fixed.
+Completed: 786 focused owner/consumer tests; local564passed/24declared opt-in skips and skip guard; strict citation verification; 17 frozen real-label comparisons with identical cleaned/scored records. Route consumer and omega display regressions pass. Chromium picolinate scope uses the existing fail-open form owner; unknown forms retain qualified copy. Combined app checkpoint and exact candidate CI pending; integration and release qualification separate. No release/corpus run. Full evidence and remaining named clinical decisions are in DISPOSITIONS and HELD_RESEARCH.

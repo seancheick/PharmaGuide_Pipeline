@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-11-12",
-    "total_entries": 155,
+    "total_entries": 156,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 155,
+    "total_rules": 156,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -2134,40 +2134,6 @@
             },
             "dose": null
           }
-        },
-        {
-          "severity": "caution",
-          "mechanism": "Chromium picolinate contains trivalent chromium. Concurrent chromium picolinate reduced levothyroxine absorption in a small healthy-volunteer study; the study did not establish the precise binding mechanism.",
-          "action": "Separate chromium supplementation from levothyroxine by at least 4 hours.",
-          "last_reviewed": "2026-04-09",
-          "drug_class_id": "thyroid_medications",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17725434/"
-          ],
-          "evidence_level": "probable",
-          "alert_headline": "May affect thyroid medication",
-          "alert_body": "Chromium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing chromium away from your dose.",
-          "informational_note": "Chromium affects thyroid pathways — relevant to people on thyroid medication.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "thyroid_medications"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -4535,7 +4501,7 @@
       "condition_rules": [
         {
           "condition_id": "hypertension",
-          "severity": "monitor",
+          "severity": "informational",
           "evidence_level": "theoretical",
           "mechanism": "A human study found about 85% lower nadolol exposure after green-tea consumption, consistent with inhibition of intestinal OATP1A2 uptake. This nadolol-specific evidence does not establish a caffeine-mediated 400 mg extract threshold or the same effect for every antihypertensive medicine.",
           "action": "Ask the nadolol prescriber before using green tea or concentrated catechin products; the retained studies do not validate a universal spacing interval.",
@@ -4543,9 +4509,9 @@
             "https://pubmed.ncbi.nlm.nih.gov/24419562/",
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
           ],
-          "alert_headline": "May reduce nadolol absorption",
+          "alert_headline": "Check green tea use if you take nadolol",
           "alert_body": "Green tea and catechin preparations can reduce nadolol exposure. If you take nadolol, talk to your prescriber before using them. Effects on other blood-pressure medicines need separate review.",
-          "informational_note": "Green tea extract can affect blood pressure — relevant to people with high blood pressure.",
+          "informational_note": "High blood pressure alone does not establish this interaction; the evidence concerns nadolol.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -4564,9 +4530,15 @@
             },
             "dose": null
           },
-          "direction": "harmful",
+          "direction": "neutral",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "condition_id": "liver_disease",
@@ -4607,24 +4579,24 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "antihypertensives",
-          "severity": "caution",
-          "evidence_level": "theoretical",
-          "mechanism": "A human study found about 85% lower nadolol exposure after green-tea consumption, consistent with inhibition of intestinal OATP1A2 uptake. This nadolol-specific evidence does not establish a caffeine-mediated 400 mg extract threshold or the same effect for every antihypertensive medicine.",
-          "action": "Ask the nadolol prescriber before using green tea or concentrated catechin products; the retained studies do not validate a universal spacing interval.",
+          "drug_class_id": "nadolol",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "A human study found about 85% lower nadolol exposure after green-tea consumption, consistent with inhibition of intestinal OATP1A2 uptake. This finding does not establish the same interaction for other beta-blockers or an extract-dose threshold.",
+          "action": "Avoid combining green tea or concentrated catechin supplements with nadolol unless your prescriber specifically advises it. A universal spacing interval has not been established.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24419562/",
-            "https://pubmed.ncbi.nlm.nih.gov/25312732/"
+            "https://pubmed.ncbi.nlm.nih.gov/29480324/"
           ],
-          "alert_headline": "May affect blood-pressure control",
-          "alert_body": "Green tea and catechin preparations can reduce nadolol exposure. If you take nadolol, talk to your prescriber before using them. Effects on other blood-pressure medicines need separate review.",
-          "informational_note": "Green tea extract can affect blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Green tea may reduce nadolol effect",
+          "alert_body": "If you take nadolol, avoid green tea or catechin supplements unless your prescriber advises it. They can reduce nadolol absorption; spacing has not been established to prevent this.",
+          "informational_note": "The evidence concerns nadolol, not every beta-blocker or blood-pressure medicine.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "antihypertensives"
+                "nadolol"
               ],
               "profile_flags_any": []
             },
@@ -4639,41 +4611,12 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
-        },
-        {
-          "drug_class_id": "beta_blockers",
-          "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Human studies document reduced nadolol exposure with green tea preparations. They do not establish an identical effect for every beta-blocker.",
-          "action": "Ask your prescriber about your specific beta-blocker before using green tea or catechin supplements; a universal spacing interval is not established.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
-            "https://pubmed.ncbi.nlm.nih.gov/29480324/"
-          ],
-          "alert_headline": "May reduce nadolol effect",
-          "alert_body": "Human studies found reduced nadolol exposure with green tea. This does not establish the same effect for every beta-blocker; ask your prescriber about your specific medicine and preparation.",
-          "informational_note": "Green tea extract affects intestinal transporters relevant to nadolol and possibly related beta blockers.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "beta_blockers"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "presence"
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -5455,18 +5398,17 @@
         },
         {
           "severity": "caution",
-          "mechanism": "Ferrous sulfate and other iron salts form stable insoluble complexes with levothyroxine, reducing thyroid hormone absorption. Concurrent ingestion can significantly impair replacement therapy efficacy.",
-          "action": "Separate iron supplementation from levothyroxine by at least 4 hours.",
+          "mechanism": "Calcium and iron supplements can bind oral levothyroxine and reduce its absorption. The SYNTHROID label instructs patients to separate these supplements by at least 4 hours; this instruction is not limited to a calcium study dose.",
+          "action": "If you take oral levothyroxine, take calcium or iron supplements at least 4 hours before or after it. Follow your prescriber's instructions for your thyroid medicine.",
           "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/1443969/",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
           ],
           "evidence_level": "established",
-          "alert_headline": "May affect thyroid medication",
-          "alert_body": "Iron can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iron away from your dose.",
-          "informational_note": "Iron affects thyroid pathways — relevant to people on thyroid medication.",
+          "alert_headline": "Separate calcium or iron from levothyroxine",
+          "alert_body": "Calcium or iron supplements can reduce oral levothyroxine absorption. Take them at least 4 hours before or after levothyroxine. Ask your prescriber about timing if you take another thyroid medicine.",
+          "informational_note": "This spacing guidance concerns oral levothyroxine; calcium and iron are grouped into the same finding.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -5486,7 +5428,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -5998,18 +5946,19 @@
         },
         {
           "condition_id": "kidney_disease",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The kidneys excrete magnesium, so reduced kidney function lets supplemental magnesium accumulate. Hypermagnesemia can cause respiratory, cardiovascular and neuromuscular complications and can be life-threatening. In patients taking daily magnesium oxide, CKD stage 4 (eGFR 15-29) and higher doses were associated with hypermagnesemia.",
-          "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
+          "mechanism": "Reduced kidney function can limit magnesium removal, allowing magnesium from supplements, laxatives or antacids to accumulate and cause toxicity. A kidney-disease checkbox does not establish the degree of kidney impairment or a dose that is appropriate.",
+          "action": "If you have kidney disease, check with your kidney-care team before adding magnesium supplements. Use them only as your care team advises.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/37512002/",
             "https://pubmed.ncbi.nlm.nih.gov/31379418/",
             "https://pubmed.ncbi.nlm.nih.gov/30805197/",
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cc7d52a-8fc3-4f52-9e50-b15613ddd02c"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cc7d52a-8fc3-4f52-9e50-b15613ddd02c",
+            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
-          "alert_headline": "Magnesium can accumulate in CKD",
-          "alert_body": "Magnesium from supplements, laxatives, or antacids can accumulate when kidney function is reduced. If you have kidney disease, use magnesium-containing products only with clinician guidance.",
+          "alert_headline": "Check with your kidney-care team before adding magnesium",
+          "alert_body": "If you have kidney disease, magnesium can accumulate and cause toxicity. Check with your kidney-care team before adding magnesium supplements, laxatives or antacids.",
           "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6031,7 +5980,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "last_reviewed": "2026-10-01"
+          "last_reviewed": "2026-10-01",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 and response govern the action. Wording and source verification prepared by Codex on 2026-11-12, not reviewed by Dr. Pham. No new numerical threshold."
+          }
         },
         {
           "condition_id": "diabetes",
@@ -6287,15 +6242,15 @@
         },
         {
           "condition_id": "kidney_disease",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Impaired renal potassium excretion greatly increases hyperkalemia risk with supplemental potassium.",
-          "action": "Avoid potassium supplements with kidney disease unless directed by nephrologist.",
+          "mechanism": "Reduced kidney function can limit potassium removal. Supplements can raise blood potassium dangerously, particularly with medicines that also reduce potassium excretion. General-population intake recommendations do not establish an appropriate supplement amount for someone with kidney disease.",
+          "action": "If you have kidney disease, check with your kidney-care team before adding potassium supplements. Use them only as your care team advises.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
-          "alert_headline": "Hyperkalemia risk in CKD",
-          "alert_body": "If you have kidney disease, potassium supplements can raise blood potassium dangerously, especially with ACE inhibitors, ARBs, or potassium-sparing medicines. Talk to your clinician.",
+          "alert_headline": "Check with your kidney-care team before adding potassium",
+          "alert_body": "If you have kidney disease, potassium supplements can raise blood potassium dangerously. Check with your kidney-care team before adding them, especially with potassium-raising medicines.",
           "informational_note": "Potassium excretion depends on kidney function — relevant to people with kidney disease.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6316,7 +6271,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 and response govern the action. Wording and source verification prepared by Codex on 2026-11-12, not reviewed by Dr. Pham. No new numerical threshold."
+          }
         },
         {
           "condition_id": "heart_disease",
@@ -7900,14 +7861,15 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null,
-          "mechanism": "At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented.",
-          "action": "Pharmacologic nicotinic acid can worsen glycemic control. Monitor glucose after starting or increasing it, and discuss use with your diabetes prescriber. Nutrient amounts in a multivitamin differ from pharmacologic therapy.",
+          "mechanism": "Pharmacologic nicotinic acid can raise blood glucose. Prescription extended-release treatment starts at 500 mg/day and carries glucose-monitoring instructions, so 1 g/day is not an absolute onset boundary. Routine nutrient amounts and nicotinamide should not automatically inherit this nicotinic-acid finding.",
+          "action": "If using pharmacologic nicotinic acid, ask your diabetes care team about glucose monitoring and any treatment adjustments. Do not change diabetes medicines yourself.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=249e27ac-e1e7-42dc-84f6-cd32fd1d9dee"
           ],
-          "alert_headline": "High-dose niacin may raise blood sugar",
-          "alert_body": "High-dose niacin can raise blood sugar. If you have diabetes, talk to your clinician before adding high-dose niacin and monitor your glucose, especially after dose changes.",
-          "informational_note": "Niacin affects blood sugar — relevant to people with diabetes.",
+          "alert_headline": "Pharmacologic nicotinic acid may raise blood glucose",
+          "alert_body": "If you have diabetes or take diabetes medicine, ask your care team before using pharmacologic nicotinic acid. It can raise blood glucose; routine amounts and nicotinamide have different evidence.",
+          "informational_note": "This glucose concern is specific to pharmacologic nicotinic acid; form and daily exposure matter.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -7922,9 +7884,17 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "niacinamide"
+              ]
             },
             "dose": null
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
           }
         },
         {
@@ -8015,14 +7985,15 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null,
-          "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
-          "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
+          "mechanism": "Pharmacologic nicotinic acid can raise blood glucose. Prescription extended-release treatment starts at 500 mg/day and carries glucose-monitoring instructions, so 1 g/day is not an absolute onset boundary. Routine nutrient amounts and nicotinamide should not automatically inherit this nicotinic-acid finding.",
+          "action": "If using pharmacologic nicotinic acid, ask your diabetes care team about glucose monitoring and any treatment adjustments. Do not change diabetes medicines yourself.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=249e27ac-e1e7-42dc-84f6-cd32fd1d9dee"
           ],
-          "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
-          "informational_note": "Niacin affects blood sugar — relevant to people on diabetes medications.",
+          "alert_headline": "Pharmacologic nicotinic acid may raise blood glucose",
+          "alert_body": "If you have diabetes or take diabetes medicine, ask your care team before using pharmacologic nicotinic acid. It can raise blood glucose; routine amounts and nicotinamide have different evidence.",
+          "informational_note": "This glucose concern is specific to pharmacologic nicotinic acid; form and daily exposure matter.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8037,9 +8008,17 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "niacinamide"
+              ]
             },
             "dose": null
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
           }
         },
         {
@@ -8049,14 +8028,15 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null,
-          "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
-          "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
+          "mechanism": "Pharmacologic nicotinic acid can raise blood glucose. Prescription extended-release treatment starts at 500 mg/day and carries glucose-monitoring instructions, so 1 g/day is not an absolute onset boundary. Routine nutrient amounts and nicotinamide should not automatically inherit this nicotinic-acid finding.",
+          "action": "If using pharmacologic nicotinic acid, ask your diabetes care team about glucose monitoring and any treatment adjustments. Do not change diabetes medicines yourself.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=249e27ac-e1e7-42dc-84f6-cd32fd1d9dee"
           ],
-          "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
-          "informational_note": "Niacin affects blood sugar — relevant to people on diabetes medications.",
+          "alert_headline": "Pharmacologic nicotinic acid may raise blood glucose",
+          "alert_body": "If you have diabetes or take diabetes medicine, ask your care team before using pharmacologic nicotinic acid. It can raise blood glucose; routine amounts and nicotinamide have different evidence.",
+          "informational_note": "This glucose concern is specific to pharmacologic nicotinic acid; form and daily exposure matter.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8071,9 +8051,17 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "niacinamide"
+              ]
             },
             "dose": null
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
           }
         },
         {
@@ -8135,14 +8123,15 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null,
-          "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
-          "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
+          "mechanism": "Pharmacologic nicotinic acid can raise blood glucose. Prescription extended-release treatment starts at 500 mg/day and carries glucose-monitoring instructions, so 1 g/day is not an absolute onset boundary. Routine nutrient amounts and nicotinamide should not automatically inherit this nicotinic-acid finding.",
+          "action": "If using pharmacologic nicotinic acid, ask your diabetes care team about glucose monitoring and any treatment adjustments. Do not change diabetes medicines yourself.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=249e27ac-e1e7-42dc-84f6-cd32fd1d9dee"
           ],
-          "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
-          "informational_note": "Niacin affects blood sugar — relevant to people on diabetes medications.",
+          "alert_headline": "Pharmacologic nicotinic acid may raise blood glucose",
+          "alert_body": "If you have diabetes or take diabetes medicine, ask your care team before using pharmacologic nicotinic acid. It can raise blood glucose; routine amounts and nicotinamide have different evidence.",
+          "informational_note": "This glucose concern is specific to pharmacologic nicotinic acid; form and daily exposure matter.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8157,9 +8146,17 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "niacinamide"
+              ]
             },
             "dose": null
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
           }
         }
       ],
@@ -10361,18 +10358,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "Omega-3 fatty acids may enhance warfarin's anticoagulant effect through two mechanisms: (1) additive antiplatelet activity via TXA2 pathway suppression, and (2) possible reduction in vitamin K-dependent coagulation factor VII levels. Multiple case reports document INR elevation (from therapeutic range to >4) when fish oil dose was doubled or added to stable warfarin therapy. One case documented INR of 8.06 after initiating fish oil with warfarin.",
-          "action": "If you take warfarin, tell your prescriber about omega-3 supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/14742793/",
-            "https://pubmed.ncbi.nlm.nih.gov/17923275/",
-            "https://pubmed.ncbi.nlm.nih.gov/28033135/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Omega-3 has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Omega-3 and ask about bleeding checks.",
-          "informational_note": "Omega-3 can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -10393,20 +10389,27 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "antiplatelets",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "Additive inhibition of platelet aggregation. Both omega-3s and antiplatelet drugs (aspirin, clopidogrel) independently suppress TXA2-mediated platelet activation. A case report of subdural hematoma after a minor fall involved high-dose omega-3 (6 g/day) combined with both aspirin and warfarin.",
-          "action": "Discuss omega-3 supplements with your antiplatelet prescriber and report unusual bruising or bleeding.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17192169/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Omega-3 has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Omega-3.",
-          "informational_note": "Omega-3 can affect platelet function — relevant to people on antiplatelets.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -10427,7 +10430,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "nsaids",
@@ -10562,17 +10571,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "Antiplatelet/antithrombotic at high dose. Most dietary doses (1-2 g/day EPA+DHA) clinically insignificant; ≥3 g/day raises bleeding risk in patients on warfarin or antiplatelets.",
-          "action": "If you take warfarin, tell your prescriber about omega-3 (EPA/DHA) supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "Bleeding risk at high doses",
-          "alert_body": "EPA/DHA at 3 g/day or higher can thin the blood. Combined with warfarin or antiplatelet medication, this raises bleeding risk.",
-          "informational_note": "Omega-3 has dose-dependent antiplatelet activity — most relevant at total EPA+DHA ≥3 g/day.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -10593,22 +10602,27 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "antiplatelets",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. In one reported case, high-dose fish oil taken with aspirin and warfarin was followed by a subdural hematoma after minor trauma.",
-          "action": "Discuss omega-3 (EPA/DHA) supplements with your antiplatelet prescriber and report unusual bruising or bleeding.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Omega-3 (EPA/DHA) has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding it.",
-          "informational_note": "Omega-3 (EPA/DHA) can affect platelet function — relevant to people on antiplatelets.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -10629,7 +10643,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "nsaids",
@@ -11595,24 +11615,24 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
-          "action": "If you take warfarin, tell your prescriber about changes in vitamin D supplementation. The retained evidence does not establish a dose-specific warfarin interaction.",
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "informational",
+          "evidence_level": "limited",
+          "mechanism": "A small trial in vitamin-D-deficient patients receiving warfarin found lower warfarin dose requirements after deficiency treatment. A separate retrospective study found a weak association between vitamin D status and warfarin sensitivity. These findings do not establish bleeding from ordinary vitamin D supplements, an interaction threshold, or the same effect with other anticoagulants.",
+          "action": "If you take warfarin and are starting or changing treatment for vitamin D deficiency, tell your anticoagulation team; they can advise whether INR follow-up is needed. Do not change warfarin on your own.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/8983860/",
+            "https://pubmed.ncbi.nlm.nih.gov/27225617/",
             "https://pubmed.ncbi.nlm.nih.gov/35718837/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about bleeding checks.",
-          "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Vitamin D deficiency treatment may affect warfarin needs",
+          "alert_body": "If you take warfarin, tell your anticoagulation team when starting or changing vitamin D deficiency treatment; small studies suggest your warfarin needs may change.",
+          "informational_note": "Evidence concerns vitamin D status and deficiency treatment in warfarin users.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -11625,9 +11645,15 @@
             },
             "dose": null
           },
-          "direction": "harmful",
+          "direction": "neutral",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 and response govern the action. Wording and source verification prepared by Codex on 2026-11-12, not reviewed by Dr. Pham. No new numerical threshold. Existing VKA gate supplies conditional warfarin information; it does not assert an interaction with other VKAs or establish exact-drug targeting."
+          }
         },
         {
           "drug_class_id": "thiazide_diuretics",
@@ -13026,20 +13052,17 @@
       "drug_class_rules": [
         {
           "severity": "caution",
-          "mechanism": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
-          "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
+          "mechanism": "Calcium and iron supplements can bind oral levothyroxine and reduce its absorption. The SYNTHROID label instructs patients to separate these supplements by at least 4 hours; this instruction is not limited to a calcium study dose.",
+          "action": "If you take oral levothyroxine, take calcium or iron supplements at least 4 hours before or after it. Follow your prescriber's instructions for your thyroid medicine.",
           "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30368654/",
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc",
-            "https://pubmed.ncbi.nlm.nih.gov/21595516/",
-            "https://pubmed.ncbi.nlm.nih.gov/11716045/"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
           ],
           "evidence_level": "established",
-          "alert_headline": "May affect thyroid medication",
-          "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
-          "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",
+          "alert_headline": "Separate calcium or iron from levothyroxine",
+          "alert_body": "Calcium or iron supplements can reduce oral levothyroxine absorption. Take them at least 4 hours before or after levothyroxine. Ask your prescriber about timing if you take another thyroid medicine.",
+          "informational_note": "This spacing guidance concerns oral levothyroxine; calcium and iron are grouped into the same finding.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -13059,7 +13082,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -13218,7 +13247,7 @@
       },
       "drug_class_rules": [
         {
-          "severity": "caution",
+          "severity": "informational",
           "mechanism": "The cited zinc-deficiency/alopecia report does not establish zinc–levothyroxine chelation or a four-hour timing interval. A possible absorption interaction requires product-specific label or clinical evidence.",
           "action": "Tell your thyroid prescriber about zinc supplements and follow the levothyroxine product instructions for supplement timing.",
           "last_reviewed": "2026-04-09",
@@ -13227,9 +13256,9 @@
             "https://pubmed.ncbi.nlm.nih.gov/23960398/"
           ],
           "evidence_level": "theoretical",
-          "alert_headline": "May affect thyroid medication",
+          "alert_headline": "Limited evidence about zinc with levothyroxine",
           "alert_body": "The cited zinc-deficiency report does not establish a specific zinc–levothyroxine interaction. Tell your thyroid prescriber about supplements and follow the medicine’s timing instructions.",
-          "informational_note": "Zinc affects thyroid pathways — relevant to people on thyroid medication.",
+          "informational_note": "A specific zinc-levothyroxine interaction or spacing interval is not established by the cited zinc-deficiency report.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -13248,8 +13277,14 @@
             },
             "dose": null
           },
-          "direction": "harmful",
-          "materiality": "presence"
+          "direction": "neutral",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 and response govern the action. Wording and source verification prepared by Codex on 2026-11-12, not reviewed by Dr. Pham. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -15039,8 +15074,8 @@
             "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
           ],
           "alert_headline": "High-dose B6 may affect milk supply",
-          "alert_body": "Very high doses of B6 have been studied for suppressing lactation. Normal multivitamin B6 levels do not trigger this concern. Use high-dose B6 while breastfeeding only with clinician guidance.",
-          "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
+          "alert_body": "If you are breastfeeding, discuss high-dose B6 with your clinician. Milk-suppression studies were inconsistent and do not establish this effect at routine nutrient amounts.",
+          "informational_note": "Lactation-suppression evidence at high doses is inconsistent; routine nutrient amounts have different evidence.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -15060,7 +15095,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "condition_id": "seizure_disorder",
@@ -15106,15 +15147,15 @@
         "pregnancy_category": "monitor",
         "lactation_category": "caution",
         "evidence_level": "probable",
-        "mechanism": "Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin.",
-        "notes": "This rule applies to supplemental/pharmacologic doses. Prenatal vitamin levels of B6 are appropriate and encouraged.",
+        "mechanism": "Vitamin B6 is an essential nutrient. Trials of 450–600 mg/day pyridoxine for postpartum milk suppression produced inconsistent results, including inconsistent prolactin findings.",
+        "notes": "Routine nutrient quantities are not established to suppress milk supply. The current presence gate cannot distinguish those quantities from pharmacologic exposure; dose-sensitive applicability remains unresolved.",
         "sources": [
           "https://pubmed.ncbi.nlm.nih.gov/28425124/",
           "https://pubmed.ncbi.nlm.nih.gov/569255/"
         ],
         "alert_headline": "High-dose B6 may affect milk supply",
-        "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
-        "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
+        "alert_body": "Vitamin B6 is an essential nutrient. High-dose studies for postpartum milk suppression had inconsistent results. Discuss concentrated B6 with your prenatal or lactation clinician; general B6 toxicity is a separate concern.",
+        "informational_note": "Lactation-suppression evidence at high doses is inconsistent; routine nutrient amounts have different evidence.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -15135,7 +15176,13 @@
           "dose": null
         },
         "direction": "harmful",
-        "materiality": "presence"
+        "materiality": "presence",
+        "clinical_review": {
+          "reviewer": "Dr. Pham",
+          "reviewed_at": "2026-11-11",
+          "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+          "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+        }
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -19702,16 +19749,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Platelet-related experimental effects of omega-3 preparations do not establish consistent clinically significant INR elevations or a uniform clinical bleeding increase from every isolated EPA or DHA product. Preparation, dose and concomitant therapy require individual appraisal.",
-          "action": "If you take warfarin, tell your prescriber about DHA supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about bleeding checks.",
-          "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19732,20 +19780,27 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "antiplatelets",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Platelet-related experimental effects of omega-3 preparations do not establish consistent clinically significant INR elevations or a uniform clinical bleeding increase from every isolated EPA or DHA product. Preparation, dose and concomitant therapy require individual appraisal.",
-          "action": "Inform your antiplatelet prescriber about DHA supplements and report unusual bruising or bleeding.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "DHA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding DHA.",
-          "informational_note": "DHA can affect platelet function — relevant to people on antiplatelets.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19766,7 +19821,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -19794,16 +19855,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Platelet-related experimental effects of omega-3 preparations do not establish consistent clinically significant INR elevations or a uniform clinical bleeding increase from every isolated EPA or DHA product. Preparation, dose and concomitant therapy require individual appraisal.",
-          "action": "Tell your anticoagulant prescriber about EPA supplements. If you take warfarin, ask about INR monitoring when starting, stopping or changing them.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about bleeding checks.",
-          "informational_note": "EPA can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19824,20 +19886,27 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "antiplatelets",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Platelet-related experimental effects of omega-3 preparations do not establish consistent clinically significant INR elevations or a uniform clinical bleeding increase from every isolated EPA or DHA product. Preparation, dose and concomitant therapy require individual appraisal.",
-          "action": "Inform your antiplatelet prescriber about EPA supplements and report unusual bruising or bleeding.",
+          "mechanism": "Omega-3 preparations can affect platelet function, but randomized-trial evidence does not show an overall increase in bleeding. High-dose purified prescription EPA has a separate bleeding signal; that finding does not establish the same risk for ordinary EPA/DHA supplements or a universal supplement cutoff.",
+          "action": "Tell your prescriber when starting, stopping or changing omega-3 supplements and report unusual bruising or bleeding. If you take warfarin, ask your anticoagulation team whether INR follow-up is needed.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/38742535/"
           ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
-          "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+          "alert_headline": "Omega-3 supplements: monitor with blood-thinning medicines",
+          "alert_body": "If you take blood-thinning medicine, tell your prescriber about omega-3 supplements and report unusual bruising or bleeding. Warfarin users may need INR follow-up when changing use.",
+          "informational_note": "Ordinary supplemental omega-3 findings are monitored together; prescription purified EPA requires its own guidance.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19858,7 +19927,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -19886,17 +19961,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "caution",
+          "severity": "informational",
           "evidence_level": "theoretical",
-          "mechanism": "L-theanine has lowered blood pressure in hypertensive rats. In people, 200 mg blocked the blood pressure rise caused by 250 mg caffeine (randomised, n = 48) and blunted stress-induced blood pressure rises in adults whose pressure rose most during mental tasks (crossover, n = 14). It has not been studied with antihypertensive drugs, so an additive lowering effect is theoretical.",
-          "action": "Monitor blood pressure when combining L-theanine with antihypertensive medications, particularly in patients with borderline-low blood pressure.",
+          "mechanism": "L-theanine has lowered blood pressure in hypertensive rats. In people, 200 mg blocked the blood pressure rise caused by 250 mg caffeine (randomised, n = 48) and blunted stress-induced blood pressure rises in adults whose pressure rose most during mental tasks (crossover, n = 14). These studies did not test coadministration with antihypertensive drugs; an additive lowering effect with those medicines remains theoretical.",
+          "action": "Tell your prescriber about L-theanine use. The cited studies do not establish a harmful interaction with blood-pressure medicines.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23107346/",
             "https://pubmed.ncbi.nlm.nih.gov/17891480/"
           ],
-          "alert_headline": "May affect blood-pressure control",
-          "alert_body": "If you take blood-pressure medicine, discuss this supplement with your prescriber and monitor blood pressure when changing its use. The effect may depend on the preparation, dose and medicine.",
-          "informational_note": "L-theanine can affect blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Limited evidence with blood-pressure medicine",
+          "alert_body": "Small studies examined blood-pressure responses to stress or caffeine, not harmful hypotension in people taking blood-pressure medicines. An additive effect with these medicines remains theoretical.",
+          "informational_note": "A harmful interaction with blood-pressure medicines remains unproven in the cited L-theanine studies.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19915,9 +19990,15 @@
             },
             "dose": null
           },
-          "direction": "harmful",
+          "direction": "neutral",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 and response govern the action. Wording and source verification prepared by Codex on 2026-11-12, not reviewed by Dr. Pham. No new numerical threshold."
+          }
         },
         {
           "drug_class_id": "sedatives",
@@ -25461,6 +25542,61 @@
       "drug_class_rules": [],
       "last_reviewed": "2026-10-29",
       "review_owner": "Sean — approved identity-uncertainty precaution scope, 2026-10-29"
+    },
+    {
+      "id": "RULE_IQM_CHROMIUM_PICOLINATE_THYROID",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "chromium"
+      },
+      "form_scope": [
+        "chromium picolinate",
+        "chromium (unspecified)"
+      ],
+      "form_scope_match": "fail_open",
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "severity": "caution",
+          "mechanism": "Chromium picolinate contains trivalent chromium. Concurrent chromium picolinate reduced levothyroxine absorption in a small healthy-volunteer study; the study did not establish the precise binding mechanism.",
+          "action": "If you use chromium picolinate with levothyroxine, separate them by several hours as your prescriber advises; the study does not establish an exact universal interval.",
+          "last_reviewed": "2026-04-09",
+          "drug_class_id": "thyroid_medications",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/17725434/"
+          ],
+          "evidence_level": "probable",
+          "alert_headline": "Chromium picolinate may reduce levothyroxine absorption",
+          "alert_body": "If you take levothyroxine, ask about separating chromium picolinate by several hours. The small study does not establish one exact interval or the same effect for other chromium forms.",
+          "informational_note": "Direct evidence concerns chromium picolinate with levothyroxine; other chromium forms need separate evidence.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "thyroid_medications"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
+        }
+      ]
     }
   ]
 }

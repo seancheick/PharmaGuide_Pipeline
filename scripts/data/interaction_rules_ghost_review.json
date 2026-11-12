@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-11",
-    "total_entries": 97
+    "last_updated": "2026-11-12",
+    "total_entries": 98
   },
   "reviewed": [
     {
@@ -371,15 +371,6 @@
       "pmid": "25312732",
       "rule_id": "RULE_IQM_GREEN_TEA_HYPERTENSION",
       "sub_rule": "condition:hypertension",
-      "live_title": "Overview of green tea interaction with cardiovascular drugs.",
-      "rationale": "Review of green tea interactions with cardiovascular drugs; human data include nadolol, a beta-blocker antihypertensive, which the verifier's topic stems do not cover. The primary nadolol/OATP1A2 trial (24419562) is cited beside it for the numbers and mechanism.",
-      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
-      "pmid": "25312732",
-      "rule_id": "RULE_IQM_GREEN_TEA_HYPERTENSION",
-      "sub_rule": "drug:antihypertensives",
       "live_title": "Overview of green tea interaction with cardiovascular drugs.",
       "rationale": "Review of green tea interactions with cardiovascular drugs; human data include nadolol, a beta-blocker antihypertensive, which the verifier's topic stems do not cover. The primary nadolol/OATP1A2 trial (24419562) is cited beside it for the numbers and mechanism.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
@@ -879,6 +870,24 @@
       "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
       "reviewed_by": "agent source-content review (not clinician-reviewed)",
       "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "38742535",
+      "rule_id": "RULE_IQM_DHA_BLEEDING",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Bleeding Risk in Patients Receiving Omega-3 Polyunsaturated Fatty Acids: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+      "rationale": "Full-text constituent/class-level citation, not an isolated DHA trial or proof of universal safety with anticoagulants. PMID 38742535 and PMC11179820 content read live: the full-text Results states that all but two included studies used EPA plus DHA; pooled bleeding did not increase overall, while purified high-dose EPA had a distinct modest signal. The abstract omits DHA, causing the subject heuristic miss. This supports the sub-rule's collective omega-3 evidence qualification, explicitly separating the prescription EPA signal from ordinary EPA/DHA supplements; it does not establish a DHA-specific bleeding effect or dose threshold. Background antiplatelet use was analyzed without an increased bleeding association. Warfarin monitoring advice rests on the separately cited NIH ODS source, not a DHA-specific anticoagulant analysis in this paper.",
+      "reviewed_by": "Codex agent source/applicability review, independently checked by parent agent (not clinician-reviewed)",
+      "reviewed_at": "2026-11-12"
+    },
+    {
+      "pmid": "38742535",
+      "rule_id": "RULE_IQM_DHA_BLEEDING",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Bleeding Risk in Patients Receiving Omega-3 Polyunsaturated Fatty Acids: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+      "rationale": "Full-text constituent/class-level citation, not an isolated DHA trial or proof of universal safety with anticoagulants. PMID 38742535 and PMC11179820 content read live: the full-text Results states that all but two included studies used EPA plus DHA; pooled bleeding did not increase overall, while purified high-dose EPA had a distinct modest signal. The abstract omits DHA, causing the subject heuristic miss. This supports the sub-rule's collective omega-3 evidence qualification, explicitly separating the prescription EPA signal from ordinary EPA/DHA supplements; it does not establish a DHA-specific bleeding effect or dose threshold. Background antiplatelet use was analyzed without an increased bleeding association. Warfarin monitoring advice rests on the separately cited NIH ODS source, not a DHA-specific anticoagulant analysis in this paper.",
+      "reviewed_by": "Codex agent source/applicability review, independently checked by parent agent (not clinician-reviewed)",
+      "reviewed_at": "2026-11-12"
     }
   ]
 }

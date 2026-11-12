@@ -4,7 +4,7 @@
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-11-12",
-    "total_classes": 53,
+    "total_classes": 54,
     "total_members": 1002,
     "data_source_metadata": {
       "sources": [
@@ -23,7 +23,7 @@
       "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 53
+    "total_entries": 54
   },
   "classes": {
     "class:statins": {
@@ -1822,23 +1822,28 @@
     },
     "class:bisphosphonates": {
       "display_name": "Bisphosphonates",
-      "description": "Bone resorption inhibitors — alendronate, risedronate, zoledronic acid, etc.",
+      "description": "Bisphosphonate medicines with oral formulations; mineral-interaction rules concern oral absorption.",
       "member_rxcuis": [
         "46041",
         "115264",
-        "73056",
-        "77655"
+        "73056"
       ],
       "member_names": [
         "alendronate",
         "ibandronate",
-        "risedronate",
-        "zoledronic acid"
+        "risedronate"
       ],
       "rxclass_id": "M05BA",
       "atc_codes": [
         "M05BA"
-      ]
+      ],
+      "excluded_member_rxcuis": [
+        "77655",
+        "904952",
+        "904954",
+        "904955"
+      ],
+      "notes": "F3 (Dr. Pham, 2026-11-11): zoledronic acid 77655 is intravenous-only and excluded from oral-absorption rules. Alendronate, ibandronate and risedronate identities checked live in RxNorm 2026-11-12. Intravenous ibandronate shares ingredient 115264 with tablets: exact nonoral concepts 904952 (prefilled syringe), 904954 (Boniva prefilled syringe), and 904955 (injection) are excluded, verified against RxNorm related SCD/SBD concepts on 2026-11-12. Consumer qualification must prove that selected-product exclusions take precedence over its ingredient membership; do not apply oral timing to an injection. Unknown route retains qualified oral wording."
     },
     "class:antiplatelet_agents": {
       "display_name": "Antiplatelet Agents",
@@ -2755,6 +2760,21 @@
         "N04AC01"
       ],
       "notes": "Rule subset of class:anticholinergics for Dr. Pham's Q6 (signed 2026-11-12): huperzine A avoid without prescriber approval and alpha-GPC caution apply here; the tricyclics and diphenhydramine, whose anticholinergic effect is incidental, stay in class:anticholinergics only. Every member is also a member of class:anticholinergics. Membership is by ingredient, so transdermal, inhaled and topical products (scopolamine patches, oxybutynin gel and patch, inhaled or topical glycopyrronium) are included; each is still used for its antimuscarinic effect. ATC classes read on RxNav 2026-11-12."
+    },
+    "class:nadolol": {
+      "display_name": "Nadolol",
+      "description": "Nadolol, kept as its own class for the green-tea interaction that names it.",
+      "member_rxcuis": [
+        "7226"
+      ],
+      "member_names": [
+        "nadolol"
+      ],
+      "rxclass_id": "C07AA",
+      "atc_codes": [
+        "C07AA"
+      ],
+      "notes": "Single-medicine class, following clobazam and lithium. RxNorm 7226 content-verified as nadolol, IN, unsuppressed on 2026-11-12. G1 limits green-tea coverage to the studied medicine; no class-wide beta-blocker extrapolation."
     }
   }
 }

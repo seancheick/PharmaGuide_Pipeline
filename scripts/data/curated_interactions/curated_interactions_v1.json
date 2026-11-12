@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-12",
-    "total_entries": 106,
+    "total_entries": 109,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -80,7 +80,7 @@
       "agent1_id": "11289",
       "agent2_name": "Fish Oil / Omega-3",
       "agent2_id": "C0016157",
-      "severity": "Moderate",
+      "severity": "Minor",
       "interaction_effect_type": "Additive",
       "mechanism": "Fish oil can have antiplatelet effects at high doses and might affect INR with warfarin. NIH ODS notes that most research at 3–6 g/day does not significantly affect anticoagulant status and reviews have not found clinically significant bleeding overall. A case report describes bleeding after a fall with 6 g/day omega-3 plus aspirin and warfarin; it does not establish a warning threshold.",
       "management": "Tell your prescriber or anticoagulation clinic before starting, stopping, or changing fish oil while taking warfarin. Periodic INR monitoring may be appropriate, and watch for unusual bruising or bleeding. Do not change warfarin on your own. This alert identifies the combination; it does not mean a proven dose threshold was crossed.",
@@ -3629,36 +3629,39 @@
     {
       "id": "DSI_MAGNESIUM_BISPHOSPHONATE",
       "type": "Med-Sup",
-      "agent1_name": "Bisphosphonates (class)",
+      "agent1_name": "Oral bisphosphonates (class)",
       "agent1_id": "class:bisphosphonates",
       "agent1_canonical_id": null,
       "agent2_name": "Magnesium",
       "agent2_id": "C0024467",
       "agent2_canonical_id": "magnesium",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Magnesium-containing products can interfere with absorption of oral bisphosphonates. This gastrointestinal interaction does not establish a warning for intravenous bisphosphonates; dosing instructions differ by oral medicine and formulation.",
-      "management": "Follow the exact oral bisphosphonate label and ask the pharmacist to schedule magnesium. Immediate-release products have their own fasting and separation instructions. Risedronate delayed-release is taken after breakfast, and magnesium supplements or laxatives must be taken at a different time of day. Do not apply a universal fasting interval to every formulation.",
+      "management": "For oral bisphosphonates, ask your pharmacist to schedule magnesium using the exact medicine and formulation. Alendronate (Fosamax): wait at least 30 minutes after the medicine before taking magnesium. Ibandronate tablets (Boniva): wait at least 60 minutes after the tablet. Immediate-release risedronate (Actonel): take the medicine at least 30 minutes before the first food, drink other than plain water, or other oral medicine; take magnesium at a different time of day. Delayed-release risedronate (Atelvia): take it immediately after breakfast and take magnesium at a different time of day. These oral-absorption instructions do not apply to intravenous bisphosphonates.",
       "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=14e931fd-2c5f-4d90-b7db-5980706f4a56",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6ca94cce-a2bb-421f-bd8f-6b14bc2bd985",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c89430be-15f1-4b8b-ab7e-738de716ee7d"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
+        "verified_at": "2026-11-12",
+        "method": "agent_label_content_review_2026_11_12",
         "verified_with": {
-          "rxnorm": false,
+          "rxnorm": true,
           "umls": true,
-          "pubmed": true
+          "pubmed": false
         },
-        "verified_at": "2026-10-12",
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "notes": "FOSAMAX 2.6/7.1, ibandronate tablets 2.2/7.1, ACTONEL 2.6/2.7/7.1, and delayed-release risedronate 2.2/2.3/7.1 content checked by agent. Wording prepared by agent, not reviewed by Dr. Pham."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "Delayed-release risedronate label is the human dosing authority; PMID 26934925 was a rat mineral-water study and cannot establish uniform human timing. Existing broad class still lacks route/formulation gating; copy limits the concern to oral therapy."
+      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
     },
     {
       "id": "DSI_GINKGO_ANTIPLATELET",
@@ -3993,6 +3996,116 @@
       "agent2_canonical_id": "zinc",
       "direction": "harmful",
       "materiality": "presence"
+    },
+    {
+      "id": "DSI_ISOTRETINOIN_VITAMIN_A",
+      "type": "Med-Sup",
+      "agent1_name": "Isotretinoin",
+      "agent1_id": "6064",
+      "agent1_canonical_id": null,
+      "agent2_name": "Vitamin A (supplement)",
+      "agent2_id": "C0042839",
+      "agent2_canonical_id": "vitamin_a",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Oral isotretinoin is closely related to vitamin A. Taking vitamin A supplements with it may add to isotretinoin-associated adverse reactions; the oral isotretinoin and ABSORICA labels advise avoiding concomitant vitamin A supplements.",
+      "management": "Avoid supplements containing vitamin A while taking oral isotretinoin. Ask your prescriber about your supplements, including multivitamins. Do not stop or change your prescribed isotretinoin to use a supplement.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4e8516dc-a3c6-4d8f-aa14-2c37c6c8f6e6",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef0cff8-19c1-4441-b780-fca6c7ee1615"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "method": "agent_label_content_review_2026_11_12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "notes": "DailyMed section 7.1 and RxNorm 6064 content checked by agent; beta-carotene identity and provitamin distinction checked against NIH ODS. Not clinician review of authored wording."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
+      "evidence_notes": "F1, Dr. Pham review 2026-11-11: avoid oral isotretinoin plus supplemental vitamin A. Wording prepared by agent, not reviewed by Dr. Pham. Scope is supplements and oral isotretinoin, not foods, unrelated carotenoids or topical retinoids. RxNorm 6064 is isotretinoin, not tretinoin.",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_ISOTRETINOIN_BETA_CAROTENE",
+      "type": "Med-Sup",
+      "agent1_name": "Isotretinoin",
+      "agent1_id": "6064",
+      "agent1_canonical_id": null,
+      "agent2_name": "Beta-carotene (supplement)",
+      "agent2_id": "ref:beta_carotene",
+      "agent2_canonical_id": "beta_carotene",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Beta-carotene is a provitamin A carotenoid that the body can convert to vitamin A; it is not preformed retinol. The oral isotretinoin label advises avoiding supplements containing vitamin A. Applying that precaution to beta-carotene supplements does not mean their toxicity is the same as preformed retinol, and the label does not separately quantify this combination's risk.",
+      "management": "Avoid beta-carotene supplements while taking oral isotretinoin unless your prescriber has reviewed the combination. This is a precaution for a vitamin A precursor, not a claim of the same toxicity as retinol. Do not stop or change your prescribed isotretinoin to use a supplement.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4e8516dc-a3c6-4d8f-aa14-2c37c6c8f6e6",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef0cff8-19c1-4441-b780-fca6c7ee1615",
+        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "method": "agent_label_content_review_2026_11_12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": false,
+          "pubmed": false
+        },
+        "notes": "DailyMed section 7.1 and RxNorm 6064 content checked by agent; beta-carotene identity and provitamin distinction checked against NIH ODS. Not clinician review of authored wording."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
+      "evidence_notes": "F1, Dr. Pham review 2026-11-11: oral isotretinoin plus vitamin A is avoid; beta-carotene must not be automatically exempted. Major for beta-carotene is agent application of that precaution, pending Dr. Pham confirmation, not a direct trial or a preformed-retinol toxicity claim. Wording prepared by agent, not reviewed by Dr. Pham. Scope is supplements and oral isotretinoin, not foods, unrelated carotenoids or topical retinoids. RxNorm 6064 is isotretinoin, not tretinoin.",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_CALCIUM_BISPHOSPHONATE",
+      "type": "Med-Sup",
+      "agent1_name": "Oral bisphosphonates (class)",
+      "agent1_id": "class:bisphosphonates",
+      "agent1_canonical_id": null,
+      "agent2_name": "Calcium",
+      "agent2_id": "C0006675",
+      "agent2_canonical_id": "calcium",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Calcium-containing products can interfere with absorption of oral bisphosphonates. This gastrointestinal interaction does not establish a warning for intravenous bisphosphonates; dosing instructions differ by oral medicine and formulation.",
+      "management": "For oral bisphosphonates, ask your pharmacist to schedule calcium using the exact medicine and formulation. Alendronate (Fosamax): wait at least 30 minutes after the medicine before taking calcium. Ibandronate tablets (Boniva): wait at least 60 minutes after the tablet. Immediate-release risedronate (Actonel): take the medicine at least 30 minutes before the first food, drink other than plain water, or other oral medicine; take calcium at a different time of day. Delayed-release risedronate (Atelvia): take it immediately after breakfast and take calcium at a different time of day. These oral-absorption instructions do not apply to intravenous bisphosphonates.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=14e931fd-2c5f-4d90-b7db-5980706f4a56",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6ca94cce-a2bb-421f-bd8f-6b14bc2bd985",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c89430be-15f1-4b8b-ab7e-738de716ee7d"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "method": "agent_label_content_review_2026_11_12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "notes": "FOSAMAX 2.6/7.1, ibandronate tablets 2.2/7.1, ACTONEL 2.6/2.7/7.1, and delayed-release risedronate 2.2/2.3/7.1 content checked by agent. Wording prepared by agent, not reviewed by Dr. Pham."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence",
+      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
     }
   ]
 }
