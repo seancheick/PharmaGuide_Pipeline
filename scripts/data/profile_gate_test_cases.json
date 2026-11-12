@@ -3,10 +3,10 @@
     "description": "Shared evaluator fixture for v6.0 profile_gate. Python (scripts/profile_gate_evaluator.py) and Dart (Flutter alert-rendering layer) MUST both produce the same fires/severity output for every case below. Drift between the two implementations is the failure this fixture catches.",
     "purpose": "profile_gate_evaluator_cross_runtime_fixture",
     "schema_version": "1.1.0",
-    "total_entries": 85,
+    "total_entries": 86,
     "evaluator_contract_version": "6.0",
-    "last_updated": "2026-11-11",
-    "case_count": 85,
+    "last_updated": "2026-11-12",
+    "case_count": 86,
     "see_also": [
       "scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md",
       "scripts/profile_gate_evaluator.py"
@@ -3736,7 +3736,8 @@
           "conditions_any": [],
           "drug_classes_any": [
             "doacs",
-            "vitamin_k_antagonists"
+            "vitamin_k_antagonists",
+            "injectable_anticoagulants"
           ],
           "profile_flags_any": [],
           "product_forms_any": [],
@@ -3780,7 +3781,8 @@
           "conditions_any": [],
           "drug_classes_any": [
             "doacs",
-            "vitamin_k_antagonists"
+            "vitamin_k_antagonists",
+            "injectable_anticoagulants"
           ],
           "profile_flags_any": [],
           "product_forms_any": [],
@@ -3793,6 +3795,51 @@
         "drug_classes": [
           "anticoagulants",
           "doacs"
+        ],
+        "profile_flags": []
+      },
+      "product_context": {
+        "product_form": null,
+        "nutrient_form": null,
+        "dose_per_day": null,
+        "dose_unit": null
+      },
+      "base_severity": "avoid",
+      "expected": {
+        "fires": false,
+        "severity": null
+      }
+    },
+    {
+      "name": "gold_warfarin_only_fallback_skips_an_injected_anticoagulant_user",
+      "description": "The fallback does not fire for an identified injected anticoagulant such as heparin or argatroban (Dr. Pham Q7, 2026-11-12); a 'Blood thinners' selection alongside it reads as that medicine",
+      "gate": {
+        "gate_type": "drug_class",
+        "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [
+            "anticoagulants"
+          ],
+          "profile_flags_any": []
+        },
+        "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [
+            "doacs",
+            "vitamin_k_antagonists",
+            "injectable_anticoagulants"
+          ],
+          "profile_flags_any": [],
+          "product_forms_any": [],
+          "nutrient_forms_any": []
+        },
+        "dose": null
+      },
+      "user_profile": {
+        "conditions": [],
+        "drug_classes": [
+          "anticoagulants",
+          "injectable_anticoagulants"
         ],
         "profile_flags": []
       },
@@ -3824,7 +3871,8 @@
           "conditions_any": [],
           "drug_classes_any": [
             "doacs",
-            "vitamin_k_antagonists"
+            "vitamin_k_antagonists",
+            "injectable_anticoagulants"
           ],
           "profile_flags_any": [],
           "product_forms_any": [],
