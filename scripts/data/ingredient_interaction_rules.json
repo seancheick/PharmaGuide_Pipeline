@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-11-11",
+    "last_updated": "2026-11-12",
     "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 155,
@@ -6980,15 +6980,17 @@
         },
         {
           "drug_class_id": "antidepressants_ssri_snri",
-          "severity": "contraindicated",
+          "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "St John's Wort increases serotonin levels via monoamine reuptake inhibition. Combined with SSRIs/SNRIs, this causes additive serotonergic stimulation leading to serotonin syndrome — a potentially fatal toxidrome (hyperthermia, clonus, agitation, seizures). Multiple case reports and pharmacovigilance alerts.",
-          "action": "Do not combine St John’s wort with serotonergic antidepressants without specialist guidance. Do not stop prescribed treatment to use it; the prescriber must determine any medication change or product-specific washout.",
+          "mechanism": "St. John's wort raises serotonin activity. SSRI and SNRI labels list it among serotonergic products that raise the risk of serotonin syndrome, a potentially life-threatening reaction (high temperature, clonus, agitation, seizures).",
+          "action": "Avoid St. John's wort while taking an SSRI or SNRI unless your prescriber directs and monitors the combination. Do not stop or switch your antidepressant on your own. Seek emergency care right away if signs of serotonin syndrome appear.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fda754f6-d0f3-4dce-a17a-927d64f912f7",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c848a5d8-ba94-4c84-80e3-0bf35fb8e32e",
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "Do not combine with SSRIs or SNRIs",
-          "alert_body": "St John's Wort raises serotonin activity. If you take an SSRI or SNRI antidepressant, do not combine — the combination can cause serotonin syndrome.",
+          "alert_headline": "Avoid combining with SSRIs or SNRIs",
+          "alert_body": "If you take an SSRI or SNRI antidepressant, avoid St. John's wort unless your prescriber approves. The combination can cause serotonin syndrome, which can be life-threatening.",
           "informational_note": "St John's Wort raises serotonin — relevant to people on SSRI or SNRI antidepressants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -7010,7 +7012,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: avoid unsupervised combination as the general action; contraindicated only with an exact source, and none of the SSRI/SNRI labels read contraindicates it. No universal washout. Pair DSI_SSRI_SJW changed with this record."
+          }
         },
         {
           "drug_class_id": "maois",
@@ -7184,7 +7192,7 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -17957,9 +17965,10 @@
           "drug_class_id": "antidepressants_ssri_snri",
           "severity": "contraindicated",
           "evidence_level": "established",
-          "mechanism": "5-HTP increases presynaptic serotonin synthesis while SSRIs/SNRIs block serotonin reuptake at SERT. The combination raises synaptic serotonin to levels associated with serotonin syndrome (hyperthermia, clonus, agitation, autonomic instability). Case reports of serotonin syndrome with this combination exist.",
-          "action": "Do not combine with SSRIs or SNRIs. If transitioning off an antidepressant, observe a washout period before initiating 5-HTP. Seek prescriber guidance.",
+          "mechanism": "5-HTP is a serotonin precursor; SSRIs and SNRIs block serotonin reuptake. Together they can raise serotonin activity enough to contribute to serotonin syndrome (high temperature, clonus, agitation). Health Canada's 5-HTP monograph lists use with antidepressants as a contraindication.",
+          "action": "Do not take 5-HTP with an SSRI or SNRI antidepressant. Do not stop or switch your antidepressant to use 5-HTP; your prescriber plans any change and the washout time. Seek emergency care for suspected serotonin syndrome.",
           "sources": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",
             "https://pubmed.ncbi.nlm.nih.gov/16023217/"
           ],
           "alert_headline": "Do not combine with SSRIs or SNRIs",
@@ -17985,14 +17994,20 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: do not combine, from the Health Canada 5-HTP monograph (jurisdiction Canada; contraindication with antidepressants). Pair DSI_SSRI_5HTP now carries the same severity and source."
+          }
         },
         {
           "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "5-HTP is converted to serotonin. Combining an MAO inhibitor with a serotonergic agent can cause the most severe form of serotonin syndrome. Mania has been reported after an MAOI was taken with 5-HTP, and serotonin syndrome after 5-HTP with linezolid, an antibiotic that inhibits MAO. MSKCC advises not taking 5-HTP with MAOIs, and Health Canada's monograph contraindicates it with antidepressants.",
-          "action": "Do not combine 5-HTP with MAOIs. Allow appropriate washout between MAOI discontinuation and 5-HTP use.",
+          "action": "Do not combine 5-HTP with MAOIs. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the product-specific washout.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
             "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",
@@ -18020,7 +18035,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: keep strong protection and harmonize the 5-HTP records; the self-managed washout instruction is removed."
+          }
         },
         {
           "drug_class_id": "serotonergic_medications",
@@ -18096,7 +18117,7 @@
           "dose": null
         }
       },
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-11-12",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -23244,17 +23265,18 @@
           "drug_class_id": "maois",
           "severity": "avoid",
           "evidence_level": "moderate",
-          "mechanism": "SAMe is a methyl donor studied as an antidepressant. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because combining it with the MAOI can cause serotonin syndrome, and a toxic interaction with the antidepressant clomipramine has been reported. Other MAOI labels do not name SAMe, so applying this to every MAOI is a class inference. No study of SAMe with an MAOI was found.",
-          "action": "If you take an MAOI, avoid SAMe. If your MAOI is tranylcypromine (Parnate), its label says the two must not be combined. Do not stop or change your MAOI to use SAMe; your prescriber manages any change and the washout time.",
+          "mechanism": "SAMe is a methyl donor studied as an antidepressant and raises serotonin activity. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because of serotonin syndrome, and a toxic interaction with the antidepressant clomipramine has been reported. The phenelzine (NARDIL) and EMSAM patch labels contraindicate serotonergic drugs without naming SAMe; for other MAOIs this is a class inference. No study of SAMe with an MAOI was found.",
+          "action": "Do not add SAMe while taking an MAOI without your prescriber's approval. Do not stop or switch your prescribed medicine to use SAMe. With tranylcypromine (Parnate), phenelzine (Nardil) or the Emsam patch, the combination is contraindicated.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3",
             "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
             "https://pubmed.ncbi.nlm.nih.gov/7854515/",
             "https://pubmed.ncbi.nlm.nih.gov/8434674/"
           ],
           "alert_headline": "Avoid combining with MAOIs",
-          "alert_body": "If you take an MAO inhibitor, avoid this product. SAMe raises serotonin activity; the tranylcypromine (Parnate) label lists it as contraindicated because of serotonin syndrome.",
+          "alert_body": "If you take an MAO inhibitor, avoid this product unless your prescriber approves. SAMe raises serotonin activity, and with some MAOIs the combination is contraindicated.",
           "informational_note": "SAMe raises serotonin activity, which matters for anyone taking an MAOI or another antidepressant.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -23278,9 +23300,9 @@
           "materiality": "presence",
           "clinical_review": {
             "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
-            "notes": "Her contraindication covers tranylcypromine, carried by the exact pair DSI_TRANYLCYPROMINE_SAME. A profile that says only MAOI does not identify the medicine, so this class rule keeps its published avoid: the other MAOIs are pending ask 1, and a contraindicated profile rule would hide SAMe's conditional note until G4."
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug language, but this rule is gated on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user gets avoid here."
           }
         }
       ],
@@ -23296,8 +23318,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-11-11",
-      "review_owner": "Dr. Pham (clinical review 2026-11-11, MAOI severity); label passages read by agent; pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (MAOI severity: review 2026-11-11, signed answers 2026-11-12); label passages read by agent"
     },
     {
       "id": "RULE_IQM_SODIUM",
