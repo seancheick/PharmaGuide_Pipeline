@@ -28,14 +28,18 @@ Batches follow her sequence: 2 = label-backed corrections (this PR), 3 = scope, 
 
 | Row | Decision | Implemented as |
 |---|---|---|
-| A3 SAMe + MAOIs | Decided: reject the downgrade; contraindicated for tranylcypromine (PARNATE §4.1 and §7 list SAM-e). Pending (**ask 1**): the other MAOIs, whose labels do not name SAMe | Pair `DSI_MAOI_SAME` stays Contraindicated with the label added; profile rule `RULE_IQM_SAME` maois raised avoid → contraindicated so both agree. For the other MAOIs this keeps the pair's existing class-wide contraindication as a documented class inference, the option her A3 decision allows, so no warning is lowered while she answers ask 1 |
+| A3 SAMe + MAOIs | Decided: reject the downgrade; contraindicated for tranylcypromine (PARNATE §4.1 and §7 list SAM-e). Pending (**ask 1**): the other MAOIs, whose labels do not name SAMe | Corrected after an outside review of #444 (`apply_same_scope_correction.py`). New exact pair `DSI_TRANYLCYPROMINE_SAME` Contraindicated (evidence established). Class pair `DSI_MAOI_SAME` stays Contraindicated, so nothing is lowered while ask 1 is open; its exported mechanism states the class inference and its evidence is moderate. Profile rule `RULE_IQM_SAME` maois keeps its published avoid (evidence moderate): a profile that says only "MAOI" does not identify tranylcypromine, and a contraindicated profile rule is hidden without a matching profile until G4, which would drop SAMe's conditional note |
 | B1 statin + gemfibrozil | Split by statin; simvastatin contraindicated; others per own label | New exact pair `DDI_SIMVASTATIN_GEMFIBROZIL` Contraindicated; class pair Moderate → Major (every marketed statin label says avoid or not recommended); the advice to switch to pravastatin or fenofibrate is removed. App: an exact medicine pair now replaces the class pair for the same two medicines |
 | B2 ciprofloxacin + theophylline | Avoid for systemic ciprofloxacin | Moderate → Major; label management only (avoid; if unavoidable, theophylline levels monitored and dose adjusted by the prescriber); unsourced "30–50%" and the azithromycin suggestion removed; text says it is for tablets, liquid or IV, and asks drop users to check with a pharmacist. Medicines carry no route, so drops are not silently excluded |
 | F9 NAC + nitroglycerin | Caution, hypotension-focused | New pair `DSI_NITROGLYCERIN_NAC` (RxCUI 4917 + acetylcysteine C0001047, canonical `nac`) Moderate, from the UK acetylcysteine SmPC §4.5 and PMID 9120179. Nitroglycerin only; no other nitrate is claimed. Management follows §4.5: if both are used, ask the prescriber how blood pressure should be checked. NAC's ingredient-map entry gets its exact CUI back (C0001047, acetylcysteine; RXNORM atom 197 is the entry's RxCUI) so the verifier keeps the pair's canonical id `nac` |
 
-Consistency check for the exact-over-class rule: an exact pair that replaces a class pair for the same two agents
-must never be the weaker warning (`test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning`). Today two
-overlaps exist: simvastatin + gemfibrozil (Contraindicated over Major) and warfarin + turmeric (Moderate over Moderate).
+Data consistency check for the exact-over-class rule: an authored exact pair that overlaps a class pair for the same
+two agents must never be the weaker warning (`test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning`).
+It checks records only; how the app matches combination medicines is covered by the app checker tests (an exact pair
+replaces a class pair only for two single-ingredient medicines). Overlaps today: simvastatin + gemfibrozil
+(Contraindicated over Major), tranylcypromine + SAMe (Contraindicated over Contraindicated) and warfarin + turmeric
+(Moderate over Moderate). Equal severity alone does not make two findings interchangeable; each overlap is the same
+concern for the same two agents.
 
 ## Batch 3: scope, membership, additions, timing
 
@@ -131,7 +135,8 @@ know" count; once any medicine resolves to a class, the medicine axis counts as 
 ## Questions for Dr. Pham
 
 1. **SAMe with MAOIs other than tranylcypromine.** The current labels for phenelzine (NARDIL), isocarboxazid
-   (MARPLAN) and selegiline (EMSAM, ZELAPAR, capsules) do not name SAMe (read 2026-11-11). This batch keeps the
-   class-wide contraindication as a documented class inference, so no warning is lowered. Confirm, or set "avoid"
-   for those medicines.
+   (MARPLAN) and selegiline (EMSAM, ZELAPAR, capsules) do not name SAMe (read 2026-11-11). NARDIL contraindicates
+   "concomitant use of NARDIL with serotoninergic agents" as a category. For each medicine: is SAMe covered by its
+   label language (contraindicated), a precautionary class inference (which severity), or pending? Until then the
+   class pair stays Contraindicated and the class profile rule stays avoid.
 2. **Vitamin E.** What counts as "ordinary nutrient exposure" for the less prominent note (form, amount, frequency)?
