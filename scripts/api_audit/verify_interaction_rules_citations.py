@@ -135,6 +135,7 @@ TOPIC_STEMS = {
     "former_smoker": ["smok", "tobacco", "cigarett"],
     "asbestos_exposure": ["asbestos"],
     # drug classes
+    "nadolol": ["nadolol"],
     "anticoagulants": ["warfarin", "coumarin", "heparin", "apixaban", "rivaroxaban",
                        "dabigatran"] + _BLEEDING,
     "doacs": ["apixaban", "rivaroxaban", "dabigatran", "edoxaban"] + _BLEEDING,

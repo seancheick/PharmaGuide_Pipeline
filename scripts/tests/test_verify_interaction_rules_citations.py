@@ -252,3 +252,17 @@ def test_both_release_paths_run_the_citation_gates():
         text = (ROOT / script).read_text()
         assert "verify_interaction_rules_citations.py --strict" in text, script
         assert re.search(r"verify_all_citations_content\.py \\\s+--baseline \S*citation_content_backlog\.json", text), script
+
+
+def test_nadolol_topic_requires_its_exact_medicine_not_generic_cardiovascular_text():
+    # Live PubMed titles, content-checked 2026-11-12 (24419562, 29480324).
+    phrases = {"green tea"}
+    for title in (
+        "Green tea ingestion greatly reduces plasma concentrations of nadolol in healthy subjects.",
+        "Role of (-)-epigallocatechin gallate in the pharmacokinetic interaction between nadolol and green tea in healthy volunteers.",
+    ):
+        article = {"title": title, "abstract": "", "mesh_terms": []}
+        assert virc.check_citation(article, phrases, "drug:nadolol") == []
+    unrelated = {"title": "Green tea and blood pressure in cardiovascular patients.",
+                 "abstract": "", "mesh_terms": []}
+    assert virc.check_citation(unrelated, phrases, "drug:nadolol") == ["topic"]
