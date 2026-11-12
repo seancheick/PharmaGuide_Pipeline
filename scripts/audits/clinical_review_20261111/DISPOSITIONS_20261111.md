@@ -271,6 +271,45 @@ while those classes load. Agent choices, open for review: the note shows the hea
 the rule's `informational_note` (not every note has been reviewed for this use); it adds one row to the "Good to
 know" count; once any medicine resolves to a class, the medicine axis counts as answered.
 
+## Signed answers (2026-11-12): implementation
+
+Authority: `DR_PHAM_ANSWERS_20261112.md` Part A (signed by Dr. Pham) and Part B (Sean's findings). One PR per batch;
+agent review of label passages unless a row says Dr. Pham decided it.
+
+### Batch 5b: aloe preparation identity for the digoxin warning (`apply_answers_b5b_aloe_preparation.py`)
+
+Sources read 2026-11-12: EU herbal monograph EMA/HMPC/625788/2015 on Aloe barbadensis and Aloe ferox, folii succus
+siccatus (scope: dried juice of leaves, Barbados aloes and Cape aloes; 3: oral use; 4.4: patients taking cardiac
+glycosides "have to consult a doctor before taking aloes concomitantly"; 4.5: hypokalaemia from long-term laxative
+abuse potentiates cardiac glycosides); NCCIH "Aloe Vera" (gel from the inner leaf, latex from the outer layer, whole
+crushed leaf has both; overuse of aloe latex may increase digoxin adverse effects); LiverTox "Aloe Vera" (NBK548634,
+oral aloe vera from gel or leaf-rind latex, likelihood B); LANOXIN 5.3.
+
+| Row | Outcome |
+|---|---|
+| Section 2 preparation mapping | `RULE_IQM_ALOE_FEROX` moves from the IQM species identity `aloe_ferox` to the latex preparation identity `banned_recalled_ingredients/RISK_ALOE_LATEX`; the rule id is kept. Before, "Aloe vera latex" (flagged `RISK_ALOE_LATEX`) met no finding and "Aloe ferox gel" (an `aloe_ferox` alias) met all of them. Now latex of either species and non-decolorized whole-leaf extract (anthraquinones retained) reach it; gel, inner-leaf gel, decolorized whole leaf and "whole leaf" of unknown processing do not. Every non-gel `aloe_ferox` name already matched the latex identity (a test holds this), so no Cape aloe latex row is lost. No aliasing of Aloe vera to Aloe ferox |
+| `RISK_ALOE_LATEX` aliases | Adds "aloe barbadensis latex" (A. barbadensis is A. vera, whose latex was already an alias; the monograph names Barbados aloes), with a change-log entry |
+| Section 2 aloe + digoxin | Severity stays avoid; headline "Avoid unsupervised use with digoxin" (was "Can raise digoxin toxicity risk"). Body: "Prolonged or excessive use of aloe latex can lower potassium and raise the risk of digoxin side effects ... do not use this product without your prescriber's advice" (was "avoid unsupervised prolonged use"; "this product", not "this laxative", because a whole-leaf extract need not be sold as a laxative). Action: "do not use aloe latex products without your prescriber's advice. They may check your potassium" (LANOXIN 5.3). The mechanism quotes NCCIH (latex overuse and cardiac glycosides) and monograph 4.4 and 4.5, says the monograph sets no dose or duration that clears the combination, and gives NCCIH's latex/gel distinction |
+| Pregnancy row text | Its mechanism named "Cape aloe latex" only; it now reaches Barbados aloe latex, so it says "Aloe latex (Cape or Barbados aloes)". Severity and alert text unchanged |
+| Other rows | Antiarrhythmic, thiazide diuretic, kidney and liver rows are unchanged; they now reach the same preparations as the digoxin row, within the monograph's scope (both species) |
+| Topical-only products | Not excluded by a product form, deliberately: the monograph's form is oral, the latex identity names oral laxative preparations and no corpus product is topical. A `product_forms_any: ["topical_only"]` exclude would change no product and would make each hard row unexpressible by alerts, so review-class at the release gate (`rule_change_gate.py::_alert_can_express`) |
+| Replay | 50 frozen products (49 with an aloe row, 1 control) through Clean, Enrich and Score at `origin/main` and at the candidate: 4 changed (267819, 273379, 333705, 337239, the only Cape aloe labels in 15,414 raw labels), enriched copy, sources and `last_reviewed` only; no scored record changed; per-product aloe rule ids and latex flags identical before and after; the 45 aloe vera products keep `RULE_INGREDIENT_ALOE_VERA` only. 267819's detail blob (`build_detail_blob` on the candidate records) carries the new digoxin warning; no device run |
+| Independent review | Healthcare-reviewer agent on the diff, requirement and sources only: NEEDS FIXES, no blocker. Applied: the review note quotes her three preparation bullets verbatim and labels the implementation as agent work; tests cover decolorized (no) and non-decolorized (yes) whole-leaf extract; "this laxative", "increase digoxin risk", "Ask your prescriber which laxative suits you" and the "(latex)" gloss go; the pregnancy text names both species; the change-log entry calls the subject move an agent implementation and no longer bumps the entry's review date. Checked and unchanged: an Aloe vera latex row meets only this rule (no duplicate pregnancy card); `review_owner` is read only as a required string |
+
+The digoxin row's `clinical_review` names Dr. Pham's decision, quotes her preparation bullets, and says the
+implementation, mechanism, action and alert text are agent work not reviewed by Dr. Pham. The rule's `review_owner`
+names Dr. Pham for the cardiac-glycoside row, the agent for the wording and the latex-identity subject, and the
+original owner for the other rows; `last_reviewed` is 2026-11-12.
+
+Held for Dr. Pham: a label row named "Aloe ferox gel" met this whole latex rule before (pregnancy contraindicated,
+digoxin avoid and the rest) and now meets no aloe rule; a test pins it as held. No raw label in the corpus names a
+Cape aloe gel. Oral Aloe vera gel meets `RULE_INGREDIENT_ALOE_VERA` (pregnancy and lactation avoid), and NCCIH says
+oral aloe in gel, latex or whole-leaf form may be unsafe in pregnancy; whether a non-vera aloe gel gets that finding
+is her call. For Sean: whole leaf of unknown processing shows no latex finding, because there is no "uncertain
+preparation" display state; adding one is a new display meaning. Found in passing: "Decolorized aloe vera whole leaf
+extract" resolves to no aloe identity at all (before and after this batch), so it meets no aloe rule; an identity
+follow-up.
+
 ## Questions for Dr. Pham
 
 **Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:

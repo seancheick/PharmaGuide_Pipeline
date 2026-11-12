@@ -5394,3 +5394,13 @@ Running the raw check at each first-parent merge from #417 (33/33 unchanged) sho
 Each PMID was content-checked against PubMed. The stored outputs from the 2026-11-11 corpus run already carried
 these values. After the refresh, raw and stored checks are both 33/33. The fixture and manifest consumer tests
 pass (168). Cause details are in the manifest changelog entry.
+
+## November 12 — Aloe preparation identity for the digoxin warning (branch `claude/interaction-b5b-aloe-preparation`)
+
+Class: behavioral data (interaction rule subject, alias, consumer copy). `RULE_IQM_ALOE_FEROX` now sits on the latex
+identity `RISK_ALOE_LATEX` (Dr. Pham, signed answers 2026-11-12, section 2; agent implementation). Record and
+evidence: `clinical_review_20261111/DISPOSITIONS_20261111.md`, batch 5b. Open items from it:
+- Dr. Pham: a label row named "Aloe ferox gel" now meets no aloe rule (no corpus label names one; 15,414 scanned).
+  Whether oral non-vera aloe gel gets the aloe vera pregnancy/lactation finding is her call.
+- Sean: whole leaf of unknown processing shows no latex finding; showing it as "uncertain" needs a new display state.
+- Identity follow-up: "Decolorized aloe vera whole leaf extract" resolves to no aloe identity, so it meets no aloe rule.

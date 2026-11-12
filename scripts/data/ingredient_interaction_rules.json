@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-11-11",
+    "last_updated": "2026-11-12",
     "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 155,
@@ -18952,15 +18952,15 @@
     {
       "id": "RULE_IQM_ALOE_FEROX",
       "subject_ref": {
-        "db": "ingredient_quality_map",
-        "canonical_id": "aloe_ferox"
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "RISK_ALOE_LATEX"
       },
       "condition_rules": [
         {
           "condition_id": "pregnancy",
           "severity": "contraindicated",
           "evidence_level": "probable",
-          "mechanism": "Cape aloe latex contains anthranoid laxatives, including emodin and aloe-emodin, that showed genotoxic potential in experimental studies, so the EU herbal monograph contraindicates aloes in pregnancy.",
+          "mechanism": "Aloe latex (Cape or Barbados aloes) contains anthranoid laxatives, including emodin and aloe-emodin, that showed genotoxic potential in experimental studies, so the EU herbal monograph contraindicates aloes in pregnancy.",
           "action": "Do not use during pregnancy. Ask your obstetrician about a gentler bulk-forming or osmotic laxative.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
@@ -19063,15 +19063,16 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. This is not evidence that every ordinary brief exposure causes a direct drug interaction.",
-          "action": "Avoid combining with digoxin or other cardiac glycosides unless your prescriber advises it; potassium may need monitoring.",
+          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. NCCIH says overuse of aloe latex may increase the risk of adverse effects from cardiac glycosides such as digoxin. The EU herbal monograph for the dried leaf juice of Aloe barbadensis and Aloe ferox (Barbados and Cape aloes) says hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor before taking aloes concomitantly (4.4). It sets no dose or duration that clears the combination and does not show that every brief use causes toxicity. NCCIH separates aloe latex, from the leaf's outer layer, from inner-leaf gel; this warning follows the latex.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use aloe latex products without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-aloe-barbadensis-mill-and-aloe-various-species-mainly-aloe-ferox-mill-and-its-hybrids-folii-succus-siccatus_en.pdf",
-            "https://www.nccih.nih.gov/health/aloe-vera"
+            "https://www.nccih.nih.gov/health/aloe-vera",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
-          "alert_headline": "Can raise digoxin toxicity risk",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, ask your prescriber before using this laxative and avoid unsupervised prolonged use.",
-          "informational_note": "Aloe latex can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
+          "alert_headline": "Avoid unsupervised use with digoxin",
+          "alert_body": "Prolonged or excessive use of aloe latex can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this product without your prescriber's advice.",
+          "informational_note": "Prolonged or heavy aloe latex use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19091,7 +19092,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2 (Dr. Pham): keep 'avoid unsupervised use,' with potassium-loss and preparation context. 'Relevant oral latex/dried leaf juice preparations should reach the warning. Verified inner-leaf gel and topical-only products should not inherit it indiscriminately. \"Whole leaf\" with unknown processing should remain uncertain.' Agent implementation, not reviewed by Dr. Pham: the rule sits on the latex identity, so gel and whole leaf of unknown processing show no latex finding (no uncertain-preparation display exists), and no topical-only exclusion is added. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         },
         {
           "drug_class_id": "antiarrhythmics",
@@ -19195,8 +19202,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-09-25",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row, with preparation context); wording and the latex-identity subject by agent, not reviewed by Dr. Pham; other rows: original rule pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_CHINESE_SKULLCAP_LIVER",
