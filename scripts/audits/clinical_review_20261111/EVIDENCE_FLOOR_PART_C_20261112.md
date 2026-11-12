@@ -175,6 +175,32 @@ Results:
 
 No defect found.
 
+## Scoring performance (controlled, identical frozen inputs)
+
+The test used 36 frozen enriched labels from the replay set (input sha256 prefix `9c874e83c9912397`):
+
+- 9 affected anchors, including 223084
+- controls, including the partial (held) Perilla seed-oil and unspecified labels
+- active-row counts from 1 to 15
+
+Each round started a fresh process per arm, ran one warm-up pass, then timed 8 `build_scored_artifact`
+runs per product. The arms alternated: main `648f27224`, then this branch `a5fb8084a`, for 4 rounds.
+
+| Arm | Sum of per-product warm medians, by round (s) | Median | Peak RSS median |
+|---|---|---|---|
+| main | 1.636, 1.621, 1.634, 1.647 | 1.635 s | 200.4 MiB |
+| branch | 1.644, 1.691, 1.667, 1.650 | 1.659 s | 196.1 MiB |
+
+- **Time:** +1.4%. The round-to-round spread is 1.6% on main and 2.9% on the branch, and the ranges
+  overlap.
+- **Peak memory:** −2.1%, also within noise.
+- **Where the extra work comes from:** for each positive match, the floor reads the match's own
+  applicable contexts from the lru-cached reviewed registry and checks their qualifying outcomes.
+  No reusable derived view was added or changed, and the helpers are read-only. So the
+  derivation-count and input-isolation guards were not extended.
+- **Scores:** identical across rounds within each arm. The 9 affected labels differ between arms by
+  design. The other 27 are identical.
+
 ## Limits
 
 - The classification is agent review applying Sean's rule, with a blind second check. It is not
