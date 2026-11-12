@@ -3,9 +3,10 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-11",
+    "last_updated": "2026-11-12",
     "total_entries": 224,
     "changelog": [
+      "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
       "2026-11-04: INGR_MELATONIN jet-lag terms exclude only a label with no sleep claim beside them (Sean's decision, excluded_claim_terms_when_alone). BRAND_KANEKA_UBIQUINOL excludes 'energy production', agent-added under its signed 'energy' exclusion.",
@@ -52425,7 +52426,7 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "Reported higher muscle total-creatine content versus placebo, not a CEE-specific change or performance benefit"
+        "Reported higher muscle total-creatine content versus placebo (p=0.041); strength, power and body composition were measured and showed no between-group benefit. Not a CEE-specific change, performance benefit or superiority to monohydrate."
       ],
       "health_goals_supported": [],
       "notes": "Limited human research reports higher muscle creatine content, while strength, power and body-composition outcomes were not better than placebo. The paper contains conflicting statements about comparison with monohydrate. No superior performance, absorption, lower-dose equivalence or renal-safety conclusion follows.",
@@ -52433,7 +52434,7 @@
       "published_studies": [
         "RCT"
       ],
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-12",
       "notable_studies": "PMID19228401:42consented/familiarized,30completers,10per arm. CEE-versus-placebo muscle-content group contrast p=.041; day27 within-arm increase separate. Performance/body-composition nulls and conflicting Discussion retained. This report is already in the existing monohydrate review inventory; no independent replication or summed enrollment.",
       "references_structured": [
         {
@@ -52576,10 +52577,11 @@
             "Source enrollment accounting and regimen wording limitations remain;30completers are not42randomized. No salt/free-creatine mass conversion or lower-dose equivalence."
           ],
           "clinical_review": {
-            "reviewer": "Codex /root/scientific_review; independently rechecked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full official PMC2649889 source read; reported unranked between-group biochemical finding and null physical outcomes qualified under existing rubric without a new interaction/ANCOVA or public-data requirement."
+            "basis": "Full official PMC2649889 source read; reported unranked between-group biochemical finding and null physical outcomes qualified under existing rubric without a new interaction/ANCOVA or public-data requirement.",
+            "notes": "Reviewer corrected 2026-11-12 on Sean's statement that this context review was Dr. Pham's (\"Fix it, it was dr pham\"; scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md, Part B section 5). The source reading and extraction were prepared by Codex agents (/root/scientific_review, independently rechecked by /root/grouped_correctness_check); that preparation is agent work, the clinician review is Dr. Pham's. reviewed_at is the recorded context review date, not asserted as her signing date."
           }
         }
       ]
