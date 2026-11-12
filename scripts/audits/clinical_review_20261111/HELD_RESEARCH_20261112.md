@@ -14,6 +14,29 @@ questions outside that signed scope. Remaining decisions include the new CBD H1â
 questions, explicitly held presentation choices and exposure policies. Routine source
 corrections proceed under the existing review delegation.
 
+## Decision register after reconciliation with Part A
+
+| Signed decision | Implementation status |
+|---|---|
+| Q1 SAMe and MAOIs | #459 implements the class avoid fallback and exact tranylcypromine and phenelzine contraindications. Confirmed EMSAM still needs exact formulation matching and pair/profile parity. That is engineering work under the signed contraindication. |
+| Q2 vitamin E | #465 carries the wording correction. Lower prominence for known ordinary exposure is already authorized within Q2. Implement and verify form, daily use and combined Stack amounts first. Any new numerical suppression threshold falls outside Q2. |
+| Q3 and Q7 anticoagulants | #461 implements the glucosamine action, supported VKA distinctions and injected-anticoagulant exclusions. Ginseng species and any extension beyond warfarin remain separate questions. |
+| Q4 and Q6 antimuscarinic scope | #462 implements the differentiated warning. Preserve qualified review for unknown route or dose. Presentation for an unidentified picker selection and accurate naming of the narrower class remain separate. |
+| Q5 CBD | #464 implements the named split, qualified oral-digoxin caution and general seizure-medicine review message. Preserve that message for an otherwise unassessed medicine even when the same regimen includes stiripentol. #470 carries the sirolimus source correction against current main. Mycophenolate was signed for the review list. |
+| Serious warnings | #459 implements SJW/SSRIs and the SSRI/SNRI 5-HTP harmonization, #461 implements SJW/anticoagulant distinctions, #462 implements huperzine scope, and #465/#466 carry senna/cascara/aloe with digoxin. Keep unknown aloe processing uncertain. |
+
+### Questions for Dr. Pham
+
+- CBD H1 clinical scope for oral cyclosporine, H2 grade and direction of the existing qualified seizure-medicine message, H3 adding liver and ammonia signals, and H4 a specific warning for prescription cannabidiol plus OTC CBD. Include whether the review-listed mycophenolate finding should publish.
+- Any new severity or management outside signed scope: exact 5-HTP coverage for systemic TCAs, carbidopa or oral selegiline where the current rules or evidence leave a gap; ginseng species and anticoagulant extension; a fixed vitamin E surgery instruction; or a new aloe ferox gel exemption. An explicit topical/low-dose doxepin exemption would also change applicability.
+- New policy for B6 and niacin exposure suppression, a published SINEMET depletion finding, nitrate/PDE5â€“arginine/citrulline guidance, or an activated-charcoal interval. These need clinical review if pursued. The cited IV-calcium statement does not supply an oral digoxin/calcium warning to approve.
+
+### Decisions Sean can make
+
+- Pick the placement and wording of a prompt to identify an unknown immunosuppressant or antimuscarinic. Engineering must distinguish a picker-only selection from a known medicine before enabling that prompt. Preserve signed actions and clinical prominence requirements.
+- Choose whether and where to show uncertainty about aloe preparation, and whether to build a non-precise timing presentation for the held pairs. Any new clinical recommendation or exemption stays within its own review scope.
+- Prioritize engineering and release order, choose presentation within the signed vitamin E policy, and select factual medication wording within the existing copy contract. H5 vocabulary currently has a clinician-copy gate, so existing signed wording can be reused within scope and any genuinely new text must clear that gate or a separately authorized change to the gate.
+
 ## Owner Check and scope
 
 Owner: `scripts/data/ingredient_interaction_rules.json` (profile findings),
@@ -41,7 +64,7 @@ sections 5.1, 7.2, 7.3, 7.4 and 12.3, content read live.
 | H2 other antiseizure medicines | Dr. Pham authorized a qualified review message. Recommend informational/neutral with insufficient evidence for the unassessed remainder. Keep named findings separate. Monitor is unsuitable unless the observation is specified. | Named severity/direction hold. Lack of assessment is not absence of an interaction. |
 | H3 clobazam liver/ammonia | EPIDIOLEX 5.1 supports the smaller clobazam liver signal and postmarketing ammonia reports, mostly with valproate/clobazam. Recommend source-qualified detail in existing cards. | Named hold on adding findings; no universal ammonia testing or consumer dose adjustment. |
 | H4 prescription cannabidiol | EPIDIOLEX 5.1 documents dose-related liver risk. Recommend a duplicate-exposure review message before adding OTC CBD, without an invented threshold. | New named finding remains held; this is inference, not an OTC-product interaction trial. |
-| Digoxin | EPIDIOLEX 7.2 names oral digoxin, potential exposure increase and clinician monitoring. Caution is defensible under the existing review/management rubric; no effect size is established. | Confirm held severity; no contraindication claim. |
+| Digoxin | EPIDIOLEX 7.2 names oral digoxin, potential exposure increase and clinician monitoring. Caution is defensible under the existing review/management rubric; no effect size is established. | Closed within Q5: the qualified caution is implemented in #464. A stronger warning would be a new decision. |
 | Mycophenolate | EPIDIOLEX 12.3 reports mycophenolic-acid AUC +35%; +58% is a prediction at a different CBD regimen. 7.2 supplies UGT1A9 management context. Recommend a named specialist-review caution. | Dr. Pham authorized the review list, not a published warning. Source review can finish while publication remains held. |
 
 ### Confirmed sirolimus factual defect in batch 4
