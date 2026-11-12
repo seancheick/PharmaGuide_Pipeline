@@ -160,6 +160,15 @@ TOPIC_STEMS = {
     "anticholinergics": ["cholinerg", "acetylcholin", "muscarin", "cholinesterase"],
     "anticonvulsants": ["anticonvuls", "antiepilep", "seizur", "epilep", "phenytoin",
                         "valpro", "carbamazep"],
+    # Single-medicine CBD topics (Dr. Pham Q5, 2026-11-12): the medicine's own name only, so a source about
+    # another medicine of the same family cannot pass as on-topic.
+    "clobazam": ["clobazam"],
+    "valproate": ["valpro", "divalproex"],
+    "stiripentol": ["stiripentol"],
+    "everolimus": ["everolimus"],
+    "tacrolimus": ["tacrolimus"],
+    "sirolimus": ["sirolimus", "rapamycin"],
+    "digoxin": ["digoxin"],
     "thiazide_diuretics": ["thiazide", "diuret", "potassium", "hypokal"],
     "lithium": ["lithium", "diuret", "renal", "kidney"],
     "calcium_channel_blockers": ["calcium channel", "amlodipine", "nifedipine",

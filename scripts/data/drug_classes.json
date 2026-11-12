@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-11-11",
-    "total_classes": 51,
-    "total_members": 966,
+    "last_updated": "2026-11-12",
+    "total_classes": 56,
+    "total_members": 971,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -23,7 +23,7 @@
       "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 51
+    "total_entries": 56
   },
   "classes": {
     "class:statins": {
@@ -2647,6 +2647,85 @@
         "N05BA09"
       ],
       "notes": "Single-medicine class (precedent: class:lithium). The cannabidiol label names clobazam; adding it to class:anticonvulsants would also reach the enzyme-induction contraceptive pair. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+    },
+    "class:stiripentol": {
+      "display_name": "Stiripentol",
+      "description": "Stiripentol only, for findings its own source names",
+      "member_names": [
+        "stiripentol"
+      ],
+      "member_rxcuis": [
+        "2054968"
+      ],
+      "rxclass_id": "N03AX",
+      "atc_codes": [
+        "N03AX"
+      ],
+      "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names stiripentol with the claim its source supports. Also a member of class:anticonvulsants. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
+    },
+    "class:everolimus": {
+      "display_name": "Everolimus",
+      "description": "Everolimus only, for findings its own source names",
+      "member_names": [
+        "everolimus"
+      ],
+      "member_rxcuis": [
+        "141704"
+      ],
+      "rxclass_id": "L04AH",
+      "atc_codes": [
+        "L01EG",
+        "L04AH"
+      ],
+      "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names everolimus with the claim its source supports. Also a member of class:immunosuppressants. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
+    },
+    "class:tacrolimus": {
+      "display_name": "Tacrolimus",
+      "description": "Tacrolimus only, for findings its own source names",
+      "member_names": [
+        "tacrolimus"
+      ],
+      "member_rxcuis": [
+        "42316"
+      ],
+      "rxclass_id": "L04AD",
+      "atc_codes": [
+        "D11AH",
+        "L04AD"
+      ],
+      "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names tacrolimus with the claim its source supports. Also a member of class:immunosuppressants. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
+    },
+    "class:sirolimus": {
+      "display_name": "Sirolimus",
+      "description": "Sirolimus only, for findings its own source names",
+      "member_names": [
+        "sirolimus"
+      ],
+      "member_rxcuis": [
+        "35302"
+      ],
+      "rxclass_id": "L04AH",
+      "atc_codes": [
+        "L01EG",
+        "L04AH",
+        "S01XA"
+      ],
+      "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names sirolimus with the claim its source supports. Also a member of class:immunosuppressants. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
+    },
+    "class:digoxin": {
+      "display_name": "Digoxin",
+      "description": "Digoxin only, for findings its own source names",
+      "member_names": [
+        "digoxin"
+      ],
+      "member_rxcuis": [
+        "3407"
+      ],
+      "rxclass_id": "C01AA",
+      "atc_codes": [
+        "C01AA"
+      ],
+      "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names digoxin with the claim its source supports. Also a member of class:cardiac_glycosides. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
     }
   }
 }

@@ -189,13 +189,188 @@ def test_guar_gum_is_not_a_diabetes_medicine():
     assert not rule_classes_for("26344") & HYPOGLYCEMIC_TIERS
 
 
-@pytest.mark.parametrize("name,rxcui", [("clobazam", "21241"), ("valproic acid", "11118"), ("levetiracetam", "114477")])
-def test_cbd_antiseizure_rule_reaches_named_seizure_medicines(name, rxcui):
-    assert rule_classes_for(rxcui) & sub_rule_gate("RULE_BANNED_CBD_INTERACTIONS", "anticonvulsants"), name
+CBD = "RULE_BANNED_CBD_INTERACTIONS"
+CBD_NAMED = {
+    # medicine: (rxcui, its own sub-rule)
+    "clobazam": ("21241", "clobazam"), "valproic acid": ("11118", "valproate"), "divalproex": ("266856", "valproate"),
+    "stiripentol": ("2054968", "stiripentol"), "everolimus": ("141704", "everolimus"),
+    "tacrolimus": ("42316", "tacrolimus"), "sirolimus": ("35302", "sirolimus"), "digoxin": ("3407", "digoxin"),
+}
 
 
-def test_cbd_antiseizure_rule_does_not_reach_other_benzodiazepines():
-    assert not rule_classes_for("596") & sub_rule_gate("RULE_BANNED_CBD_INTERACTIONS", "anticonvulsants")
+def cbd_sub(drug_class_id: str) -> dict:
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == CBD)
+    return next(d for d in rule["drug_class_rules"] if d["drug_class_id"] == drug_class_id)
+
+
+def cbd_findings(rxcuis=(), picker=()) -> set[str]:
+    """drug_class_ids of the CBD drug-class sub-rules whose whole gate fires for the profile."""
+    import profile_gate_evaluator as pge
+
+    profile = set(picker).union(*(rule_classes_for(r) for r in rxcuis))
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == CBD)
+    return {
+        d["drug_class_id"] for d in rule["drug_class_rules"]
+        if pge.evaluate_profile_gate(d["profile_gate"], {"drug_classes": sorted(profile)}, {},
+                                     base_severity=d["severity"]).fires
+    }
+
+
+@pytest.mark.parametrize("medicine", CBD_NAMED)
+def test_each_medicine_the_cbd_label_names_gets_its_own_finding(medicine):
+    """Q5: named medicines, each with its own claim, instead of one claim for every seizure medicine."""
+    rxcui, own = CBD_NAMED[medicine]
+    findings = cbd_findings([rxcui])
+    assert own in findings, medicine
+    assert "anticonvulsants" not in findings, medicine  # the general review message is for other seizure medicines
+
+
+@pytest.mark.parametrize("name,rxcui", [("levetiracetam", "114477"), ("lamotrigine", "28439"), ("phenytoin", "8183")])
+def test_other_seizure_medicines_get_a_qualified_review_message(name, rxcui):
+    """Q5: keep a qualified review message for other seizure medicines until their evidence is assessed."""
+    assert cbd_findings([rxcui]) == {"anticonvulsants"}, name
+    general = cbd_sub("anticonvulsants")
+    assert general["evidence_level"] == "theoretical"
+    # Limited to what the label reports; no universal "not assessed" claim, no scope sentence about findings it
+    # does not make, and no assumption that a neurologist prescribes the medicine.
+    assert "dedicated interaction studies only with clobazam, valproate and stiripentol" in general["mechanism"]
+    text = " ".join(general[k] for k in ("mechanism", "action", "alert_body", "informational_note"))
+    for stale in ("not been individually", "These findings", "neurologist"):
+        assert stale not in text, stale
+    assert "doctor who prescribes it" in general["action"] and "doctor who prescribes it" in general["alert_body"]
+    assert "May affect seizure medication" not in general["alert_headline"]
+
+
+@pytest.mark.parametrize("name,rxcui", [
+    ("cyclosporine", "3008"), ("adalimumab", "327361"), ("azathioprine", "1256"),
+    ("mycophenolate mofetil", "68149"), ("mycophenolic acid", "7145"),
+])
+def test_cbd_findings_stop_at_the_named_medicines(name, rxcui):
+    """Q5: narrow the immunosuppressant rule to the named, supported medicines. Mycophenolate is on the review
+    list (DISPOSITIONS batch 4: the label reports higher mycophenolic-acid exposure) and gets no finding yet."""
+    assert cbd_findings([rxcui]) == set(), name
+    assert "immunosuppressants" not in {d["drug_class_id"] for d in
+                                        next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"]
+                                             if r["id"] == CBD)["drug_class_rules"]}
+
+
+def test_immunosuppressant_picker_alone_gets_no_cbd_finding():
+    """The known consequence of Q5's narrowing, held for Dr. Pham (DISPOSITIONS batch 4, H1): the picker class
+    holds 90 medicines, mostly biologics, so a conditional card would reach the scope Q5 rejected."""
+    assert cbd_findings(picker=["immunosuppressants"]) == set()
+
+
+@pytest.mark.parametrize("profile", [{"picker": ["cardiac_glycosides"]}, {"rxcuis": ["3403"]}],
+                         ids=["digoxin picker", "digitoxin"])
+def test_digoxin_picker_reaches_the_conditional_digoxin_finding(profile):
+    """The 'Digoxin / Heart rhythm medication' picker keeps a conditional message (Q4: an unknown medicine is not
+    assumed absent). The class cannot tell the picker from another cardiac glycoside, so the copy names digoxin."""
+    assert cbd_findings(**profile) == {"digoxin"}
+    digoxin = cbd_sub("digoxin")
+    for key in ("alert_headline", "alert_body", "informational_note", "action"):
+        assert "digoxin taken by mouth" in digoxin[key] or "digoxin by mouth" in digoxin[key], key
+
+
+SEIZURE_FINDINGS = {"clobazam", "valproate", "stiripentol", "anticonvulsants"}
+
+
+def test_cbd_seizure_findings_do_not_reach_other_benzodiazepines():
+    """Alprazolam gets no seizure-medicine finding. Whether it should get the CBD sedation finding (label 7.4,
+    other CNS depressants) is a gap that predates Q5, logged in DISPOSITIONS batch 4."""
+    assert not cbd_findings(["596"]) & SEIZURE_FINDINGS
+
+
+def test_cbd_findings_say_what_each_source_measured():
+    """Q5's per-medicine claims, and no consumer instruction to change a prescription dose."""
+    valproate = cbd_sub("valproate")
+    text = " ".join(valproate[k] for k in ("alert_headline", "alert_body", "informational_note", "action")).lower()
+    assert "liver" in text and "raise valproate" not in text and "valproate levels" not in text
+    assert "did not raise valproate exposure" in valproate["mechanism"]
+    assert "active metabolite" in cbd_sub("clobazam")["mechanism"] and "sleepiness" in cbd_sub("clobazam")["alert_body"]
+    assert "about 2.5-fold" in cbd_sub("everolimus")["mechanism"]
+    tacrolimus = cbd_sub("tacrolimus")
+    assert tacrolimus["sources"][0] == "https://pubmed.ncbi.nlm.nih.gov/39601108/"
+    assert "4.2-fold" in tacrolimus["mechanism"] and "3.1-fold" in tacrolimus["mechanism"]
+    assert "open-label" in tacrolimus["mechanism"] and "interim analysis" in tacrolimus["mechanism"]
+    # Both are measured human PK effects, graded alike.
+    assert tacrolimus["evidence_level"] == cbd_sub("everolimus")["evidence_level"] == "established"
+    for medicine in ("sirolimus", "digoxin"):
+        sub = cbd_sub(medicine)
+        assert "not measured directly" in sub["alert_body"] and sub["evidence_level"] == "theoretical", medicine
+        assert "not one measured with " + medicine in sub["mechanism"], medicine
+    for medicine in ("tacrolimus", "sirolimus", "digoxin"):
+        sub = cbd_sub(medicine)
+        assert "by mouth" in sub["alert_body"] and "by mouth" in sub["action"], medicine
+        assert sub["alert_headline"].endswith(medicine + " taken by mouth"), medicine
+    # Q5: the measured size belongs to prescription cannabidiol; no visible body states it for CBD in general.
+    for drug_class_id in ("clobazam", "valproate", "stiripentol", "everolimus", "tacrolimus", "sirolimus", "digoxin"):
+        assert "prescription" in cbd_sub(drug_class_id)["alert_body"].lower(), drug_class_id
+    assert "In a controlled study, CBD raised" not in tacrolimus["alert_body"]
+    for drug_class_id in ("clobazam", "valproate", "stiripentol", "everolimus", "tacrolimus", "sirolimus", "digoxin",
+                          "anticonvulsants"):
+        action = cbd_sub(drug_class_id)["action"].lower()
+        for instruction in ("dose reduction", "reduce the dose", "monitor ", "adjust"):
+            assert instruction not in action, (drug_class_id, instruction)
+        assert "yourself" in action, drug_class_id
+
+
+def test_seizure_condition_guidance_makes_an_accurate_claim():
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == CBD)
+    seizure = next(c for c in rule["condition_rules"] if c["condition_id"] == "seizure_disorder")
+    assert "Use only pharmaceutical-grade CBD" not in seizure["action"]
+    assert "in place of prescribed seizure treatment" in seizure["action"]
+    assert "seizure threshold" not in seizure["informational_note"]
+    assert "Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex" in seizure["mechanism"]
+    assert "made liver-enzyme rises more common (valproate)" in seizure["mechanism"]
+    assert "or liver-enzyme rises (valproate)" not in seizure["mechanism"]
+
+
+def test_cbd_findings_say_the_wording_is_agent_work():
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == CBD)
+    owner = rule["review_owner"]
+    assert owner.startswith("Dr. Pham (signed answers 2026-11-12, Q5") and "by agent" in owner
+    # The signature covers the Q5 sub-rules only; the other sub-rules were not re-reviewed.
+    assert "anticoagulant, sedative and pregnancy sub-rules are unchanged" in owner
+    for drug_class_id in ("clobazam", "valproate", "stiripentol", "everolimus", "tacrolimus", "sirolimus", "digoxin",
+                          "anticonvulsants"):
+        notes = cbd_sub(drug_class_id)["clinical_review"]["notes"]
+        assert "severity and evidence grading: agent work, not reviewed by Dr. Pham" in notes, drug_class_id
+    assert rule["last_reviewed"] == "2026-11-12"
+
+
+@pytest.mark.parametrize("class_id,parent", [
+    ("clobazam", "anticonvulsants"), ("valproate", "anticonvulsants"), ("stiripentol", "anticonvulsants"),
+    ("everolimus", "immunosuppressants"), ("tacrolimus", "immunosuppressants"), ("sirolimus", "immunosuppressants"),
+    ("digoxin", "cardiac_glycosides"),
+])
+def test_cbd_rule_class_vocabulary_reuses_approved_copy(class_id, parent):
+    """The vocabulary's sign-off covers only approved strings, so the new rule-only entries reuse their parent's.
+    Dr. Pham's Q5 sentences for clobazam and valproate wait for her confirmation of the contract adaptation."""
+    vocab_blob = _load("drug_class_vocab.json")
+    vocab = {e["id"]: e for e in vocab_blob["drug_classes"]}
+    for field in ("group_label", "commonly_used_for"):
+        assert vocab[class_id][field] == vocab[parent][field], (class_id, field)
+    assert vocab[class_id]["user_selectable"] is False
+    review = vocab_blob["_metadata"]["consumer_copy_review"]
+    assert review["status"] == "approved" and "wait for her confirmation" in review["note"]
+
+
+@pytest.mark.parametrize("class_id,atc", [("stiripentol", "N03AX"), ("everolimus", "L04AH"), ("tacrolimus", "L04AD"),
+                                          ("sirolimus", "L04AH"), ("digoxin", "C01AA")])
+def test_single_medicine_classes_name_the_systemic_atc_class(class_id, atc):
+    """The eye-preparation class (S01XA) is not sirolimus's systemic class."""
+    assert _load("drug_classes.json")["classes"][f"class:{class_id}"]["rxclass_id"] == atc
+
+
+def test_single_medicine_citation_topics_need_the_medicine_name():
+    """A source about another member of the same family must not pass as on-topic for a single-medicine class."""
+    from api_audit.verify_interaction_rules_citations import TOPIC_STEMS
+
+    names = {"clobazam": "clobazam", "valproate": "valproate divalproex", "stiripentol": "stiripentol",
+             "everolimus": "everolimus", "tacrolimus": "tacrolimus", "sirolimus": "sirolimus rapamycin",
+             "digoxin": "digoxin"}
+    for class_id, name in names.items():
+        assert TOPIC_STEMS[class_id] and all(stem in name for stem in TOPIC_STEMS[class_id]), class_id
 
 
 def test_valproate_stays_out_of_the_enzyme_inducer_anticonvulsant_class():

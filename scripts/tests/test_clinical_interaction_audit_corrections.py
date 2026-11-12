@@ -114,18 +114,26 @@ def test_consumer_copy_preserves_the_actual_transplant_hazard():
     probiotic = rows['RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED']['drug_class_rules'][0]
     assert 'infection' in probiotic['alert_body'].lower()
     assert 'immune-modulating' not in probiotic['alert_body']
-    for ident in ('RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4', 'RULE_IQM_SILYMARIN_LIVER', 'RULE_BANNED_CBD_INTERACTIONS'):
+    for ident in ('RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4', 'RULE_IQM_SILYMARIN_LIVER'):
         row = next(x for x in rows[ident]['drug_class_rules'] if x['drug_class_id'] == 'immunosuppressants')
         assert 'immune-modulating' not in row['alert_body']
         assert 'drug' in row['alert_body'].lower()
+    # Dr. Pham Q5 (2026-11-12): CBD names each medicine; the hazard is the medicine's level.
+    for medicine in ('everolimus', 'tacrolimus', 'sirolimus'):
+        row = next(x for x in rows['RULE_BANNED_CBD_INTERACTIONS']['drug_class_rules'] if x['drug_class_id'] == medicine)
+        assert 'immune-modulating' not in row['alert_body']
+        assert medicine + ' levels' in row['alert_body'], medicine
 
 def test_cbd_immunosuppressant_text_names_the_everolimus_label_finding():
     """EPIDIOLEX 7.2 measures everolimus (about 2.5-fold) and names sirolimus and tacrolimus; it does not say
-    CBD affects immune function. Everolimus (RxCUI 141704) reaches the sub-rule through its class."""
-    row = next(x for x in _rules()['RULE_BANNED_CBD_INTERACTIONS']['drug_class_rules']
-               if x['drug_class_id'] == 'immunosuppressants')
+    CBD affects immune function. Dr. Pham Q5 (2026-11-12): each medicine gets its own finding, and the whole-class
+    immunosuppressant finding is narrowed away."""
+    subs = _rules()['RULE_BANNED_CBD_INTERACTIONS']['drug_class_rules']
+    assert 'immunosuppressants' not in {x['drug_class_id'] for x in subs}
+    row = next(x for x in subs if x['drug_class_id'] == 'everolimus')
     for drug in ('everolimus', 'sirolimus', 'tacrolimus'):
-        assert drug in row['mechanism'] and drug in row['action'] and drug in row['informational_note'], drug
+        own = next(x for x in subs if x['drug_class_id'] == drug)
+        assert drug in own['mechanism'] and drug in own['action'] and drug in own['informational_note'], drug
     assert '2.5-fold' in row['mechanism']
     assert 'immune function' not in row['informational_note']
     # Everolimus is also used for tuberous sclerosis and cancer, so the copy is not transplant-only.
@@ -134,6 +142,7 @@ def test_cbd_immunosuppressant_text_names_the_everolimus_label_finding():
     assert any('8bf27097-4870-43fb-94f0-f3d0871d1eec' in url for url in row['sources'])
     classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
     assert '141704' in classes['class:immunosuppressants']['member_rxcuis']
+    assert classes['class:everolimus']['member_rxcuis'] == ['141704']
 
 def test_potassium_bp_warning_is_about_potassium_retention():
     row = _rules()['RULE_IQM_POTASSIUM_HYPERTENSION']['drug_class_rules'][0]
