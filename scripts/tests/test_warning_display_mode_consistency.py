@@ -140,11 +140,13 @@ def test_validator_skips_non_dict_entries() -> None:
 # Emission policy — profile-scoped interaction rules default to suppress
 # ---------------------------------------------------------------------------
 
-def test_contraindicated_interaction_defaults_to_suppress() -> None:
+def test_contraindicated_interaction_defaults_to_a_conditional_note() -> None:
     """End-to-end: a profile-scoped contraindicated interaction rule
-    emits ``display_mode_default="suppress"`` in the detail blob.
-    Pre-E1.1.2 this defaulted to ``critical``, forcing the condition-
-    specific copy onto every user.
+    emits ``display_mode_default="informational"`` in the detail blob, the
+    same as avoid. Dr. Pham G4 (2026-11-11): show avoid and contraindicated
+    findings as conditional notes when applicability is unknown. Never
+    ``critical``: pre-E1.1.2 that forced the condition-specific copy onto
+    every user as a personal banner.
     """
     # Import fixtures from the existing test module; keeps the fixture
     # definition in one place (test_build_final_db) without duplicating.
@@ -177,8 +179,8 @@ def test_contraindicated_interaction_defaults_to_suppress() -> None:
     ]
     assert contra, "fixture did not produce a contraindicated interaction"
     for w in contra:
-        assert w["display_mode_default"] == "suppress", (
-            f"Sprint E1.1.2: expected 'suppress' on profile-scoped "
+        assert w["display_mode_default"] == "informational", (
+            f"G4: expected 'informational' on profile-scoped "
             f"contraindicated rule; got {w.get('display_mode_default')!r}"
         )
         assert w["severity_contextual"] == "contraindicated"
@@ -219,11 +221,12 @@ def test_regex_detects_condition_specific_phrasing(text: str, expected_match: st
 # suppress (same invariant, different emission loop).
 # ---------------------------------------------------------------------------
 
-def test_drug_class_contraindicated_defaults_to_suppress() -> None:
+def test_drug_class_contraindicated_defaults_to_a_conditional_note() -> None:
     """Drug-class-scoped interaction rules — e.g. 5-HTP + MAOI serotonin
     syndrome — are profile-scoped (match user's declared medications).
-    Default display_mode_default=suppress; Flutter promotes to critical
-    on profile match.
+    Default display_mode_default=informational (G4): the app shows it as a
+    conditional note when the user's medicines are unknown and as the full
+    warning on a profile match.
     """
     sys.path.insert(0, str(Path(__file__).parent))
     from test_build_final_db import make_enriched, make_scored  # noqa: E402
@@ -254,5 +257,5 @@ def test_drug_class_contraindicated_defaults_to_suppress() -> None:
     ]
     assert contra
     for w in contra:
-        assert w["display_mode_default"] == "suppress"
+        assert w["display_mode_default"] == "informational"
         assert w["severity_contextual"] == "contraindicated"
