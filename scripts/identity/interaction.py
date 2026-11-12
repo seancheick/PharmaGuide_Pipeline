@@ -148,6 +148,9 @@ BOTANICAL_INTERACTION_TWIN: dict[str, str] = {
     "ceylon_cinnamon": "cinnamon",
     "chamomile": "chamomile",
     "chaste_tree": "chasteberry",
+    # G. uralensis root is liquorice root in the EU herbal monograph (EMA/HMPC/108399/2024 Rev. 1),
+    # whose glycyrrhizin warnings cover it (Dr. Pham A14/F4, 2026-11-11).
+    "chinese_licorice": "licorice",
     "cinnamon": "cinnamon",
     "cinnamon_bark": "cinnamon",
     "citrus_bergamot": "citrus_bergamot",
