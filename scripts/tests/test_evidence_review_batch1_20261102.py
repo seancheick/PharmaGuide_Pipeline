@@ -209,9 +209,10 @@ def test_fiber_review_stays_out_of_the_data():
     # The L-carnitine base record finished as reference-only on 2026-11-11, but a
     # canonical query has no printed salt, so the Carnipure tartrate source stays open.
     ("l_carnitine", "L-Carnitine", "clinical_source_row_unresolved"),
-    ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
+    # Finished source transfer still requires a physical retail row.
+    ("phytosterols", "Plant Sterols", "clinical_source_row_unresolved"),
 ])
-def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
+def test_canonical_queries_without_qualifying_source_rows_stay_held(cid, name, reason):
     from evidence_resolver import resolve_evidence_for_canonical
     logging.disable(logging.WARNING)
     resolution = resolve_evidence_for_canonical(cid, name=name)

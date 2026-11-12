@@ -82,8 +82,14 @@ def test_packet_drafts_stay_outside_the_data_file():
         assert {p for context in approved for p in context["source_pmids"]} == pmids
         assert all(context["review_status"] == "clinician_approved" for context in approved)
         assert all("Codex" in context["clinical_review"]["reviewer"] for context in approved)
-        assert assess_clinical_source_review(record)["is_complete"] == (
-            record_id in {"INGR_NATTOKINASE", "INGR_L_GLUTAMINE"})
+        assert assess_clinical_source_review(record)["is_complete"]
+        if record_id == "INGR_L_TYROSINE":
+            scoped = next(c for c in record["study_contexts"] if c["source_pmids"] == ["29980424"])
+            assert scoped["review_status"] == "rejected_source"
+            assert scoped["scoring_eligible"] is False
+            assert {outcome["direction"] for outcome in scoped["outcomes"]} == {
+                "positive", "null", "negative",
+            }
         if record_id == "INGR_L_GLUTAMINE":
             secondary = next(c for c in record["study_contexts"] if "34844156" in c["source_pmids"])
             assert secondary["review_status"] == "rejected_source"
