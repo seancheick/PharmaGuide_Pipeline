@@ -2095,6 +2095,32 @@ def evidence_required_canonicals(
             for blend in material_blends
         ))
     }
+    # A named, source-verified amino aggregate can link separately printed
+    # rows. They inherit its review scope just as nested blend members do.
+    # The projection supplies lineage only, so no points or amount transfer.
+    for row, role in zip(rows, roles):
+        if (row.get("canonical_source_db") != "verified_label_child_aggregate"
+                or role.get("role") not in MATERIAL_ROLES
+                or str(row.get("canonical_id") or "").strip().lower() not in required):
+            continue
+        children = set(row.get("verified_child_canonicals") or ())
+        paths = set(row.get("linked_rows") or ())
+        required.update(
+            canonical for member in rows
+            if (canonical := str(member.get("canonical_id") or "").strip().lower()) in children
+            and member.get("raw_source_path") in paths
+        )
+    if module == "fiber_digestive":
+        from normalization import find_affirmative_label_match
+        from scoring_input_contract import _profile_title_boundary
+        from scoring_v4.route_features import DIGESTIVE_ENZYME_CANONICALS
+
+        title = str(product.get("product_name") or product.get("fullName") or "").lower()
+        heading = title[:_profile_title_boundary(title)]
+        if find_affirmative_label_match(re.compile(r"\benzymes?\b"), heading, spaced_free=True):
+            # A product explicitly named for enzymes needs the reviews of
+            # those enzymes even beside a much heavier non-enzyme active.
+            required.update(owners & DIGESTIVE_ENZYME_CANONICALS)
     return required or owners
 
 

@@ -251,6 +251,7 @@ def test_same_contraindication_is_exact_for_tranylcypromine_and_inferred_for_oth
     assert PARNATE in exact['source_urls']
     # No MAOI warning is lowered while ask 1 is pending, and the exported text says the scope is inferred.
     cls = pairs['DSI_MAOI_SAME']
+    assert (cls['agent1_id'], cls['agent2_id']) == ('class:maois', 'C0036002')
     assert cls['severity'] == 'Contraindicated'
     assert 'class inference' in cls['mechanism'].lower()
     # The profile rule keeps its published avoid for the MAOI class: a contraindicated profile rule is
