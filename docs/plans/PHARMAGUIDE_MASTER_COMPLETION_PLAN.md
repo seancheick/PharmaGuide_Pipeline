@@ -2406,3 +2406,25 @@ Finite V1 review and incremental maintenance are recorded in ADR-0004. Preserve
 PMID 34844156's numerical hold and 30108163's separate approval. No prior bounded
 closure count is added to the historical census; no rebuilt catalog or app
 activation is established by the source work above.
+
+### November 11 — required Evidence rows and candidate verification
+
+- [x] Audit the prior census flags with checksum-verified label lineage.
+  The broad query returned 116 products, including two additional probiotic
+  records. Native owners cover 106. Source and route tracing of the remaining
+  ten identified three missing review requirements. Seven retain the existing
+  adjunct treatment.
+- [x] Correct the existing required Evidence owner for linked members of a
+  verified, material amino aggregate and for digestive enzymes in a title
+  that names enzymes as the product purpose. The two Multi Enzyme labels
+  298024 and 323075 and BCAA Complex Chew 74828 need further review. The
+  affected owner and readiness suite passed 281 tests.
+- [x] Build the interaction database locally from pipeline main bac88166e.
+  Its 133 interactions and 51 medication classes passed the bundle checks.
+  Product Detail and Stack provider tests used the rebuilt database and a
+  retained senna warning. Both Stack add orders passed.
+- [ ] Qualify the correction on the final candidate and integrate it.
+  Reconcile app PR 226 and finish interaction release prerequisites.
+- [ ] Build one nonpublishing catalog candidate and measure the fresh census.
+  Verify actual Core and detail records, scan representative products in the
+  app, and check the medication warning in Product Detail and Stack.

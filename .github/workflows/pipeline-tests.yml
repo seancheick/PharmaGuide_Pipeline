@@ -78,7 +78,17 @@ jobs:
         run: python scripts/check_python_correctness.py
 
       - name: Install print-fixture fonts and catalog SQL test dependencies
-        run: sudo apt-get update && sudo apt-get install -y fonts-liberation postgresql-16 postgresql-contrib
+        run: |
+          fixture_dependencies_present() {
+            fc-list 'Liberation Sans' family | grep -Fxq 'Liberation Sans' &&
+              test -x /usr/lib/postgresql/16/bin/initdb &&
+              test -f /usr/share/postgresql/16/extension/pg_trgm.control
+          }
+          if ! fixture_dependencies_present; then
+            sudo apt-get update
+            sudo apt-get install -y fonts-liberation postgresql-16 postgresql-contrib
+          fi
+          fixture_dependencies_present
 
       - name: Fast rung
         run: |
