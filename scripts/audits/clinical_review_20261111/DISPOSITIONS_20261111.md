@@ -271,6 +271,22 @@ while those classes load. Agent choices, open for review: the note shows the hea
 the rule's `informational_note` (not every note has been reviewed for this use); it adds one row to the "Good to
 know" count; once any medicine resolves to a class, the medicine axis counts as answered.
 
+## Signed answers (2026-11-12): implementation
+
+Authority: `DR_PHAM_ANSWERS_20261112.md` Part A (signed by Dr. Pham) and Part B (Sean's findings). One PR per batch;
+agent review of label passages unless a row says Dr. Pham decided it.
+
+### Batch 9: release-gate expressibility for drug-class rules (`rule_change_gate.py`)
+
+| Row | Outcome |
+|---|---|
+| Section 4 gate (Part B, confirmed in Part D) | `_profile_rules` passed `alertable=True` for every `drug_class_rules` entry, while condition and pregnancy/lactation rules use `_alert_can_express`. Drug-class sub-rules now use the same check: a gate with a dose, a product-form exclude or a nutrient-form exclude needs a product in hand, so an alert cannot carry it and a reviewed attestation covers the change. A profile-only drug-class gate stays alertable (an attestation alone still does not cover a new hard rule) |
+
+Fail-first tests in `test_rule_change_gate.py` (dose, product form, nutrient form; plus the expressible control).
+Current data: one drug-class sub-rule has such a gate (`RULE_IQM_NIACIN_DIABETES` / statins, a niacinamide
+nutrient-form exclude, caution), below the hard tier, so no release-gate outcome changes today. Engineering change;
+no clinical content.
+
 ## Questions for Dr. Pham
 
 **Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:
