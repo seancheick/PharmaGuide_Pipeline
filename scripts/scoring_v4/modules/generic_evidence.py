@@ -1794,6 +1794,12 @@ def _primary_mass_floor(
         canonical = _canonical_from_entry(entry)
         if not canonical:
             continue  # can't identify the ingredient -> don't anchor a floor on it
+        st = _floor_study_type(entry)
+        if st is None:
+            # Exposure, target engagement or an unvalidated physiological response
+            # alone cannot unlock the floor (Sean, 2026-11-12, Part C). Its ordinary
+            # pipeline credit above is unchanged.
+            continue
         linked = _evidence_anchor_rows(product, entry)
         if prominent:
             anchors = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
@@ -1804,7 +1810,6 @@ def _primary_mass_floor(
                 row for row in linked
                 if str(row.get("canonical_id") or "").strip().lower() in identities
             ]
-        st = _norm_text(entry.get("study_type"))
         if st in _STRONG_STUDY:
             base = PRIMARY_FLOOR_STRONG
         elif st in _MODERATE_STUDY:
@@ -1887,17 +1892,51 @@ def _select_trial_family_contributions(candidates: list) -> list:
     return selected
 
 
-def _qualified_trial_families(entry: Dict[str, Any]) -> frozenset[str]:
-    from clinical_applicability import _context_trial_families, reviewed_entries
+def _applicable_contexts(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """The scoring-eligible reviewed contexts that qualified this match."""
+    from clinical_applicability import reviewed_entries
     ids = {value for value in _safe_list(_safe_dict(_safe_dict(
         entry.get("applicability_assessment")).get("population_applicability")).get("context_ids"))
            if isinstance(value, str)}
     if not ids:
-        return frozenset()
+        return []
     reference = reviewed_entries().get(_clinical_source_id(entry), {})
-    return _context_trial_families(context for context in reference.get("study_contexts") or []
-                                   if isinstance(context, dict) and context.get("context_id") in ids
-                                   and context.get("scoring_eligible") is True)
+    return [context for context in reference.get("study_contexts") or []
+            if isinstance(context, dict) and context.get("context_id") in ids
+            and context.get("scoring_eligible") is True]
+
+
+def _floor_study_type(entry: Dict[str, Any]) -> Optional[str]:
+    """Study type the primary floor may use, or None when it may not anchor.
+
+    A finding that shows only exposure, target engagement or an unvalidated
+    physiological response cannot alone unlock the floor (Sean, 2026-11-12,
+    Part C), nor make it a multiple-trial floor. Only the contexts that qualified
+    this match are read, so another preparation or population is never borrowed.
+    A match without such contexts keeps its existing study type.
+    """
+    from clinical_applicability import (
+        _context_trial_families, outcomes_beyond_exposure, qualifying_purpose_outcomes)
+    study_type = _norm_text(entry.get("study_type"))
+    findings = [context for context in _applicable_contexts(entry) if qualifying_purpose_outcomes(context)[0]]
+    if not findings:
+        return study_type
+    beyond = [context for context in findings if outcomes_beyond_exposure(context)]
+    if not beyond:
+        return None
+    # The applicability owner derives rct_multiple from the trial families of
+    # direct-RCT contexts; only undo it when an exposure-only trial supplied the
+    # second family. A design the record states itself is left unchanged.
+    if (study_type == "rct_multiple"
+            and all(context.get("evidence_role") == "direct_rct" for context in findings)
+            and len(_context_trial_families(beyond)) < 2 <= len(_context_trial_families(findings))):
+        return "rct_single"
+    return study_type
+
+
+def _qualified_trial_families(entry: Dict[str, Any]) -> frozenset[str]:
+    from clinical_applicability import _context_trial_families
+    return _context_trial_families(_applicable_contexts(entry))
 
 
 def _entry_raw_points(entry: Dict[str, Any]) -> float:
