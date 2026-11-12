@@ -271,6 +271,31 @@ while those classes load. Agent choices, open for review: the note shows the hea
 the rule's `informational_note` (not every note has been reviewed for this use); it adds one row to the "Good to
 know" count; once any medicine resolves to a class, the medicine axis counts as answered.
 
+## Signed answers (2026-11-12): implementation
+
+Dr. Pham's signed answers (`DR_PHAM_ANSWERS_20261112.md` Part A) and Sean's findings (Part B, label-sourced rows
+only) are implemented one batch per PR. "Agent review" marks a label-sourced identity, membership or scope fix
+made under the 2026-11-06 delegation and independently checked; it is not a clinician review.
+
+### Batch 1: serotonergic harmonization (`apply_answers_b1_serotonergic.py`)
+
+| Row | Outcome |
+|---|---|
+| Q1 SAMe + tranylcypromine | Kept: exact pair `DSI_TRANYLCYPROMINE_SAME` Contraindicated (PARNATE names SAM-e) |
+| Q1 SAMe + phenelzine | New exact pair `DSI_PHENELZINE_SAME` (RxCUI 8123) Contraindicated through NARDIL's serotonergic-agent category; the record says the label does not name SAMe and that applying the category is the clinical interpretation (evidence tier probable) |
+| Q1 SAMe + confirmed EMSAM | **Not expressible**: medicines match by RxNorm ingredient, so EMSAM and oral selegiline are both selegiline (9639) and both receive the class avoid. The class pair's evidence notes and the profile rule name EMSAM's contraindication. Needs route/product identity (same limit as ciprofloxacin drops) |
+| Q1 SAMe + oral selegiline, other or unidentified MAOI | Class pair `DSI_MAOI_SAME` Contraindicated → Major, matching `RULE_IQM_SAME`/maois (avoid). Both carry Q1's consumer text ("Do not add SAMe while taking an MAOI without your prescriber's approval. Do not stop or switch your prescribed medicine to use SAMe.") and state the class inference. The Contraindicated/avoid split is closed |
+| 5-HTP + SSRIs/SNRIs | `DSI_SSRI_5HTP` Major → Contraindicated, matching the profile rule; Health Canada 5-HTP monograph (dated 2024-08-28; contraindication: antidepressants) cited with jurisdiction and scope. Pair widened from SSRIs to SSRIs and SNRIs, the rule's audience. Self-managed washout text removed from the SSRI/SNRI and MAOI sub-rules; `DSI_MAOI_5HTP` gains the monograph and PARNATE (hydroxytryptophan) and drops "universally contraindicated … consensus" |
+| 5-HTP + other serotonergic medicines | Unchanged (avoid). Held question: tricyclics are antidepressants under the monograph's contraindication (see the hold list) |
+| SJW + SSRIs/SNRIs | Pair `DSI_SSRI_SJW` Contraindicated → Major and rule contraindicated → avoid, changed together; widened to SSRIs and SNRIs. ZOLOFT, EFFEXOR XR, PRISTIQ, FETZIMA and SAVELLA list St. John's wort as a serotonergic risk with monitoring as management; none contraindicates it, so no exact contraindication was found. Urgent-help text kept; no washout interval. The FDA citalopram QT page left the pair's sources (it does not concern St. John's wort) |
+| SJW + rasagiline, safinamide (Part B 3D) | New exact pairs `DSI_RASAGILINE_SJW` (134748; label section 4) and `DSI_SAFINAMIDE_SJW` (1922448; XADAGO 4 and 7.3), Contraindicated; agent review. Neither joins `class:maois`, so no other MAOI rule reaches them. Exact pairs reach both the Stack and the product page (`personalized_warnings_provider` runs the pair checker) |
+
+Cross-repo note: the app's bundle release-gate fixture (`test/release_gate/quick_check_catalog_interaction_test.dart`,
+sertraline row) passes `drugClasses: ['class:ssris']` by hand. Production resolves sertraline to both
+`class:ssris` and `class:antidepressants_ssri_snri` from `drug_class_map` (`MedicationIdentityHydrator`
+re-hydrates stored stacks), but that fixture needs `class:antidepressants_ssri_snri` added before it runs against a
+database built from this batch.
+
 ## Questions for Dr. Pham
 
 **Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:
