@@ -5,6 +5,15 @@ no recommendations below are attributed to Dr. Pham. Existing signed decisions r
 `DR_PHAM_REVIEW_20261111.md` and `DR_PHAM_ANSWERS_20261112.md`; implementation status belongs in
 `DISPOSITIONS_20261111.md`. Named holds are not silently closed by finding a source.
 
+## Approval boundary
+
+[PR #458](https://github.com/seancheick/PharmaGuide_Pipeline/pull/458) records Dr. Pham's
+signed answers to the original seven questions and serious-warning decisions. Apply Part A
+and track implementation in DISPOSITIONS. The research below records only narrower
+questions outside that signed scope. Remaining decisions include the new CBD H1–H4
+questions, explicitly held presentation choices and exposure policies. Routine source
+corrections proceed under the existing review delegation.
+
 ## Owner Check and scope
 
 Owner: `scripts/data/ingredient_interaction_rules.json` (profile findings),
@@ -71,12 +80,12 @@ does not authorize changing interaction scope.
 | Tacrolimus | Preserve the oral-versus-skin distinction in the existing draft; eczema does not imply oral use. | [Ointment label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c2d2e3a1-f346-4245-b445-6dd44e371180) supports the skin indication; oral/transplant wording should retain its existing verified source. |
 | Valproate | Retain depending-on-the-product qualification for seizures, mania and migraine prevention. | [STAVZOR label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2026/022152s010lbl.pdf) |
 
-## Earlier held items: consolidated independent-agent receipt
+## Questions outside the signed scope: independent research receipt
 
 The held-research agent reported live checks on 2026-11-12. These findings were consolidated here,
 not independently re-fetched by this document's writer. They require integrator source review before data edits.
 
-| Item | Source result and recommendation | Hold boundary |
+| Item | Source result and recommendation | Remaining boundary |
 |---|---|---|
 | 5-HTP and tricyclic antidepressants | [Health Canada oral 5-HTP monograph](https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng) contraindicates antidepressants. Supports systemic TCA scope, not automatic equivalence of topical/low-dose doxepin. | Named applicability hold. |
 | 5-HTP and carbidopa | Same monograph separately cautions carbidopa. Recommend exact carbidopa coverage, including combination products, rather than ignoring the source. | Named hold remains; not an approval to classify every Parkinson medicine alike. |
@@ -96,8 +105,8 @@ The following completes the earlier held-item list. Source passages and live ide
 
 | Decision | Recommendation and implementation boundary |
 |---|---|
-| Isotretinoin / beta-carotene | Confirm the separate Major/avoid precaution implementing F1's no-automatic-exemption decision. Keep explicit that provitamin A is not as toxic as preformed retinol; no extrapolation to unrelated carotenoids. |
-| Oral bisphosphonates / magnesium | Confirm Major to Moderate under F3, with drug-specific label timing and IV products excluded. No universal spacing interval. |
+| Isotretinoin / beta-carotene | Apply F1’s avoid precaution and no-automatic-exemption decision. Any proposed beta-carotene-only exemption needs its own review. Keep explicit that provitamin A is not as toxic as preformed retinol; no extrapolation to unrelated carotenoids. |
+| Oral bisphosphonates / magnesium | F3 calls for reviewing magnesium alongside calcium. The implemented Major-to-Moderate change follows Sean’s batch-6 instruction, with drug-specific label timing and IV products excluded. No universal spacing interval. |
 | SINEMET B6 depletion | Approve severity/copy and qualify exact combination hydration before activation. The source record is withheld. Do not add a blanket B6 warning to carbidopa/levodopa users. A true levodopa-without-inhibitor regimen is a separate question; INBRIJA's indication does not establish that regimen. |
 | Digoxin / calcium | Accept no oral supplement warning from the cited rapid-IV-calcium statement. This does not establish that every calcium/digoxin situation is clear. |
 | Nitrates or PDE5 medicines / arginine or citrulline | Consider a qualified, medicine-specific prescriber-review finding. Do not equate amino acids with organic nitrates or invent a formal contraindication, threshold or spacing rule. Selected combination trials do not establish universal safety. |
@@ -128,11 +137,11 @@ deduplication, form matching, exposure aggregation or Stack grade parity.
 
 ### Confirmed vitamin D citation defect
 
-`RULE_INGREDIENT_VITAMIN_D` currently includes PMID 8983860. Live EFetch resolves it to
+`RULE_INGREDIENT_VITAMIN_D` included PMID 8983860 in the baseline. Live EFetch resolves it to
 *Warfarin withdrawal. Pharmacokinetic-pharmacodynamic considerations*, not vitamin-D supplementation.
 The abstract's isolated vitamin-D-dependent wording occurs amid the vitamin-K mechanism and does not
-support the claimed interaction. Remove this citation from the vitamin-D finding; retain applicable
-source evidence and do not preserve it merely because an API resolver accepts the PMID.
+support the claimed interaction. PR #468 removes the citation and retains the applicable
+vitamin-D evidence. This source correction requires no new clinical decision.
 
 ### Bounded ready subset versus outstanding consumer work
 
