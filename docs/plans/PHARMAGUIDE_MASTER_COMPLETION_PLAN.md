@@ -2528,3 +2528,14 @@ scores to have current source-qualified receipts, no unresolved
 safety-critical publication failures, partial products excluded from
 public numeric ratings, and explicit measured usable coverage. It is
 a policy proposal only. The existing 99% threshold remains binding.
+
+Perilla exact-preparation replay (five frozen labels) now completes all five
+assessments. The existing no-benchmark Dose rule changes Dose from 0 to
+11.4 and totals from 45.7 to 57.1 for 311422–311425 and 49.7 to 61.1 for
+299734. Evidence and other numerical pillars stay fixed. Identity,
+450 mg aerial-part and 150 mg seed-extract amounts, standardization,
+compared safety and warnings are preserved. The ambiguous original note
+on 311425 is retained without assuming a ratio. All five passed the
+bounded Clean → Enrich → Score → Blob/Core projection. Unspecified, leaf
+and seed-oil controls cannot inherit the exact review. 423 focused checks
+passed. No census increment or installed-app acceptance is claimed.

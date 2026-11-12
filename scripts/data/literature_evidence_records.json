@@ -17766,6 +17766,102 @@
       "reason_code": "food_powder_or_flavor_matrix"
     },
     {
+      "canonical_id": "perilla_unspecified",
+      "standard_name": "Perilla Aerial Part Extract",
+      "aliases": [
+        "Perilla Seed Extract"
+      ],
+      "material_form": "Perilla frutescens aerial-part extract declared at 450 mg or seed extract declared at 150 mg and standardized to 3% polyphenols",
+      "search_query": "Perilla frutescens human oral studies of aerial-part and seed extracts, with leaf and seed-oil preparation controls",
+      "search_date": "2026-11-11",
+      "databases_searched": [
+        "PubMed",
+        "PubMed Central"
+      ],
+      "records_screened": 2,
+      "population_context": "The related BeneGut leaf trial enrolled adults with gastrointestinal discomfort. The seed-extract publication used laboratory cell models.",
+      "effect_direction": null,
+      "qualifying_human_studies": [],
+      "applicability_status": "applicability_unestablished",
+      "applicability_decision": "Sean approved a bounded non-credit assessment for the exact declared aerial-part and seed extracts. PMID 24885816 studied proprietary BeneGut leaf extract, with a favorable between-group symptom subscore in a subgroup of women. PMID 41227657 studied perilla seed extract in laboratory cell models. Neither establishes a human clinical benefit or general Dose benchmark for the two reviewed retail preparations. Retain printed mass and source notes without inferring an extract-ratio conversion or safety conclusion.",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "perilla aerial part extract; plantpart: aerial parts; quantity: 450 mg",
+          "perilla seed extract; plantpart: seed; standardized to contain 3% polyphenols; quantity: 150 mg"
+        ],
+        "source_pmids": [
+          "24885816"
+        ]
+      },
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex agent preparation and source-content review; independently checked in Sean’s Perilla close-out audit",
+        "verified_at": "2026-11-12T02:24:55.298069+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "fcf6f5e7d108ab2a717042c040d561b33a3eab57d9b2969680fe5dbd778ab210",
+          "source_ids": [
+            "PMID:24885816",
+            "PMID:41227657"
+          ],
+          "verified_at": "2026-11-12T02:24:55.298069+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:24885816",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Perilla extract improves gastrointestinal discomfort in a randomized placebo controlled double blind human pilot study.",
+              "content_sha256": "4cac245d5b6d6c587b28c53e8900b5f9fc185d812013fb6dfcebea2a9873d7df"
+            },
+            {
+              "source_id": "PMID:41227657",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "The Apoptosis Induction and Immunomodulating Activities of Nga-Kee-Mon (Perilla frutescens) Seed Extract.",
+              "content_sha256": "4d49f8257840c8b3ee06f7832ce3a4fcfe3cac019e92b097c023ef22823e25d6"
+            }
+          ]
+        }
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "The two separately declared extract preparations specified in applicability",
+        "purpose": "General efficacy Dose assessment only",
+        "population": "Adult catalog review; no applicable human exposure benchmark",
+        "exposure_basis": "Printed amount per serving retained without conversion",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:24885816",
+          "PMID:41227657"
+        ],
+        "rationale": "No supported general clinical-efficacy benchmark transfers from the non-equivalent leaf study or seed-extract cell-model experiment. Sean approved this finite preparation-specific disposition on 2026-11-11.",
+        "owner": "scripts/data/literature_evidence_records.json::perilla_unspecified",
+        "review_date": "2026-11-11",
+        "approval_status": "approved_existing_neutral_2026_11_11"
+      },
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "perilla aerial part extract; plantpart: aerial parts; quantity: 450 mg",
+          "perilla seed extract; plantpart: seed; standardized to contain 3% polyphenols; quantity: 150 mg"
+        ],
+        "source_pmids": [
+          "24885816"
+        ]
+      }
+    },
+    {
       "canonical_id": "perilla_leaf",
       "material_form": "Perilla frutescens leaf",
       "search_query": "perilla_leaf randomized controlled trial standardized extract",
