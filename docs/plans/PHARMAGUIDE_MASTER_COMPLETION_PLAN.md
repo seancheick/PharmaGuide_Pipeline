@@ -2423,8 +2423,36 @@ activation is established by the source work above.
   Its 133 interactions and 51 medication classes passed the bundle checks.
   Product Detail and Stack provider tests used the rebuilt database and a
   retained senna warning. Both Stack add orders passed.
-- [ ] Qualify the correction on the final candidate and integrate it.
-  Reconcile app PR 226 and finish interaction release prerequisites.
-- [ ] Build one nonpublishing catalog candidate and measure the fresh census.
+- [x] Qualify the correction and integrate PR 446. All eight test groups
+  and merge readiness passed in run 43056872578 on ac87b0935. Local corpus
+  passed 564 tests and 24 declared optional skips. Main merge is 3bde242e7.
+  Paired scoring reopened three assessments with all numeric pillars,
+  totals, amounts and safety fields preserved. Five frozen labels showed
+  57.32 s baseline versus 58.43 s candidate median per 1,500 required-owner
+  calls, with traced Python peak 311,851 versus 310,874 bytes. These are
+  owner timings only. Some later trials overlapped the corpus build.
+- [ ] Reconcile app PR 226 and finish interaction release prerequisites.
+- [x] Finish the nonpublishing corpus rebuild on 3bde242e7. All 37 brand
+  datasets passed, and Product Submissions refreshed.
+- [x] Measure and reconcile the fresh whole-catalog census.
+  Fresh main 3bde242e7 census: 15,447 products, 9,252 scored and complete,
+  10 safety-suppressed complete, 0 unrated complete and 6,185 partial.
+  Shared-ID movements: 176 closures and 3 reopenings.
+  Cohort reconciliation found 0 added or removed IDs and no catalog safety
+  status changes. Scored completion is 59.9%, with 6,041 more needed for 99%.
+  All three PR 446 labels reopened to partial in the rebuilt data.
+- [ ] Finish the catalog candidate export and native app verification.
+  Catalog validation stopped at the scoring assessment completeness preflight
+  with 114 source-of-truth findings. No candidate export or native scans
+  completed. The 114 manifest-owned records split into 33 omega authority
+  receipts, 28 probiotic reviewed-zero receipts, 34 tyrosine source holds,
+  14 plant-sterol source holds and five Perilla Dose plus Evidence holds.
+  Exact-owner replay of all 114 now verifies the 61 native receipts. All 61
+  remain partial, and adding a Dose blocker still rejects each one. The
+  remaining 53 retain their existing release holds. Perilla IDs 311422–311425
+  declare 450 mg aerial-part extract. ID 299734 declares 150 mg seed extract.
+  Neither printed preparation maps to the qualified leaf or seed-oil review.
+  The next candidate must
+  clear those holds before export and native scans can run.
   Verify actual Core and detail records, scan representative products in the
   app, and check the medication warning in Product Detail and Stack.
