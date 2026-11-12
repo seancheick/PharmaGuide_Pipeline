@@ -6,8 +6,8 @@ Authority: DR_PHAM_ANSWERS_20261112.md Part A, Q5, as recorded in DISPOSITIONS_2
   2026-05-29; PMID 39601108 for tacrolimus):
   clobazam (raised active metabolite, sleepiness), valproate (more liver-enzyme rises, not raised valproate levels),
   stiripentol (raised levels), everolimus (raised levels; the specialist manages levels and dosing), tacrolimus
-  (raised levels in a controlled study), sirolimus and oral digoxin (a potential P-gp interaction the label describes,
-  not measured with that medicine).
+  (raised levels in a controlled study), sirolimus (label precaution plus measured trough rises in an observational
+  series, PMID 31924480), and oral digoxin (a potential P-gp interaction not measured with that medicine).
 - Other seizure medicines keep a qualified review message; the whole-class "may affect seizure medication" claim ends.
 - The immunosuppressant sub-rule is narrowed away: only the named medicines get a CBD finding. Mycophenolate (label:
   mycophenolic-acid AUC +35%) goes on the review list, not into a finding. A profile with only the "Immunosuppressants"
@@ -41,6 +41,7 @@ ANSWERS = "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md"
 TODAY = "2026-11-12"
 EPIDIOLEX = "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
 TACROLIMUS_PK = "https://pubmed.ncbi.nlm.nih.gov/39601108/"
+SIROLIMUS_OBSERVATIONAL = "https://pubmed.ncbi.nlm.nih.gov/31924480/"
 FDA_CBD = ("https://www.fda.gov/news-events/public-health-focus/"
            "fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd")
 RULE_ID = "RULE_BANNED_CBD_INTERACTIONS"
@@ -189,18 +190,24 @@ NAMED = [
         "like everolimus: a measured human PK effect, with the label naming tacrolimus.",
     ),
     finding(
-        "sirolimus", "caution", "theoretical",
+        "sirolimus", "caution", "probable",
         "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming sirolimus, "
-        "may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a "
-        "potential interaction described for the transporter, not one measured with sirolimus." + PRESCRIPTION_SCOPE,
+        "may increase with prescription cannabidiol, and suggests considering drug-level monitoring. A retrospective "
+        "tuberous sclerosis complex series included seven sirolimus patients and reported a median trough-level "
+        "increase of 5.1 ng/mL after cannabidiol. This was an observational series, not a controlled "
+        "sirolimus interaction trial. The label concerns prescription oral cannabidiol; the size of the effect "
+        "for over-the-counter or topical CBD products is not established.",
         "If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD; they may check "
         "your sirolimus levels. Do not change your sirolimus dose yourself.",
         "Possible rise in levels of sirolimus taken by mouth",
-        "The prescription CBD label says sirolimus levels may rise; this was not measured directly. If you take "
+        "The prescription CBD label flags rising sirolimus levels; an observational study also found this. If you take "
         "sirolimus by mouth, talk to your transplant or specialist team before using CBD.",
-        "Prescription CBD may raise levels of sirolimus taken by mouth; not measured directly.",
-        [EPIDIOLEX],
-        "Q5: potential interaction described for oral P-gp substrates, distinguished from a measured interaction.",
+        "Higher sirolimus levels were measured in a small observational cannabidiol study.",
+        [EPIDIOLEX, SIROLIMUS_OBSERVATIONAL],
+        "Q5: oral P-gp precaution. Agent source correction 2026-11-12: PMID 31924480 reports measured sirolimus "
+        "trough increases in an observational series. Probable follows the existing taxonomy's partial human "
+        "support category; caution, action and matching remain unchanged. This source correction was not reviewed "
+        "by Dr. Pham.",
     ),
     finding(
         "digoxin", "caution", "theoretical",
