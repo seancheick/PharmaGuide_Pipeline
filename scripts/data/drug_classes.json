@@ -5,7 +5,7 @@
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-11-11",
     "total_classes": 51,
-    "total_members": 955,
+    "total_members": 966,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -1900,12 +1900,14 @@
       "description": "Direct factor Xa and direct thrombin inhibitors with clinically important P-gp/CYP3A induction exposure risks.",
       "member_rxcuis": [
         "1364430",
+        "1927851",
         "1037042",
         "1599538",
         "1114195"
       ],
       "member_names": [
         "apixaban",
+        "betrixaban",
         "dabigatran etexilate",
         "edoxaban",
         "rivaroxaban"
@@ -1915,7 +1917,7 @@
         "B01AF",
         "B01AE"
       ],
-      "notes": "Narrow Wave 8 class for St. John's wort inducer interactions; excludes warfarin so DOAC treatment-failure risk can be authored separately."
+      "notes": "Narrow Wave 8 class for St. John's wort inducer interactions; excludes warfarin so DOAC treatment-failure risk can be authored separately. Betrixaban added 2026-11-11 (ATC B01AF; BEVYXXA label: oral factor Xa inhibitor, P-gp substrate). The injected direct thrombin inhibitors (ATC B01AE) are not oral and are not members."
     },
     "class:potassium_sparing_diuretics": {
       "display_name": "Potassium-sparing diuretics",
@@ -2357,7 +2359,7 @@
       "atc_codes": [
         "H03AA"
       ],
-      "notes": "Thyroid hormones only. Every thyroid_medications sub-rule concerns levothyroxine absorption or thyroid-hormone action, so antithyroid drugs (methimazole, propylthiouracil; ATC H03B) are not members, although the profile vocabulary's examples list methimazole (open for PharmD review). RxClass returns only tiratricol for H03AA; the other three come from exact RxNorm lookups. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Thyroid hormones only. Every thyroid_medications sub-rule concerns levothyroxine absorption or thyroid-hormone action, so antithyroid drugs (methimazole, propylthiouracil; ATC H03B) are not members; the profile vocabulary's methimazole example was removed per Dr. Pham D1 (2026-11-11). RxClass returns only tiratricol for H03AA; the other three come from exact RxNorm lookups. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:antidepressants_ssri_snri": {
       "display_name": "Antidepressants (SSRIs and SNRIs)",
@@ -2400,53 +2402,73 @@
       "notes": "class:ssris members (ATC N06AB) plus the SNRIs venlafaxine, milnacipran, duloxetine, desvenlafaxine and levomilnacipran, matching the rule class the profile vocabulary defines. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:anticholinergics": {
-      "display_name": "Anticholinergic (antimuscarinic) medicines",
-      "description": "Medicines whose main action is muscarinic blockade: bladder antimuscarinics, anticholinergic antiparkinson agents, scopolamine and antimuscarinic antispasmodics.",
+      "display_name": "Anticholinergic medicines",
+      "description": "Primary antimuscarinics (bladder antimuscarinics, anticholinergic antiparkinson agents, scopolamine, antimuscarinic antispasmodics), plus diphenhydramine and the tricyclic antidepressants whose own labels identify anticholinergic effects.",
       "member_rxcuis": [
+        "704",
+        "722",
         "1424",
         "1589",
         "19610",
+        "2597",
         "136198",
+        "3247",
         "3267",
         "3361",
+        "3498",
+        "3638",
         "3816",
         "797195",
         "1546438",
         "153970",
+        "5691",
         "29682",
+        "7531",
         "32675",
         "8718",
         "4134",
         "55175",
+        "8886",
         "9601",
         "322167",
         "37815",
         "119565",
         "10811",
+        "10834",
         "38876",
         "236778"
       ],
       "member_names": [
+        "amitriptyline",
+        "amoxapine",
         "benztropine",
         "biperiden",
         "bornaprine",
+        "clomipramine",
         "darifenacin",
+        "desipramine",
         "dexetimide",
         "dicyclomine",
+        "diphenhydramine",
+        "doxepin",
         "emepronium",
         "fesoterodine",
         "glycopyrronium",
         "hyoscyamine",
+        "imipramine",
         "methixene",
+        "nortriptyline",
         "oxybutynin",
         "procyclidine",
         "profenamine",
         "propiverine",
+        "protriptyline",
         "scopolamine",
         "solifenacin",
         "terodiline",
         "tolterodine",
         "trihexyphenidyl",
+        "trimipramine",
         "tropatepine",
         "trospium"
       ],
@@ -2458,9 +2480,11 @@
         "A04AD01",
         "A03AB02",
         "A03AA07",
-        "A03BA03"
+        "A03BA03",
+        "R06AA02",
+        "N06AA"
       ],
-      "notes": "Primary antimuscarinics only. Excluded: beta-3 agonists that share ATC G04BD (mirabegron, vibegron) and flavoxate (not a clear antimuscarinic). Medicines with secondary anticholinergic effects (diphenhydramine, tricyclics), which the profile vocabulary's examples include, are left for PharmD review. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Dr. Pham D2 (2026-11-11): add diphenhydramine and review the tricyclics individually; membership does not extend to all antihistamines or antidepressants. Each added medicine's current DailyMed label (read 2026-11-11) states anticholinergic effects: diphenhydramine f808ee14; amitriptyline 00d11130; amoxapine a16297df; clomipramine b1809cb2; desipramine a3b4b25d; doxepin 1496dfc1; imipramine 20af582f; nortriptyline dbb3cc4d; protriptyline c6c7c39e; trimipramine 4f31df66. Membership is by ingredient, so combination sleep and cold products reach it and route is not distinguished (topical products included); low-dose doxepin (SILENOR, 3-6 mg) lists anticholinergic effects only above 6 mg (ask 4). N06AA is listed as the group the tricyclics belong to; membership is the explicit list. Maprotiline has no current DailyMed label and is not included. Excluded: beta-3 agonists that share ATC G04BD (mirabegron, vibegron) and flavoxate. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:hypoglycemics_high_risk": {
       "display_name": "Insulin, sulfonylureas and meglitinides",
@@ -2544,6 +2568,7 @@
         "1991302",
         "593411",
         "2638675",
+        "2601723",
         "596554"
       ],
       "member_names": [
@@ -2565,6 +2590,7 @@
         "semaglutide",
         "sitagliptin",
         "sotagliflozin",
+        "tirzepatide",
         "vildagliptin"
       ],
       "rxclass_id": "A10BA",
@@ -2572,9 +2598,10 @@
         "A10BA",
         "A10BJ",
         "A10BK",
-        "A10BH"
+        "A10BH",
+        "A10BX16"
       ],
-      "notes": "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). Tirzepatide added per Dr. Pham D3 (2026-11-11): lower intrinsic risk alone; per MOUNJARO 5.3, use with an insulin secretagogue or insulin may increase the risk of hypoglycemia, including severe hypoglycemia, and those medicines carry the high-risk tier themselves. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:hypoglycemics_unknown": {
       "display_name": "Other diabetes medicines",
@@ -2586,7 +2613,6 @@
         "33738",
         "139953",
         "84108",
-        "2601723",
         "72610"
       ],
       "member_names": [
@@ -2596,7 +2622,6 @@
         "pioglitazone",
         "pramlintide",
         "rosiglitazone",
-        "tirzepatide",
         "troglitazone"
       ],
       "rxclass_id": "A10BG",
@@ -2604,10 +2629,9 @@
         "A10BG",
         "A10BF",
         "A10BX05",
-        "A10BX06",
-        "A10BX16"
+        "A10BX06"
       ],
-      "notes": "Unknown-tier sub-rules carry the high-risk severities, so this is the conservative placement. Guar gum (ATC A10BX01) is a dietary fiber and is excluded. The tier for tirzepatide and pramlintide is open for PharmD review. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Unknown-tier sub-rules carry the high-risk severities, so this is the conservative placement. Guar gum (ATC A10BX01) is a dietary fiber and is excluded. Pramlintide stays here per Dr. Pham D3 (2026-11-11): SYMLIN does not cause hypoglycemia alone but is indicated with mealtime insulin, where severe hypoglycemia risk rises, so without insulin entered the regimen is incomplete rather than low risk; entered insulin reaches the high-risk tier. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:clobazam": {
       "display_name": "Clobazam",
