@@ -41,8 +41,9 @@ def test_every_pair_classified_with_valid_enums():
     # Dr. Pham's 2026-11-11 review added DDI_SIMVASTATIN_GEMFIBROZIL and
     # DSI_NITROGLYCERIN_NAC: 133. The SAMe scope correction (2026-11-11) adds the exact
     # DSI_TRANYLCYPROMINE_SAME pair: 134. Batch 3b part 2 (F4, F2) adds DSI_CARDIACGLYC_LICORICE
-    # and DSI_LEVODOPA_IRON: 136.
-    assert len(PAIRS) == 136, f"expected 136 reviewed pairs, found {len(PAIRS)}"
+    # and DSI_LEVODOPA_IRON: 136. Batch 3c (A12) adds exact zinc pairs for ciprofloxacin, levofloxacin
+    # and moxifloxacin, each with its own label interval: 139.
+    assert len(PAIRS) == 139, f"expected 139 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:
