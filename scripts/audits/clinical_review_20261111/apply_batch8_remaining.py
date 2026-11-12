@@ -54,6 +54,9 @@ def apply():
             'form_scope': ['chromium picolinate', 'chromium (unspecified)'],
             'form_scope_match': 'fail_open', 'condition_rules': [], 'drug_class_rules': [thyroid]}
         data['interaction_rules'].append(rules[thyroid_id])
+    rules[thyroid_id].update(last_reviewed='2026-11-12',
+        review_owner='Codex source/applicability implementation of Dr. Pham G1; not a new clinician review',
+        dose_thresholds=[])
     row = rules[thyroid_id]['drug_class_rules'][0]
     row.update(action='If you use chromium picolinate with levothyroxine, separate them by several hours as your prescriber advises; the study does not establish an exact universal interval.',
                alert_headline='Chromium picolinate may reduce levothyroxine absorption',
@@ -97,7 +100,8 @@ def apply():
     path = REPO / 'scripts/data/curated_interactions/curated_interactions_v1.json'
     data = data_batch.load(path)
     row = next(x for x in data['interactions'] if x['id'] == 'DSI_WAR_OMEGA3')
-    row['severity'] = 'Minor'
+    row.update(severity='Minor', display_layer='background',
+        background_rationale='Signed G1: ordinary omega-3 supplementation receives monitoring information, not a prominent caution. Warfarin INR follow-up remains in the management text; no safe dose threshold is inferred.')
     data_batch.save(path, data)
     path = REPO / 'scripts/data/drug_classes.json'
     data = data_batch.load(path)

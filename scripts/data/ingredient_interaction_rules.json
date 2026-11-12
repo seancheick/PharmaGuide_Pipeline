@@ -25596,7 +25596,10 @@
             "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
           }
         }
-      ]
+      ],
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Codex source/applicability implementation of Dr. Pham G1; not a new clinician review",
+      "dose_thresholds": []
     }
   ]
 }

@@ -465,6 +465,13 @@ CI and local checks, and its current candidate has a fresh qualification run.
 PR468's first completed CI shard caught an obsolete Wave8 assertion requiring green tea to target
 all beta-blockers. Reproduced the failing node, then pinned nadolol/avoid and explicitly prohibited
 both broader classes. The Wave8 and Batch8 owner files pass together; no production behavior changed.
+The completed run also found missing review attribution on the chromium split and the absent existing
+background classification on the lowered omega pair. Both were fixed at their authoring script/data
+owner. Pregnancy/lactation remains owned once by the unscoped chromium record; the coverage tests
+now resolve that explicit sibling owner instead of requiring a duplicate assessment. Source-grounded
+count, vitamin-D scope/direction and omega severity assertions were updated without weakening dose
+or publication guards. All ten affected files passed together: 172 tests. The app PR234 and CBD PR467
+source candidates passed their complete CI runs; pipeline PR468 is undergoing its corrected checkpoint.
 Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
 release or main push authorized.
 

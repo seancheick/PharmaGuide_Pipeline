@@ -108,7 +108,9 @@
       "agent2_canonical_id": "fish_oil",
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "PMID 17192169 is a case report with aspirin, warfarin and high-dose omega-3 after a fall. Neither that report nor NIH ODS establishes a 1 g/day warning floor or a universal 3 g/day bleeding threshold."
+      "evidence_notes": "PMID 17192169 is a case report with aspirin, warfarin and high-dose omega-3 after a fall. Neither that report nor NIH ODS establishes a 1 g/day warning floor or a universal 3 g/day bleeding threshold.",
+      "display_layer": "background",
+      "background_rationale": "Signed G1: ordinary omega-3 supplementation receives monitoring information, not a prominent caution. Warfarin INR follow-up remains in the management text; no safe dose threshold is inferred."
     },
     {
       "id": "DSI_WAR_GINKGO",

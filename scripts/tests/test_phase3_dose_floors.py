@@ -63,7 +63,7 @@ EXPECTED = {
     # threshold, so its sub-rules are presence (test_interaction_rules_integrity_regressions).
     "st_johns_wort": (900, "mg", {"antihypertensives"}),
     # vitamin D high-dose-only
-    "vitamin_d": (10000, "IU", {"anticoagulants"}),
+    "vitamin_d": (10000, "IU", {"vitamin_k_antagonists"}),
     # thyroid mineral dose gates moved from the retired Flutter threshold table
     # into emitted pipeline floors.
     "iodine": (150, "mcg", {"thyroid_disorder"}),
@@ -91,7 +91,9 @@ def test_unestablished_floors_do_not_suppress_source_precautions():
                     found.append(row)
                     assert row.get("min_effective_dose") is None, (canonical, key)
                     assert row["materiality"] == "presence", (canonical, key)
-                    assert row["direction"] == "harmful", (canonical, key)
+                    assert row["direction"] == ("neutral" if canonical == "vitamin_d" else "harmful"), (canonical, key)
+                    if canonical == "vitamin_d":
+                        assert row["severity"] == "informational"  # G1 deficiency-treatment context only.
                     assert row.get("profile_gate", {}).get("dose") is None, (canonical, key)
         assert found, canonical
 
