@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-11-12",
-    "total_classes": 52,
-    "total_members": 980,
+    "total_classes": 53,
+    "total_members": 1002,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -23,7 +23,7 @@
       "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 52
+    "total_entries": 53
   },
   "classes": {
     "class:statins": {
@@ -2496,7 +2496,7 @@
         "R06AA02",
         "N06AA"
       ],
-      "notes": "Dr. Pham D2 (2026-11-11): add diphenhydramine and review the tricyclics individually; membership does not extend to all antihistamines or antidepressants. Each added medicine's current DailyMed label (read 2026-11-11) states anticholinergic effects: diphenhydramine f808ee14; amitriptyline 00d11130; amoxapine a16297df; clomipramine b1809cb2; desipramine a3b4b25d; doxepin 1496dfc1; imipramine 20af582f; nortriptyline dbb3cc4d; protriptyline c6c7c39e; trimipramine 4f31df66. Membership is by ingredient, so combination sleep and cold products reach it and route is not distinguished (topical products included); low-dose doxepin (SILENOR, 3-6 mg) lists anticholinergic effects only above 6 mg (ask 4). N06AA is listed as the group the tricyclics belong to; membership is the explicit list. Maprotiline has no current DailyMed label and is not included. Excluded: beta-3 agonists that share ATC G04BD (mirabegron, vibegron) and flavoxate. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Dr. Pham D2 (2026-11-11): add diphenhydramine and review the tricyclics individually; membership does not extend to all antihistamines or antidepressants. Each added medicine's current DailyMed label (read 2026-11-11) states anticholinergic effects: diphenhydramine f808ee14; amitriptyline 00d11130; amoxapine a16297df; clomipramine b1809cb2; desipramine a3b4b25d; doxepin 1496dfc1; imipramine 20af582f; nortriptyline dbb3cc4d; protriptyline c6c7c39e; trimipramine 4f31df66. Membership is by ingredient, so combination sleep and cold products reach it and route is not distinguished (topical products included); low-dose doxepin (SILENOR, 3-6 mg) lists anticholinergic effects among those seen above 6 mg (10.1) but still contraindicates it in untreated narrow-angle glaucoma or severe urinary retention (4.3); Dr. Pham's Q4 (2026-11-12) says the 6 mg figure is not an interaction cutoff, and the ZONALON cream label (5f302247) reports systemic absorption, so topical doxepin is not exempt. Q4 keeps every member here; Q6 moves the strongest rules to class:antimuscarinics, the members taken for their antimuscarinic effect. N06AA is listed as the group the tricyclics belong to; membership is the explicit list. Maprotiline has no current DailyMed label and is not included. Excluded: beta-3 agonists that share ATC G04BD (mirabegron, vibegron) and flavoxate. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:hypoglycemics_high_risk": {
       "display_name": "Insulin, sulfonylureas and meglitinides",
@@ -2692,6 +2692,69 @@
         "B01AX05"
       ],
       "notes": "Identified subgroup for Dr. Pham's Q7 (signed 2026-11-12): these medicines stay anticoagulants and keep general bleeding findings, but are excluded from the unidentified-warfarin fallback sub-rules and never receive warfarin INR or oral-inducer instructions. From ATC B01AE only argatroban, bivalirudin, desirudin and lepirudin are members; dabigatran (B01AE) is oral and a DOAC. Heparin's ingredient RxCUI also covers topical and eye products (ATC C05BA, S01XA); membership is by ingredient, so those users are treated as injected-anticoagulant users. RxCUIs read on RxNav 2026-11-12."
+    },
+    "class:antimuscarinics": {
+      "display_name": "Antimuscarinic medicines",
+      "description": "Medicines taken for their antimuscarinic effect: bladder antimuscarinics, anticholinergic antiparkinson agents, scopolamine and antimuscarinic antispasmodics (not tricyclic antidepressants or diphenhydramine).",
+      "member_names": [
+        "benztropine",
+        "biperiden",
+        "bornaprine",
+        "darifenacin",
+        "dexetimide",
+        "dicyclomine",
+        "emepronium",
+        "fesoterodine",
+        "glycopyrronium",
+        "hyoscyamine",
+        "methixene",
+        "oxybutynin",
+        "procyclidine",
+        "profenamine",
+        "propiverine",
+        "scopolamine",
+        "solifenacin",
+        "terodiline",
+        "tolterodine",
+        "trihexyphenidyl",
+        "tropatepine",
+        "trospium"
+      ],
+      "member_rxcuis": [
+        "1424",
+        "1589",
+        "19610",
+        "136198",
+        "3267",
+        "3361",
+        "3816",
+        "797195",
+        "1546438",
+        "153970",
+        "29682",
+        "32675",
+        "8718",
+        "4134",
+        "55175",
+        "9601",
+        "322167",
+        "37815",
+        "119565",
+        "10811",
+        "38876",
+        "236778"
+      ],
+      "rxclass_id": "G04BD",
+      "atc_codes": [
+        "A03AA07",
+        "A03AB02",
+        "A03BA03",
+        "A04AD01",
+        "G04BD",
+        "N04AA",
+        "N04AC01"
+      ],
+      "notes": "Rule subset of class:anticholinergics for Dr. Pham's Q6 (signed 2026-11-12): huperzine A avoid without prescriber approval and alpha-GPC caution apply here; the tricyclics and diphenhydramine, whose anticholinergic effect is incidental, stay in class:anticholinergics only. Every member is also a member of class:anticholinergics. Membership is by ingredient, so transdermal, inhaled and topical products (scopolamine patches, oxybutynin gel and patch, inhaled or topical glycopyrronium) are included; each is still used for its antimuscarinic effect. ATC classes read on RxNav 2026-11-12."
     }
   }
 }

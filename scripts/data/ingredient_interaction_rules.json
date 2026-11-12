@@ -20828,24 +20828,25 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticholinergics",
+          "drug_class_id": "antimuscarinics",
           "severity": "avoid",
-          "evidence_level": "probable",
-          "mechanism": "Huperzine A is a natural acetylcholinesterase inhibitor, licensed as an Alzheimer's drug in China and sold as a supplement in the US. The prescribing information for donepezil, another cholinesterase inhibitor, states that because of their mechanism of action, cholinesterase inhibitors have the potential to interfere with the activity of anticholinergic medications. Anticholinergic drugs such as oxybutynin, benztropine, scopolamine and tricyclic antidepressants block the acetylcholine that these inhibitors increase. No huperzine-specific interaction study was found.",
-          "action": "Do not combine huperzine A with anticholinergic medications. Alert prescriber to supplement use.",
+          "evidence_level": "theoretical",
+          "mechanism": "Huperzine A is a natural acetylcholinesterase inhibitor, licensed as an Alzheimer's drug in China and sold as a supplement in the US. The prescribing information for donepezil, another cholinesterase inhibitor, states that because of their mechanism of action, cholinesterase inhibitors have the potential to interfere with the activity of anticholinergic medications. Medicines in this group, such as oxybutynin, tolterodine, trospium, scopolamine, benztropine and trihexyphenidyl, are taken for that antimuscarinic action, so interference would work against the reason they are prescribed. Applying the label statement to huperzine A is a pharmacological inference; no huperzine-specific interaction study was found.",
+          "action": "If you take a medicine for its anticholinergic effect, such as oxybutynin for bladder control or benztropine, do not combine it with huperzine A unless your prescriber approves. Tell your prescriber about huperzine A use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25191267/",
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98e451e1-e4d7-4439-a675-c5457ba20975"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98e451e1-e4d7-4439-a675-c5457ba20975",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=76bf638e-dbde-418e-8977-1caf009990bc"
           ],
-          "alert_headline": "Works against anticholinergic medications",
-          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it, so the two can work against each other. If you take an anticholinergic medication, talk to your prescriber before use.",
-          "informational_note": "Huperzine A boosts acetylcholine — relevant to people on anticholinergic medications.",
+          "alert_headline": "Avoid with medicines like oxybutynin unless approved",
+          "alert_body": "Huperzine A may work against medicines taken for their anticholinergic effect, such as oxybutynin or benztropine. If you take one, do not combine them unless your prescriber approves.",
+          "informational_note": "Huperzine A raises acetylcholine, which medicines such as oxybutynin are taken to block.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticholinergics"
+                "antimuscarinics"
               ],
               "profile_flags_any": []
             },
@@ -20859,7 +20860,58 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q6: avoid unsupervised combination with a medicine used for its antimuscarinic effect; obtain prescriber approval. The donepezil-label extension to huperzine A is a pharmacological inference. Consumer wording, membership and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "anticholinergics",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Huperzine A is a natural acetylcholinesterase inhibitor. The prescribing information for donepezil, another cholinesterase inhibitor, states that cholinesterase inhibitors have the potential to interfere with the activity of anticholinergic medications. Tricyclic antidepressants and diphenhydramine have anticholinergic effects that are usually not the reason they are taken, and no study was found that measured them with huperzine A, so the practical effect is not established. The low-dose doxepin label for sleep (SILENOR, 3-6 mg) lists anticholinergic effects among those seen above 6 mg but still contraindicates it in untreated narrow-angle glaucoma or severe urinary retention, so 6 mg is not an interaction cutoff; the doxepin cream label (ZONALON) reports measurable blood levels and systemic anticholinergic effects after skin application.",
+          "action": "If you take a tricyclic antidepressant or diphenhydramine, ask your prescriber or pharmacist before using huperzine A, and tell them the medicine, the dose and whether you take it by mouth or on the skin. If your medicine is taken for its anticholinergic effect, such as oxybutynin, do not combine them unless your prescriber approves.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/25191267/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98e451e1-e4d7-4439-a675-c5457ba20975",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=76bf638e-dbde-418e-8977-1caf009990bc",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1bec1223-5239-4eb6-a9e8-62444106d2c0",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5f302247-525e-4acc-852b-00eb1d79af4b"
+          ],
+          "alert_headline": "Check first if you take an anticholinergic medicine",
+          "alert_body": "Huperzine A may interfere with anticholinergic medicines. If yours is taken for that effect, such as oxybutynin, do not combine unless your prescriber approves; otherwise ask first.",
+          "informational_note": "Huperzine A raises acetylcholine; some antidepressants and sleep aids have anticholinergic effects.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticholinergics"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antimuscarinics"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q6: caution / professional review with an explicit evidence limitation for tricyclic antidepressants and systemic diphenhydramine. Q4: doxepin keeps its class membership with qualified wording; topical doxepin is not exempt; no SILENOR strength cutoff; an unknown medicine keeps its uncertainty. Consumer wording, membership and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -20874,8 +20926,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-14",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, Q4 and Q6: severity and scope); wording, membership and labels read by agent; original rule pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_ALPHA_GPC_ANTICHOLINERGICS",
@@ -20886,23 +20938,24 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticholinergics",
+          "drug_class_id": "antimuscarinics",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect. For medicines taken for their anticholinergic action (e.g., oxybutynin for overactive bladder), that could reduce their therapeutic effect; for medicines whose anticholinergic effect is a side effect (e.g., diphenhydramine, tricyclic antidepressants), the practical effect of the combination is not established.",
-          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. If the medicine is taken for its anticholinergic action (for example, oxybutynin for overactive bladder), watch for it working less well.",
+          "evidence_level": "limited",
+          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that can increase acetylcholine synthesis. Medicines in this group, such as oxybutynin, tolterodine, trospium, scopolamine, benztropine and trihexyphenidyl, are taken for their antimuscarinic action. In 32 healthy volunteers, 10 days of alpha-GPC before a scopolamine injection reduced scopolamine-induced attention and memory impairment. That small study does not show that alpha-GPC makes these medicines ineffective in clinical use; the effect of the combination on treatment is not established.",
+          "action": "If your medicine is taken for its anticholinergic action, such as oxybutynin for bladder control, tell your prescriber about alpha-GPC use, and report it if the medicine seems to work less well.",
           "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/2071257/",
             "https://pubmed.ncbi.nlm.nih.gov/36950691/"
           ],
-          "alert_headline": "May affect anticholinergic medications",
-          "alert_body": "Alpha-GPC can influence brain-signaling balance. If you take an anticholinergic medication, talk to your prescriber before adding Alpha-GPC.",
-          "informational_note": "Alpha-GPC affects brain-signaling balance — relevant to people on anticholinergic medications.",
+          "alert_headline": "May affect medicines like oxybutynin",
+          "alert_body": "Alpha-GPC supplies choline, which is used to make acetylcholine. Evidence is limited, but it could lessen the effect of medicines taken for their anticholinergic action. Tell your prescriber about it.",
+          "informational_note": "Alpha-GPC supplies choline; evidence on medicines like oxybutynin is limited.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticholinergics"
+                "antimuscarinics"
               ],
               "profile_flags_any": []
             },
@@ -20916,7 +20969,55 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q6: caution, with limited evidence and no categorical treatment-failure claim, for a medicine used for its antimuscarinic effect. Consumer wording, membership and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "anticholinergics",
+          "severity": "informational",
+          "evidence_level": "theoretical",
+          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor. Tricyclic antidepressants and diphenhydramine usually have anticholinergic effects as side effects, not as the reason they are taken. No study was found showing that alpha-GPC changes how well these medicines work, and class membership alone does not establish a loss of benefit.",
+          "action": "If your medicine is taken for its anticholinergic action, such as oxybutynin for bladder control, tell your prescriber about alpha-GPC use. For tricyclic antidepressants and diphenhydramine, no change in their effect has been shown.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/2071257/",
+            "https://pubmed.ncbi.nlm.nih.gov/36950691/"
+          ],
+          "alert_headline": "Alpha-GPC with an anticholinergic medicine",
+          "alert_body": "No study was found showing alpha-GPC changes how tricyclics or diphenhydramine work. If you take a medicine like oxybutynin for its anticholinergic effect, tell your prescriber about alpha-GPC.",
+          "informational_note": "Alpha-GPC supplies choline; no effect on tricyclics or diphenhydramine has been shown.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticholinergics"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antimuscarinics"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "neutral",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q6: for a medicine with incidental anticholinergic effects, do not assert loss of the medicine's intended benefit from class membership alone; a qualified informational note. Consumer wording, membership and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -20931,8 +21032,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-14",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, Q4 and Q6: severity and scope); wording, membership and labels read by agent; original rule pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_L_TYROSINE_THYROID",
