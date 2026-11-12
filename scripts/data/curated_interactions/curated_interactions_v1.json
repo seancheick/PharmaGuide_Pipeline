@@ -3564,10 +3564,11 @@
       "agent2_id": "C0302583",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Iron salts can form chelates with levodopa and carbidopa and so reduce how much of the medicine is available to the body. The carbidopa/levodopa (SINEMET) label names iron salts, including multivitamins that contain them; this finding covers every iron supplement as a precaution.",
-      "management": "If you take carbidopa/levodopa, talk to your prescriber or pharmacist before starting an iron supplement or a multivitamin with iron; the label says to take them together with caution. The label gives no spacing interval, so ask how to time them.",
+      "mechanism": "Iron salts can form chelates with levodopa (and with carbidopa in combination tablets) and so reduce how much of the medicine is available to the body. The carbidopa/levodopa (SINEMET) and inhaled levodopa (INBRIJA) labels name iron salts, including multivitamins that contain them; this finding covers every iron supplement as a precaution.",
+      "management": "If you take levodopa, talk to your prescriber or pharmacist before starting an iron supplement or a multivitamin with iron. The carbidopa/levodopa label says to take them together with caution, and the inhaled levodopa (INBRIJA) label says iron can reduce how much levodopa is available to the body. Neither label gives a spacing interval, so ask how to time them.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=077c0f39-a3a2-4b2b-a184-09131889dcfb"
       ],
       "source_pmids": [],
       "verification": {
@@ -3579,12 +3580,12 @@
           "umls": true,
           "pubmed": false
         },
-        "notes": "SINEMET (setid 9b17b028) drug-interaction and patient text read 2026-11-11; RxCUI 6375 (levodopa, ingredient, Active) and C0302583 (UMLS, iron) checked live. Severity and the no-interval scope decided by Dr. Pham (clinical review 2026-11-11, F2); label passages read by agent."
+        "notes": "SINEMET (setid 9b17b028) drug-interaction and patient text read 2026-11-11; RxCUI 6375 (levodopa, ingredient, Active) and C0302583 (UMLS, iron) checked live. Severity and the no-interval scope decided by Dr. Pham (clinical review 2026-11-11, F2); label passages read by agent. INBRIJA (levodopa inhalation powder) label (setid 077c0f39, effective 2026-07-20) section 7.3: iron salts or multivitamins containing iron salts can form chelates with levodopa and reduce its bioavailability; no interval given. Read by agent 2026-11-11."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "specific_drug",
-      "evidence_notes": "SINEMET (carbidopa and levodopa) label, read 2026-11-11: carbidopa/levodopa and iron salts, or multivitamins containing iron salts, should be taken together with caution, because iron salts can chelate levodopa and carbidopa and reduce their bioavailability. The label gives no spacing interval, so none is stated. Combination products (carbidopa/levodopa, carbidopa/levodopa/entacapone) reach this pair through their levodopa ingredient (RxCUI 6375).",
+      "evidence_notes": "SINEMET (carbidopa and levodopa) label, read 2026-11-11: carbidopa/levodopa and iron salts, or multivitamins containing iron salts, should be taken together with caution, because iron salts can chelate levodopa and carbidopa and reduce their bioavailability. The label gives no spacing interval, so none is stated. Combination products (carbidopa/levodopa, carbidopa/levodopa/entacapone) reach this pair through their levodopa ingredient (RxCUI 6375). INBRIJA (levodopa inhalation powder) label (setid 077c0f39, effective 2026-07-20) section 7.3: iron salts or multivitamins containing iron salts can form chelates with levodopa and reduce its bioavailability; no interval given.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "iron",
       "direction": "harmful",

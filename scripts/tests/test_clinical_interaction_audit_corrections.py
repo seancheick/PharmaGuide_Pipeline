@@ -482,6 +482,31 @@ def test_warfarin_only_findings_follow_an_identified_warfarin_and_fall_back_only
         'RULE_IQM_COQ10_HEART_DISEASE_STATINS'}
 
 
+def test_betrixaban_is_a_doac_and_leaves_the_unidentified_fallback():
+    """BEVYXXA: betrixaban is an oral factor Xa inhibitor (ATC B01AF, inside the doacs class's ATC scope) and a
+    P-gp substrate, so it reads as a DOAC: no warfarin INR text, and St. John's wort still shows avoid. The
+    injected direct thrombin inhibitors are ATC B01AE but not oral; they stay in the fallback (question 7)."""
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+
+    def profile(rxcui):
+        return {cid.removeprefix('class:') for cid, c in classes.items()
+                if not cid.startswith('_') and rxcui in c.get('member_rxcuis', [])}
+
+    betrixaban = profile('1927851')
+    assert {'anticoagulants', 'doacs'} <= betrixaban and 'vitamin_k_antagonists' not in betrixaban
+    import profile_gate_evaluator as pge
+
+    for rule_id in WARFARIN_ONLY_RULES:
+        assert _anticoagulant_hits(rule_id, {'drug_classes': betrixaban}) == [], rule_id
+    sjw_doac = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'doacs')
+    assert sjw_doac['severity'] == 'avoid'
+    assert pge.evaluate_profile_gate(sjw_doac['profile_gate'], {'drug_classes': sorted(betrixaban)}, {},
+                                     base_severity='avoid').fires
+    for name, rxcui in (('argatroban', '15202'), ('bivalirudin', '60819'), ('desirudin', '114934'),
+                        ('lepirudin', '237057')):
+        assert profile(rxcui) == {'anticoagulants'}, name
+
+
 def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():
     pair = _pairs()['DSI_WAR_COQ10']
     assert '17723077' in pair['source_pmids'] and 'self-reported bleeding' in _pair_text(pair)
@@ -586,6 +611,7 @@ EMA_LICORICE = (
 )
 LANOXIN = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc'
 SINEMET = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66'
+INBRIJA = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=077c0f39-a3a2-4b2b-a184-09131889dcfb'
 LICORICE_RULES = ('RULE_IQM_LICORICE_HYPERTENSION', 'RULE_BOTANICAL_LICORICE_ROOT')
 
 
@@ -672,11 +698,13 @@ def test_levodopa_iron_is_caution_from_the_carbidopa_levodopa_label():
     assert (pair['type'], pair['agent1_id'], pair['agent2_id'], pair['severity']) == (
         'Med-Sup', '6375', 'C0302583', 'Moderate')
     assert SINEMET in pair['source_urls']
+    # Levodopa's ingredient RxCUI also reaches inhaled levodopa, so its own label (section 7.3) is cited too.
+    assert INBRIJA in pair['source_urls']
     text = _pair_text(pair)
-    assert 'chelate' in text
-    # The label names iron salts, including multivitamins that contain them; covering every iron form is ours.
+    assert 'chelate' in text and 'inbrija' in text
+    # The labels name iron salts, including multivitamins that contain them; covering every iron form is ours.
     assert 'says this applies to iron supplements' not in text
-    assert 'names iron salts' in text and 'as a precaution' in text
+    assert 'labels name iron salts' in text and 'as a precaution' in text
     # The label gives no spacing interval, so the record states none.
     assert not re.search(r'\b(\d+|one|two|three|four|six)\s*(hours?|hrs?|h)\b', text)
     normalized = _verified('DSI_LEVODOPA_IRON')

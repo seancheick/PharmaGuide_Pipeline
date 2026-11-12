@@ -109,11 +109,14 @@ thinners" is the only selectable blood-thinner class). A DOAC user gets neither.
 the tier `verify_interactions.py` derives for its pair (one interaction, one tier).
 
 Limits of this scope (agent finding; see "Other vitamin K antagonists" under Questions): other VKAs (phenprocoumon, acenocoumarol)
-receive the warfarin-label findings through the class; five identified medicines in `anticoagulants` sit in neither
-`doacs` nor `vitamin_k_antagonists` (the injected direct thrombin inhibitors argatroban, bivalirudin, desirudin and
-lepirudin, and the oral factor Xa inhibitor betrixaban), so they fall into the fallback, as before 3a, and see the
-warfarin-addressed text ("If you take warfarin, ..."); a "Blood thinners" selection plus an entered DOAC reads as that
-DOAC. Narrowing the fallback needs a class membership or a new class, and so Dr. Pham's sign-off (question 7).
+receive the warfarin-label findings through the class. Betrixaban, an oral factor Xa inhibitor (ATC B01AF, inside
+the `doacs` class's ATC scope; BEVYXXA label: P-gp substrate), was in neither class; it now joins `doacs` (identity
+fix, `apply_batch3a_betrixaban_doac.py`), so it leaves the warfarin-addressed fallback and gets the DOAC St. John's
+wort finding, still avoid. Four identified medicines in `anticoagulants` remain in neither class: the injected direct
+thrombin inhibitors argatroban, bivalirudin, desirudin and lepirudin (ATC B01AE but not oral). They fall into the
+fallback, as before 3a, and see the warfarin-addressed text ("If you take warfarin, ..."); a "Blood thinners"
+selection plus an entered DOAC reads as that DOAC. Separating them needs a new exclusion id in the profile vocabulary,
+and so Dr. Pham's sign-off (question 7).
 
 | Row | Implemented as |
 |---|---|
@@ -164,8 +167,17 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
 |---|---|
 | A14 licorice + antihypertensives | Both sub-rules (`RULE_IQM_LICORICE_HYPERTENSION`, `RULE_BOTANICAL_LICORICE_ROOT`) caution → avoid with one shared text; EMA liquorice monograph (EMA/HMPC/108399/2024 Rev. 1, 4.5) cited. Verified DGL is excluded by identity; an unknown preparation is not assumed to be DGL |
 | F4 cardiac glycosides + licorice | New `cardiac_glycosides` avoid sub-rule and pair `DSI_CARDIACGLYC_LICORICE` (Major): EMA 4.5, the LANOXIN hypokalemia warning, PMID 28660884. No glycyrrhizin floor |
-| Licorice identity | Chinese licorice (G. uralensis, inside the monograph's scope) now twins to licorice, and "Glycyrrhiza uralensis root" / "... root extract" reach it; DGL lost its bare "Glycyrrhiza glabra" alias, which belongs to whole licorice, and gained the DGL names that were unmapped ("Licorice Root Extract, DGL", "GutGard Deglycyrrhizinated Licorice (DGL) root extract", "standardized Deglycyrrhized Licorice extract"). Not fixed: "Licorice root extract (deglycyrrhizinated)" still maps to whole licorice, because the cleaner resolves the name before its parenthetical (over-warning; no current label). No current label names G. inflata |
-| F2 levodopa + iron | Pair `DSI_LEVODOPA_IRON` (Moderate), keyed on levodopa's ingredient RxCUI 6375, from the SINEMET label; no interval (the label gives none). The label names iron salts, including multivitamins that contain them; the pair covers every iron form as a precaution and says so. Carbidopa/levodopa (SCD 197444) and carbidopa/entacapone/levodopa (SCD 403851) reach it through their ingredients; carbidopa alone does not (app test). Inhaled levodopa (INBRIJA) also matches the ingredient; its users take oral carbidopa/levodopa as well, so the warning still applies |
+| Licorice identity | Chinese licorice (G. uralensis, inside the monograph's scope) now twins to licorice, and "Glycyrrhiza uralensis root" / "... root extract" reach it; DGL lost its bare "Glycyrrhiza glabra" alias, which belongs to whole licorice, and gained the DGL names that were unmapped ("Licorice Root Extract, DGL", "GutGard Deglycyrrhizinated Licorice (DGL) root extract", "standardized Deglycyrrhized Licorice extract"). "Licorice root extract (deglycyrrhizinated)" and "... (DGL)" now reach DGL: the cleaner reads a trailing parenthetical that names a distinct botanical preparation as its curated comma form; source parentheticals such as "(Glycyrrhiza glabra)" keep whole licorice (second review; no current label uses these names). No current label names G. inflata |
+| F2 levodopa + iron | Pair `DSI_LEVODOPA_IRON` (Moderate), keyed on levodopa's ingredient RxCUI 6375, from the SINEMET label; no interval (the label gives none). The label names iron salts, including multivitamins that contain them; the pair covers every iron form as a precaution and says so. Carbidopa/levodopa (SCD 197444) and carbidopa/entacapone/levodopa (SCD 403851) reach it through their ingredients; carbidopa alone does not (app test). Inhaled levodopa (INBRIJA) also matches the ingredient, and its own label (setid 077c0f39, section 7.3) says iron salts can chelate levodopa and reduce its bioavailability, with no interval; the pair cites both labels (second review) |
+
+Representative replay (second review, `replay.py` freeze-raw on origin/main 50d07e40e vs this branch): GutGard DGL
+(229869), Solgar standardized deglycyrrhized extract plus raw licorice powder (44423), Herbal Terra Gan Cao
+(G. uralensis, 233763, label fetched from the DSLD API) and Jarrow licorice root extract (307549, control). Score,
+all six pillars and status are unchanged on all four. Identity changes do reach Evidence review: GutGard's row moved
+from whole licorice to DGL, which has a Dose record but no Evidence review yet, so its evidence readiness went from
+complete to incomplete; Solgar's not-yet-evaluated count went from 1 to 2. Warnings: GutGard lost the whole-licorice
+findings; Solgar keeps them through its raw licorice powder; Gan Cao gained them; the control gained the
+antihypertensive and cardiac glycoside gates. Corpus-wide impact is measured only by the final corpus run.
 
 Agent dispositions in the same batch (not Dr. Pham's decisions):
 - **GutGard.** It keeps routing to DGL. The source (PMID 39929150) describes a deglycyrrhizinated extract with
@@ -278,6 +290,6 @@ matching.
 7. **Other vitamin K antagonists.** The four warfarin-only findings (A2, A4, A7, A8) cite warfarin sources. They now
    fire for the `vitamin_k_antagonists` class, which also holds phenprocoumon and acenocoumarol where a user enters
    them. Keep the class scope (same mechanism, no source read for those medicines), or limit the findings to warfarin?
-   Also: argatroban, bivalirudin, desirudin, lepirudin and betrixaban are identified but reach the unidentified
-   blood-thinner fallback and its warfarin-addressed text. Should betrixaban join `doacs`, and should the four
-   injected direct thrombin inhibitors get a class of their own that the fallback excludes?
+   Also: argatroban, bivalirudin, desirudin and lepirudin are identified but reach the unidentified blood-thinner
+   fallback and its warfarin-addressed text. Should these four injected direct thrombin inhibitors get a class of
+   their own that the fallback excludes? (Betrixaban now reads as a DOAC: its label and ATC code place it there.)
