@@ -422,6 +422,33 @@ levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other 
 bundled taxonomy and vocabulary drift test need the new classes (38/22 entries with batch 3), the removal of the immunosuppressant
 sub-rule and the new class map must ship in the same interaction-DB build.
 
+### Batch 5a: vitamin E wording (Q2), senna and cascara with digoxin (`apply_answers_b5a_vitamin_e_laxatives.py`)
+
+Sources read 2026-11-12: NIH ODS vitamin E fact sheet, "Anticoagulant and antiplatelet medications" (in-app browser;
+"unknown but probably exceed 400 IU/day"); PMID 21051774 abstract (E-utilities; pooled RR 1.22 for hemorrhagic
+stroke; no 400 IU/day anchor); EU herbal monographs for senna leaf and pod and cascara bark, 4.4 and 4.5, verbatim in
+`audits/interaction_rules/laxative_resourcing_2026_09/research.md`; LANOXIN 5.3 (assess serum electrolytes
+periodically), quoted in `audits/interaction_audit_20261111/additions_receipts_a.md`.
+
+| Row | Outcome |
+|---|---|
+| Q2 vitamin E + blood thinners | Mechanism quotes the ODS passage and adds that 400 IU/day is not an established threshold below which the interaction disappears; the "(≥400 IU/day)" onset claim goes. Body: "The amount that matters is not known"; "mildly thin the blood" goes. The action says "a blood thinner" (the old "warfarin or an antiplatelet" left out DOAC users) and asks the user to tell the prescriber how much they take. The note says vitamin E "can have" an antiplatelet effect (was stated as fact) |
+| Q2 vitamin E + bleeding disorders, surgery | "Anchored to ~400 IU/day", "about 400 IU/day or more" and "(~400 IU/day and above)" go. The surgery row's headline, body and action (including "about 1-2 weeks beforehand") predate this review and are not changed; its review note says so |
+| Q2 numerical suppression | Held: the four pregnancy and lactation dose thresholds (1000 and 800 mg) are unchanged, and all three bleeding rows stay presence-gated with no minimum effective dose; a test pins them |
+| Section 2 senna, cascara + digoxin | Severity stays avoid. Headline "Avoid unsupervised use with digoxin" (was "Can increase digoxin toxicity"). The body says "do not use this laxative without your prescriber's advice" (the old "avoid unsupervised prolonged use" narrowed the advice to prolonged use, which the monographs do not). The action drops the clinician tasks (choose an osmotic agent or potassium-sparing approach, monitor serum levels) for "do not use ... without your prescriber's advice"; "they may check your potassium" follows LANOXIN 5.3. The mechanism quotes 4.5 (hypokalaemia from long-term laxative abuse) and 4.4 (have to consult a doctor) and says the monographs set no dose or duration cutoff. Aloe is batch 5b. After the 5b review, for one wording across the three laxatives: the body says "raise the risk of digoxin side effects" (was "increase digoxin risk"; LANOXIN 5.3: hypokalemia may predispose to digoxin toxicity), and the action's "Ask your prescriber which laxative suits you" goes (no source) |
+| Independent review | Healthcare-reviewer agent on the diff, requirement and sources only: NEEDS FIXES (attribution limited to "consumer wording" while mechanisms carry agent text; the hold test covered one row). Applied: the attribution says mechanism, action and alert text are agent work; the hold test covers all three rows; the 400/"mild" test checks every consumer string of the rule; the Schurks meta-regression sentence goes (the abstract reports little heterogeneity to explain, so it shows no dose-response either way); the bleeding body names "vitamin E use"; the laxative rule owner names the cardiac-glycoside row only |
+
+Each changed sub-rule's `clinical_review` names Dr. Pham's decision and says the mechanism, action and alert text are
+agent work not reviewed by Dr. Pham. Vitamin E keeps its `review_owner` with "Q2 wording 2026-11-12 (Dr. Pham signed
+the policy; wording by agent)" appended; senna and cascara name Dr. Pham for the cardiac-glycoside row only, the agent
+for the wording and the original owner for the other rows. Rule `last_reviewed` and the two changed vitamin E
+condition rows are 2026-11-12.
+
+Held for Dr. Pham: Q2's presentation policy (a less prominent note for ordinary exposure) needs amount handling that
+distinguishes alpha-tocopherol mass from IU and form, which is not built; nothing is suppressed meanwhile. The
+vitamin E surgery row's "Stop" headline and "about 1-2 weeks beforehand" window have no source in the rule; they
+need a source or her decision.
+
 ### Batch 5b: aloe preparation identity for the digoxin warning (`apply_answers_b5b_aloe_preparation.py`)
 
 Sources read 2026-11-12: EU herbal monograph EMA/HMPC/625788/2015 on Aloe barbadensis and Aloe ferox, folii succus
