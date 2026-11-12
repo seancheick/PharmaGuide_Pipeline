@@ -758,3 +758,37 @@ def test_enricher_user_alert_gates_derive_flags_from_conditions():
     assert alerts('RULE_INGREDIENT_ST_JOHNS_WORT', ['lactation']) == ['lactation']
     assert alerts('RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED', ['immunocompromised']) == []
     assert alerts('RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED', ['immunocompromised'], ['severely_immunocompromised']) == ['immunocompromised']
+
+
+FLUOROQUINOLONE_ZINC_SPACING = {
+    # pair id: (RxCUI, label interval). Dr. Pham, A12 (2026-11-11); each label read 2026-11-11.
+    'DSI_ZINC_CIPROFLOXACIN': ('2551', 'at least 2 hours before or 6 hours after'),
+    'DSI_ZINC_LEVOFLOXACIN': ('82122', 'at least 2 hours before or 2 hours after'),
+    'DSI_ZINC_MOXIFLOXACIN': ('139462', 'at least 4 hours before or 8 hours after'),
+}
+
+
+def test_zinc_fluoroquinolone_spacing_follows_each_antibiotic_label():
+    """A12: caution with drug-specific spacing; direction matters and injected forms are not affected."""
+    pairs = _pairs()
+    for pair_id, (rxcui, interval) in FLUOROQUINOLONE_ZINC_SPACING.items():
+        pair = pairs[pair_id]
+        assert (pair['agent1_id'], pair['agent2_canonical_id'], pair['severity']) == (rxcui, 'zinc', 'Moderate'), pair_id
+        assert interval in pair['management'], pair_id
+        assert 'injected' in pair['management'].lower(), pair_id
+        others = [i for _, i in FLUOROQUINOLONE_ZINC_SPACING.values() if i != interval]
+        assert not any(i in pair['management'] for i in others), pair_id
+    fallback = pairs['DSI_ZINC_FLUOROQUINOLONE']
+    assert fallback['severity'] == 'Moderate'
+    assert 'differs by drug' in fallback['management']
+    assert not any(i in fallback['management'] for _, i in FLUOROQUINOLONE_ZINC_SPACING.values())
+
+
+def test_calcium_ciprofloxacin_separates_supplements_from_calcium_in_a_meal():
+    """A13: caution with the label's spacing; dairy or fortified juice alone differs from those foods in a meal."""
+    pair = _pairs()['DSI_CALCIUM_CIPROFLOXACIN']
+    text = pair['management'].lower()
+    assert pair['severity'] == 'Moderate'
+    assert 'at least 2 hours before or 6 hours after' in text
+    assert 'calcium-fortified juice' in text and 'on their own' in text and 'meal' in text
+    assert 'injected' in text
