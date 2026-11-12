@@ -84,7 +84,8 @@ M_FAMILY = [
     ("M6",  "ingredient_quality_map",        "ginseng",           "maois", "caution"),
     ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "maois", "contraindicated"),
     # Raised from avoid by Dr. Pham 2026-11-11: the PARNATE label lists SAMe as contraindicated.
-    ("M8",  "ingredient_quality_map",        "same",              "maois", "contraindicated"),
+    # Class rule stays avoid; tranylcypromine is contraindicated by its exact pair (Dr. Pham A3, ask 1 pending).
+    ("M8",  "ingredient_quality_map",        "same",              "maois", "avoid"),
     ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "maois", "contraindicated"),
 ]
 
