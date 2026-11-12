@@ -22407,14 +22407,15 @@
           "condition_id": "seizure_disorder",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
-          "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+          "mechanism": "Prescription cannabidiol (EPIDIOLEX) is FDA-approved for seizures in Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex. Over-the-counter CBD products are not FDA-approved and can vary in dose and purity. With some seizure medicines, prescription cannabidiol raised drug levels (clobazam's active form, stiripentol) or made liver-enzyme rises more common (valproate); those findings appear separately.",
+          "action": "If you have a seizure disorder, talk to your neurologist before using CBD, and do not use an over-the-counter CBD product in place of prescribed seizure treatment.",
           "sources": [
-            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
           "alert_headline": "CBD — seizure clinician guidance",
-          "alert_body": "Prescription cannabidiol treats specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures or take antiseizure medication, use CBD only with clinician guidance.",
-          "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder.",
+          "alert_body": "Prescription cannabidiol is approved for specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures, talk to your neurologist before using CBD.",
+          "informational_note": "OTC CBD products vary in dose and purity; prescription cannabidiol is a separate product.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -22434,7 +22435,13 @@
             "dose": null
           },
           "direction": "neutral",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: keep seizure-condition guidance with an accurate claim; a condition note does not replace the drug-specific findings. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "pregnancy",
@@ -22472,24 +22479,61 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticonvulsants",
+          "drug_class_id": "clobazam",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EPIDIOLEX label reports increased exposure to N-desmethylclobazam during concomitant clobazam use and a higher liver-enzyme elevation risk with valproate. These findings apply to the studied prescription cannabidiol preparation and specific combinations; the label does not establish identical effects for every anticonvulsant.",
-          "action": "Ask your neurologist before adding CBD. The prescriber should manage clobazam-related adverse effects, liver monitoring with valproate, and any medication adjustment.",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised N-desmethylclobazam, clobazam's active metabolite, about 3-fold in healthy subjects, with no effect on clobazam itself, which may increase clobazam-related adverse reactions such as sleepiness and sedation. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take clobazam, talk to your neurologist before using CBD and tell them about new sleepiness or other side effects. Do not change your clobazam dose yourself.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May affect seizure medication",
-          "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
-          "informational_note": "CBD may affect anticonvulsant therapy — relevant to people on seizure medications.",
+          "alert_headline": "May increase clobazam side effects such as sleepiness",
+          "alert_body": "Prescription CBD raised levels of clobazam's active form, which can add to sleepiness. If you take clobazam, talk to your neurologist before using CBD.",
+          "informational_note": "Prescription CBD raised levels of clobazam's active form in label studies.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticonvulsants",
-                "clobazam",
+                "clobazam"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: increased exposure to clobazam's active metabolite; greater sedation risk. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "valproate",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "The EPIDIOLEX label reports that liver-enzyme (transaminase) elevations were more common when prescription cannabidiol was taken with valproate: most ALT elevations in the controlled studies occurred in patients taking valproate. Cannabidiol did not raise valproate exposure (no effect in healthy subjects; small, not clinically relevant decreases in patients). These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take a valproate medicine, talk to your prescriber before using CBD; liver blood tests may be needed. Do not change your valproate dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Liver enzymes rose more often with valproate",
+          "alert_body": "With valproate, prescription CBD raised liver enzymes more often in label studies. If you take valproate, talk to your prescriber before using CBD; liver tests may be needed.",
+          "informational_note": "Prescription CBD with valproate raised liver enzymes more often in label studies.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
                 "valproate"
               ],
               "profile_flags_any": []
@@ -22504,26 +22548,32 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: greater liver-enzyme elevation risk; not described as increased valproate exposure. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
-          "drug_class_id": "immunosuppressants",
+          "drug_class_id": "stiripentol",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised oral everolimus exposure about 2.5-fold, and that exposure to other oral P-glycoprotein substrates, such as sirolimus and tacrolimus, may rise; it advises drug-level monitoring and dose adjustment. This should not be generalized to clinically proven inhibition of all CYP3A4 substrates.",
-          "action": "Monitor everolimus, tacrolimus or sirolimus levels closely; a dose reduction may be needed. Tell the team that prescribes it about CBD use.",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised stiripentol exposure (AUC up 55% in healthy subjects and 30% in patients with epilepsy) and advises monitoring for stiripentol-related adverse reactions. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take stiripentol, talk to your neurologist before using CBD and tell them about new side effects. Do not change your stiripentol dose yourself.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May raise levels of some immunosuppressant medicines",
-          "alert_body": "CBD can raise levels of some immunosuppressants, such as everolimus, tacrolimus or sirolimus. Ask that medicine's prescriber first; drug-level monitoring or a prescribed dose change may be needed.",
-          "informational_note": "Prescription CBD raised everolimus levels in a label study — relevant to anyone on everolimus, tacrolimus or sirolimus.",
+          "alert_headline": "May raise stiripentol levels",
+          "alert_body": "Prescription CBD raised stiripentol levels in label studies, which can add to its side effects. If you take stiripentol, talk to your neurologist before using CBD.",
+          "informational_note": "Prescription CBD raised stiripentol levels in label studies.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "immunosuppressants"
+                "stiripentol"
               ],
               "profile_flags_any": []
             },
@@ -22537,7 +22587,212 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: add stiripentol; increased exposure; monitor for adverse effects. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "everolimus",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol (12.5 mg/kg twice daily) raised everolimus peak levels and total exposure about 2.5-fold in healthy subjects; it advises monitoring everolimus levels, with dosing managed by the prescriber. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take everolimus, talk to the specialist who prescribes it before using CBD; they may check your everolimus levels. Do not change your everolimus dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "May raise everolimus levels",
+          "alert_body": "Prescription CBD raised everolimus levels about 2.5-fold in a label study. If you take everolimus, talk to the specialist who prescribes it before using CBD.",
+          "informational_note": "Prescription CBD raised everolimus levels in a label study.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "everolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: increased exposure; specialist management of levels and dosing. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "tacrolimus",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "In an open-label, fixed-sequence crossover study in 12 healthy adults (interim analysis), cannabidiol titrated to 5 mg/kg twice daily for 14 days raised tacrolimus peak levels 4.2-fold and total exposure 3.1-fold after a single 5 mg oral dose. The EPIDIOLEX label also says exposure to oral P-glycoprotein substrates such as tacrolimus may increase. The study used prescription-level doses; the effect of lower-dose over-the-counter or topical CBD is not established.",
+          "action": "If you take tacrolimus by mouth, talk to your transplant or specialist team before using CBD; they may check your tacrolimus levels. Do not change your tacrolimus dose yourself.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/39601108/",
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "May raise levels of tacrolimus taken by mouth",
+          "alert_body": "In a study using prescription-level CBD doses, tacrolimus levels rose about 3-fold. If you take tacrolimus by mouth, talk to your transplant or specialist team before using CBD.",
+          "informational_note": "Prescription-level CBD doses raised oral tacrolimus levels in a study in healthy adults.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "tacrolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: tacrolimus gets its own record; a controlled human PK study found increased exposure. Graded established like everolimus: a measured human PK effect, with the label naming tacrolimus. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "sirolimus",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming sirolimus, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a potential interaction described for the transporter, not one measured with sirolimus. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD; they may check your sirolimus levels. Do not change your sirolimus dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Possible rise in levels of sirolimus taken by mouth",
+          "alert_body": "The prescription CBD label says sirolimus levels may rise; this was not measured directly. If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD.",
+          "informational_note": "Prescription CBD may raise levels of sirolimus taken by mouth; not measured directly.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "sirolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: potential interaction described for oral P-gp substrates, distinguished from a measured interaction. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "digoxin",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming digoxin, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a potential interaction described for the transporter, not one measured with digoxin. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take digoxin by mouth, talk to your prescriber before using CBD; they may check your digoxin level. Do not change your digoxin dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Possible rise in levels of digoxin taken by mouth",
+          "alert_body": "The prescription CBD label says digoxin levels may rise; this was not measured directly. If you take digoxin by mouth, talk to your prescriber before using CBD.",
+          "informational_note": "Prescription CBD may raise levels of digoxin taken by mouth; not measured directly.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "digoxin",
+                "cardiac_glycosides"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: add a qualified CBD-digoxin finding, distinguished from a measured interaction. The 'Digoxin / Heart rhythm medication' picker class also reaches it, so every copy field is conditional on digoxin taken by mouth (Q4: an unknown medicine keeps a conditional message). Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "anticonvulsants",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Among seizure medicines, the EPIDIOLEX label reports dedicated interaction studies only with clobazam, valproate and stiripentol, which have their own findings. It reports no specific effect on other seizure medicines, so none is claimed here.",
+          "action": "If you take a seizure medicine, talk to the doctor who prescribes it before using CBD. Do not change your seizure medicine yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Ask before using CBD with seizure medicines",
+          "alert_body": "The prescription CBD label reports studies with only a few seizure medicines. If you take a seizure medicine, talk to the doctor who prescribes it before using CBD.",
+          "informational_note": "The prescription CBD label reports interaction studies with only a few seizure medicines.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticonvulsants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "stiripentol"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: end the implication that every anticonvulsant shares the demonstrated interaction; keep a qualified review message for other seizure medicines until their evidence is assessed. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
           "drug_class_id": "anticoagulants",
@@ -22642,8 +22897,8 @@
           "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
         ]
       },
-      "last_reviewed": "2026-04-14",
-      "review_owner": "drug_label_mining"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, Q5: the seizure-medicine, immunosuppressant and digoxin findings and the seizure-condition note; findings and scope only); wording, membership, severity, evidence grading and labels read by agent; the anticoagulant, sedative and pregnancy sub-rules are unchanged from the original rule (drug_label_mining)"
     },
     {
       "id": "RULE_BANNED_PENNYROYAL_PREGNANCY",

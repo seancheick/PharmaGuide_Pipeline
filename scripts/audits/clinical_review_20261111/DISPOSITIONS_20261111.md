@@ -362,6 +362,66 @@ Current data: one drug-class sub-rule has such a gate (`RULE_IQM_NIACIN_DIABETES
 nutrient-form exclude, caution), below the hard tier, so no release-gate outcome changes today. Engineering change;
 no clinical content.
 
+### Batch 4: CBD named-medicine split, F7 (`apply_answers_b4_cbd.py`)
+
+Sources read 2026-11-12: EPIDIOLEX label (setid 8bf27097, effective 2026-05-29; 5.1, 7.2, 7.4, 12.3) and PMID 39601108
+(abstract: open-label, fixed-sequence crossover, interim analysis; 12 healthy adults; cannabidiol titrated to 5 mg/kg
+twice daily for 14 days; tacrolimus 5 mg single oral dose; Cmax 4.2-fold, AUC 3.1-fold).
+
+| Row | Outcome |
+|---|---|
+| Q5 clobazam | New sub-rule (rule class `clobazam`): caution, established. Raised N-desmethylclobazam (active metabolite) about 3-fold with no effect on clobazam; may add to sleepiness and sedation |
+| Q5 valproate | New sub-rule (`valproate`): caution, established. Liver-enzyme rises more common (most ALT elevations with valproate); states that cannabidiol did not raise valproate exposure (no change in healthy subjects, 17%/21% decreases in patients, not clinically relevant) |
+| Q5 stiripentol | New class `class:stiripentol` (RxCUI 2054968, N03AX) and sub-rule: caution, established. AUC +55% healthy, +30% patients; monitor for its adverse reactions |
+| Q5 everolimus | New class `class:everolimus` (141704, L04AH) and sub-rule: caution, established. About 2.5-fold Cmax and AUC (12.5 mg/kg twice daily); the specialist manages levels and dosing |
+| Q5 tacrolimus | New class `class:tacrolimus` (42316, L04AD) and sub-rule: caution, established (graded like everolimus: a measured human PK effect, with the label naming tacrolimus). The body gives the dose context ("prescription-level CBD doses"); headline "May raise levels of tacrolimus taken by mouth" |
+| Q5 oral sirolimus, digoxin | New classes `class:sirolimus` (35302, L04AH; not the eye-preparation S01XA) and `class:digoxin` (3407, C01AA), sub-rules caution, theoretical: the label's potential interaction for oral P-gp substrates, stated as not measured with that medicine; headlines and bodies say "taken by mouth". The digoxin sub-rule also requires the "Digoxin / Heart rhythm medication" picker class (`cardiac_glycosides`), so an unknown medicine keeps a conditional message (Q4); the class cannot tell the picker from another cardiac glycoside, so digitoxin users see the digoxin card too |
+| Q5 immunosuppressants | The whole-class sub-rule is removed: only the named medicines get a CBD finding. Cyclosporine, azathioprine, mycophenolate and biologic users lose the finding they had. A profile with only the "Immunosuppressants" picker class also loses it (held, H1) |
+| Q5 mycophenolate (review list) | No finding. Label 12.3: one 1500 mg dose of mycophenolate mofetil with EPIDIOLEX 7.5 mg/kg twice daily raised mycophenolic-acid Cmax 16% and AUC 35%; 9% and 58% predicted at steady state. Label 7.2: cannabidiol inhibits UGT1A9; consider dosage reduction of UGT1A9 substrates where small changes may cause serious reactions. Mycophenolate mofetil (RxCUI 68149) is in no rule class today |
+| Q5 other seizure medicines | The anticonvulsants sub-rule becomes a qualified review message (caution, theoretical; excludes stiripentol): the label reports dedicated studies only with clobazam, valproate and stiripentol and no specific effect on others; "talk to the doctor who prescribes it" (the class also covers nerve pain, migraine and mood) |
+| Q5 seizure condition | Keeps its guidance with an accurate claim: EPIDIOLEX's three approved indications, OTC products vary, the named findings appear separately; "do not use an over-the-counter CBD product in place of prescribed seizure treatment" |
+| Q5 dose instructions | No action tells the user to change a prescription dose; each says "Do not change your ... dose yourself" |
+| Vocabulary | Seven rule-only entries (clobazam, valproate, stiripentol, everolimus, tacrolimus, sirolimus, digoxin) reuse their parent class's approved `group_label` and `commonly_used_for` verbatim, so the 2026-08-08 sign-off still covers every string. Dr. Pham's Q5 sentences need adapting to the contract (H5) |
+| Citation verifier | Topic stems for the seven single-medicine classes are the medicine's own name only. Strict run on the changed rule: 4 on-topic, 0 suspects |
+| Independent review (2026-11-12) | Fresh-context healthcare review: NEEDS FIXES. Applied: tacrolimus body dose context; route-qualified headlines; label-limited general seizure-medicine text without the dangling scope sentence; "the doctor who prescribes it"; tacrolimus graded like everolimus; attribution of severity and evidence grading to the agent and of `review_owner` to the Q5 sub-rules only; vocabulary reuse instead of unreviewed strings; sirolimus ATC class; name-only topic stems; digoxin picker; the alprazolam test narrowed to seizure findings; "made liver-enzyme rises more common". Not applied, held: the picker-only immunosuppressant card (H1) |
+
+`last_reviewed` is 2026-11-12. `review_owner` names Dr. Pham for the Q5 findings and scope only and says the
+anticoagulant, sedative and pregnancy sub-rules are unchanged; each new or changed sub-rule's `clinical_review` notes
+that consumer wording, membership, severity and evidence grading are agent work not reviewed by Dr. Pham.
+
+Held for Dr. Pham:
+
+- **H1, immunosuppressant picker.** A profile with only the "Immunosuppressants" picker class (its examples start
+  with tacrolimus) now gets no CBD finding, nor do entered cyclosporine (oral, CYP3A4 and P-gp substrate, narrow
+  margin; the label's "e.g." list is not exhaustive), azathioprine or mycophenolate. A conditional card ("if your
+  medicine is tacrolimus, everolimus or sirolimus taken by mouth ...") was not added: the profile cannot tell the
+  picker from an entered medicine, so it would reach all 90 class members, mostly biologics, the scope Q5 rejected.
+  Should picker-only users get it anyway, and should cyclosporine get the qualified P-gp finding?
+- **H2, general seizure-medicine card.** It is caution with direction harmful yet claims no effect. Monitor or
+  informational instead, and evidence `insufficient` rather than `theoretical`?
+- **H3, label signals outside the Q5 table.** Clobazam also raised the incidence of transaminase elevations, less
+  than valproate (ALT above 3 times ULN: 4% with clobazam without valproate vs 3% with neither; 5.1); postmarketing
+  high ammonia with valproate or clobazam (5.1). Add to their findings?
+- **H4, prescription cannabidiol users.** EPIDIOLEX is in `class:anticonvulsants`, so its users get the general card;
+  their concern is adding OTC cannabidiol to a dose-related liver risk (5.1). A specific finding?
+- **H5, vocabulary sentences.** Q5's suggested copy breaks the vocabulary contract ("Commonly used ...", one sentence,
+  no "treat"). Drafts for confirmation: clobazam "Commonly used together with other seizure medicines for certain
+  types of seizures."; valproate (group label "Valproate medicines") "Commonly used, depending on the product
+  (valproic acid, sodium valproate or divalproex), for seizures, bipolar mania or migraine prevention."; stiripentol
+  "Commonly used together with clobazam for seizures in Dravet syndrome."; everolimus "Commonly used to prevent organ
+  transplant rejection and for certain tumors, including in tuberous sclerosis complex."; sirolimus "Commonly used to
+  prevent kidney transplant rejection and for a rare lung condition (LAM)."; tacrolimus "Commonly used to prevent
+  organ transplant rejection; a skin form is used for eczema." The current reused sentences are the parents' (for
+  example, everolimus and sirolimus inherit "manage autoimmune conditions").
+- **Digoxin severity.** Caution for a potential, unmeasured interaction is an agent choice.
+
+Known limits: membership is by ingredient, so topical tacrolimus and sirolimus users reach their findings; the
+headline and body say "taken by mouth". The stiripentol exclude applies to the whole profile, so stiripentol plus
+levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other benzodiazepines outside
+`class:sedatives` get no CBD sedation finding although label 7.4 names other CNS depressants (predates Q5); the app's
+bundled taxonomy and vocabulary drift test need the new classes (38/22 entries with batch 3), the removal of the immunosuppressant
+sub-rule and the new class map must ship in the same interaction-DB build.
+
 ### Batch 5a: vitamin E wording (Q2), senna and cascara with digoxin (`apply_answers_b5a_vitamin_e_laxatives.py`)
 
 Sources read 2026-11-12: NIH ODS vitamin E fact sheet, "Anticoagulant and antiplatelet medications" (in-app browser;
