@@ -6990,7 +6990,7 @@
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
           "alert_headline": "Avoid combining with SSRIs or SNRIs",
-          "alert_body": "If you take an SSRI or SNRI antidepressant, avoid St. John's wort unless your prescriber approves. The combination can cause serotonin syndrome.",
+          "alert_body": "If you take an SSRI or SNRI antidepressant, avoid St. John's wort unless your prescriber approves. The combination can cause serotonin syndrome, which can be life-threatening.",
           "informational_note": "St John's Wort raises serotonin — relevant to people on SSRI or SNRI antidepressants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -23302,7 +23302,7 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-12",
             "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
-            "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug language, but medicines are matched by ingredient, so EMSAM cannot be told apart from oral selegiline, which is avoid."
+            "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug language, but this rule is gated on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user gets avoid here."
           }
         }
       ],

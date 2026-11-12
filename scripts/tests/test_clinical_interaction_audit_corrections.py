@@ -861,8 +861,11 @@ def test_same_with_maois_is_avoid_by_class_and_contraindicated_only_where_a_labe
         assert SAME_ACTION in copy
         assert 'Do not stop or switch' in copy
     assert 'Do not combine SAMe with an MAOI' not in cls['management']
-    rule_copy = ' '.join(rule[k] for k in ('action', 'alert_body', 'mechanism')).lower()
+    # The consumer-facing fields name the exact contraindications, not only the mechanism.
+    rule_copy = ' '.join(rule[k] for k in ('action', 'alert_headline', 'alert_body')).lower()
     assert 'tranylcypromine' in rule_copy and 'phenelzine' in rule_copy and 'emsam' in rule_copy
+    # EMSAM is not told apart by this class record; the record says why without claiming the app cannot match it.
+    assert 'cannot be told apart' not in cls['evidence_notes'] and 'keyed on the MAOI class' in cls['evidence_notes']
     assert 'unless cleared' not in rule_copy and rule['informational_note']
     # Exported text says where the class-wide scope is an inference.
     assert 'class inference' in cls['mechanism'].lower() and 'class inference' in rule['mechanism'].lower()
@@ -884,16 +887,27 @@ def test_5htp_with_ssris_and_snris_is_contraindicated_on_both_surfaces_from_the_
     for sources in (pair['source_urls'], rule['sources']):
         assert HEALTH_CANADA_5HTP in sources
     # The source's jurisdiction and scope are recorded with the evidence.
-    assert 'Health Canada' in pair['evidence_notes'] and 'Canada' in pair['evidence_notes']
+    assert 'Health Canada' in pair['evidence_notes'] and 'jurisdiction' in pair['evidence_notes'].lower()
     assert 'antidepressants' in pair['evidence_notes']
+    # Widening the pair from SSRIs to SSRIs and SNRIs drops no SSRI user.
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+    assert set(classes['class:ssris']['member_rxcuis']) <= set(classes[pair['agent1_id']]['member_rxcuis'])
     assert _verified('DSI_SSRI_5HTP')['evidence_level'] == rule['evidence_level']
     # No self-managed washout on any 5-HTP antidepressant record.
     maoi_rule = _sub('RULE_IQM_5HTP_SEROTONIN', 'maois')
     for copy in (rule['action'], maoi_rule['action'], pair['management'], pairs['DSI_MAOI_5HTP']['management']):
         assert 'observe a washout' not in copy and 'Allow appropriate washout' not in copy
         assert 'prescriber' in copy
-    assert HEALTH_CANADA_5HTP in pairs['DSI_MAOI_5HTP']['source_urls']
-    assert 'universally contraindicated' not in pairs['DSI_MAOI_5HTP'].get('evidence_notes', '')
+    maoi_pair = pairs['DSI_MAOI_5HTP']
+    assert HEALTH_CANADA_5HTP in maoi_pair['source_urls']
+    assert 'universally contraindicated' not in maoi_pair.get('evidence_notes', '')
+    # Contraindicated on both MAOI records, and both tell the user not to combine (no review-and-proceed wording).
+    assert APP_SEVERITY[maoi_pair['severity']] == maoi_rule['severity'] == 'contraindicated'
+    for copy in (maoi_pair['management'], maoi_rule['action']):
+        assert copy.startswith('Do not take 5-HTP with an MAOI') or copy.startswith('Do not combine 5-HTP with MAOIs')
+        assert 'without the prescriber reviewing' not in copy
+    # Oral selegiline (Parkinson's disease) inherits the antidepressant contraindication only by class.
+    assert 'oral selegiline' in maoi_pair['evidence_notes'] and 'class inference' in maoi_pair['evidence_notes']
 
 
 def test_st_johns_wort_with_ssris_and_snris_is_avoid_on_both_surfaces_without_a_washout():
@@ -909,6 +923,8 @@ def test_st_johns_wort_with_ssris_and_snris_is_avoid_on_both_surfaces_without_a_
         assert 'emergency' in copy and 'serotonin syndrome' in copy
         assert 'half-lives' not in copy and '14 days' not in copy and 'washout' not in copy
     assert 'Do not combine' not in rule['alert_headline']
+    # The alert body alone also conveys how serious serotonin syndrome can be.
+    assert 'life-threatening' in rule['alert_body']
     assert rule['clinical_review']['file'] == ANSWERS_FILE
 
 

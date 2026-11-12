@@ -10,8 +10,10 @@ serotonergic medicines"), and Part B 3D (Sean's finding, label-sourced: rasagili
   RULE_IQM_SAME/maois (avoid): one answer for an MAOI that is not identified further. Exact pairs carry the
   contraindications: DSI_TRANYLCYPROMINE_SAME (PARNATE names SAM-e; unchanged) and new DSI_PHENELZINE_SAME (NARDIL
   contraindicates serotoninergic agents as a category; applying it to SAMe is the clinical interpretation Dr. Pham
-  signed). Confirmed EMSAM is contraindicated through its serotonergic-drug language (section 7.1), but medicines
-  are matched by RxNorm ingredient, so EMSAM and oral selegiline cannot be told apart here: both receive avoid.
+  signed). Confirmed EMSAM is contraindicated through its serotonergic-drug language (section 7.1). Not implemented
+  here: the class pair and the profile rule are keyed on the MAOI class (selegiline ingredient), so an EMSAM user
+  receives avoid like oral selegiline. The app also matches the RxCUI a user picked, so exact pairs on EMSAM's
+  product RxCUIs could carry the contraindication; that stays an open follow-up.
   Consumer action is Q1's text.
 - 5-HTP + SSRIs/SNRIs (section 2). DSI_SSRI_5HTP Major -> Contraindicated, matching the profile rule; Health
   Canada's 5-HTP monograph (Contraindication(s), all uses: antidepressants) is the source, with its jurisdiction
@@ -72,6 +74,10 @@ FIVE_HTP_SSRI_ACTION = (
     "Do not take 5-HTP with an SSRI or SNRI antidepressant. Do not stop or switch your antidepressant to use 5-HTP; "
     "your prescriber plans any change and the washout time. Seek emergency care for suspected serotonin syndrome."
 )
+FIVE_HTP_MAOI_ACTION = (
+    "Do not take 5-HTP with an MAOI. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change "
+    "and the washout time. Seek emergency care for suspected serotonin syndrome."
+)
 SSRI_SNRI_LABELS_READ = (
     "SSRI and SNRI labels read on DailyMed 2026-11-12 (ZOLOFT fda754f6, EFFEXOR XR c848a5d8, PRISTIQ 0f43610c, "
     "FETZIMA f371258d, SAVELLA 16a4a314) list St. John's wort among serotonergic drugs that raise serotonin-syndrome "
@@ -112,8 +118,8 @@ def maoi_same(row: dict) -> None:
             "Class record (avoid; prescriber review required). Dr. Pham, 2026-11-12 (Q1): tranylcypromine is "
             "contraindicated (exact pair DSI_TRANYLCYPROMINE_SAME); phenelzine is contraindicated through NARDIL's "
             "serotonergic-agent category, a clinical interpretation (exact pair DSI_PHENELZINE_SAME); confirmed EMSAM "
-            "is contraindicated through its serotonergic-drug language (section 7.1), but medicines are matched by "
-            "RxNorm ingredient, so an EMSAM user cannot be told apart from oral selegiline and receives this record; "
+            "is contraindicated through its serotonergic-drug language (section 7.1), but this record is keyed on the "
+            "MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user receives it; "
             "oral selegiline (ZELAPAR) and other or unidentified MAOIs are avoid, a documented class inference. The "
             "EMSAM 6 mg exception concerns dietary tyramine only."
         ),
@@ -202,12 +208,14 @@ def ssri_5htp(row: dict) -> None:
 def maoi_5htp(row: dict) -> None:
     assert row["severity"] == "Contraindicated" and row["agent1_id"] == "class:maois"
     row.update({
+        "management": FIVE_HTP_MAOI_ACTION,
         "source_urls": [*row["source_urls"], HC_5HTP, PARNATE],
         "evidence_notes": (
             "Health Canada's 5-HTP monograph (Canada, dated 2024-08-28) contraindicates use with antidepressants; the "
             "tranylcypromine (PARNATE) label lists hydroxytryptophan among products not to combine with it. MSKCC "
             "reports mania with an MAOI and 5-HTP and serotonin syndrome with linezolid. Severity kept as strong "
-            "protection (Dr. Pham, 2026-11-12, section 2)."
+            "protection (Dr. Pham, 2026-11-12, section 2). Applying it to oral selegiline, which is used for "
+            "Parkinson's disease rather than depression, is a class inference."
         ),
         "verification": verification(
             f"Health Canada monograph and PARNATE section 4 read 2026-11-12. Dr. Pham, {ANSWERS} (section 2)."
@@ -334,8 +342,8 @@ def same_rule(sub: dict) -> None:
             "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs "
             "DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic "
             "category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug "
-            "language, but medicines are matched by ingredient, so EMSAM cannot be told apart from oral selegiline, "
-            "which is avoid."
+            "language, but this rule is gated on the MAOI class, which does not tell EMSAM apart from oral "
+            "selegiline, so an EMSAM user gets avoid here."
         ),
     })
 
@@ -354,7 +362,7 @@ def sjw_ssri_rule(sub: dict) -> None:
         "alert_headline": "Avoid combining with SSRIs or SNRIs",
         "alert_body": (
             "If you take an SSRI or SNRI antidepressant, avoid St. John's wort unless your prescriber approves. The "
-            "combination can cause serotonin syndrome."
+            "combination can cause serotonin syndrome, which can be life-threatening."
         ),
         "clinical_review": review(
             "Section 2: avoid unsupervised combination as the general action; contraindicated only with an exact "
