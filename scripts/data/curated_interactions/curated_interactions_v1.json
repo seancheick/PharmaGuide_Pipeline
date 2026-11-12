@@ -117,11 +117,12 @@
       "agent1_id": "11289",
       "agent2_name": "Ginkgo biloba",
       "agent2_id": "C0772125",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Ginkgo may increase bleeding risk with warfarin. A large Veterans Administration record study found an association with bleeding during concurrent use, while the literature has mixed and conflicting findings. Observational association does not establish causality, incidence for an individual or a safe dose.",
-      "management": "Avoid adding ginkgo during warfarin treatment without anticoagulation-clinician review. If already taking it, discuss monitoring and changes rather than adjusting warfarin yourself. Report unusual bruising or bleeding promptly.",
+      "management": "Talk to your anticoagulation team before adding ginkgo. If you take both, ask how bleeding should be monitored, report unusual bruising or bleeding promptly, and do not change your warfarin dose yourself.",
       "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
         "https://www.nccih.nih.gov/health/ginkgo",
         "https://pubmed.ncbi.nlm.nih.gov/26958257/"
       ],
@@ -130,18 +131,18 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "26958257 directly studies ginkgo with warfarin; 40198642 did not include a warfarin cohort and is removed as direct support for this pair. Observational evidence and conflicting literature remain qualified."
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "DailyMed warfarin label section 7 read; NCCIH ginkgo and PMID 26958257 kept. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
       "evidence_basis": "observational",
       "clinical_confidence": "medium",
-      "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users.",
+      "evidence_notes": "The warfarin label names Ginkgo biloba among botanicals that may cause bleeding and whose effects would be expected to add to warfarin's. Observational data suggest more bleeding; controlled studies at usual doses found no significant effect. No dose has been shown to remove the concern.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginkgo",
       "direction": "harmful",
@@ -156,25 +157,30 @@
       "agent2_id": "C0993630",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Garlic supplements may affect platelet function and increase bleeding risk with warfarin. The cited monographs do not establish a 600 mg safe-below threshold or clinically demonstrated CYP2C9 inhibition.",
+      "mechanism": "Garlic supplements may affect platelet function. The warfarin label names garlic among botanicals that may cause bleeding and whose effects would be expected to add to warfarin's.",
       "management": "Talk to your warfarin prescriber before starting, stopping or changing garlic supplements. Ask whether INR checks are needed and report unusual bruising or bleeding.",
       "source_urls": [
-        "https://nccih.nih.gov/health/garlic/ataglance.htm"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+        "https://www.nccih.nih.gov/health/garlic",
+        "https://pubmed.ncbi.nlm.nih.gov/18516070/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "18516070"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "DailyMed warfarin label section 7, NCCIH garlic and PMID 18516070 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "evidence_notes": "Mainly case reports. Culinary amounts are safe. Concentrated supplements may have mild antiplatelet effect.",
+      "evidence_notes": "This applies to garlic supplements and concentrates, not ordinary food use. Evidence is mainly case reports; a small crossover study in 12 healthy men found no change in warfarin's effect with garlic (PMID 18516070), which does not rule out an effect in long-term users.",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "garlic",
@@ -192,8 +198,10 @@
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "St. John’s wort can induce drug-metabolizing pathways and reduce warfarin exposure or anticoagulant effect. Starting or stopping it can therefore change anticoagulation; the reviewed evidence does not establish one exclusive enzyme/transporter mechanism for all warfarin responses.",
-      "management": "Avoid adding St. John’s wort during warfarin treatment without the anticoagulation clinician reviewing it. If already taking it, tell the clinician before any change so INR monitoring can be planned. Do not change warfarin or discontinue an established supplement without discussing the monitoring plan.",
+      "management": "Avoid St. John's wort while you take warfarin. If you already take both, do not stop either one on your own: tell your anticoagulation team first, because starting or stopping St. John's wort can change how well warfarin works and your INR.",
       "source_urls": [
+        "https://www.medicines.org.uk/emc/product/14333/smpc",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
         "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://pubmed.ncbi.nlm.nih.gov/15260917/",
         "https://pubmed.ncbi.nlm.nih.gov/15049433/"
@@ -204,21 +212,22 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "UK SmPC 14333 and the DailyMed warfarin label read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "st_johns_wort",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "The UK warfarin SmPC (section 4.5) says St John's wort preparations must not be used with warfarin because of a proven risk of reduced warfarin levels and effect. The US warfarin label lists St. John's wort among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Other vitamin-K antagonists were not verified separately."
     },
     {
       "id": "DSI_WAR_VITE",
@@ -263,66 +272,77 @@
       "agent1_id": "11289",
       "agent2_name": "Coenzyme Q10",
       "agent2_id": "C0041536",
-      "severity": "Moderate",
+      "severity": "Minor",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "CoQ10 is structurally similar to vitamin K2 and may exert a mild pro-coagulant effect, potentially reducing warfarin's efficacy. Case reports describe decreased INR when CoQ10 is added to warfarin therapy.",
-      "management": "Monitor INR if starting CoQ10 while on warfarin. Dose adjustments may be needed. Inform your prescriber.",
+      "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect. Clinical evidence is mixed, and a negative trial does not remove the label's concern.",
+      "management": "Tell your anticoagulation team before you start, stop or substantially change CoQ10, so they can decide whether your INR needs extra checks.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/",
-        "https://nccih.nih.gov/health/coq10"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+        "https://www.nccih.nih.gov/health/coenzyme-q10",
+        "https://pubmed.ncbi.nlm.nih.gov/17723077/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "17723077"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "DailyMed warfarin label section 7 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "coq10",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "display_layer": "background",
+      "background_rationale": "Warfarin-label example of a botanical that may reduce warfarin's effect, with mixed clinical data; an INR monitoring signal rather than an avoid instruction (Dr. Pham, 2026-11-11).",
+      "evidence_notes": "Warfarin label section 7: some botanicals may decrease warfarin's effect (co-enzyme Q10, St. John's wort, ginseng); perform more frequent INR monitoring when starting or stopping botanicals. Scope is warfarin only; the label does not cover other anticoagulants. PMID 17723077: In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause."
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",
-      "display_layer": "background",
-      "background_rationale": "Minor and uncertain INR signal; retain as background context without gating product fit.",
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
       "agent2_name": "Glucosamine",
       "agent2_id": "C0017718",
-      "severity": "Minor",
+      "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Case reports suggest glucosamine (alone or with chondroitin) may increase INR in warfarin users. The mechanism is not well established; possible mild CYP2C9 inhibition or direct effect on coagulation cascade.",
-      "management": "Monitor INR when starting glucosamine. Report any unusual bruising or bleeding. Effect may be small but warrants awareness.",
+      "mechanism": "An FDA pharmacovigilance review found 20 reports of altered coagulation, such as a higher INR or bleeding, when glucosamine or glucosamine-chondroitin was used with warfarin; one report described a bleed in the brain. The mechanism is unknown.",
+      "management": "Tell your anticoagulation team before you start, stop or change glucosamine, including glucosamine-chondroitin products, so they can decide how to check your INR. Report unusual bruising or bleeding.",
       "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+        "https://www.medicines.org.uk/emc/product/14333/smpc",
         "https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "18363538"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "PMID 18363538 and UK SmPC 14333 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
+      "evidence_basis": "observational",
+      "clinical_confidence": "medium",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "glucosamine",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Knudsen and Sokol 2008 (PMID 18363538): 20 MedWatch reports of altered coagulation with warfarin, one with an intraventricular bleed and subdural hematoma. The UK warfarin SmPC (section 4.5) says the combination is not recommended. Scope is warfarin only."
     },
     {
       "id": "DSI_WAR_CRANBERRY",
@@ -333,28 +353,36 @@
       "agent2_id": "C0453273",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Cranberry juice and extracts may inhibit CYP2C9, the primary enzyme responsible for warfarin (S-enantiomer) metabolism. This can elevate warfarin levels and INR. Case reports include fatal hemorrhage.",
-      "management": "Limit cranberry consumption to small amounts (occasional serving of juice/food). Avoid large quantities of cranberry juice or concentrated supplements. Monitor INR closely if intake changes.",
+      "mechanism": "Evidence is mixed. In 12 healthy men, cranberry concentrate capsules raised the INR response to a single warfarin dose by about 30% without changing warfarin levels (PMID 18516070). In 30 people on stable warfarin, a daily glass of cranberry juice for 2 weeks did not cause a clinically important change (PMID 19553405). Case reports describe a higher INR or bleeding. The studies used different preparations, so neither result applies to every product.",
+      "management": "Contact your anticoagulation team before you start, stop or materially change cranberry supplements or concentrates.",
       "source_urls": [
-        "https://www.mhra.gov.uk/home/groups/pl-p/documents/websiteresources/con019838.pdf"
+        "https://www.medicines.org.uk/emc/product/14333/smpc",
+        "https://www.nccih.nih.gov/health/cranberry",
+        "https://pubmed.ncbi.nlm.nih.gov/18516070/",
+        "https://pubmed.ncbi.nlm.nih.gov/19553405/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "18516070",
+        "19553405"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "UK SmPC 14333, NCCIH cranberry and PMIDs 18516070, 19553405 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cranberry",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Applies to cranberry supplements, concentrates and unknown preparations; no dose has been shown to remove the concern. Jurisdiction: the UK warfarin SmPC (section 4.5) says patients should be advised to avoid cranberry products and that INR supervision should be considered with regular cranberry juice; US NCCIH describes the evidence as conflicting and advises talking with a provider. Not a formal contraindication."
     },
     {
       "id": "DSI_WAR_TURMERIC",
@@ -430,39 +458,43 @@
     },
     {
       "id": "DSI_WAR_GINGER",
-      "display_layer": "background",
-      "background_rationale": "Minor dose-dependent bleeding signal; culinary and lower supplemental exposure should not gate product fit.",
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
-      "agent2_name": "Ginger (high dose supplement)",
+      "agent2_name": "Ginger (supplement)",
       "agent2_id": "C0162751",
-      "severity": "Minor",
+      "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Human platelet studies of ginger have mixed results. A possible bleeding interaction with warfarin warrants caution, but a 2 g/day safe-below boundary is not established.",
-      "management": "Discuss ginger supplements with your warfarin prescriber. Report unusual bruising or bleeding and ask whether INR monitoring is appropriate when changing supplement use.",
+      "mechanism": "In a cohort of 171 people taking warfarin, ginger use was associated with self-reported bleeding (odds ratio 3.2; PMID 17723077). In a crossover study in 12 healthy men, ginger did not change INR or platelet aggregation after a single warfarin dose (PMID 15801937). Neither study sets a safe dose or shows that ginger in food carries the same risk.",
+      "management": "Talk to your anticoagulation team before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
       "source_urls": [
-        "https://nccih.nih.gov/health/ginger"
+        "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+        "https://pubmed.ncbi.nlm.nih.gov/15801937/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": false
+          "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "PMIDs 17723077 and 15801937 read; NCCIH ginger removed (no bleeding content). Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
-      "evidence_basis": "authoritative_review",
+      "evidence_basis": "observational",
       "clinical_confidence": "low",
-      "evidence_notes": "Theoretical based on in-vitro platelet inhibition. Clinical evidence for interaction at dietary doses is weak.",
+      "evidence_notes": "Limited and conflicting evidence: an observational association with self-reported bleeding versus a small single-dose study with no INR or platelet effect. Applies to supplemental or concentrated ginger.",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginger",
       "direction": "harmful",
       "materiality": "presence",
-      "dose_threshold": null
+      "dose_threshold": null,
+      "source_pmids": [
+        "17723077",
+        "15801937"
+      ]
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -1993,23 +2025,24 @@
       "agent1_id": "class:nsaids",
       "agent2_name": "Fish Oil / Omega-3",
       "agent2_id": "C0016157",
-      "severity": "Moderate",
+      "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Fish oil may affect platelet function, but ODS discusses bleeding-time effects at doses expressed as EPA plus DHA, not a 2000 mg fish-oil carrier-mass boundary for NSAID harm. The cited evidence does not establish clinically important bleeding onset for this specific pair.",
-      "management": "Ask a clinician or pharmacist to review fish oil with an NSAID if there are additional bleeding risks. Do not assume a dose below 2000 mg fish oil guarantees no interaction; taking an NSAID with food does not establish protection from bleeding.",
+      "mechanism": "Omega-3 fatty acids may prolong bleeding time. The prescription omega-3 label (LOVAZA) says people taking it with a drug that affects coagulation should be monitored periodically; the trials in that label did not show clinically significant bleeding. Applying this to over-the-counter fish oil and to NSAIDs is an extrapolation, since the label names neither. Prescription purified EPA (icosapent ethyl) has its own label and is not covered here.",
+      "management": "If you take an NSAID regularly, mention fish oil to your clinician or pharmacist, especially if you have other bleeding risks, and watch for unusual bruising or bleeding.",
       "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=21cfa4ce-0b05-47ed-b268-339eb1b83b75",
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": false
+          "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "LOVAZA label section 7.1 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
       },
       "evidence_basis": "mechanism_inferred",
       "clinical_confidence": "low",
@@ -2019,7 +2052,10 @@
       "direction": "harmful",
       "materiality": "presence",
       "dose_threshold": null,
-      "source_pmids": []
+      "source_pmids": [],
+      "display_layer": "background",
+      "background_rationale": "Possible additive bleeding tendency extrapolated from the prescription omega-3 label's advice to monitor people on drugs that affect coagulation; no NSAID-specific source (Dr. Pham, 2026-11-11).",
+      "evidence_notes": "LOVAZA section 7.1 (anticoagulants or other drugs affecting coagulation): monitor periodically. Extrapolated to supplement fish oil and NSAIDs; no fish-oil amount is set as a cutoff."
     },
     {
       "id": "DSI_NSAID_GARLIC",
