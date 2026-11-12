@@ -18007,7 +18007,7 @@
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "5-HTP is converted to serotonin. Combining an MAO inhibitor with a serotonergic agent can cause the most severe form of serotonin syndrome. Mania has been reported after an MAOI was taken with 5-HTP, and serotonin syndrome after 5-HTP with linezolid, an antibiotic that inhibits MAO. MSKCC advises not taking 5-HTP with MAOIs, and Health Canada's monograph contraindicates it with antidepressants.",
-          "action": "Do not combine 5-HTP with MAOIs. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the washout time.",
+          "action": "Do not combine 5-HTP with MAOIs. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the product-specific washout.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
             "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",

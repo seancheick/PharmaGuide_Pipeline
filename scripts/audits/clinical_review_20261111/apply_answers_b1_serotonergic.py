@@ -76,7 +76,7 @@ FIVE_HTP_SSRI_ACTION = (
 )
 FIVE_HTP_MAOI_ACTION = (
     "Do not take 5-HTP with an MAOI. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change "
-    "and the washout time. Seek emergency care for suspected serotonin syndrome."
+    "and the product-specific washout. Seek emergency care for suspected serotonin syndrome."
 )
 SSRI_SNRI_LABELS_READ = (
     "SSRI and SNRI labels read on DailyMed 2026-11-12 (ZOLOFT fda754f6, EFFEXOR XR c848a5d8, PRISTIQ 0f43610c, "
@@ -393,7 +393,7 @@ def five_htp_maoi_rule(sub: dict) -> None:
     assert sub["action"].endswith("Allow appropriate washout between MAOI discontinuation and 5-HTP use.")
     sub["action"] = (
         "Do not combine 5-HTP with MAOIs. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any "
-        "change and the washout time."
+        "change and the product-specific washout."
     )
     sub["clinical_review"] = review(
         "Section 2: keep strong protection and harmonize the 5-HTP records; the self-managed washout instruction is "

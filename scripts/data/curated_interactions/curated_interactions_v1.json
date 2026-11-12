@@ -1956,7 +1956,7 @@
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
       "mechanism": "5-HTP is a serotonin precursor. Combining it with medicines that affect serotonin can cause serious adverse effects. MSK reports mania with an MAOI and 5-HTP and serotonin syndrome with linezolid, an antibiotic MAOI; these reports do not establish a class-wide event rate or safe dose.",
-      "management": "Do not take 5-HTP with an MAOI. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the washout time. Seek emergency care for suspected serotonin syndrome.",
+      "management": "Do not take 5-HTP with an MAOI. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the product-specific washout. Seek emergency care for suspected serotonin syndrome.",
       "source_urls": [
         "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
         "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",
