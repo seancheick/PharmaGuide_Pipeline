@@ -802,6 +802,48 @@ def test_a_rule_an_alert_cannot_express_can_still_be_attested(tmp_path):
     ).ok
 
 
+@pytest.mark.parametrize("gate_part", ["dose", "product_form", "nutrient_form"])
+def test_a_drug_class_rule_an_alert_cannot_express_can_still_be_attested(tmp_path, gate_part):
+    """Drug-class sub-rules use the same expressibility check as condition rules: a gate with a dose or a form needs
+    a product in hand, so an attestation, not an alert, covers the change (Part B section 4)."""
+    empty = {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": []}
+    excludes = {**empty, "product_forms_any": [], "nutrient_forms_any": []}
+    if gate_part == "product_form":
+        excludes["product_forms_any"] = ["topical"]
+    if gate_part == "nutrient_form":
+        excludes["nutrient_forms_any"] = ["fake_form"]
+    profile_gate = {
+        "gate_type": "drug_class",
+        "requires": {**empty, "drug_classes_any": ["fake_class"]},
+        "excludes": excludes,
+        "dose": {"basis": "per_day", "min": 1, "unit": "mg"} if gate_part == "dose" else None,
+    }
+    base = {**_rule(), "drug_class_rules": []}
+    new = {**base, "drug_class_rules": [{
+        "drug_class_id": "fake_class", "severity": "avoid", "profile_gate": profile_gate,
+    }]}
+    fingerprint = _fp(tmp_path, rules=[new], key=DRUG_KEY)
+    attested = _check(
+        tmp_path, base_rules=[base], cand_rules=[new],
+        attestations=[{"rule_key": DRUG_KEY, "rule_fingerprint": fingerprint, "reason": "r",
+                       "reviewer": "fake", "date": "2026-11-03"}],
+    )
+    assert attested.ok, attested.errors
+
+
+def test_an_expressible_drug_class_rule_still_needs_an_alert(tmp_path):
+    """A profile-only drug-class gate stays alertable: an attestation alone does not cover a new hard rule."""
+    base = {**_rule(), "drug_class_rules": []}
+    new = _rule(severity="avoid")
+    fingerprint = _fp(tmp_path, rules=[new], key=DRUG_KEY)
+    attested = _check(
+        tmp_path, base_rules=[base], cand_rules=[new],
+        attestations=[{"rule_key": DRUG_KEY, "rule_fingerprint": fingerprint, "reason": "r",
+                       "reviewer": "fake", "date": "2026-11-03"}],
+    )
+    assert not attested.ok
+
+
 def test_emergency_refuses_a_held_removal_it_cannot_prove_absent(tmp_path):
     result = _emergency(tmp_path, cand=())
     assert not result.ok
