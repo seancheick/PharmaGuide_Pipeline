@@ -43,8 +43,10 @@ def test_every_pair_classified_with_valid_enums():
     # DSI_TRANYLCYPROMINE_SAME pair: 134. Batch 3b part 2 (F4, F2) adds DSI_CARDIACGLYC_LICORICE
     # and DSI_LEVODOPA_IRON: 136. Batch 3c (A12) adds exact zinc pairs for ciprofloxacin, levofloxacin
     # and moxifloxacin, each with its own label interval: 139. Dr. Pham's signed answers (2026-11-12, batch 1) add
-    # DSI_PHENELZINE_SAME (Q1) and the label-exact DSI_RASAGILINE_SJW and DSI_SAFINAMIDE_SJW: 142.
-    assert len(PAIRS) == 142, f"expected 142 reviewed pairs, found {len(PAIRS)}"
+    # DSI_PHENELZINE_SAME (Q1) and the label-exact DSI_RASAGILINE_SJW and DSI_SAFINAMIDE_SJW: 142. Batch 2 (Q7 and
+    # section 2) adds exact acenocoumarol, phenprocoumon and edoxaban St. John's wort pairs and acenocoumarol and
+    # phenprocoumon glucosamine pairs: 147.
+    assert len(PAIRS) == 147, f"expected 147 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:

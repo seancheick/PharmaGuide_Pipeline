@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-12",
-    "total_entries": 101,
+    "total_entries": 106,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -230,6 +230,112 @@
       "evidence_notes": "The UK warfarin SmPC (section 4.5) says St John's wort preparations must not be used with warfarin because of a proven risk of reduced warfarin levels and effect. The US warfarin label lists St. John's wort among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Other vitamin-K antagonists were not verified separately."
     },
     {
+      "id": "DSI_ACENOCOUMAROL_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Acenocoumarol",
+      "agent1_id": "154",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's wort can induce drug-metabolizing enzymes and weaken acenocoumarol's anticoagulant effect. Starting or stopping it can therefore change anticoagulation.",
+      "management": "Avoid St. John's wort while you take acenocoumarol. If you already take both, do not stop either one on your own: tell your anticoagulation team first, because starting or stopping St. John's wort can change how well acenocoumarol works and your INR.",
+      "source_urls": [
+        "https://www.medicines.org.uk/emc/product/2058/smpc"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "UK Sinthrome (acenocoumarol) SmPC, section 4.5 (text revised June 2025): St. John's Wort/Hypericum perforatum is listed among medicines that may diminish acenocoumarol's anticoagulant effect. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q7, section 2)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "evidence_notes": "UK Sinthrome (acenocoumarol) SmPC, section 4.5 (text revised June 2025): St. John's Wort/Hypericum perforatum is listed among medicines that may diminish acenocoumarol's anticoagulant effect. Strong avoidance for warfarin, acenocoumarol and phenprocoumon is Dr. Pham's Q7 decision (2026-11-12).",
+      "applies_to": "specific_drug",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_PHENPROCOUMON_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Phenprocoumon",
+      "agent1_id": "8150",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's wort can weaken phenprocoumon's anticoagulant effect, probably by inducing cytochrome P450 enzymes. Stopping it while phenprocoumon continues can raise its effect.",
+      "management": "Avoid St. John's wort while you take phenprocoumon. If you already take both, do not stop either one on your own: tell your anticoagulation team first, because starting or stopping St. John's wort can change how well phenprocoumon works and your INR.",
+      "source_urls": [
+        "https://www.fachinfo.de/pdf/003056"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "German Marcumar (phenprocoumon) Fachinformation, section 4.5 (Stand June 2026): St. John's wort preparations can weaken phenprocoumon's effect, probably through cytochrome P450 induction; closer coagulation checks, especially at the start and, because of the overdose risk, after St. John's wort is stopped, and dose adjustment are recommended. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q7, section 2)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "evidence_notes": "German Marcumar (phenprocoumon) Fachinformation, section 4.5 (Stand June 2026): St. John's wort preparations can weaken phenprocoumon's effect, probably through cytochrome P450 induction; closer coagulation checks, especially at the start and, because of the overdose risk, after St. John's wort is stopped, and dose adjustment are recommended. Strong avoidance for warfarin, acenocoumarol and phenprocoumon is Dr. Pham's Q7 decision (2026-11-12).",
+      "applies_to": "specific_drug",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EDOXABAN_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Edoxaban",
+      "agent1_id": "1599538",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's wort induces P-gp. Edoxaban's UK label says P-gp inducers such as St. John's wort may lower edoxaban levels, which can reduce protection against stroke or clots.",
+      "management": "Avoid St. John's wort while you take edoxaban unless your prescriber explicitly manages the combination. Do not start or stop St. John's wort without telling the prescriber.",
+      "source_urls": [
+        "https://www.medicines.org.uk/emc/product/6905/smpc",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e77d3400-56ad-11e3-949a-0800200c9a66"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "UK Lixiana SmPC, section 4.5 (revised 24 July 2025): other P-gp inducers such as St. John's wort may lower edoxaban concentrations, and edoxaban should be used with caution with P-gp inducers. The US SAVAYSA label (section 7.2) says to avoid rifampin and does not name St. John's wort. The label says caution; avoid is retained as PharmaGuide precautionary policy (Dr. Pham, 2026-11-12, section 2). Policy: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (section 2)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "evidence_notes": "UK Lixiana SmPC, section 4.5 (revised 24 July 2025): other P-gp inducers such as St. John's wort may lower edoxaban concentrations, and edoxaban should be used with caution with P-gp inducers. The US SAVAYSA label (section 7.2) says to avoid rifampin and does not name St. John's wort. The label says caution; avoid is retained as PharmaGuide precautionary policy (Dr. Pham, 2026-11-12, section 2).",
+      "applies_to": "specific_drug",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
       "id": "DSI_WAR_VITE",
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
@@ -316,7 +422,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "An FDA pharmacovigilance review found 20 reports of altered coagulation, such as a higher INR or bleeding, when glucosamine or glucosamine-chondroitin was used with warfarin; one report described a bleed in the brain. The mechanism is unknown.",
-      "management": "Tell your anticoagulation team before you start, stop or change glucosamine, including glucosamine-chondroitin products, so they can decide how to check your INR. Report unusual bruising or bleeding.",
+      "management": "Do not start glucosamine while taking warfarin unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels advise against this combination. This includes glucosamine-chondroitin products. Report unusual bruising or bleeding.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/18363538/",
         "https://www.medicines.org.uk/emc/product/14333/smpc",
@@ -334,7 +440,7 @@
           "pubmed": true
         },
         "method": "agent_label_content_review_2026_11_11",
-        "notes": "PMID 18363538 and UK SmPC 14333 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent."
+        "notes": "PMID 18363538 and UK SmPC 14333 read. Severity and scope decided by Dr. Pham (clinical review 2026-11-11, audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md); sources read by agent. Management: Dr. Pham Q3, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (2026-11-12)."
       },
       "evidence_basis": "observational",
       "clinical_confidence": "medium",
@@ -343,6 +449,76 @@
       "direction": "harmful",
       "materiality": "presence",
       "evidence_notes": "Knudsen and Sokol 2008 (PMID 18363538): 20 MedWatch reports of altered coagulation with warfarin, one with an intraventricular bleed and subdural hematoma. The UK warfarin SmPC (section 4.5) says the combination is not recommended. Scope is warfarin only."
+    },
+    {
+      "id": "DSI_ACENOCOUMAROL_GLUCOSAMINE",
+      "type": "Med-Sup",
+      "agent1_name": "Acenocoumarol",
+      "agent1_id": "154",
+      "agent2_name": "Glucosamine",
+      "agent2_id": "C0017718",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Increased INR has been reported with glucosamine and oral vitamin K antagonists, including acenocoumarol. The mechanism is unknown.",
+      "management": "Do not start glucosamine while taking acenocoumarol unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Report unusual bruising or bleeding.",
+      "source_urls": [
+        "https://www.medicines.org.uk/emc/product/2058/smpc"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "UK Sinthrome (acenocoumarol) SmPC, section 4.5 (text revised June 2025): increased INR has been reported in patients taking glucosamine and oral vitamin K antagonists; they should be closely monitored when glucosamine is started or stopped. Severity and action follow warfarin + glucosamine: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q3, Q7)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "evidence_notes": "UK Sinthrome (acenocoumarol) SmPC, section 4.5 (text revised June 2025): increased INR has been reported in patients taking glucosamine and oral vitamin K antagonists; they should be closely monitored when glucosamine is started or stopped. Caution with a clinician-agreement action, as for warfarin (Dr. Pham Q3 and Q7, 2026-11-12); not a contraindication.",
+      "applies_to": "specific_drug",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "glucosamine",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_PHENPROCOUMON_GLUCOSAMINE",
+      "type": "Med-Sup",
+      "agent1_name": "Phenprocoumon",
+      "agent1_id": "8150",
+      "agent2_name": "Glucosamine",
+      "agent2_id": "C0017718",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Glucosamine can strengthen the effect of oral vitamin K antagonists, including phenprocoumon. The mechanism is unknown.",
+      "management": "Do not start glucosamine while taking phenprocoumon unless your anticoagulation clinician has specifically agreed and arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Report unusual bruising or bleeding.",
+      "source_urls": [
+        "https://www.fachinfo.de/pdf/003056"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "German Marcumar (phenprocoumon) Fachinformation, section 4.5 (Stand June 2026): glucosamine can strengthen the effect of oral vitamin K antagonists; patients should be closely observed, especially when glucosamine is started or stopped. Severity and action follow warfarin + glucosamine: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q3, Q7)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "evidence_notes": "German Marcumar (phenprocoumon) Fachinformation, section 4.5 (Stand June 2026): glucosamine can strengthen the effect of oral vitamin K antagonists; patients should be closely observed, especially when glucosamine is started or stopped. Caution with a clinician-agreement action, as for warfarin (Dr. Pham Q3 and Q7, 2026-11-12); not a contraindication.",
+      "applies_to": "specific_drug",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "glucosamine",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_CRANBERRY",
@@ -2888,7 +3064,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Very-low-quality case reports describe INR changes with cannabinoids and warfarin. The retained review found no clinical evidence for other anticoagulants. The Epidiolex label does not establish a warfarin-specific warning; its tested CYP2C9 and CYP3A4 substrates did not show clinically significant exposure changes.",
-      "management": "Monitor INR closely if CBD is started or stopped with warfarin. Dose adjustment of warfarin may be required. Inform prescriber of all CBD use including oils and capsules.",
+      "management": "Tell your prescriber about all CBD use, including oils and capsules. If you take warfarin, ask about closer INR checks when CBD is started or stopped; your prescriber may need to adjust the warfarin dose.",
       "source_urls": [
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
         "https://pubmed.ncbi.nlm.nih.gov/37740600/"
@@ -3284,7 +3460,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Panax ginseng may reduce the anticoagulant effect of warfarin. A controlled trial found ginseng reduced warfarin AUC and INR. The mechanism may involve CYP induction or direct procoagulant ginsenoside effects.",
-      "management": "Monitor INR closely if taking ginseng with warfarin. INR may need to be checked more frequently and warfarin dose adjusted.",
+      "management": "If you take warfarin, tell your prescriber before taking ginseng: your INR may need checking more often, and your prescriber may adjust the warfarin dose.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/asian-ginseng"
       ],
