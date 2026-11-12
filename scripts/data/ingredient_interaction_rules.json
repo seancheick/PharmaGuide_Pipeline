@@ -8387,8 +8387,8 @@
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21051774/"
           ],
-          "alert_headline": "Stop high-dose vitamin E before surgery",
-          "alert_body": "High-dose vitamin E can increase bleeding. If you have surgery scheduled, ask your clinician about stopping vitamin E supplements about 1-2 weeks beforehand.",
+          "alert_headline": "Review vitamin E before surgery",
+          "alert_body": "Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
           "informational_note": "Vitamin E can increase bleeding — relevant before scheduled surgery.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8415,7 +8415,7 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-12",
             "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
-            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Only the mechanism changed in this row; its alert text and action predate this review and were not reviewed by Dr. Pham. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Follow-up: use clinician-directed surgery advice without a fixed interval. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
           }
         },
         {

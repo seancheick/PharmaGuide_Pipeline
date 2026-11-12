@@ -1482,8 +1482,9 @@ def test_vitamin_e_copy_sets_no_400_iu_boundary_and_never_calls_the_effect_mild(
     # "Blood thinner" includes DOAC users; the old action named only warfarin or an antiplatelet.
     assert "warfarin or an antiplatelet" not in anticoagulants["action"]
     assert "blood thinner" in anticoagulants["action"]
-    # The surgery row's alert text and stop window predate Q2; its review block must not read as her endorsing them.
-    assert "predate this review and were not reviewed by Dr. Pham" in surgery["clinical_review"]["notes"]
+    assert "surgical team" in surgery["alert_body"]
+    assert "whether and when" in surgery["alert_body"]
+    assert "week" not in surgery["alert_body"] and "stop" not in surgery["alert_headline"].lower()
     assert rule["last_reviewed"] == "2026-11-12"
     assert "Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)" in rule["review_owner"]
 
