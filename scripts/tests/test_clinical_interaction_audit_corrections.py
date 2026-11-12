@@ -586,6 +586,7 @@ EMA_LICORICE = (
 )
 LANOXIN = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc'
 SINEMET = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66'
+INBRIJA = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=077c0f39-a3a2-4b2b-a184-09131889dcfb'
 LICORICE_RULES = ('RULE_IQM_LICORICE_HYPERTENSION', 'RULE_BOTANICAL_LICORICE_ROOT')
 
 
@@ -672,11 +673,13 @@ def test_levodopa_iron_is_caution_from_the_carbidopa_levodopa_label():
     assert (pair['type'], pair['agent1_id'], pair['agent2_id'], pair['severity']) == (
         'Med-Sup', '6375', 'C0302583', 'Moderate')
     assert SINEMET in pair['source_urls']
+    # Levodopa's ingredient RxCUI also reaches inhaled levodopa, so its own label (section 7.3) is cited too.
+    assert INBRIJA in pair['source_urls']
     text = _pair_text(pair)
-    assert 'chelate' in text
-    # The label names iron salts, including multivitamins that contain them; covering every iron form is ours.
+    assert 'chelate' in text and 'inbrija' in text
+    # The labels name iron salts, including multivitamins that contain them; covering every iron form is ours.
     assert 'says this applies to iron supplements' not in text
-    assert 'names iron salts' in text and 'as a precaution' in text
+    assert 'labels name iron salts' in text and 'as a precaution' in text
     # The label gives no spacing interval, so the record states none.
     assert not re.search(r'\b(\d+|one|two|three|four|six)\s*(hours?|hrs?|h)\b', text)
     normalized = _verified('DSI_LEVODOPA_IRON')
