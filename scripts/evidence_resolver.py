@@ -1615,6 +1615,30 @@ def _resolve_evidence_for_row(
             "verification_result": lit_entry.get("verification_result"),
         }
 
+        # An exact, verified no-transfer review records related research
+        # without treating a retail preparation as the one studied.
+        semantics = lit_entry.get("reference_semantics") or {}
+        if (literature_review_result(lit_entry) == "applicability_unestablished"
+                and not lit_entry.get("qualifying_human_studies")
+                and semantics.get("scope") == "exact_preparation"
+                and semantics.get("reference_type") == "no_benchmark"
+                and lit_entry.get("documented_review_scope")
+                and lit_entry["documented_review_scope"] == lit_entry.get("applicability")):
+            from dose_assessment import _dose_source_preparation_matches, verified_reference_citations
+            reviewed = (not unresolved_clinical_source and product is not None
+                        and verified_reference_citations(lit_entry)
+                        and _dose_source_preparation_matches(product, row_dict, lit_entry))
+            if reviewed:
+                owner_facts["literature_evidence"]["pmids"] = lit_entry["applicability"].get("source_pmids", [])
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="clinical_form_mismatch" if reviewed else "literature_applicability_unestablished",
+                owner_facts=owner_facts,
+                blocking_reasons=[] if reviewed else ["literature_applicability_unestablished"],
+            )
+
         # 7. Check if literature evidence established reviewed null/unfavorable or no studies
         if literature_review_result(lit_entry) in {"null", "negative", "reviewed_null_unfavorable", "no_qualifying_human_evidence"}:
             studies = lit_entry.get("qualifying_human_studies", [])

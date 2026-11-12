@@ -2528,3 +2528,46 @@ scores to have current source-qualified receipts, no unresolved
 safety-critical publication failures, partial products excluded from
 public numeric ratings, and explicit measured usable coverage. It is
 a policy proposal only. The existing 99% threshold remains binding.
+
+Perilla exact-preparation replay (five frozen labels) now completes all five
+assessments. The existing no-benchmark Dose rule changes Dose from 0 to
+11.4 and totals from 45.7 to 57.1 for 311422–311425 and 49.7 to 61.1 for
+299734. Evidence and other numerical pillars stay fixed. Identity,
+450 mg aerial-part and 150 mg seed-extract amounts, standardization,
+compared safety and warnings are preserved. The ambiguous original note
+on 311425 is retained without assuming a ratio. All five passed the
+bounded Clean → Enrich → Score → Blob/Core projection. Unspecified, leaf
+and seed-oil controls cannot inherit the exact review. 423 focused checks
+passed. No census increment or installed-app acceptance is claimed.
+
+The Perilla implementation is stacked as PR 455 on PR 453. Main advanced
+through interaction PRs 445 and 447 during qualification. Refresh both
+candidates against the agreed integration source before the final run.
+For the six retained partials, the bounded Core/Blob and share projection
+kept partial status and omitted numeric share scores. The Core retains
+internal scores and tiers. Existing Flutter reader, Product Detail and
+recommendation guards passed 28 focused tests. Actual installed candidate
+scan, ranking and share acceptance remain open.
+
+The Perilla registry recount and schema check now bind 846 entries and
+the exact neutral Dose reference's per-use exposure basis. Recomputed
+reference-semantics proof validates the unchanged source citations.
+231 targeted checks passed. Aligned candidates include main 732d97d79.
+PR 453 head eb47c32d0 is qualifying in run 43146352842. PR 455 head
+eec742c47 is qualifying in run 43146538518. Merge in order only after
+green exact-head qualification. The local native harness now explicitly
+checks all six retained partial IDs for an incomplete hero, ineligible
+public score and absence of a displayed provisional total or tier.
+
+The aligned combined local checkpoint passed 564 checks with 24 declared
+optional skips and the strict skip guard. The native scan harness passes
+Flutter analysis. The staged run will check #453 and #455 green in order,
+verify the final merged source matches the qualified candidate, then run
+one nonpublishing corpus pass and candidate export. Census and simulator
+receipts are pending. If another main change lands, reconcile the new
+candidate before using the staged run.
+
+PR 453 merged as d1a4d5343. PR 455's manual exact-head run passed but
+GitHub still required the pull-request Merge readiness check. Align
+PR 455 with main through interaction PR 449 (7764cd2e3) and qualify
+the resulting PR head before export.

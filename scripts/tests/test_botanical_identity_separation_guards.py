@@ -184,3 +184,61 @@ def test_generic_identity_preserves_source_part_notes_and_mass(
     assert (row['canonical_id'], row['plantPart'], row['quantity'], row['unit']) == (
         canonical, part, 150.0, 'mg')
     assert row['raw_source_text'] == label
+
+
+@pytest.mark.parametrize("index", range(5))
+def test_perilla_exact_label_has_limited_evidence_and_no_benchmark(normalizer, enricher, index):
+    import json
+    from pathlib import Path
+
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    from evidence_resolver import resolve_evidence_for_row
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    from scoring_input_contract import get_evidence_subject_rows
+
+    labels = json.loads((Path(__file__).parent / "fixtures/perilla_exact_source_labels.json").read_text())
+    clean = normalizer.normalize_product(labels[index])
+    product, _ = enricher.enrich_product(clean)
+    row, = get_evidence_subject_rows(product)
+    assert row["canonical_id"] == "perilla_unspecified"
+    assert (row["quantity"], row["unit"]) == (450.0 if index < 4 else 150.0, "mg")
+    assert _botanical_benchmark(row, product=product) == "absent"
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible is False
+    assert resolution.reason_code == "clinical_form_mismatch"
+    assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+
+    assert resolution.owner_facts["literature_evidence"]["pmids"] == ["24885816"]
+
+
+@pytest.mark.parametrize("name", ["Perilla leaf extract", "Perilla seed oil", "Perilla extract"])
+def test_perilla_exact_review_does_not_transfer_to_other_labels(normalizer, enricher, name):
+    from dose_assessment import _dose_source_preparation_matches
+    from evidence_resolver import _load_literature_evidence, resolve_evidence_for_row
+
+    product, _ = enricher.enrich_product(normalizer.normalize_product(
+        _perilla_source_product(name, oil=name.endswith("oil"))))
+    row = product["ingredient_quality_data"]["ingredients"][0]
+    record = _load_literature_evidence()["perilla_unspecified"]
+    assert not _dose_source_preparation_matches(product, row, record)
+    resolution = resolve_evidence_for_row(row, product)
+    if row["canonical_id"] == "perilla_unspecified":
+        assert resolution.blocking_reasons
+        assert resolution.points_eligible is False
+        assert resolution.owner_facts.get("literature_evidence", {}).get("pmids") != ["24885816"]
+
+
+def test_perilla_review_uses_counted_registry_and_verified_per_use_reference():
+    import json
+
+    from data_batch import recount
+    from dose_assessment import verified_reference_citations
+    from evidence_resolver import _LITERATURE_EVIDENCE_PATH
+
+    registry = json.loads(_LITERATURE_EVIDENCE_PATH.read_text())
+    assert not recount(_LITERATURE_EVIDENCE_PATH.name, registry)
+    record = next(row for row in registry["literature_evidence_records"]
+                  if row["canonical_id"] == "perilla_unspecified")
+    assert record["reference_semantics"]["exposure_basis"] == "per_use"
+    assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
+    assert verified_reference_citations(record)
