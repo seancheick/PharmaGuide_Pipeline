@@ -2548,3 +2548,26 @@ kept partial status and omitted numeric share scores. The Core retains
 internal scores and tiers. Existing Flutter reader, Product Detail and
 recommendation guards passed 28 focused tests. Actual installed candidate
 scan, ranking and share acceptance remain open.
+
+The Perilla registry recount and schema check now bind 846 entries and
+the exact neutral Dose reference's per-use exposure basis. Recomputed
+reference-semantics proof validates the unchanged source citations.
+231 targeted checks passed. Aligned candidates include main 732d97d79.
+PR 453 head eb47c32d0 is qualifying in run 43146352842. PR 455 head
+eec742c47 is qualifying in run 43146538518. Merge in order only after
+green exact-head qualification. The local native harness now explicitly
+checks all six retained partial IDs for an incomplete hero, ineligible
+public score and absence of a displayed provisional total or tier.
+
+The aligned combined local checkpoint passed 564 checks with 24 declared
+optional skips and the strict skip guard. The native scan harness passes
+Flutter analysis. The staged run will check #453 and #455 green in order,
+verify the final merged source matches the qualified candidate, then run
+one nonpublishing corpus pass and candidate export. Census and simulator
+receipts are pending. If another main change lands, reconcile the new
+candidate before using the staged run.
+
+PR 453 merged as d1a4d5343. PR 455's manual exact-head run passed but
+GitHub still required the pull-request Merge readiness check. Align
+PR 455 with main through interaction PR 449 (7764cd2e3) and qualify
+the resulting PR head before export.
