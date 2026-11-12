@@ -39,8 +39,9 @@ def test_every_pair_classified_with_valid_enums():
     # owner of the potassium-sparing diuretic pair). Sean approved retirement
     # of the unsupported EPO/anticonvulsant pair on 2026-10-12: 131 remain.
     # Dr. Pham's 2026-11-11 review added DDI_SIMVASTATIN_GEMFIBROZIL and
-    # DSI_NITROGLYCERIN_NAC: 133.
-    assert len(PAIRS) == 133, f"expected 133 reviewed pairs, found {len(PAIRS)}"
+    # DSI_NITROGLYCERIN_NAC: 133. The SAMe scope correction (2026-11-11) adds the exact
+    # DSI_TRANYLCYPROMINE_SAME pair: 134.
+    assert len(PAIRS) == 134, f"expected 134 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:

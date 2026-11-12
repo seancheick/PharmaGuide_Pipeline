@@ -240,18 +240,56 @@ def _pair_text(row):
     return ' '.join(row.get(k) or '' for k in ('mechanism', 'management', 'evidence_notes')).lower()
 
 
-def test_same_maoi_contraindication_follows_the_tranylcypromine_label_in_both_records():
-    pair = _pairs()['DSI_MAOI_SAME']
-    rule = next(r for r in _rules()['RULE_IQM_SAME']['drug_class_rules'] if r['drug_class_id'] == 'maois')
-    assert pair['severity'] == 'Contraindicated'
-    assert rule['severity'] == 'contraindicated', 'the profile rule must not be weaker than the label'
-    assert PARNATE in pair['source_urls'] and PARNATE in rule['sources']
-    # The class-wide scope is an inference from one label, and the record says so.
-    assert 'class inference' in _pair_text(pair)
-    assert rule['clinical_review']['file'] == REVIEW_FILE
+def _same_rule():
+    return next(r for r in _rules()['RULE_IQM_SAME']['drug_class_rules'] if r['drug_class_id'] == 'maois')
+
+
+def test_same_contraindication_is_exact_for_tranylcypromine_and_inferred_for_other_maois():
+    pairs = _pairs()
+    exact = pairs['DSI_TRANYLCYPROMINE_SAME']
+    assert (exact['agent1_id'], exact['agent2_id'], exact['severity']) == ('10734', 'C0036002', 'Contraindicated')
+    assert PARNATE in exact['source_urls']
+    # No MAOI warning is lowered while ask 1 is pending, and the exported text says the scope is inferred.
+    cls = pairs['DSI_MAOI_SAME']
+    assert (cls['agent1_id'], cls['agent2_id']) == ('class:maois', 'C0036002')
+    assert cls['severity'] == 'Contraindicated'
+    assert 'class inference' in cls['mechanism'].lower()
+    # The profile rule keeps its published avoid for the MAOI class: a contraindicated profile rule is
+    # hidden from people without a matching profile until G4, which would drop SAMe's conditional note.
+    rule = _same_rule()
+    assert rule['severity'] == 'avoid' and rule['informational_note']
     copy = ' '.join(rule[k] for k in ('action', 'alert_headline', 'alert_body')).lower()
-    assert 'unless cleared' not in copy and 'avoid combining' not in copy
-    assert 'do not combine' in copy
+    assert 'tranylcypromine' in copy and 'unless cleared' not in copy
+    assert 'class inference' in rule['mechanism'].lower()
+    assert rule['clinical_review']['file'] == REVIEW_FILE and 'ask 1' in rule['clinical_review']['notes']
+
+
+def _verified(pair_id):
+    """The pair as verify_interactions.py emits it for the build (evidence tier and canonical ids recomputed)."""
+    import sys
+    sys.path.insert(0, str(DATA.parent / 'api_audit'))
+    import verify_interactions as vi
+
+    def load(name):
+        return json.loads((DATA / name).read_text(encoding='utf-8'))
+
+    index = vi.build_iqm_cui_index(
+        load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
+        banned_recalled=load('banned_recalled_ingredients.json'),
+        harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
+    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
+    return vi.verify_entry(dict(_pairs()[pair_id]), ctx, vi.VerificationReport())
+
+
+def test_same_evidence_tier_after_verification_matches_what_each_record_supports():
+    # verify_interactions.py recomputes evidence_level before the build, so test its output.
+    tiers = {}
+    for pair_id in ('DSI_TRANYLCYPROMINE_SAME', 'DSI_MAOI_SAME'):
+        normalized = _verified(pair_id)
+        assert normalized['agent2_canonical_id'] == 'same', pair_id
+        tiers[pair_id] = normalized['evidence_level']
+    assert tiers == {'DSI_TRANYLCYPROMINE_SAME': 'established', 'DSI_MAOI_SAME': 'moderate'}
+    assert _same_rule()['evidence_level'] == tiers['DSI_MAOI_SAME']
 
 
 def test_statin_gemfibrozil_is_split_by_statin_label():
@@ -324,17 +362,6 @@ def test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning():
 def test_nac_nitroglycerin_keeps_its_nac_canonical_id_through_verification():
     # verify_interactions.py replaces an authored supplement canonical id with the
     # ingredient-map lookup by CUI, so NAC's map entry must carry C0001047.
-    import sys
-    sys.path.insert(0, str(DATA.parent / 'api_audit'))
-    import verify_interactions as vi
-
-    load = lambda name: json.loads((DATA / name).read_text())
-    index = vi.build_iqm_cui_index(
-        load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
-        banned_recalled=load('banned_recalled_ingredients.json'),
-        harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
-    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
-    report = vi.VerificationReport()
-    normalized = vi.verify_entry(dict(_pairs()['DSI_NITROGLYCERIN_NAC']), ctx, report)
+    normalized = _verified('DSI_NITROGLYCERIN_NAC')
     assert normalized is not None
     assert normalized['agent2_canonical_id'] == 'nac'
