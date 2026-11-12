@@ -89,7 +89,27 @@ not independently re-fetched by this document's writer. They require integrator 
 | Vitamin E surgery | [Mayo Clinic](https://www.mayoclinic.org/drugs-supplements-vitamin-e/art-20364144) says two weeks, not an unsupported one-to-two-week range or a high-dose threshold. Recommend clinician-directed wording with an attributed interval only if adopted. | Named instruction hold; Mayo is clinical guidance, not a trial establishing a universal interval. |
 | Aloe ferox gel | [NCCIH Aloe Vera](https://www.nccih.nih.gov/health/aloe-vera) concerns Aloe vera; EMA/HMPC/625788/2015 concerns dried leaf juice/anthranoid preparations, not verified ferox inner gel. | Do not transfer species/preparation equivalence. Keep latex handling and unresolved gel applicability explicit. |
 
-## Batch 8 G1: independent source review and bounded implementation advice
+## Batch 6 additions to the owner decision list
+
+The following completes the earlier held-item list. Source passages and live identifier checks are in
+`BATCH6_RESEARCH_20261112.md`; these recommendations are agent research, not clinician sign-off.
+
+| Decision | Recommendation and implementation boundary |
+|---|---|
+| Isotretinoin / beta-carotene | Confirm the separate Major/avoid precaution implementing F1's no-automatic-exemption decision. Keep explicit that provitamin A is not as toxic as preformed retinol; no extrapolation to unrelated carotenoids. |
+| Oral bisphosphonates / magnesium | Confirm Major to Moderate under F3, with drug-specific label timing and IV products excluded. No universal spacing interval. |
+| SINEMET B6 depletion | Approve severity/copy and qualify exact combination hydration before activation. The source record is withheld. Do not add a blanket B6 warning to carbidopa/levodopa users. A true levodopa-without-inhibitor regimen is a separate question; INBRIJA's indication does not establish that regimen. |
+| Digoxin / calcium | Accept no oral supplement warning from the cited rapid-IV-calcium statement. This does not establish that every calcium/digoxin situation is clear. |
+| Nitrates or PDE5 medicines / arginine or citrulline | Consider a qualified, medicine-specific prescriber-review finding. Do not equate amino acids with organic nitrates or invent a formal contraindication, threshold or spacing rule. Selected combination trials do not establish universal safety. |
+| Activated charcoal | Specify oral medicine/formulation scope if a finding is wanted. Poisoning-treatment evidence does not establish one universally protective separation interval. |
+| G1 routine niacin and B6 quantities | Agree a source-supported exposure policy and qualify daily/Stack amounts before suppressing routine-quantity findings. The source/form corrections are implemented; no study dose was repurposed as a safety threshold. |
+
+Product decisions: retain iron/calcium, iron/zinc and theanine/caffeine holds rather than creating a
+new timing relation solely to clear records. Do not infer aloe latex from unknown processing;
+an uncertainty display would require a defined consumer meaning. These are implementation
+recommendations for Sean, not additional clinician approvals.
+
+## Batch 8 G1: source review
 
 The clinical severity decisions below are already in Dr. Pham's G1 review; the research verifies
 their factual basis, not a new clinical policy. This receipt does not demonstrate consumer behavior,
