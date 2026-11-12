@@ -106,6 +106,11 @@ COMPONENT_REGISTRATION_STATUS = frozenset(
 )
 OUTCOME_KINDS = frozenset({"patient_important", "surrogate", "evidence_ranking"})
 OUTCOME_HIERARCHIES = frozenset({"primary", "secondary", "post_hoc", "guideline", "not_reported", "unresolved"})
+# What a surrogate row shows when its reviewed context limits it to the measured
+# exposure, target action or biomarker (Sean, 2026-11-12, Evidence-floor rule:
+# DR_PHAM_ANSWERS_20261112.md Part C). Absent means not classified: accepted
+# surrogates and functional measures keep their existing treatment.
+SURROGATE_CLASSES = frozenset({"exposure", "target_engagement", "unvalidated_physiological_response"})
 # One owner for what a study dose counts in: the runtime validator and the dose
 # classifier import this mapping rather than keeping their own copy.
 DOSE_MEASUREMENT_UNITS = {
@@ -307,6 +312,11 @@ def _outcome_errors(context: Mapping) -> list[str]:
         role = outcome.get("outcome_role")
         if role is not None and role not in OUTCOME_ROLE:
             errors.append(f"{prefix}.outcome_role_invalid")
+        if "surrogate_class" in outcome:
+            if outcome["surrogate_class"] not in SURROGATE_CLASSES:
+                errors.append(f"{prefix}.surrogate_class_invalid")
+            if outcome.get("kind") != "surrogate":
+                errors.append(f"{prefix}.surrogate_class_requires_surrogate_kind")
         # A trial's primary outcome is not a subgroup finding or a result borrowed
         # from a companion report.
         if outcome.get("hierarchy") == "primary" and role in {"post_hoc_subgroup", "companion_reported_context"}:

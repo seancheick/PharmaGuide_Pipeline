@@ -1794,6 +1794,11 @@ def _primary_mass_floor(
         canonical = _canonical_from_entry(entry)
         if not canonical:
             continue  # can't identify the ingredient -> don't anchor a floor on it
+        if not _finding_beyond_exposure(entry):
+            # Exposure, target engagement or an unvalidated physiological response
+            # alone cannot unlock the floor (Sean, 2026-11-12, Part C). Its ordinary
+            # pipeline credit above is unchanged.
+            continue
         linked = _evidence_anchor_rows(product, entry)
         if prominent:
             anchors = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
@@ -1885,6 +1890,24 @@ def _select_trial_family_contributions(candidates: list) -> list:
             selected = [prior for prior in selected if prior not in contained]
             selected.append(candidate)
     return selected
+
+
+def _finding_beyond_exposure(entry: Dict[str, Any]) -> bool:
+    """Whether the applicable reviewed contexts show more than exposure, target
+    engagement or an unvalidated physiological response (Part C, Sean, 2026-11-12).
+
+    Only the contexts that qualified this match are read, so a functional result
+    from another preparation or population is never borrowed. A record without
+    those contexts keeps its existing treatment.
+    """
+    from clinical_applicability import outcomes_beyond_exposure, qualifying_purpose_outcomes, reviewed_entries
+    ids = set(_safe_list(_safe_dict(_safe_dict(
+        entry.get("applicability_assessment")).get("population_applicability")).get("context_ids")))
+    reference = reviewed_entries().get(_clinical_source_id(entry), {})
+    findings = [context for context in reference.get("study_contexts") or []
+                if isinstance(context, dict) and context.get("context_id") in ids
+                and context.get("scoring_eligible") is True and qualifying_purpose_outcomes(context)[0]]
+    return not findings or any(outcomes_beyond_exposure(context) for context in findings)
 
 
 def _qualified_trial_families(entry: Dict[str, Any]) -> frozenset[str]:

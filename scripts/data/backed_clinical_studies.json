@@ -6,6 +6,7 @@
     "last_updated": "2026-11-12",
     "total_entries": 224,
     "changelog": [
+      "2026-11-12: Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure of the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only). Blood pressure, lipids, glycemia, TSH and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, not a new clinician review.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -2801,7 +2802,7 @@
       ],
       "notes": "Bioactive reduced CoQ10 form with explicit randomized human evidence for endothelial function and strong PK/safety evidence in healthy volunteers. Retained-source scope and limitations: Improved flow-mediated dilation in dyslipidemic adults not taking statins, without clinical cardiovascular disease, over 8 weeks (PMID: 32326664) Absorption and short-term tolerability in healthy volunteers; not heart-failure, statin-myopathy or general energy efficacy (PMID: 16919858)",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-12",
       "notable_studies": "Sabbatinelli et al. (2020, PMID 32326664) randomized dyslipidemia trial found improved flow-mediated dilation with Kaneka ubiquinol. Hosoe et al. (2007, PMID 16919858) documented dose-dependent absorption and short-term safety up to 300 mg/day in healthy volunteers.",
       "references_structured": [
         {
@@ -2951,14 +2952,16 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "Secondary: FMD at week 4 not different (p=0.648); serum NOx increased (p=0.016); LDL oxidation lag time improved with 200 mg/day (p=0.017); plasma oxLDL not different (p=0.905).",
               "hierarchy": "secondary",
               "kind": "surrogate",
               "direction": "mixed",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             }
           ],
           "limitations": [
@@ -4182,7 +4185,7 @@
       ],
       "notes": "Two small double-blind crossover trials evaluated 2 g/day active L-carnitine delivered as L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy. Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes. Completed delegated-agent source contexts and independent primary-body review 2026-11-06 preserve the limited source-specific findings. This record concerns the defined 2:1 L-carnitine L-tartrate chemical, not every Carnipure product: Lonza also offers crystalline L-carnitine. Source quantities are active L-carnitine; the 2002 report separately declares 2944 mg/day salt, whereas the 2010 report does not print salt mass. Neither amount becomes a general Dose benchmark or a conversion for retail labels.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-11-06",
+      "last_updated": "2026-11-12",
       "notable_studies": "PMID 11788381 studied 10 resistance-trained men and PMID 20045157 studied 18 middle-aged adults in crossover protocols. Both provided 2 g/day active L-carnitine as tartrate, with recovery biomarker endpoints rather than proven durable performance improvement.",
       "min_clinical_dose": 2000,
       "max_studied_clinical_dose": 2000,
@@ -4366,7 +4369,8 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "Perceived muscle soreness lower on days 1, 2, 4 postexercise; not a demonstrated performance or universal recovery outcome.",
@@ -29379,7 +29383,7 @@
         "mechanistic",
         "RCT"
       ],
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-12",
       "notable_studies": "PMID31485804: nine healthy adults; aligned-clock4,500mg pH contrast positive, lower doses/AUCpH/maximum pH null. PMID23980906: six-person uncontrolled transient pH experiment. PMID25274610: dasatinib-exposure finding under drug-induced hypochlorhydria. PMID28028768: no significant atazanavir-exposure rescue under fed conditions. Do not infer digestive-symptom benefit, general medication rescue or safety clearance.",
       "references_structured": [
         {
@@ -29704,21 +29708,24 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "target_engagement"
             },
             {
               "name": "Aligned-clock time to baseline at 1,500 mg (p=.611) and 3,000 mg (p=.689) did not differ significantly from meal-only control.",
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "null",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "target_engagement"
             },
             {
               "name": "AUCpH p=.990 and maximum pH p=.670 did not differ significantly across arms.",
               "hierarchy": "secondary",
               "kind": "surrogate",
               "direction": "null",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "target_engagement"
             }
           ],
           "dose": {
@@ -36727,7 +36734,7 @@
       "notes": "One randomized placebo-controlled trial used Natreon PrimaVie purified shilajit, 250 mg twice daily for 90 days. Product eligibility requires the explicitly disclosed studied branded preparation; merely purified or fulvic-acid material is not demonstrated equivalent.",
       "notable_studies": "PMID 26395129 randomized 96 healthy men aged 45-55; 75 completed (38 active, 37 placebo). Total/free testosterone and DHEAS increased versus placebo. These biomarker outcomes do not demonstrate energy, longevity or muscle-recovery benefits. PMID 20078516 is retained as separate context: processed shilajit in oligospermia, 35 enrolled/28 completed, uncontrolled baseline comparison; its equivalence to PrimaVie is unverified and it is not a second branded RCT.",
       "study_type": "rct_single",
-      "last_updated": "2026-10-14",
+      "last_updated": "2026-11-12",
       "references_structured": [
         {
           "type": "pubmed",
@@ -36874,21 +36881,24 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "surrogate"
+              "outcome_role": "surrogate",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "free_testosterone",
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "surrogate"
+              "outcome_role": "surrogate",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "DHEAS",
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "surrogate"
+              "outcome_role": "surrogate",
+              "surrogate_class": "unvalidated_physiological_response"
             }
           ],
           "limitations": [
@@ -46404,7 +46414,7 @@
       "effect_direction": "positive_strong",
       "total_enrollment": 169,
       "notes": "Retained eye-fatigue/accommodation trials and an acute eight-man glycemia study concern specific preparations/outcomes. They do not support the former chronic lipid claim attributed to 25191571. Named NCTs are retained provenance, not proof of bilberry-specific efficacy or independently verified aggregate enrollment. Retained-source scope and limitations: Objective ciliary-muscle accommodation HFC-1 findings with 240 mg/day extract for 12 weeks; p=0.049 concerns task-related change, not a subjective eye-strain score (PMID: 32106548) Alleviated critical flicker fusion decline (p=0.023) and reduced subjective eye fatigue symptoms at 480mg/day for 8 weeks in VDT workers (PMID: 25923485) Single 0.47 g standardized-extract capsule in eight men with diet-controlled T2D reduced postprandial glucose/insulin AUC; not a 12-week lipid trial (PMID: 25191571)",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-12",
       "notable_studies": "NCT03415503 (n=169): Dietary Anthocyanins Improve Lipid Metabolism in a Dose - Dependent Manner. NCT01568983 (n=153): The Effects of Polyphenol-rich Berry Juice on Blood Pressure in Hypertensive Subjects. NCT02194361 (n=119): Efficacy of a Standardised Bilberry Extract in Improving the Night Vision of Healthy Volunteers.",
       "references_structured": [
         {
@@ -46480,7 +46490,8 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             }
           ],
           "limitations": [
@@ -49551,7 +49562,7 @@
         "Hormone Balance"
       ],
       "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Outcomes included an aging-males' symptom score, hormone levels and hand-grip strength. In the older-men trial, the symptom score was primary and hormone levels and strength were secondary; these short trials do not establish long-term disease outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-12",
       "notable_studies": "Sreeramaneni et al. (2023, PMID 35129040) randomized 120 men aged 21-35 to placebo, 200 or 400 mg/day for 56 days: free testosterone rose at both doses and total testosterone at 400 mg versus placebo. Pandit et al. (2022, PMID 35928723) randomized 120 men aged 36-55 to the same arms: aging males' symptoms scores fell and free and total testosterone rose at both doses.",
       "references_structured": [
         {
@@ -49755,7 +49766,8 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "Secondary: LH rose with 400 mg (p=0.0470 vs placebo); DHT, cortisol and estradiol unchanged; hand-grip and MUAC improved with 400 mg",
@@ -51887,7 +51899,7 @@
       ],
       "health_goals_supported": [],
       "notes": "One source-qualified randomized trial. The exact preparation, population and outcome limits are retained. Repeated outcomes, timepoints and dose arms do not add independent replication. The assigned study exposure does not establish an effective minimum or general Dose benchmark. Historical source labels remain unchanged in the literature inventory. NCT01044277 reports 61 enrolled; the publication distinguishes 60 receiving intervention and 54 analyzed completers.",
-      "last_updated": "2026-11-07",
+      "last_updated": "2026-11-12",
       "applicability": {
         "scope": "ingredient",
         "studied_population": "Healthy nonsmoking adult men and women; 61 enrolled, 60 received intervention, 54 completed and analyzed; 76% women. Eligibility age 30–79; analyzed participants age 28–72 (mean 46.6), as reported.",
@@ -52005,35 +52017,40 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "exposure"
             },
             {
               "name": "After one-month washout, glutathione stores declined toward baseline; six-month treatment findings do not establish a persistent effect after discontinuation or positivity at every dose/time/compartment.",
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "mixed",
-              "outcome_role": "within_group_change"
+              "outcome_role": "within_group_change",
+              "surrogate_class": "exposure"
             },
             {
               "name": "Selected buccal-cell glutathione store comparisons in Figure 3 were positive; this extra cellular compartment is not a separate trial or a clinical efficacy outcome.",
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "exposure"
             },
             {
               "name": "Lymphocyte proliferation and neutrophil function did not significantly improve.",
               "hierarchy": "secondary",
               "kind": "surrogate",
               "direction": "null",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "NK-cell cytotoxicity in small subsets at three months increased from baseline (Figure 5, Student t-test; n 6 placebo/high-dose, n 5 low-dose); this is not an established placebo-controlled clinical immune benefit.",
               "hierarchy": "secondary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "within_group_change"
+              "outcome_role": "within_group_change",
+              "surrogate_class": "unvalidated_physiological_response"
             }
           ],
           "limitations": [
@@ -52107,7 +52124,7 @@
       ],
       "health_goals_supported": [],
       "notes": "One source-qualified randomized trial. The exact preparation, population and outcome limits are retained. Repeated outcomes, timepoints and dose arms do not add independent replication. The assigned study exposure does not establish an effective minimum or general Dose benchmark. Historical source labels remain unchanged in the literature inventory.",
-      "last_updated": "2026-11-07",
+      "last_updated": "2026-11-12",
       "applicability": {
         "scope": "ingredient",
         "studied_population": "12 healthy young Japanese men, mean 22.3 years; no medication or history of hematologic, venous or arterial disease.",
@@ -52185,14 +52202,16 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "target_engagement"
             },
             {
               "name": "Other measured blood parameters showed no significant treatment/placebo difference; no clinical thrombotic or cardiovascular event endpoint was tested.",
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "target_engagement"
             }
           ],
           "limitations": [
@@ -52527,7 +52546,8 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "exposure"
             },
             {
               "name": "Physical strength/power,lean mass/body composition and most body-water between-group comparisons were not significant.",
@@ -52541,7 +52561,8 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "within_group_change"
+              "outcome_role": "within_group_change",
+              "surrogate_class": "exposure"
             }
           ],
           "dose": {
@@ -52911,7 +52932,8 @@
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             },
             {
               "name": "Whole-group fasting and2-hour glucose and2-hour insulin did not differ; glucose-tolerance subgroup findings are additional population-specific results, not the whole-cohort primary finding.",
@@ -53461,7 +53483,7 @@
       ],
       "notes": "Bounded adult oral L-carnosine source review; two qualifying primary glycemic families, plus separately assessed companion/null/post-hoc findings. Not an exhaustive census of every carnosine paper, a diabetes-prevention or general-performance claim, a Dose benchmark, preparation equivalence or safety clearance. The existing literature screening record retains its source summaries; this canonical clinical registry owns numerical source eligibility.",
       "notable_studies": "2016 pilot primary HOMA-IR rise attenuated versus placebo, not an absolute decline;2023 Monash primary OGTT glucose improved with sensitivity limitations. Reports bearing the Monash registration generated secondary inflammation,vascular,musculoskeletal,cognition and mood analyses, conservatively grouped with the noted demographic discrepancy; NEAT cognition/physical papers are one additional noncredit family. Renal primary mean-change null/additional percent positive retained.",
-      "last_updated": "2026-11-10"
+      "last_updated": "2026-11-12"
     },
     {
       "id": "INGR_GUANIDINOACETATE",
@@ -53859,7 +53881,8 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "unvalidated_physiological_response"
             }
           ],
           "limitations": [
@@ -53999,7 +54022,7 @@
           "verification_source": "Live official MED content and source-specific original material; actual abstract/full-text scope retained in contexts."
         }
       ],
-      "last_updated": "2026-11-10"
+      "last_updated": "2026-11-12"
     },
     {
       "id": "INGR_RICE_PROTEIN",
