@@ -75,6 +75,20 @@ MEMBERSHIP = [
         },
     ),
     (
+        "antimuscarinics",
+        # Dr. Pham Q6 (2026-11-12): the members taken for their antimuscarinic effect.
+        # Tricyclics and diphenhydramine stay in anticholinergics only (Q4 keeps their identity).
+        {
+            "oxybutynin": "32675", "tolterodine": "119565", "trospium": "236778", "solifenacin": "322167",
+            "scopolamine": "9601", "benztropine": "1424", "trihexyphenidyl": "10811", "hyoscyamine": "153970",
+            "glycopyrronium": "1546438", "dicyclomine": "3361",
+        },
+        {
+            "amitriptyline": "704", "nortriptyline": "7531", "doxepin": "3638", "imipramine": "5691",
+            "diphenhydramine": "3498", "mirabegron": "1300786", "donepezil": "135447",
+        },
+    ),
+    (
         "hypoglycemics_high_risk",
         {"insulin glargine": "274783", "glipizide": "4821", "repaglinide": "73044"},
         {"metformin": "6809", "pioglitazone": "33738", "guar gum": "26344"},
@@ -383,17 +397,128 @@ def test_st_johns_wort_antidepressant_rule_reaches_ssris_and_snris(name, rxcui):
     assert rule_classes_for(rxcui) & sub_rule_gate("RULE_INGREDIENT_ST_JOHNS_WORT", "antidepressants_ssri_snri"), name
 
 
-def test_anticholinergic_rule_text_fits_medicines_whose_anticholinergic_effect_is_a_side_effect():
-    """D2 widened the class to diphenhydramine and tricyclics, so the rules it gates
-    must not promise lost efficacy, or a cancelled effect, for every member."""
-    rules = {r["id"]: r for r in _load("ingredient_interaction_rules.json")["interaction_rules"]}
+HUPERZINE = "RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS"
+ALPHA_GPC = "RULE_IQM_ALPHA_GPC_ANTICHOLINERGICS"
+ANTIMUSCARINIC_USERS = {"oxybutynin": "32675", "tolterodine": "119565", "benztropine": "1424", "scopolamine": "9601"}
+INCIDENTAL_USERS = {"amitriptyline": "704", "doxepin": "3638", "nortriptyline": "7531", "diphenhydramine": "3498"}
 
-    def sub(rule_id):
-        return next(d for d in rules[rule_id]["drug_class_rules"] if d["drug_class_id"] == "anticholinergics")
 
-    gpc = sub("RULE_IQM_ALPHA_GPC_ANTICHOLINERGICS")
-    assert "Monitor for loss of efficacy" not in gpc["action"]
-    assert "taken for its anticholinergic action" in gpc["action"]
-    assert "side effect" in gpc["mechanism"] and "not established" in gpc["mechanism"]
-    hup = sub("RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS")
-    assert "cancel" not in hup["alert_body"] and hup["severity"] == "avoid"
+def firing(rule_id: str, rxcuis=(), picker=()) -> list[tuple[str, str]]:
+    """(drug_class_id, severity) of each drug-class sub-rule whose whole gate fires for a profile: the classes of
+    the entered medicines plus any picker class, as the app builds it. Excludes apply to the whole profile."""
+    import profile_gate_evaluator as pge
+
+    profile = set(picker).union(*(rule_classes_for(r) for r in rxcuis))
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == rule_id)
+    return [
+        (d["drug_class_id"], d["severity"]) for d in rule["drug_class_rules"]
+        if pge.evaluate_profile_gate(d["profile_gate"], {"drug_classes": sorted(profile)}, {},
+                                     base_severity=d["severity"]).fires
+    ]
+
+
+def anticholinergic_sub(rule_id: str, drug_class_id: str) -> dict:
+    rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == rule_id)
+    return next(d for d in rule["drug_class_rules"] if d["drug_class_id"] == drug_class_id)
+
+
+@pytest.mark.parametrize("rxcui", ANTIMUSCARINIC_USERS.values(), ids=ANTIMUSCARINIC_USERS)
+def test_a_medicine_taken_for_its_antimuscarinic_effect_gets_huperzine_avoid_and_alpha_gpc_caution(rxcui):
+    """Q6: huperzine A, avoid unsupervised combination; alpha-GPC, caution with limited evidence."""
+    assert firing(HUPERZINE, [rxcui]) == [("antimuscarinics", "avoid")]
+    assert firing(ALPHA_GPC, [rxcui]) == [("antimuscarinics", "caution")]
+
+
+@pytest.mark.parametrize("rxcui", INCIDENTAL_USERS.values(), ids=INCIDENTAL_USERS)
+def test_a_medicine_with_incidental_anticholinergic_effects_gets_caution_and_a_note(rxcui):
+    """Q6: huperzine A + a tricyclic or diphenhydramine is caution with an evidence limitation; alpha-GPC asserts
+    no loss of benefit from class membership alone. Q4: doxepin keeps its identity (no low-dose or topical carve-out)."""
+    assert firing(HUPERZINE, [rxcui]) == [("anticholinergics", "caution")]
+    assert firing(ALPHA_GPC, [rxcui]) == [("anticholinergics", "informational")]
+
+
+def test_both_kinds_together_show_only_the_stronger_finding():
+    """Excludes are whole-profile: oxybutynin with amitriptyline reads as the antimuscarinic finding once."""
+    assert firing(HUPERZINE, ["32675", "704"]) == [("antimuscarinics", "avoid")]
+    assert firing(ALPHA_GPC, ["32675", "704"]) == [("antimuscarinics", "caution")]
+
+
+def test_a_picker_only_profile_keeps_the_uncertainty_and_the_avoid_instruction():
+    """Q4: when the medicine is unknown, keep the uncertainty and ask. The picker-only profile gets the broad
+    sub-rule, and the app shows its headline and body, so those carry both branches: someone on a medicine like
+    oxybutynin is told not to combine without approval, and nothing assumes a tricyclic or diphenhydramine."""
+    assert firing(HUPERZINE, picker=["anticholinergics"]) == [("anticholinergics", "caution")]
+    assert firing(ALPHA_GPC, picker=["anticholinergics"]) == [("anticholinergics", "informational")]
+    hup = anticholinergic_sub(HUPERZINE, "anticholinergics")
+    gpc = anticholinergic_sub(ALPHA_GPC, "anticholinergics")
+    for sub in (hup, gpc):
+        assert "tricyclic" not in sub["alert_headline"].lower() and "diphenhydramine" not in sub["alert_headline"]
+        assert "anticholinergic medicine" in sub["alert_headline"]
+        assert "oxybutynin" in sub["alert_body"] and "anticholinergic" in sub["alert_body"]
+    assert "do not combine unless your prescriber approves; otherwise ask first" in hup["alert_body"]
+    assert "such as oxybutynin, do not combine them unless your prescriber approves" in hup["action"]
+    assert "by mouth or on the skin" in hup["action"]
+    assert "tell your prescriber about alpha-GPC" in gpc["alert_body"]
+
+
+def test_anticholinergic_copy_claims_no_cancelled_effect_or_treatment_failure():
+    """Q6: eliminate "cancel each other out" and qualify the consequence."""
+    rules = _load("ingredient_interaction_rules.json")["interaction_rules"]
+    pairs = (DATA / "curated_interactions/curated_interactions_v1.json").read_text()
+    assert "cancel each other" not in json.dumps(rules).lower() and "cancel each other" not in pairs.lower()
+    for rule_id in (HUPERZINE, ALPHA_GPC):
+        for drug_class_id in ("antimuscarinics", "anticholinergics"):
+            sub = anticholinergic_sub(rule_id, drug_class_id)
+            text = " ".join(sub[k] for k in ("alert_headline", "alert_body", "informational_note", "action",
+                                             "mechanism")).lower()
+            assert "cancel" not in text and "loss of efficacy" not in text, (rule_id, drug_class_id)
+    note = anticholinergic_sub(ALPHA_GPC, "anticholinergics")
+    assert (note["severity"], note["direction"], note["evidence_level"]) == ("informational", "neutral", "theoretical")
+    consumer = " ".join(note[k] for k in ("alert_headline", "alert_body", "informational_note")).lower()
+    for claim in ("less well", "lessen", "reduce", "work against", "blunt"):
+        assert claim not in consumer, claim
+    subset = anticholinergic_sub(ALPHA_GPC, "antimuscarinics")
+    assert subset["evidence_level"] == "limited"
+    assert "does not show that alpha-GPC makes these medicines ineffective" in subset["mechanism"]
+
+
+def test_doxepin_wording_is_qualified_without_a_strength_cutoff_or_a_topical_exemption():
+    """Q4: SILENOR's above-6-mg statement is not an interaction cutoff; ZONALON reports systemic absorption."""
+    hup = anticholinergic_sub(HUPERZINE, "anticholinergics")
+    assert (hup["severity"], hup["evidence_level"]) == ("caution", "theoretical")
+    assert "so 6 mg is not an interaction cutoff" in hup["mechanism"]
+    # SILENOR lists anticholinergic effects among those seen above 6 mg yet contraindicates 3-6 mg use in untreated
+    # narrow-angle glaucoma or severe urinary retention (4.3): "only above 6 mg" overstated the label.
+    assert "contraindicates it in untreated narrow-angle glaucoma or severe urinary retention" in hup["mechanism"]
+    notes = _load("drug_classes.json")["classes"]["class:anticholinergics"]["notes"]
+    assert "only above 6 mg" not in notes and "only above 6 mg" not in hup["mechanism"]
+    assert "systemic anticholinergic effects after skin application" in hup["mechanism"]
+    assert any("1bec1223" in s for s in hup["sources"]) and any("5f302247" in s for s in hup["sources"])
+    assert hup["profile_gate"]["dose"] is None and not hup["profile_gate"]["excludes"]["product_forms_any"]
+    for rule_id in (HUPERZINE, ALPHA_GPC):
+        assert anticholinergic_sub(rule_id, "anticholinergics")["profile_gate"]["excludes"]["drug_classes_any"] == [
+            "antimuscarinics"]
+
+
+def test_the_antimuscarinic_subset_sits_inside_the_anticholinergic_identity_class():
+    """Q6: create the narrower rule subset without corrupting the broader identity class."""
+    classes = _load("drug_classes.json")["classes"]
+    subset = set(classes["class:antimuscarinics"]["member_rxcuis"])
+    broad = set(classes["class:anticholinergics"]["member_rxcuis"])
+    assert subset < broad
+    assert broad - subset == {"704", "722", "2597", "3247", "3498", "3638", "5691", "7531", "8886", "10834"}
+    # Exact ATC codes for single members, as the parent records them: a group code such as A04AD (other
+    # antiemetics) would name unrelated medicines.
+    assert classes["class:antimuscarinics"]["atc_codes"] == [
+        "A03AA07", "A03AB02", "A03BA03", "A04AD01", "G04BD", "N04AA", "N04AC01"]
+    assert set(classes["class:antimuscarinics"]["atc_codes"]) <= set(classes["class:anticholinergics"]["atc_codes"])
+
+
+def test_anticholinergic_findings_say_the_wording_is_agent_work():
+    """Dr. Pham signed the Q4/Q6 severities and scope; the strings are agent wording and must say so."""
+    for rule_id in (HUPERZINE, ALPHA_GPC):
+        rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == rule_id)
+        assert rule["review_owner"].startswith("Dr. Pham (signed answers 2026-11-12, Q4 and Q6")
+        assert "by agent" in rule["review_owner"]
+        for sub in rule["drug_class_rules"]:
+            assert "agent work, not reviewed by Dr. Pham" in sub["clinical_review"]["notes"], (rule_id, sub["drug_class_id"])

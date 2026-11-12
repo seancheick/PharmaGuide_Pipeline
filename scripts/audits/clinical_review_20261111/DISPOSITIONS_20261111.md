@@ -321,6 +321,36 @@ medicines as Q7 did for CoQ10, cranberry and ginger, or keep it for every antico
 App follow-ups: re-copy `profile_gate_test_cases.json` (pin `1392f960`) into the app fixture and its sync test, and
 sync the bundled `clinical_risk_taxonomy.json` (5.7.0) so the app's gate validator knows `injectable_anticoagulants`.
 
+### Batch 3: anticholinergic scope (`apply_answers_b3_anticholinergic.py`)
+
+| Row | Outcome |
+|---|---|
+| Q6 rule subset | New rule class `class:antimuscarinics`: the 22 members of `class:anticholinergics` taken for their antimuscarinic effect (bladder antimuscarinics G04BD, antiparkinson anticholinergics N04AA/N04AC01, scopolamine A04AD01, antispasmodics A03AA07/A03AB02/A03BA03; ATC read on RxNav 2026-11-12; `atc_codes` reuses the parent's exact codes for single members). The ten tricyclics and diphenhydramine stay in `class:anticholinergics` only; that identity class is unchanged. Gate id added to the taxonomy (minor version bump, gate vocabulary only); rule-only vocabulary entry reuses the approved anticholinergics `group_label` and `commonly_used_for` verbatim, so no new consumer copy |
+| Q6 huperzine A + antimuscarinic treatment | New sub-rule: avoid, "do not combine ... unless your prescriber approves", evidence theoretical (main had probable; Q6 calls the extension of the donepezil label statement to huperzine A a pharmacological inference with no direct huperzine interaction trial, the taxonomy's "limited direct human evidence"); sources PMID 25191267, ARICEPT and donepezil 76bf638e (7.1) |
+| Q6 huperzine A + tricyclics, diphenhydramine | The anticholinergics sub-rule becomes caution, evidence theoretical, excluding `antimuscarinics`. Text asks the user to check with a prescriber or pharmacist and give the medicine, dose and route; states the practical effect is not established. Headline "Check first if you take an anticholinergic medicine"; the body carries both branches (see "medicine unknown") |
+| Q4 doxepin, topical products | Doxepin keeps its class membership with qualified wording: SILENOR lists anticholinergic effects among those seen above 6 mg (10.1) yet contraindicates 3-6 mg use in untreated narrow-angle glaucoma or severe urinary retention (4.3), so 6 mg is cited as not an interaction cutoff (the class notes' "only above 6 mg" is corrected), and ZONALON cream's label (systemic absorption, a probable systemic anticholinergic toxicity case) is cited so topical doxepin is not exempt. Topical diphenhydramine no longer inherits the strongest (avoid) finding. No dose or form gate is added |
+| Q4 medicine unknown | A profile with only the "Anticholinergic medication" picker class reaches the broader sub-rules (huperzine caution, alpha-GPC informational). The app shows `alert_headline` and `alert_body`, so both carry both branches: neutral headlines, and bodies that tell someone on a medicine like oxybutynin not to combine without prescriber approval (huperzine) or to tell the prescriber (alpha-GPC), and otherwise to ask first. Whether that profile should get the subset's severity is held for Dr. Pham |
+| Q6 alpha-GPC + antimuscarinic treatment | New sub-rule: caution, evidence limited, no treatment-failure claim. Cites PMID 2071257 (32 healthy volunteers; alpha-GPC reduced scopolamine-induced attention and memory impairment), stated as not showing clinical ineffectiveness, and PMID 36950691 |
+| Q6 alpha-GPC + incidental anticholinergics | The anticholinergics sub-rule becomes informational, direction neutral, evidence theoretical, excluding `antimuscarinics`: no loss of benefit is asserted from class membership. The text tells someone on a medicine like oxybutynin to tell the prescriber |
+| Q6 "cancel each other out" | Absent from every rule and curated pair; a test keeps it and any loss-of-efficacy claim out of both rules |
+| Independent review (2026-11-12) | Fresh-context healthcare review: NEEDS FIXES, all applied. Picker-only visible copy assumed a tricyclic or diphenhydramine (fixed above, tested on headline and body); huperzine subset grading (theoretical); hedged wording ("usually not the reason they are taken", "no study was found"); attribution; exact ATC codes; SILENOR "only above 6 mg" overstated the label |
+| Citation verifier | `verify_interaction_rules_citations.py` gains topic stems for `antimuscarinics` (and `anticholinergic`, `antimuscarinic`, `scopolamine` prefixes for both classes; tokens match by prefix). Strict run on the changed rules: 6 on-topic, 0 suspects |
+
+Both rules' `last_reviewed` is 2026-11-12 and each new or changed sub-rule records Dr. Pham's Q4/Q6 decision in
+`clinical_review`, noting that the consumer wording, membership and evidence grading are agent work not reviewed by
+Dr. Pham; `review_owner` names Dr. Pham for severity and scope and the agent for wording and labels read. This lifts the release blocker recorded under ask 4 below. Known limits: membership stays by
+ingredient, so transdermal scopolamine, oxybutynin gel and inhaled or topical glycopyrronium reach the antimuscarinic
+avoid; each is still used for its antimuscarinic effect. Whole-profile excludes mean oxybutynin plus a tricyclic shows
+only the avoid finding. Held for Dr. Pham: (1) a subset-specific `commonly_used_for` sentence for `antimuscarinics` (the shared sentence
+mentions allergies and sleep problems, which fit the broad class); (2) picker-only severity: a profile with only the
+picker class gets caution (huperzine) and informational (alpha-GPC), with the avoid instruction in the visible text,
+not the subset's avoid and caution; (3) transdermal, topical and inhaled antimuscarinic products (scopolamine patch,
+oxybutynin gel, inhaled glycopyrronium) reach the avoid finding by ingredient. Follow-ups: the app's bundled taxonomy
+and its vocabulary drift test (30/14 to 31/15) need the new class (runtime passes unknown ids through); tiotropium,
+ipratropium, umeclidinium, aclidinium, atropine, methscopolamine and propantheline are in neither class (membership
+work); the lowered severity for the incidental members needs its release-gate alert or attestation on the final
+candidate (not prepared by this lane).
+
 ### Batch 4: CBD named-medicine split, F7 (`apply_answers_b4_cbd.py`)
 
 Sources read 2026-11-12: EPIDIOLEX label (setid 8bf27097, effective 2026-05-29; 5.1, 7.2, 7.4, 12.3) and PMID 39601108
@@ -378,7 +408,7 @@ Known limits: membership is by ingredient, so topical tacrolimus and sirolimus u
 headline and body say "taken by mouth". The stiripentol exclude applies to the whole profile, so stiripentol plus
 levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other benzodiazepines outside
 `class:sedatives` get no CBD sedation finding although label 7.4 names other CNS depressants (predates Q5); the app's
-bundled taxonomy and vocabulary drift test need the new classes (37/21 entries); the removal of the immunosuppressant
+bundled taxonomy and vocabulary drift test need the new classes (38/22 entries with batch 3), the removal of the immunosuppressant
 sub-rule and the new class map must ship in the same interaction-DB build.
 
 ## Questions for Dr. Pham
