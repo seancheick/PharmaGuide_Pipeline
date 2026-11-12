@@ -47,7 +47,7 @@ def test_every_pair_classified_with_valid_enums():
     # section 2) adds exact acenocoumarol, phenprocoumon and edoxaban St. John's wort pairs and acenocoumarol and
     # phenprocoumon glucosamine pairs: 147.
     # Batch6 adds oral isotretinoin/vitamin A, separate beta-carotene, and calcium/bisphosphonates.
-    assert len(PAIRS) == 150, f"expected 150 reviewed pairs, found {len(PAIRS)}"
+    assert len(PAIRS) == 162, f"expected 162 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:

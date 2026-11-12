@@ -22858,7 +22858,10 @@
             "excludes": {
               "conditions_any": [],
               "drug_classes_any": [
-                "stiripentol"
+                "clobazam",
+                "valproate",
+                "stiripentol",
+                "cbd_other_anticonvulsants"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -22942,6 +22945,45 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "drug_class_id": "cbd_other_anticonvulsants",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Among seizure medicines, the EPIDIOLEX label reports dedicated interaction studies only with clobazam, valproate and stiripentol, which have their own findings. It reports no specific effect on other seizure medicines, so none is claimed here.",
+          "action": "If you take a seizure medicine, talk to the doctor who prescribes it before using CBD. Do not change your seizure medicine yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Ask before using CBD with seizure medicines",
+          "alert_body": "The prescription CBD label reports studies with only a few seizure medicines. If you take a seizure medicine, talk to the doctor who prescribes it before using CBD.",
+          "informational_note": "The prescription CBD label reports interaction studies with only a few seizure medicines.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "cbd_other_anticonvulsants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: end the implication that every anticonvulsant shares the demonstrated interaction; keep a qualified review message for other seizure medicines until their evidence is assessed. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -23800,7 +23842,9 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "emsam_patch"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -23814,6 +23858,45 @@
             "reviewed_at": "2026-11-12",
             "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
             "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug language, but this rule is gated on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user gets avoid here."
+          }
+        },
+        {
+          "drug_class_id": "emsam_patch",
+          "severity": "contraindicated",
+          "evidence_level": "moderate",
+          "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+          "action": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+          ],
+          "alert_headline": "Do not combine SAMe with EMSAM",
+          "alert_body": "If you use the EMSAM patch, do not take SAMe. Talk to your prescriber before changing your medication.",
+          "informational_note": "Applies to confirmed selegiline patches at any strength.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "emsam_patch"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Signed Q1: contraindicated through EMSAM section 7.1 serotonergic-drug language. Implementation matches confirmed transdermal RxNorm products."
           }
         }
       ],

@@ -2,14 +2,20 @@
   "_metadata": {
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
-    "schema_version": "5.10.0",
+    "schema_version": "5.11.0",
     "contract_test": "scripts/tests/test_clinical_risk_taxonomy_contract.py",
     "last_updated": "2026-11-12",
-    "total_entries": 95,
+    "total_entries": 97,
     "flutter_top_level_key": "clinical_risk_taxonomy",
-    "drug_classes_count": 41,
+    "drug_classes_count": 43,
     "migration": {
       "completed_migrations": [
+        {
+          "from": "5.10.0",
+          "to": "5.11.0",
+          "date": "2026-11-12",
+          "summary": "Signed Q1 EMSAM product scope and Q5 unassessed seizure medication scope."
+        },
         {
           "from": "5.9.0",
           "to": "5.10.0",
@@ -649,6 +655,18 @@
       "id": "nadolol",
       "label": "Nadolol",
       "category": "cardiovascular",
+      "display_priority": 25
+    },
+    {
+      "id": "emsam_patch",
+      "label": "EMSAM patch",
+      "category": "neurologic",
+      "display_priority": 25
+    },
+    {
+      "id": "cbd_other_anticonvulsants",
+      "label": "Other seizure medicines",
+      "category": "neurologic",
       "display_priority": 25
     }
   ],

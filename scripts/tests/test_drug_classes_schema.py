@@ -93,6 +93,8 @@ EXPECTED_CLASSES = {
     "class:hypoglycemics_lower_risk",
     "class:hypoglycemics_unknown",
     "class:clobazam",
+    "class:emsam_patch",
+    "class:cbd_other_anticonvulsants",
     "class:nadolol",  # Signed G1: exact green-tea interaction, not all beta-blockers.
 }
 

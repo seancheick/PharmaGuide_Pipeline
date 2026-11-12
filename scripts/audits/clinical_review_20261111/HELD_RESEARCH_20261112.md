@@ -18,11 +18,11 @@ corrections proceed under the existing review delegation.
 
 | Signed decision | Implementation status |
 |---|---|
-| Q1 SAMe and MAOIs | #459 implements the class avoid fallback and exact tranylcypromine and phenelzine contraindications. Confirmed EMSAM still needs exact formulation matching and pair/profile parity. That is engineering work under the signed contraindication. |
-| Q2 vitamin E | #465 carries the wording correction. Lower prominence for known ordinary exposure is already authorized within Q2. Implement and verify form, daily use and combined Stack amounts first. Any new numerical suppression threshold falls outside Q2. |
+| Q1 SAMe and MAOIs | #459 implements the class avoid fallback and exact tranylcypromine and phenelzine contraindications. The #468 follow-up implements confirmed EMSAM formulation matching and the signed contraindication on both source surfaces. |
+| Q2 vitamin E | #465 carries the wording correction. The #468 follow-up replaces the fixed surgery interval with advice from the surgical team. The follow-up notes retain the hold on numerical suppression and lower prominence until form, daily use and combined Stack amounts are qualified. |
 | Q3 and Q7 anticoagulants | #461 implements the glucosamine action, supported VKA distinctions and injected-anticoagulant exclusions. Ginseng species and any extension beyond warfarin remain separate questions. |
 | Q4 and Q6 antimuscarinic scope | #462 implements the differentiated warning. Preserve qualified review for unknown route or dose. Presentation for an unidentified picker selection and accurate naming of the narrower class remain separate. |
-| Q5 CBD | #464 implements the named split, qualified oral-digoxin caution and general seizure-medicine review message. Preserve that message for an otherwise unassessed medicine even when the same regimen includes stiripentol. #470 carries the sirolimus source correction against current main. Mycophenolate was signed for the review list. |
+| Q5 CBD | #464 implements the named split, qualified oral-digoxin caution and general seizure-medicine review message. The #468 follow-up preserves the review message for a known unassessed medicine alongside stiripentol, without changing the held H2 grade. #470 carries the sirolimus source correction against current main. Mycophenolate was signed for the review list. |
 | Serious warnings | #459 implements SJW/SSRIs and the SSRI/SNRI 5-HTP harmonization, #461 implements SJW/anticoagulant distinctions, #462 implements huperzine scope, and #465/#466 carry senna/cascara/aloe with digoxin. Keep unknown aloe processing uncertain. |
 
 ### Questions for Dr. Pham

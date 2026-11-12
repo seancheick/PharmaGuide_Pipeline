@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-12",
-    "total_entries": 109,
+    "total_entries": 121,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -2193,7 +2193,7 @@
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
       "applies_to": "whole_class",
-      "evidence_notes": "Class record (avoid; prescriber review required). Dr. Pham, 2026-11-12 (Q1): tranylcypromine is contraindicated (exact pair DSI_TRANYLCYPROMINE_SAME); phenelzine is contraindicated through NARDIL's serotonergic-agent category, a clinical interpretation (exact pair DSI_PHENELZINE_SAME); confirmed EMSAM is contraindicated through its serotonergic-drug language (section 7.1), but this record is keyed on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user receives it; oral selegiline (ZELAPAR) and other or unidentified MAOIs are avoid, a documented class inference. The EMSAM 6 mg exception concerns dietary tyramine only.",
+      "evidence_notes": "Class record (avoid; prescriber review required). Dr. Pham, 2026-11-12 (Q1): tranylcypromine is contraindicated (exact pair DSI_TRANYLCYPROMINE_SAME); phenelzine is contraindicated through NARDIL's serotonergic-agent category, a clinical interpretation (exact pair DSI_PHENELZINE_SAME); confirmed EMSAM is contraindicated through its serotonergic-drug language (section 7.1), and has exact patch-product pairs. This fallback is keyed on the MAOI class; oral selegiline (ZELAPAR) and other or unidentified MAOIs are avoid, a documented class inference. The EMSAM 6 mg exception concerns dietary tyramine only.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",
@@ -4108,6 +4108,426 @@
       "direction": "harmful",
       "materiality": "presence",
       "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
+    },
+    {
+      "id": "DSI_EMSAM_SAME_617716",
+      "type": "Med-Sup",
+      "agent1_name": "Emsam",
+      "agent1_id": "617716",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865206",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.25 MG/HR Transdermal System",
+      "agent1_id": "865206",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865208",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.25 MG/HR Transdermal System [Emsam]",
+      "agent1_id": "865208",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865210",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.375 MG/HR Transdermal System",
+      "agent1_id": "865210",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865212",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.375 MG/HR Transdermal System [Emsam]",
+      "agent1_id": "865212",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865214",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.5 MG/HR Transdermal System",
+      "agent1_id": "865214",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_865216",
+      "type": "Med-Sup",
+      "agent1_name": "24 HR selegiline 0.5 MG/HR Transdermal System [Emsam]",
+      "agent1_id": "865216",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_1806068",
+      "type": "Med-Sup",
+      "agent1_name": "selegiline Transdermal System",
+      "agent1_id": "1806068",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_1806071",
+      "type": "Med-Sup",
+      "agent1_name": "selegiline Transdermal System [Emsam]",
+      "agent1_id": "1806071",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_1295063",
+      "type": "Med-Sup",
+      "agent1_name": "selegiline Transdermal Product",
+      "agent1_id": "1295063",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_1296229",
+      "type": "Med-Sup",
+      "agent1_name": "Emsam Transdermal Product",
+      "agent1_id": "1296229",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_EMSAM_SAME_1175941",
+      "type": "Med-Sup",
+      "agent1_name": "Emsam Topical Product",
+      "agent1_id": "1175941",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "EMSAM labeling contraindicates serotonergic drugs because of serotonin syndrome risk. Applying that category to SAMe is the signed Q1 clinical interpretation. The label does not name SAMe.",
+      "management": "Do not take SAMe with the EMSAM patch. Do not stop or switch your prescribed medicine to use SAMe.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "EMSAM section 7.1 reviewed against signed Q1. Exact transdermal identity verified through RxNorm EMSAM relationships."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Signed Q1. Exact transdermal product identity from RxNorm. Dietary tyramine exceptions do not change this finding.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
     }
   ]
 }
