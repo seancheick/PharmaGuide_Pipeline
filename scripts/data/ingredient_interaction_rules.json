@@ -8341,15 +8341,15 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "probable",
-          "last_reviewed": "2026-07-04",
-          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors. A meta-analysis of RCTs found a 22% increased risk of hemorrhagic stroke (Schurks 2010, pooled RR 1.22); the signal is anchored to ~400 IU/day supplemental doses and compounds with anticoagulant or antiplatelet use.",
+          "last_reviewed": "2026-11-12",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors. A meta-analysis of randomized trials found a 22% increased risk of hemorrhagic stroke (Schurks 2010, pooled RR 1.22). The NIH fact sheet says the supplemental amount needed for clinically significant medication interactions is unknown but probably exceeds 400 IU/day, which is not an established threshold. The risk adds to anticoagulant or antiplatelet use.",
           "action": "Use caution with supplemental vitamin E if you have a bleeding disorder. Review it with your clinician, especially if you also take blood thinners.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21051774/"
           ],
           "alert_headline": "High-dose vitamin E may increase bleeding",
-          "alert_body": "High-dose vitamin E (about 400 IU/day or more) can inhibit clotting and raise bleeding risk. If you have a bleeding disorder or take blood thinners, review vitamin E use with your clinician.",
+          "alert_body": "High-dose vitamin E can raise bleeding risk; the amount that matters is not established. If you have a bleeding disorder or take blood thinners, review vitamin E use with your clinician.",
           "informational_note": "Vitamin E can affect clotting at high doses — relevant to people with bleeding disorders.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8371,14 +8371,20 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "surgery_scheduled",
           "severity": "caution",
           "evidence_level": "probable",
-          "last_reviewed": "2026-07-04",
-          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, raising perioperative bleeding risk at high supplemental doses (~400 IU/day and above).",
+          "last_reviewed": "2026-11-12",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, which can raise perioperative bleeding risk at high supplemental doses; the amount that matters is not established.",
           "action": "Tell your surgical team about vitamin E supplements and follow their instructions about whether and when to stop them.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
@@ -8407,7 +8413,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Only the mechanism changed in this row; its alert text and action predate this review and were not reviewed by Dr. Pham. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "lactation",
@@ -8449,14 +8461,14 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Antiplatelet activity at high doses (≥400 IU/day) via vitamin K-epoxide reductase competition.",
-          "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using vitamin E supplements.",
+          "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. The NIH Office of Dietary Supplements says large doses taken with anticoagulant or antiplatelet medicines such as warfarin can increase bleeding risk, especially with low vitamin K intake, and that the supplemental amount needed for clinically significant effects is unknown but probably exceeds 400 IU/day. That figure is not an established threshold below which the interaction disappears.",
+          "action": "If you take a blood thinner, talk to your prescriber before using vitamin E supplements, and tell them how much you take.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
           ],
           "alert_headline": "Bleeding risk at high doses",
-          "alert_body": "Vitamin E above 400 IU/day can mildly thin the blood and raise bleeding risk when combined with warfarin or aspirin-type drugs.",
-          "informational_note": "Vitamin E at high dose has antiplatelet effect — relevant to anyone on blood thinners.",
+          "alert_body": "Large doses of vitamin E can affect clotting and add to bleeding risk with blood thinners. The amount that matters is not known. Talk to your prescriber before taking vitamin E.",
+          "informational_note": "Vitamin E at high doses can have an antiplatelet effect — relevant to anyone on blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8477,7 +8489,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [
@@ -8679,8 +8697,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team; Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",
@@ -18246,16 +18264,16 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. This is not evidence that every ordinary brief exposure causes a direct drug interaction.",
-          "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
+          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monographs for senna leaf and pod say hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). They set no dose or duration that clears the combination and do not show that every brief use causes toxicity.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use senna without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
-          "alert_headline": "Can increase digoxin toxicity",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, ask your prescriber before using this laxative and avoid unsupervised prolonged use.",
-          "informational_note": "Senna can lower potassium — relevant to people on digoxin or other cardiac glycosides.",
+          "alert_headline": "Avoid unsupervised use with digoxin",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "informational_note": "Prolonged or heavy senna use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -18275,7 +18293,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: keep 'avoid unsupervised use,' with potassium-loss and preparation context; the monographs require medical consultation and set no dose or duration cutoff. Her preparation guidance names aloe, which batch 5b handles. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -18315,8 +18339,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only); wording by agent, not reviewed by Dr. Pham; other rows: original rule pharmaguide_clinical_team, agent re-sourcing 2026-04-26"
     },
     {
       "id": "RULE_IQM_CHASTEBERRY_PREGNANCY",
@@ -18945,15 +18969,15 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. This is not evidence that every ordinary brief exposure causes a direct drug interaction.",
-          "action": "Avoid cascara sagrada with cardiac glycosides. If constipation management is required, select a potassium-sparing approach and monitor serum potassium and digoxin levels.",
+          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monograph for cascara bark says hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). It sets no dose or duration that clears the combination and does not show that every brief use causes toxicity.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use cascara without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
-          "alert_headline": "Can increase digoxin toxicity",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, ask your prescriber before using this laxative and avoid unsupervised prolonged use.",
-          "informational_note": "Cascara can lower potassium — relevant to people on digoxin or other cardiac glycosides.",
+          "alert_headline": "Avoid unsupervised use with digoxin",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "informational_note": "Prolonged or heavy cascara use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -18973,7 +18997,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: keep 'avoid unsupervised use,' with potassium-loss and preparation context; the monographs require medical consultation and set no dose or duration cutoff. Her preparation guidance names aloe, which batch 5b handles. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -19011,8 +19041,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only); wording by agent, not reviewed by Dr. Pham; other rows: original rule pharmaguide_clinical_team, agent re-sourcing 2026-04-26"
     },
     {
       "id": "RULE_IQM_ALOE_FEROX",
