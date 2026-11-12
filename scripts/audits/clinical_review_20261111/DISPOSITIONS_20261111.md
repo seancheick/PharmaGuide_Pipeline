@@ -296,6 +296,24 @@ sertraline row) passes `drugClasses: ['class:ssris']` by hand. Production resolv
 re-hydrates stored stacks), but that fixture needs `class:antidepressants_ssri_snri` added before it runs against a
 database built from this batch.
 
+### Batch 2: anticoagulants (`apply_answers_b2_anticoagulants.py`)
+
+| Row | Outcome |
+|---|---|
+| Q7 injected direct thrombin inhibitors | New class `class:injectable_anticoagulants` (argatroban, bivalirudin, desirudin, lepirudin, plus the heparins and fondaparinux below); gate id added to the taxonomy (5.7.0, gate vocabulary only). The six warfarin-addressed fallback sub-rules (St. John's wort, glucosamine, cranberry, CoQ10, both ginger records) exclude it. These medicines stay anticoagulants and keep the general bleeding findings; they get no warfarin, INR or oral-inducer text and no St. John's wort finding |
+| Part B 3D heparin-group membership | heparin 5224, enoxaparin 67108, dalteparin 67109, tinzaparin 69646, fondaparinux 321208 (RxNav ingredient RxCUIs, ATC B01AB/B01AX) join `class:anticoagulants` and the injected class. The `class:anticoagulants` pairs (CBD, vinpocetine, horse chestnut, turmeric, ginseng, NSAIDs) now reach them; each of their INR sentences names warfarin. Heparin's ingredient also covers topical and eye products, so such users are treated as injected users (over-warns) |
+| St. John's wort + warfarin, acenocoumarol, phenprocoumon (Q7, section 2) | New exact Major pairs `DSI_ACENOCOUMAROL_SJW` (UK Sinthrome SmPC 4.5: may diminish the effect) and `DSI_PHENPROCOUMON_SJW` (German Marcumar Fachinformation 4.5: weakened effect; closer checks at start and after stopping). The VKA sub-rule and the fallback (one text) address "warfarin or a similar blood thinner", cite both labels, and state that other VKAs (dicumarol, fluindione, phenindione, tioclomarol) are a precautionary class inference, as Q7 allows |
+| St. John's wort + DOACs (section 2) | `DSI_DOAC_SJW` evidence notes give each label's own wording: ELIQUIS and rivaroxaban name St. John's wort; PRADAXA says P-gp inducers should generally be avoided; SAVAYSA names rifampin only; Lixiana (UK) says caution including St. John's wort; betrixaban's label is no longer on DailyMed and was not re-read. No INR text |
+| St. John's wort + edoxaban (section 2) | New exact pair `DSI_EDOXABAN_SJW`, Major: avoid recorded as PharmaGuide precautionary policy because the UK label says caution. The DOAC sub-rule mechanism says the same |
+| Glucosamine + warfarin (Q3) | Caution kept. `DSI_WAR_GLUCOSAMINE` management is Q3's text followed by the existing bleeding-report sentence. The VKA and fallback sub-rules carry Q3's action ("warfarin or a similar blood thinner"), a body saying not to start without the anticoagulation clinician's agreement, and no interval. Not called a contraindication |
+| Glucosamine + acenocoumarol, phenprocoumon (Q7) | New exact Moderate pairs from the Sinthrome and Marcumar labels (raised INR or stronger effect; close monitoring when glucosamine starts or stops); the sub-rules cite both and state other VKAs as inference |
+| CoQ10, cranberry, ginger (both records) (Q7) | Evidence stays warfarin-specific; the VKA extension is stated as an inference in mechanism and action, identically in both ginger records |
+| INR copy pass (section 2; Part B 3D) | 19 whole-class anticoagulant bodies: "ask about INR or bleeding checks" becomes "ask about bleeding checks". 12 rules' actions or bodies (ginseng, omega-3, fish oil, chamomile, cat's claw, devil's claw, chondroitin, black seed oil, DHA, ALCAR, quercetin, CBD) now address each INR instruction to warfarin users. A test walks every sub-rule that fires for apixaban, rivaroxaban, dabigatran, edoxaban and the nine injected medicines and finds no unaddressed INR sentence. With the rows above, 30 rules changed |
+| VKA plus another anticoagulant (section 2) | Test: warfarin + enoxaparin, warfarin + apixaban, acenocoumarol + enoxaparin and warfarin + apixaban + enoxaparin keep the VKA finding, and the DOAC St. John's wort finding where a DOAC is present |
+
+Noted for batch 8 (not changed here): chamomile's ">4 cups/day" and the generic "has mild antiplatelet or
+anticoagulant activity" opening of several whole-class bodies (for example vitamin D, row G1) are unsourced wording.
+
 ## Questions for Dr. Pham
 
 **Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:

@@ -248,8 +248,9 @@ STATIN_LABELS = {  # each marketed statin's own gemfibrozil instruction, read 20
 
 def _pairs():
     out = {}
-    for name in ('curated_interactions_v1.json', 'med_med_pairs_v1.json'):
+    for name in ('curated_interactions_v1.json', 'med_med_pairs_v1.json', 'batch_critical_2026_05.json'):
         for row in json.loads((DATA / 'curated_interactions' / name).read_text())['interactions']:
+            assert row['id'] not in out, row['id']
             out[row['id']] = row
     return out
 
@@ -410,7 +411,8 @@ def test_anticoagulant_pairs_and_rules_agree_on_the_reviewed_severity_and_scope(
         assert sub['severity'] == severity, rule_id
         # Minor pairs sit in the background lane (pipeline label, not exported); the rest never do.
         assert (pair.get('display_layer') == 'background') == (pair['severity'] == 'Minor'), pair_id
-        assert sub['clinical_review']['file'] == REVIEW_FILE, rule_id
+        # Reviewed 2026-11-11; rows refined by the signed answers of 2026-11-12 cite that file instead.
+        assert sub['clinical_review']['file'] in (REVIEW_FILE, ANSWERS_FILE), rule_id
         if drug_class != 'anticoagulants':
             continue
         fires = {
@@ -495,7 +497,8 @@ def test_ginger_blood_thinner_findings_carry_the_warfarin_evidence_and_scope():
 def test_betrixaban_is_a_doac_and_leaves_the_unidentified_fallback():
     """BEVYXXA: betrixaban is an oral factor Xa inhibitor (ATC B01AF, inside the doacs class's ATC scope) and a
     P-gp substrate, so it reads as a DOAC: no warfarin INR text, and St. John's wort still shows avoid. The
-    injected direct thrombin inhibitors are ATC B01AE but not oral; they stay in the fallback (question 7)."""
+    injected direct thrombin inhibitors are ATC B01AE but not oral; since Q7 (signed 2026-11-12) they are an
+    identified injected subgroup outside the warfarin fallback."""
     classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
 
     def profile(rxcui):
@@ -514,7 +517,169 @@ def test_betrixaban_is_a_doac_and_leaves_the_unidentified_fallback():
                                      base_severity='avoid').fires
     for name, rxcui in (('argatroban', '15202'), ('bivalirudin', '60819'), ('desirudin', '114934'),
                         ('lepirudin', '237057')):
-        assert profile(rxcui) == {'anticoagulants'}, name
+        assert profile(rxcui) == {'anticoagulants', 'injectable_anticoagulants'}, name
+
+
+# --- Signed answers 2026-11-12, batch 2: anticoagulants (Q3, Q7, section 2, Part B 3D) -------------------------------
+
+ANSWERS_FILE = 'audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md'
+SINTHROME = 'https://www.medicines.org.uk/emc/product/2058/smpc'
+MARCUMAR = 'https://www.fachinfo.de/pdf/003056'
+LIXIANA = 'https://www.medicines.org.uk/emc/product/6905/smpc'
+INJECTED = {  # RxNorm ingredient RxCUIs, verified on RxNav 2026-11-12
+    'argatroban': '15202', 'bivalirudin': '60819', 'desirudin': '114934', 'lepirudin': '237057',
+    'heparin': '5224', 'enoxaparin': '67108', 'dalteparin': '67109', 'tinzaparin': '69646', 'fondaparinux': '321208',
+}
+GLUCOSAMINE_Q3 = (
+    'Do not start glucosamine while taking warfarin unless your anticoagulation clinician has specifically agreed and '
+    'arranged appropriate INR monitoring. Tell them before stopping or changing glucosamine. Some warfarin labels '
+    'advise against this combination.'
+)
+CONSUMER_FIELDS = ('action', 'alert_headline', 'alert_body', 'informational_note')
+
+
+def _classes():
+    return json.loads((DATA / 'drug_classes.json').read_text())['classes']
+
+
+def _profile_of(*rxcuis):
+    """Profile-gate ids an entered regimen produces: every class each medicine is a member of."""
+    return {cid.removeprefix('class:') for cid, c in _classes().items()
+            if any(r in c.get('member_rxcuis', []) for r in rxcuis)}
+
+
+def _firing_subs(profile):
+    import profile_gate_evaluator as pge
+
+    for rule in _rules().values():
+        for sub in rule.get('drug_class_rules', []):
+            if pge.evaluate_profile_gate(sub['profile_gate'], {'drug_classes': sorted(profile)}, {},
+                                         base_severity=sub['severity']).fires:
+                yield rule['id'], sub
+
+
+def test_injected_anticoagulants_are_an_identified_subgroup_outside_the_warfarin_fallback():
+    """Q7: injected thrombin inhibitors get their own subgroup and leave the unidentified-warfarin fallback; Part B
+    3D: heparins and fondaparinux join the anticoagulants without receiving warfarin text."""
+    classes = _classes()
+    injected = classes['class:injectable_anticoagulants']
+    assert dict(zip(injected['member_names'], injected['member_rxcuis'])) == INJECTED
+    assert set(INJECTED.values()) <= set(classes['class:anticoagulants']['member_rxcuis'])
+    for cid in ('class:doacs', 'class:vitamin_k_antagonists'):
+        assert not set(INJECTED.values()) & set(classes[cid]['member_rxcuis']), cid
+    taxonomy = json.loads((DATA / 'clinical_risk_taxonomy.json').read_text())
+    assert 'injectable_anticoagulants' in {c['id'] for c in taxonomy['drug_classes']}
+    for name, rxcui in INJECTED.items():
+        profile = _profile_of(rxcui)
+        assert profile == {'anticoagulants', 'injectable_anticoagulants'}, name
+        for rule_id in (*WARFARIN_ONLY_RULES, 'RULE_OTHER_GINGER_EXTRACT_BLEEDING'):
+            assert _anticoagulant_hits(rule_id, {'drug_classes': profile}) == [], (name, rule_id)
+        # No St. John's wort finding is inherited from warfarin or the oral DOACs.
+        assert not [s for rid, s in _firing_subs(profile) if rid == 'RULE_INGREDIENT_ST_JOHNS_WORT'
+                    and s['drug_class_id'] != 'antidepressants_ssri_snri'], name
+
+
+def test_a_warfarin_type_medicine_keeps_its_findings_next_to_another_anticoagulant():
+    """Section 2: one entered medicine cannot suppress a valid finding for another in the same regimen."""
+    warfarin, apixaban, enoxaparin, acenocoumarol = '11289', '1364430', '67108', '154'
+    for regimen in ((warfarin, enoxaparin), (warfarin, apixaban), (acenocoumarol, enoxaparin),
+                    (warfarin, apixaban, enoxaparin)):
+        profile = _profile_of(*regimen)
+        for rule_id in (*WARFARIN_ONLY_RULES, 'RULE_OTHER_GINGER_EXTRACT_BLEEDING'):
+            assert _anticoagulant_hits(rule_id, {'drug_classes': profile}) == ['vitamin_k_antagonists'], (
+                regimen, rule_id)
+        sjw = sorted(s['drug_class_id'] for rid, s in _firing_subs(profile) if rid == 'RULE_INGREDIENT_ST_JOHNS_WORT'
+                     and s['drug_class_id'] in ('anticoagulants', 'vitamin_k_antagonists', 'doacs'))
+        assert sjw == sorted(['vitamin_k_antagonists', *(['doacs'] if apixaban in regimen else [])]), regimen
+
+
+def test_no_inr_instruction_reaches_a_doac_or_injected_anticoagulant_user_unqualified():
+    """Section 2 and Q7: no INR instructions for DOAC or injected-anticoagulant users. Every consumer sentence that
+    mentions INR in a finding they can see is addressed to warfarin-type medicines."""
+    import re
+
+    def unqualified(text):
+        return [s for s in re.split(r'(?<=[.;])\s+', text or '')
+                if 'INR' in s and not re.search(r'warfarin|vitamin K antagonist', s, re.I)]
+
+    for rxcui in ('1364430', '1114195', '1037042', '1599538', *INJECTED.values()):
+        for rule_id, sub in _firing_subs(_profile_of(rxcui)):
+            for field in CONSUMER_FIELDS:
+                assert not unqualified(sub.get(field)), (rxcui, rule_id, sub['drug_class_id'], field)
+    for pair in _pairs().values():
+        if pair['agent1_id'] in ('class:anticoagulants', 'class:doacs', '1599538'):
+            assert not unqualified(pair['management']), pair['id']
+
+
+def test_st_johns_wort_with_vkas_cites_each_label_and_marks_the_class_inference():
+    """Q7 and section 2: strong avoidance for warfarin, acenocoumarol and phenprocoumon, each with its own source;
+    other VKAs keep it as a stated precautionary class inference."""
+    pairs = _pairs()
+    for pair_id, rxcui, source in (('DSI_ACENOCOUMAROL_SJW', '154', SINTHROME),
+                                   ('DSI_PHENPROCOUMON_SJW', '8150', MARCUMAR)):
+        pair = pairs[pair_id]
+        assert (pair['agent1_id'], pair['agent2_canonical_id'], pair['severity']) == (rxcui, 'st_johns_wort', 'Major')
+        assert pair['source_urls'][0] == source and pair['applies_to'] == 'specific_drug'
+        assert 'stopping' in pair['management'] and 'INR' in pair['management']
+        assert ANSWERS_FILE in pair['verification']['notes'] and 'Dr. Pham' not in pair['verification']['method']
+    for cls in ('vitamin_k_antagonists', 'anticoagulants'):
+        sub = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', cls)
+        assert sub['severity'] == 'avoid' and {SINTHROME, MARCUMAR} <= set(sub['sources'])
+        assert 'acenocoumarol' in sub['mechanism'] and 'phenprocoumon' in sub['mechanism']
+        assert 'precautionary class inference' in sub['mechanism']
+        assert 'warfarin' in sub['alert_body'] and 'stopping' in sub['action']
+
+
+def test_st_johns_wort_with_doacs_records_each_label_and_the_edoxaban_policy():
+    """Section 2: apixaban, rivaroxaban, dabigatran labels support avoiding; edoxaban's UK label says caution, so
+    avoid is PharmaGuide precautionary policy, recorded in its own evidence record."""
+    pairs = _pairs()
+    doac = pairs['DSI_DOAC_SJW']
+    notes = doac['evidence_notes']
+    for label in ('ELIQUIS', 'rivaroxaban', 'PRADAXA', 'SAVAYSA', 'Lixiana'):
+        assert label in notes, label
+    assert 'does not name' in notes and LIXIANA in doac['source_urls']
+    edoxaban = pairs['DSI_EDOXABAN_SJW']
+    assert (edoxaban['agent1_id'], edoxaban['severity'], edoxaban['applies_to']) == ('1599538', 'Major', 'specific_drug')
+    assert LIXIANA in edoxaban['source_urls'] and 'precautionary policy' in edoxaban['evidence_notes']
+    assert 'caution' in edoxaban['evidence_notes']
+    sub = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'doacs')
+    assert LIXIANA in sub['sources'] and 'precautionary policy' in sub['mechanism']
+    for text in (_pair_text(doac), _pair_text(edoxaban), _rule_text(sub)):
+        assert 'inr' not in text
+
+
+def test_glucosamine_with_warfarin_type_medicines_uses_the_signed_q3_action():
+    """Q3: caution kept, with a firm do-not-start-without-agreement action; Q7: acenocoumarol and phenprocoumon
+    labels support the precaution; no invented recheck interval; not a contraindication."""
+    pairs = _pairs()
+    # Q3's action, followed by the existing bleeding-report instruction (not softened).
+    assert pairs['DSI_WAR_GLUCOSAMINE']['management'] == GLUCOSAMINE_Q3 + ' Report unusual bruising or bleeding.'
+    assert pairs['DSI_WAR_GLUCOSAMINE']['severity'] == 'Moderate'
+    for pair_id, rxcui, source in (('DSI_ACENOCOUMAROL_GLUCOSAMINE', '154', SINTHROME),
+                                   ('DSI_PHENPROCOUMON_GLUCOSAMINE', '8150', MARCUMAR)):
+        pair = pairs[pair_id]
+        assert (pair['agent1_id'], pair['agent2_canonical_id'], pair['severity']) == (rxcui, 'glucosamine', 'Moderate')
+        assert pair['source_urls'][0] == source and pair['management'].startswith('Do not start glucosamine')
+    for cls in ('vitamin_k_antagonists', 'anticoagulants'):
+        sub = _sub('RULE_INGREDIENT_GLUCOSAMINE', cls)
+        assert sub['severity'] == 'caution'
+        assert sub['action'].startswith('Do not start glucosamine') and 'Some warfarin labels' in sub['action']
+        assert {SINTHROME, MARCUMAR} <= set(sub['sources']) and 'inference' in sub['mechanism']
+        text = _rule_text(sub)
+        assert 'contraindicat' not in text and 'weeks' not in text and 'stop warfarin' not in text
+
+
+def test_warfarin_findings_extended_to_other_vkas_say_they_are_an_inference():
+    """Q7: CoQ10, cranberry and ginger evidence stays warfarin-specific; the VKA extension is stated as inference in
+    every duplicated owner, both ginger records included."""
+    for rule_id in ('RULE_IQM_COQ10_HEART_DISEASE_STATINS', 'RULE_INGREDIENT_CRANBERRY', 'RULE_IQM_GINGER_BLEEDING',
+                    'RULE_OTHER_GINGER_EXTRACT_BLEEDING'):
+        for cls in ('vitamin_k_antagonists', 'anticoagulants'):
+            sub = _sub(rule_id, cls)
+            assert 'warfarin' in sub['mechanism'] and 'inference' in sub['mechanism'], (rule_id, cls)
+            assert 'inferred' in sub['action'], (rule_id, cls)
+            assert sub['clinical_review']['file'] == ANSWERS_FILE, (rule_id, cls)
 
 
 def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():
