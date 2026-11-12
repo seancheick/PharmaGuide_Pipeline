@@ -509,7 +509,9 @@ def test_coq10_heart_rule_cites_q_symbio_for_its_heart_failure_claim():
     assert "Q-SYMBIO" in heart["mechanism"]
     assert "inconclusive" in heart["mechanism"]
     assert "ejection fraction" not in heart["mechanism"].lower()
-    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+    # The 2026-04-09 date was agent re-sourcing; Dr. Pham's signed Q7 decision on the warfarin sub-rules (2026-11-12)
+    # is the rule's latest clinical review.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 EMA_SALIX = (
