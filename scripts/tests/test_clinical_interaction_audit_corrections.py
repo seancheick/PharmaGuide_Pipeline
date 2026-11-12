@@ -48,7 +48,8 @@ def test_sjw_serotonergic_gate_accepts_actual_ssri_class():
     rule = _rules()['RULE_INGREDIENT_ST_JOHNS_WORT']
     ssri = next(r for r in rule['drug_class_rules'] if r['drug_class_id'] == 'antidepressants_ssri_snri')
     assert 'ssris' in ssri['profile_gate']['requires']['drug_classes_any']
-    assert ssri['severity'] == 'contraindicated'
+    # Dr. Pham 2026-11-12 (section 2): avoid generally; contraindicated only with an exact source.
+    assert ssri['severity'] == 'avoid'
 
 CURATED_FLOOR_IDS = (
     'DSI_DM_CINNAMON', 'DSI_WAR_GARLIC', 'DSI_OC_SOY', 'DSI_WAR_TURMERIC',
@@ -268,26 +269,6 @@ def _pair_text(row):
 
 def _same_rule():
     return next(r for r in _rules()['RULE_IQM_SAME']['drug_class_rules'] if r['drug_class_id'] == 'maois')
-
-
-def test_same_contraindication_is_exact_for_tranylcypromine_and_inferred_for_other_maois():
-    pairs = _pairs()
-    exact = pairs['DSI_TRANYLCYPROMINE_SAME']
-    assert (exact['agent1_id'], exact['agent2_id'], exact['severity']) == ('10734', 'C0036002', 'Contraindicated')
-    assert PARNATE in exact['source_urls']
-    # No MAOI warning is lowered while ask 1 is pending, and the exported text says the scope is inferred.
-    cls = pairs['DSI_MAOI_SAME']
-    assert (cls['agent1_id'], cls['agent2_id']) == ('class:maois', 'C0036002')
-    assert cls['severity'] == 'Contraindicated'
-    assert 'class inference' in cls['mechanism'].lower()
-    # The profile rule keeps its published avoid for the MAOI class: a contraindicated profile rule is
-    # hidden from people without a matching profile until G4, which would drop SAMe's conditional note.
-    rule = _same_rule()
-    assert rule['severity'] == 'avoid' and rule['informational_note']
-    copy = ' '.join(rule[k] for k in ('action', 'alert_headline', 'alert_body')).lower()
-    assert 'tranylcypromine' in copy and 'unless cleared' not in copy
-    assert 'class inference' in rule['mechanism'].lower()
-    assert rule['clinical_review']['file'] == REVIEW_FILE and 'ask 1' in rule['clinical_review']['notes']
 
 
 @functools.lru_cache(maxsize=1)
@@ -858,3 +839,112 @@ def test_calcium_ciprofloxacin_separates_supplements_from_calcium_in_a_meal():
     assert 'at least 2 hours before or 6 hours after' in text
     assert 'calcium-fortified juice' in text and 'on their own' in text and 'meal' in text
     assert 'injected' in text
+
+
+# Dr. Pham's signed answers, 2026-11-12 (DR_PHAM_ANSWERS_20261112.md Part A), batch 1: serotonergic harmonization.
+ANSWERS_FILE = 'audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md'
+NARDIL = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa'
+EMSAM = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3'
+HEALTH_CANADA_5HTP = 'https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng'
+ZOLOFT = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fda754f6-d0f3-4dce-a17a-927d64f912f7'
+RASAGILINE_LABEL = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=68cef20f-10c0-475e-af95-b7799355c7e9'
+XADAGO = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c4d65f28-983f-42b4-bb23-023ae0fe81b2'
+SAME_ACTION = "Do not add SAMe while taking an MAOI without your prescriber's approval."
+
+
+def test_same_with_maois_is_avoid_by_class_and_contraindicated_only_where_a_label_supports_it():
+    """Q1: tranylcypromine names SAM-e; phenelzine through its serotonergic-agent category; other MAOIs avoid."""
+    pairs = _pairs()
+    exact = pairs['DSI_TRANYLCYPROMINE_SAME']
+    assert (exact['agent1_id'], exact['severity']) == ('10734', 'Contraindicated') and PARNATE in exact['source_urls']
+    phenelzine = pairs['DSI_PHENELZINE_SAME']
+    assert (phenelzine['agent1_id'], phenelzine['agent2_id'], phenelzine['severity']) == ('8123', 'C0036002', 'Contraindicated')
+    assert NARDIL in phenelzine['source_urls'] and phenelzine['applies_to'] == 'specific_drug'
+    text = _pair_text(phenelzine)
+    # The label prohibits serotonergic agents as a category and does not name SAMe; the record says so.
+    assert 'does not name samE'.lower() in text and 'interpretation' in text
+    # The class pair now matches the class profile rule: one avoid, no Contraindicated/avoid split.
+    cls, rule = pairs['DSI_MAOI_SAME'], _same_rule()
+    assert cls['severity'] == 'Major' and APP_SEVERITY[cls['severity']] == rule['severity'] == 'avoid'
+    for copy in (cls['management'], rule['action']):
+        assert SAME_ACTION in copy
+        assert 'Do not stop or switch' in copy
+    assert 'Do not combine SAMe with an MAOI' not in cls['management']
+    # The consumer-facing fields name the exact contraindications, not only the mechanism.
+    rule_copy = ' '.join(rule[k] for k in ('action', 'alert_headline', 'alert_body')).lower()
+    assert 'tranylcypromine' in rule_copy and 'phenelzine' in rule_copy and 'emsam' in rule_copy
+    # EMSAM is not told apart by this class record; the record says why without claiming the app cannot match it.
+    assert 'cannot be told apart' not in cls['evidence_notes'] and 'keyed on the MAOI class' in cls['evidence_notes']
+    assert 'unless cleared' not in rule_copy and rule['informational_note']
+    # Exported text says where the class-wide scope is an inference.
+    assert 'class inference' in cls['mechanism'].lower() and 'class inference' in rule['mechanism'].lower()
+    # The pending-question wording is gone from every record.
+    for blob in (json.dumps(cls), json.dumps(rule), json.dumps(phenelzine)):
+        assert 'ask 1' not in blob and 'pending' not in blob.lower()
+    assert rule['clinical_review'] == {**rule['clinical_review'], 'reviewer': 'Dr. Pham', 'reviewed_at': '2026-11-12',
+                                       'file': ANSWERS_FILE}
+    assert phenelzine['verification']['notes'].count(ANSWERS_FILE) == 1
+
+
+def test_5htp_with_ssris_and_snris_is_contraindicated_on_both_surfaces_from_the_health_canada_monograph():
+    """Section 2: DSI_SSRI_5HTP was Major while the SSRI/SNRI rule was contraindicated."""
+    pairs = _pairs()
+    pair = pairs['DSI_SSRI_5HTP']
+    rule = _sub('RULE_IQM_5HTP_SEROTONIN', 'antidepressants_ssri_snri')
+    assert pair['agent1_id'] == 'class:antidepressants_ssri_snri'
+    assert APP_SEVERITY[pair['severity']] == rule['severity'] == 'contraindicated'
+    for sources in (pair['source_urls'], rule['sources']):
+        assert HEALTH_CANADA_5HTP in sources
+    # The source's jurisdiction and scope are recorded with the evidence.
+    assert 'Health Canada' in pair['evidence_notes'] and 'jurisdiction' in pair['evidence_notes'].lower()
+    assert 'antidepressants' in pair['evidence_notes']
+    # Widening the pair from SSRIs to SSRIs and SNRIs drops no SSRI user.
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+    assert set(classes['class:ssris']['member_rxcuis']) <= set(classes[pair['agent1_id']]['member_rxcuis'])
+    assert _verified('DSI_SSRI_5HTP')['evidence_level'] == rule['evidence_level']
+    # No self-managed washout on any 5-HTP antidepressant record.
+    maoi_rule = _sub('RULE_IQM_5HTP_SEROTONIN', 'maois')
+    for copy in (rule['action'], maoi_rule['action'], pair['management'], pairs['DSI_MAOI_5HTP']['management']):
+        assert 'observe a washout' not in copy and 'Allow appropriate washout' not in copy
+        assert 'prescriber' in copy
+    maoi_pair = pairs['DSI_MAOI_5HTP']
+    assert HEALTH_CANADA_5HTP in maoi_pair['source_urls']
+    assert 'universally contraindicated' not in maoi_pair.get('evidence_notes', '')
+    # Contraindicated on both MAOI records, and both tell the user not to combine (no review-and-proceed wording).
+    assert APP_SEVERITY[maoi_pair['severity']] == maoi_rule['severity'] == 'contraindicated'
+    for copy in (maoi_pair['management'], maoi_rule['action']):
+        assert copy.startswith('Do not take 5-HTP with an MAOI') or copy.startswith('Do not combine 5-HTP with MAOIs')
+        assert 'without the prescriber reviewing' not in copy
+    # Oral selegiline (Parkinson's disease) inherits the antidepressant contraindication only by class.
+    assert 'oral selegiline' in maoi_pair['evidence_notes'] and 'class inference' in maoi_pair['evidence_notes']
+
+
+def test_st_johns_wort_with_ssris_and_snris_is_avoid_on_both_surfaces_without_a_washout():
+    """Section 2: avoid generally; no SSRI/SNRI label checked contraindicates it; no universal washout."""
+    pair = _pairs()['DSI_SSRI_SJW']
+    rule = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'antidepressants_ssri_snri')
+    assert pair['agent1_id'] == 'class:antidepressants_ssri_snri'
+    assert APP_SEVERITY[pair['severity']] == rule['severity'] == 'avoid'
+    assert ZOLOFT in pair['source_urls'] and ZOLOFT in rule['sources']
+    assert _verified('DSI_SSRI_SJW')['evidence_level'] == rule['evidence_level']
+    consumer = (pair['mechanism'] + ' ' + pair['management']).lower()
+    for copy in (consumer, _rule_text(rule)):
+        assert 'emergency' in copy and 'serotonin syndrome' in copy
+        assert 'half-lives' not in copy and '14 days' not in copy and 'washout' not in copy
+    assert 'Do not combine' not in rule['alert_headline']
+    # The alert body alone also conveys how serious serotonin syndrome can be.
+    assert 'life-threatening' in rule['alert_body']
+    assert rule['clinical_review']['file'] == ANSWERS_FILE
+
+
+def test_rasagiline_and_safinamide_get_their_label_st_johns_wort_contraindication_and_no_other_maoi_rule():
+    """Part B 3D: exact coverage from each label; no blanket MAO-B membership in the MAOI class."""
+    pairs = _pairs()
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+    for pair_id, rxcui, label in (('DSI_RASAGILINE_SJW', '134748', RASAGILINE_LABEL),
+                                  ('DSI_SAFINAMIDE_SJW', '1922448', XADAGO)):
+        pair = pairs[pair_id]
+        assert (pair['agent1_id'], pair['agent2_canonical_id'], pair['severity']) == (rxcui, 'st_johns_wort', 'Contraindicated')
+        assert label in pair['source_urls'] and pair['applies_to'] == 'specific_drug'
+        assert _verified(pair_id)['evidence_level'] == 'established'
+        assert not [cid for cid, c in classes.items() if rxcui in c['member_rxcuis']], pair_id
