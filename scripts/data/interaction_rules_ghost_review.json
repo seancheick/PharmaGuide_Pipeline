@@ -440,6 +440,15 @@
       "reviewed_at": "2026-09-26"
     },
     {
+      "pmid": "10725394",
+      "rule_id": "RULE_BANNED_TANSY_PREGNANCY",
+      "sub_rule": "condition:pregnancy",
+      "live_title": "Alpha-thujone (the active component of absinthe): gamma-aminobutyric acid type A receptor modulation and metabolic detoxification.",
+      "rationale": "Primary animal and cellular research supports the alpha-thujone neurotoxicity mechanism through GABA-A receptor modulation and convulsant effects. It does not study tansy products or pregnancy outcomes. The companion essential-oil review supplies the tansy and pregnancy context.",
+      "reviewed_by": "Codex source verification",
+      "reviewed_at": "2026-11-12"
+    },
+    {
       "pmid": "33673548",
       "rule_id": "RULE_BANNED_TANSY_PREGNANCY",
       "sub_rule": "condition:pregnancy",
