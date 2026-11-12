@@ -2062,7 +2062,7 @@ def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence
     import json
     from scoring_input_contract import score_eligible_identity_view
 
-    if module not in {"generic", "sports", "fiber_digestive", "omega", "b_complex", "multi_or_prenatal"}:
+    if module not in {"generic", "sports", "fiber_digestive", "omega", "probiotic", "b_complex", "multi_or_prenatal"}:
         return False
     # The public scorer enters through this same projection: identities kept
     # only for interactions must not become Evidence owners during validation.
@@ -2073,9 +2073,16 @@ def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence
     elif module == "omega":
         from scoring_v4.modules.omega_evidence import score_evidence
         current = score_evidence(source)
-        # This extension proves withheld native science only. Positive omega
-        # authority already has its completed native release assessment.
-        if current.get("score") != 0:
+        if (current.get("score") != 0
+                and _safe_dict(current.get("metadata")).get("evidence_result_state") != "evaluated_authority"):
+            return False
+    elif module == "probiotic":
+        from scoring_v4.modules.probiotic_evidence import score_evidence
+        current = score_evidence(source)
+        if (current.get("score") != 0
+                or _safe_dict(current.get("metadata")).get("evidence_result_state") not in {
+                    "evaluated_null", "no_qualifying_human_evidence",
+                }):
             return False
     elif module == "b_complex":
         from scoring_v4.modules.b_complex import _score_evidence
@@ -2176,8 +2183,16 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
     if replay != pillar["receipt"]:
         return False
     current_receipt = _current_evidence_dimension_receipt(enriched, str(module.get("module") or ""), evidence)
+    if module.get("module") == "omega" and score > 0:
+        # A completed native authority decision can coexist with an unrelated
+        # material ingredient whose generic review is still open.
+        return current_receipt and set(release["blockers"]) == {"evidence_assessment_incomplete"}
     if module.get("module") != "probiotic":
         return current_receipt
+    if score == public == 0 and meta.get("evidence_result_state") in {
+        "evaluated_null", "no_qualifying_human_evidence",
+    }:
+        return current_receipt and set(release["blockers"]) == {"evidence_assessment_incomplete"}
     # Generic Evidence retains signed clinical exposure constraints. Native
     # probiotic record qualification deliberately uses its amount-free seam.
     matches, _ = resolved_clinical_matches(dict(enriched), owner_scoped=module.get("module") != "probiotic",
