@@ -489,6 +489,31 @@ def test_ginger_blood_thinner_findings_carry_the_warfarin_evidence_and_scope():
                 assert sub[key] == reviewed[key], (rule_id, cls, key)
 
 
+def test_betrixaban_is_a_doac_and_leaves_the_unidentified_fallback():
+    """BEVYXXA: betrixaban is an oral factor Xa inhibitor (ATC B01AF, inside the doacs class's ATC scope) and a
+    P-gp substrate, so it reads as a DOAC: no warfarin INR text, and St. John's wort still shows avoid. The
+    injected direct thrombin inhibitors are ATC B01AE but not oral; they stay in the fallback (question 7)."""
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+
+    def profile(rxcui):
+        return {cid.removeprefix('class:') for cid, c in classes.items()
+                if not cid.startswith('_') and rxcui in c.get('member_rxcuis', [])}
+
+    betrixaban = profile('1927851')
+    assert {'anticoagulants', 'doacs'} <= betrixaban and 'vitamin_k_antagonists' not in betrixaban
+    import profile_gate_evaluator as pge
+
+    for rule_id in WARFARIN_ONLY_RULES:
+        assert _anticoagulant_hits(rule_id, {'drug_classes': betrixaban}) == [], rule_id
+    sjw_doac = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'doacs')
+    assert sjw_doac['severity'] == 'avoid'
+    assert pge.evaluate_profile_gate(sjw_doac['profile_gate'], {'drug_classes': sorted(betrixaban)}, {},
+                                     base_severity='avoid').fires
+    for name, rxcui in (('argatroban', '15202'), ('bivalirudin', '60819'), ('desirudin', '114934'),
+                        ('lepirudin', '237057')):
+        assert profile(rxcui) == {'anticoagulants'}, name
+
+
 def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():
     pair = _pairs()['DSI_WAR_COQ10']
     assert '17723077' in pair['source_pmids'] and 'self-reported bleeding' in _pair_text(pair)
@@ -584,3 +609,57 @@ def test_garlic_with_a_blood_thinner_is_caution_at_every_amount():
         return next(h['severity'] for h in alert['drug_class_hits'] if h['drug_class_id'] == 'anticoagulants')
 
     assert {q: severity(q) for q in (300.0, 1500.0, None)} == {300.0: 'caution', 1500.0: 'caution', None: 'caution'}
+
+
+def test_enricher_user_alerts_honor_the_profile_gate():
+    """The enricher's user-alert path must apply each hit's profile_gate.
+    A DOAC user (anticoagulants + doacs) must not get the warfarin-only
+    fallback row; a warfarin user gets the VKA row (CodeRabbit on #448)."""
+    import sys
+    sys.path.insert(0, str(DATA.parent))
+    from enrich_supplements_v3 import SupplementEnricherV3
+    owner = SupplementEnricherV3.__new__(SupplementEnricherV3)
+    owner.unit_converter = None
+    owner.databases = {name: json.loads((DATA / (name + '.json')).read_text()) for name in ('clinical_risk_taxonomy', 'ingredient_quality_map', 'botanical_ingredients', 'other_ingredients')}
+    rule = _rules()['RULE_INGREDIENT_GLUCOSAMINE']
+    owner.databases['ingredient_interaction_rules'] = {'interaction_rules': [rule]}
+    canonical = rule['subject_ref']['canonical_id']
+    ingredient = {'name': canonical, 'canonical_id': canonical, 'canonical_source_db': rule['subject_ref']['db'], 'quantity': 100, 'unit': 'mg'}
+    product = {'ingredient_quality_data': {'ingredients': [ingredient]}, 'servingSizes': [{'minDailyServings': 1, 'maxDailyServings': 1}]}
+
+    def alerts(drug_classes):
+        profile = owner._collect_interaction_profile(product, user_profile={'drug_classes': drug_classes})
+        return [a['drug_class_id'] for a in profile['user_condition_alerts']['alerts'] if a['type'] == 'drug_class']
+
+    assert alerts(['anticoagulants', 'doacs']) == []
+    assert alerts(['anticoagulants', 'vitamin_k_antagonists']) == ['vitamin_k_antagonists']
+    assert alerts(['anticoagulants']) == ['anticoagulants']
+
+
+def test_enricher_user_alert_gates_derive_flags_from_conditions():
+    """A checked condition supplies the profile flag the taxonomy derives from it
+    (surgery_scheduled, pregnant, breastfeeding, trying_to_conceive), so a gate
+    requiring that flag still fires. A user-selectable flag is never derived:
+    "immunocompromised" alone does not mean "severely immunocompromised"
+    (CodeRabbit on #448)."""
+    import sys
+    sys.path.insert(0, str(DATA.parent))
+    from enrich_supplements_v3 import SupplementEnricherV3
+    owner = SupplementEnricherV3.__new__(SupplementEnricherV3)
+    owner.unit_converter = None
+    owner.databases = {name: json.loads((DATA / (name + '.json')).read_text()) for name in ('clinical_risk_taxonomy', 'ingredient_quality_map', 'botanical_ingredients', 'other_ingredients')}
+
+    def alerts(rule_id, conditions, flags=None):
+        rule = _rules()[rule_id]
+        owner.databases['ingredient_interaction_rules'] = {'interaction_rules': [rule]}
+        canonical = rule['subject_ref']['canonical_id']
+        ingredient = {'name': canonical, 'canonical_id': canonical, 'canonical_source_db': rule['subject_ref']['db'], 'quantity': 100, 'unit': 'mg'}
+        product = {'ingredient_quality_data': {'ingredients': [ingredient]}, 'servingSizes': [{'minDailyServings': 1, 'maxDailyServings': 1}]}
+        user_profile = {'conditions': conditions, **({'profile_flags': flags} if flags else {})}
+        profile = owner._collect_interaction_profile(product, user_profile=user_profile)
+        return sorted({a['condition_id'] for a in profile['user_condition_alerts']['alerts'] if a['type'] == 'condition'})
+
+    assert alerts('RULE_INGREDIENT_GARLIC', ['surgery_scheduled']) == ['surgery_scheduled']
+    assert alerts('RULE_INGREDIENT_ST_JOHNS_WORT', ['lactation']) == ['lactation']
+    assert alerts('RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED', ['immunocompromised']) == []
+    assert alerts('RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED', ['immunocompromised'], ['severely_immunocompromised']) == ['immunocompromised']

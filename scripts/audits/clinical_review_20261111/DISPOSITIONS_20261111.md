@@ -109,9 +109,14 @@ thinners" is the only selectable blood-thinner class). A DOAC user gets neither.
 the tier `verify_interactions.py` derives for its pair (one interaction, one tier).
 
 Limits of this scope (agent finding; see "Other vitamin K antagonists" under Questions): other VKAs (phenprocoumon, acenocoumarol)
-receive the warfarin-label findings through the class; identified parenteral direct thrombin inhibitors
-(argatroban, bivalirudin) have no subclass and fall into the fallback, as before 3a; a "Blood thinners" selection
-plus an entered DOAC reads as that DOAC.
+receive the warfarin-label findings through the class. Betrixaban, an oral factor Xa inhibitor (ATC B01AF, inside
+the `doacs` class's ATC scope; BEVYXXA label: P-gp substrate), was in neither class; it now joins `doacs` (identity
+fix, `apply_batch3a_betrixaban_doac.py`), so it leaves the warfarin-addressed fallback and gets the DOAC St. John's
+wort finding, still avoid. Four identified medicines in `anticoagulants` remain in neither class: the injected direct
+thrombin inhibitors argatroban, bivalirudin, desirudin and lepirudin (ATC B01AE but not oral). They fall into the
+fallback, as before 3a, and see the warfarin-addressed text ("If you take warfarin, ..."); a "Blood thinners"
+selection plus an entered DOAC reads as that DOAC. Separating them needs a new exclusion id in the profile vocabulary,
+and so Dr. Pham's sign-off (question 7).
 
 | Row | Implemented as |
 |---|---|
@@ -138,6 +143,29 @@ Agent dispositions in the same batch (not Dr. Pham's decisions, no review record
   cases that pinned the removed garlic tier were replaced by cases on live gates (garlic on presence; the
   warfarin-only gate for a DOAC user and for an unknown blood thinner). The app's copy of that fixture moves with it.
 - April "clinician-locked" severities W2, W3, W6 and W12 in tests now follow this review.
+
+### Batch 3b part 1 implemented: medication membership (`apply_batch3b_memberships.py`)
+
+Membership is by RxNorm ingredient (IN), the level the app matches on, so combination products are reached through
+their ingredients and route is not distinguished. Labels were read on DailyMed 2026-11-11; setids are in each class's
+notes.
+
+| Row | Implemented as |
+|---|---|
+| D1 thyroid examples | `methimazole` removed from the vocabulary examples; "replace or modulate" now reads "thyroid hormone replacement". class:thyroid_medications already excluded methimazole and propylthiouracil |
+| D2 anticholinergics | Added diphenhydramine and nine tricyclics whose own labels state anticholinergic properties or atropine-like action: amitriptyline, amoxapine, clomipramine, desipramine, doxepin, imipramine, nortriptyline, protriptyline, trimipramine. Not added: maprotiline (no current DailyMed label), other antihistamines, SSRIs. Real combination sleep aids (RxNorm 1092189 acetaminophen/diphenhydramine, 895664 diphenhydramine/ibuprofen) reach the class in the pipeline and app tests |
+| D3 tirzepatide, pramlintide | Tirzepatide: unknown → lower-risk tier (MOUNJARO 5.3); with insulin or a sulfonylurea entered, that medicine adds the high-risk tier. Pramlintide stays in the conservative unknown tier (SYMLIN 5.2), whose severities equal the high-risk tier's |
+| F7 CBD split | **Not applied (ask 5).** Separate sub-rules need the rule classes `clobazam` and `valproate`, and every vocabulary entry carries consumer copy (group label, "commonly used for") under your 2026-08-08 sign-off |
+
+Agent dispositions in the same batch (not Dr. Pham's decisions):
+- The thyroid tap-to-learn note told users to separate iodine, kelp, soy isoflavones and biotin from levothyroxine by
+  4 hours. The SYNTHROID label gives 4 hours for binders such as calcium carbonate and ferrous sulfate, and says to
+  stop biotin at least 2 days before TSH/T4 tests; the note now says that.
+- The class reaches two rules, which now also reach diphenhydramine and tricyclic users. An independent review found
+  their text did not fit: alpha-GPC promised lost efficacy and "monitor for loss of efficacy" for every member, and
+  huperzine A said the effects "cancel" (the donepezil label says cholinesterase inhibitors have the "potential to
+  interfere"). Alpha-GPC's text is now scoped to medicines taken for their anticholinergic action; huperzine A's
+  says the two "can work against each other". Severities unchanged (alpha-GPC caution, huperzine A avoid); ask 6.
 
 ## Batch 4: noise reductions (after quantity checks)
 
@@ -169,6 +197,32 @@ Agent dispositions in the same batch (not Dr. Pham's decisions, no review record
 2. **Vitamin E.** What counts as "ordinary nutrient exposure" for the less prominent note (form, amount, frequency)?
 3. **Glucosamine with warfarin.** The UK warfarin SmPC (section 4.5) says the combination is not recommended, which is
    closer to avoid than to the caution you chose. Keep caution, or align with the UK label? Batch 3a ships caution.
-4. **Other vitamin K antagonists.** The four warfarin-only findings (A2, A4, A7, A8) cite warfarin sources. They now
+4. **Low-dose doxepin.** Doxepin joins the anticholinergic class (its capsule label states anticholinergic effects),
+   so huperzine A shows avoid and alpha-GPC caution for every doxepin user. SILENOR (3-6 mg for sleep) lists
+   anticholinergic effects only above 6 mg. Membership is by ingredient, so neither strength nor route can be told
+   apart (topical diphenhydramine and doxepin products also match). Keep doxepin in the class, or leave it out? And
+   is the topical match acceptable, as with ciprofloxacin drops in batch 2?
+5. **CBD split (F7): wording for two new rule classes.** Separate clobazam and valproate rules need two rule-only
+   vocabulary entries. Proposed copy, for your sign-off:
+   - `clobazam`: group label "Seizure medications"; "Commonly used to help prevent seizures, including in
+     Lennox-Gastaut syndrome."
+   - `valproate`: group label "Seizure medications"; "Commonly used to help prevent seizures, and also for bipolar
+     mania or migraine prevention."
+   The rules would follow the EPIDIOLEX label (setid 8bf27097, read 2026-11-11): clobazam, about 3-fold higher
+   N-desmethylclobazam (its active metabolite) and more somnolence and sedation (46% with clobazam vs 16% without);
+   valproate, more liver-enzyme elevations with no change in valproate exposure; both stated as findings for
+   prescription oral cannabidiol. The label also names **stiripentol** (higher stiripentol exposure; monitor for its
+   adverse reactions), which the packet did not list. The current single rule warns everyone in the 40-medicine
+   anticonvulsant class (stiripentol and cannabidiol included) plus clobazam and valproate. Should the split add a
+   stiripentol rule, and should it end the warning for the other anticonvulsants, for which the label reports no
+   effect of cannabidiol on the medicine? The seizure-disorder condition rule stays either way.
+6. **Rules the wider anticholinergic class reaches.** Huperzine A (avoid, "do not combine") and alpha-GPC (caution)
+   now reach every diphenhydramine and tricyclic user, including combination sleep aids. Should both reach medicines
+   whose anticholinergic effect is a side effect, or only the primary antimuscarinics? Narrowing either needs a
+   separate rule class, which needs your copy sign-off like ask 5.
+7. **Other vitamin K antagonists.** The four warfarin-only findings (A2, A4, A7, A8) cite warfarin sources. They now
    fire for the `vitamin_k_antagonists` class, which also holds phenprocoumon and acenocoumarol where a user enters
    them. Keep the class scope (same mechanism, no source read for those medicines), or limit the findings to warfarin?
+   Also: argatroban, bivalirudin, desirudin and lepirudin are identified but reach the unidentified blood-thinner
+   fallback and its warfarin-addressed text. Should these four injected direct thrombin inhibitors get a class of
+   their own that the fallback excludes? (Betrixaban now reads as a DOAC: its label and ATC code place it there.)
