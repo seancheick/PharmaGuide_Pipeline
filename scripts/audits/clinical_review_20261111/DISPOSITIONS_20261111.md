@@ -273,6 +273,10 @@ know" count; once any medicine resolves to a class, the medicine axis counts as 
 
 ## Questions for Dr. Pham
 
+**Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:
+`DR_PHAM_ANSWERS_20261112.md` Part A. They govern where they differ from this file. The questions below stay as
+history.
+
 1. **SAMe with MAOIs other than tranylcypromine.** The current labels for phenelzine (NARDIL), isocarboxazid
    (MARPLAN) and selegiline (EMSAM, ZELAPAR, capsules) do not name SAMe (read 2026-11-11). NARDIL contraindicates
    "concomitant use of NARDIL with serotoninergic agents" as a category. For each medicine: is SAMe covered by its
