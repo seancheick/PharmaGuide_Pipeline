@@ -308,10 +308,9 @@ def test_cbd_findings_say_what_each_source_measured():
     assert "open-label" in tacrolimus["mechanism"] and "interim analysis" in tacrolimus["mechanism"]
     # Both are measured human PK effects, graded alike.
     assert tacrolimus["evidence_level"] == cbd_sub("everolimus")["evidence_level"] == "established"
-    for medicine in ("sirolimus", "digoxin"):
-        sub = cbd_sub(medicine)
-        assert "not measured directly" in sub["alert_body"] and sub["evidence_level"] == "theoretical", medicine
-        assert "not one measured with " + medicine in sub["mechanism"], medicine
+    digoxin = cbd_sub("digoxin")
+    assert "not measured directly" in digoxin["alert_body"] and digoxin["evidence_level"] == "theoretical"
+    assert "not one measured with digoxin" in digoxin["mechanism"]
     for medicine in ("tacrolimus", "sirolimus", "digoxin"):
         sub = cbd_sub(medicine)
         assert "by mouth" in sub["alert_body"] and "by mouth" in sub["action"], medicine
@@ -326,6 +325,24 @@ def test_cbd_findings_say_what_each_source_measured():
         for instruction in ("dose reduction", "reduce the dose", "monitor ", "adjust"):
             assert instruction not in action, (drug_class_id, instruction)
         assert "yourself" in action, drug_class_id
+
+
+def test_cbd_sirolimus_retains_observational_measurement_without_trial_claim():
+    """PMID 31924480 measured sirolimus troughs; it was not a controlled PK trial."""
+    sub = cbd_sub("sirolimus")
+    assert "https://pubmed.ncbi.nlm.nih.gov/31924480/" in sub["sources"]
+    assert sub["severity"] == "caution"
+    assert sub["evidence_level"] == "probable"
+    assert "retrospective" in sub["mechanism"]
+    assert "seven" in sub["mechanism"] and "5.1 ng/mL" in sub["mechanism"]
+    assert "not a controlled" in sub["mechanism"]
+    assert "observational" in sub["alert_body"]
+    assert "observational" in sub["informational_note"]
+    for field in ("mechanism", "alert_body", "informational_note"):
+        assert "not measured directly" not in sub[field]
+        assert "not one measured with sirolimus" not in sub[field]
+    assert "Agent source correction" in sub["clinical_review"]["notes"]
+    assert sub["profile_gate"]["requires"]["drug_classes_any"] == ["sirolimus"]
 
 
 def test_seizure_condition_guidance_makes_an_accurate_claim():

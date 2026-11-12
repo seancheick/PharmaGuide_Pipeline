@@ -22758,15 +22758,16 @@
         {
           "drug_class_id": "sirolimus",
           "severity": "caution",
-          "evidence_level": "theoretical",
-          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming sirolimus, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a potential interaction described for the transporter, not one measured with sirolimus. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "evidence_level": "probable",
+          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming sirolimus, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. A retrospective tuberous sclerosis complex series included seven sirolimus patients and reported a median trough-level increase of 5.1 ng/mL after cannabidiol. This was an observational series, not a controlled sirolimus interaction trial. The label concerns prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
           "action": "If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD; they may check your sirolimus levels. Do not change your sirolimus dose yourself.",
           "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display",
+            "https://pubmed.ncbi.nlm.nih.gov/31924480/"
           ],
           "alert_headline": "Possible rise in levels of sirolimus taken by mouth",
-          "alert_body": "The prescription CBD label says sirolimus levels may rise; this was not measured directly. If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD.",
-          "informational_note": "Prescription CBD may raise levels of sirolimus taken by mouth; not measured directly.",
+          "alert_body": "The prescription CBD label flags rising sirolimus levels; an observational study also found this. If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD.",
+          "informational_note": "Higher sirolimus levels were measured in a small observational cannabidiol study.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -22791,7 +22792,7 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-12",
             "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
-            "notes": "Q5: potential interaction described for oral P-gp substrates, distinguished from a measured interaction. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+            "notes": "Q5: oral P-gp precaution. Agent source correction 2026-11-12: PMID 31924480 reports measured sirolimus trough increases in an observational series. Probable follows the existing taxonomy's partial human support category; caution, action and matching remain unchanged. This source correction was not reviewed by Dr. Pham. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
           }
         },
         {
