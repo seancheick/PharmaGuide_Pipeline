@@ -56,7 +56,7 @@ def test_ginkgo_warfarin_mechanism_keeps_mixed_evidence_explicit():
     pair = PAIRS['DSI_WAR_GINKGO']
     assert 'significantly amplifies' not in pair['mechanism'].lower()
     assert 'mixed' in pair['mechanism'].lower()
-    assert pair['severity'] == 'Major'
+    assert pair['severity'] == 'Moderate'  # Dr. Pham, 2026-11-11 (A5): caution
     assert pair['materiality'] == 'presence'
 
 
@@ -88,7 +88,7 @@ def test_real_source_pairs_preserve_clinical_tier_and_identity_through_export():
     classes = json.loads((DATA / 'drug_classes.json').read_text())
     expected = {
         'DSI_ACEI_POTASSIUM': ('avoid', 'potassium', 'established'),
-        'DSI_WAR_GINKGO': ('avoid', 'ginkgo', 'moderate'),  # directly relevant observational source
+        'DSI_WAR_GINKGO': ('caution', 'ginkgo', 'moderate'),  # Dr. Pham A5 (2026-11-11); observational source
         'DSI_GINKGO_ANTIPLATELET': ('avoid', 'ginkgo', 'moderate'),
         'DSI_SSRI_SJW': ('contraindicated', 'st_johns_wort', 'established'),
         'DSI_STATINS_RYR': ('avoid', 'red_yeast_rice', 'established'),

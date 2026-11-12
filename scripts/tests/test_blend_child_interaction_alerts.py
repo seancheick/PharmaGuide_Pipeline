@@ -74,8 +74,11 @@ def test_blend_child_without_amount_never_satisfies_a_dose_rule(enricher):
     # Presence rule: fires on identity alone.
     assert conditions["surgery_scheduled"]["severity"] == "avoid"
     # Dose rule: the amount is unknown, so the authored amount-missing policy
-    # decides; no dose is invented from the blend.
-    decision = drugs["anticoagulants"]["dose_decision"]
+    # decides; no dose is invented from the blend. (Garlic with blood thinners
+    # is a presence rule since Dr. Pham's 2026-11-11 review; its 600 mg
+    # antihypertensive floor is still authored and pending batch 4.)
+    assert drugs["anticoagulants"]["severity"] == "caution"
+    decision = drugs["antihypertensives"]["dose_decision"]
     assert decision["evaluation_status"] == "amount_unknown"
     assert decision["consumer_disposition"] == "suppress"
 

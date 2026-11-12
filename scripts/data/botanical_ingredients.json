@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-11",
     "total_entries": 560,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -3504,7 +3504,9 @@
         "glycyrrhiza uralensis",
         "glycyrrhiza uralensis extract",
         "chinese licorice root",
-        "gan cao"
+        "gan cao",
+        "glycyrrhiza uralensis root",
+        "glycyrrhiza uralensis root extract"
       ],
       "category": "root",
       "notes": "Glycyrrhiza uralensis (Fabaceae) root. Gan Cao in TCM, most frequently used herb in Chinese formulas. Contains glycyrrhizin (50x sweeter than sucrose) and liquiritigenin flavonoid. Botanical root form.",
@@ -4751,7 +4753,6 @@
         "deglycyrrhizinated licorice",
         "dgl licorice",
         "de-glycyrrhizinated licorice",
-        "Glycyrrhiza glabra",
         "deglycyrrhizinated licorice root extract",
         "licorice root extract, deglycyrrhizinated",
         "dgl licorice root",
@@ -4759,7 +4760,11 @@
         "gutgard",
         "gutgard licorice extract",
         "gutgard dgl",
-        "gutgard glycyrrhiza glabra extract"
+        "gutgard glycyrrhiza glabra extract",
+        "licorice root extract, dgl",
+        "gutgard deglycyrrhizinated licorice (dgl) root extract",
+        "gutgard deglycyrrhizinated licorice (dgl) extract",
+        "standardized deglycyrrhized licorice extract"
       ],
       "category": "root",
       "notes": "Glycyrrhiza glabra root preparation with reduced glycyrrhizin. A stated residual content below 3% is not complete removal and does not establish elimination of mineralocorticoid effects; exact preparation, dose and safety require verification.",

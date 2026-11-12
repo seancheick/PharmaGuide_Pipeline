@@ -2431,7 +2431,8 @@ activation is established by the source work above.
   57.32 s baseline versus 58.43 s candidate median per 1,500 required-owner
   calls, with traced Python peak 311,851 versus 310,874 bytes. These are
   owner timings only. Some later trials overlapped the corpus build.
-- [ ] Reconcile app PR 226 and finish interaction release prerequisites.
+- [x] Reconcile app PR 226. GitHub confirms the exact-pair correction merged.
+- [ ] Finish interaction release prerequisites against the final rules artifact.
 - [x] Finish the nonpublishing corpus rebuild on 3bde242e7. All 37 brand
   datasets passed, and Product Submissions refreshed.
 - [x] Measure and reconcile the fresh whole-catalog census.
@@ -2456,3 +2457,74 @@ activation is established by the source work above.
   clear those holds before export and native scans can run.
   Verify actual Core and detail records, scan representative products in the
   app, and check the medication warning in Product Detail and Stack.
+
+Publication is a separate gate from candidate export. The fixed cohort
+contract requires 15,293 genuinely complete assessments. The current
+census records 9,252 scored-complete, plus 10 complete with safety
+suppression. Even if all 53 current export holds closed as complete,
+the fixed cohort would still be below the publication threshold.
+Do not infer new catalog counts from bounded receipt validation.
+
+### Ranked follow-up from the November 11 census
+
+5,323 partial products have only the generic Evidence blocker. The first
+disjoint single-canonical review candidates are fiber 77, blueberry 56,
+L-carnitine 51, maca 50, citrus bioflavonoids 46, green-tea extract 46,
+phytosterols 46, broccoli 45, cinnamon 45, CoQ10 44, MCT 44 and prebiotics 44.
+These are source-row candidate counts. The first batch verifies exact
+ingredient and preparation ownership before any completion is recorded.
+Separate native-only groups contain 161 probiotic and 144 omega products.
+The full ID-level ranking is in the existing census receipt directory
+under CENSUS_3bde242e_BACKLOG_RANKING.json.
+
+TestFlight distribution can use the already published catalog and does
+not itself qualify a new catalog for upload. Verify the bundled Core and
+its referenced detail records before packaging. The new catalog candidate
+still needs its source reviews, export validation and native scan proof.
+
+### November 11 — bounded source-transfer follow-up
+
+PR 451 merged at 50d07e40e after all eight hosted groups, merge readiness
+and 564 local checks passed. Sean authorized completed limited
+no-additional-credit transfer decisions for tyrosine PMID 29980424 and
+plant-sterol PMID 37739728. The reported findings and unread Methods
+remain recorded. Existing qualified source credit is preserved.
+
+The 53-product frozen Enrich-to-Score replay found 42 partial-to-complete
+transitions (33 tyrosine and nine plant sterol). Six more partial records
+passed retained-Evidence proof. All six numerical pillars, score totals
+and compared safety and warning fields were unchanged. Five Perilla
+labels still hold exact-preparation Dose and Evidence. The manufacturer
+confirms aerial-part extract for the BulkSupplements labels and seed
+extract standardized to 3% polyphenols for Pure Encapsulations. Neither
+source establishes a clinical benchmark. The focused source tests passed
+432 checks. No bounded results have been added to the global census.
+
+### Finite beta close-out
+
+- [x] Confirm the existing 48-product source-transfer replay. PR 453 is
+  ready for review. The local corpus checkpoint passed 564 checks and 24
+  declared skips. Exact-head hosted qualification remains in progress.
+- [ ] Qualify the five Perilla records through the existing literature
+  Evidence and botanical Dose owners. The 450 mg aerial-part and 150 mg
+  seed-extract amounts are verified label facts. The seed-extract paper
+  PMID 41227657 uses cell models. The human GI pilot PMID 24885816 does
+  not establish matching retail preparation or a general Dose threshold.
+  Retain the exact preparation and independent safety/exposure holds.
+- [ ] Freeze the integrated pipeline and Flutter sources with the
+  interaction orchestrator before the single final candidate pass.
+  PRs 449 and 452 are stacked on the 448 and 449 branches respectively.
+  PR 450 and its app companion require coordinated consumer validation.
+  Run the existing interaction rule-change gate on the frozen candidate.
+- [ ] Validate the candidate Core, blobs and barcode journeys for complete,
+  safety-suppressed and legitimately partial products. Confirm public
+  score suppression and verify Product Detail and Stack against the
+  same interaction artifact.
+
+The publication contract still requires 15,293 complete cohort IDs.
+The proposed beta alternative would instead require all 15,447 cohort
+IDs to have an accounted-for disposition, 100% of published numerical
+scores to have current source-qualified receipts, no unresolved
+safety-critical publication failures, partial products excluded from
+public numeric ratings, and explicit measured usable coverage. It is
+a policy proposal only. The existing 99% threshold remains binding.

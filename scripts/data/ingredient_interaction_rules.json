@@ -3262,16 +3262,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "Allicin/ajoene give garlic mild antiplatelet activity at supplement doses (≥600 mg/day extract). Standalone risk modest; severity escalates when combined with antiplatelets.",
-          "action": "If you take warfarin or an antiplatelet, monitor for bruising or bleeding when adding a garlic supplement.",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Garlic supplements can affect platelet function. The warfarin label names garlic among botanicals whose bleeding effects would be expected to add to warfarin's; the risk rises further with antiplatelets.",
+          "action": "If you take a blood thinner, talk to your prescriber before starting, stopping or changing a garlic supplement, and report unusual bruising or bleeding.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/garlic"
           ],
-          "alert_headline": "Mild bleeding risk with blood thinners",
-          "alert_body": "High-dose garlic supplements can mildly thin the blood. Combined with warfarin or aspirin-type drugs, this can increase bleeding risk.",
-          "informational_note": "Garlic supplements at high dose can affect platelet function — relevant to anyone on blood thinners.",
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Garlic supplements may increase bleeding risk with blood thinners such as warfarin. Talk to your prescriber before using them.",
+          "informational_note": "Garlic supplements can affect platelet function — relevant to anyone on blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -3291,15 +3292,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
           }
         },
         {
@@ -3333,16 +3331,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
-          }
+          "materiality": "presence",
+          "min_effective_dose": null
         },
         {
           "drug_class_id": "antihypertensives",
@@ -3455,42 +3445,6 @@
               "severity_if_not_met": "monitor"
             }
           }
-        },
-        {
-          "scope": "drug_class",
-          "target_id": "anticoagulants",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 1200,
-          "unit": "mg",
-          "severity_if_met": "avoid",
-          "severity_if_not_met": "monitor",
-          "note": "Garlic supplements may have antiplatelet effects. Evidence is dose-dependent; caution is advised with anticoagulants. https://www.nccih.nih.gov/health/garlic",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "anticoagulants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 1200,
-              "unit": "mg",
-              "severity_if_met": "avoid",
-              "severity_if_not_met": "monitor"
-            }
-          }
         }
       ],
       "pregnancy_lactation": {
@@ -3585,23 +3539,24 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
+          "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Potential additive bleeding risk with anticoagulants.",
-          "action": "Use with monitoring and clinician input.",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/ginger"
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Ginger has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger and ask about INR or bleeding checks.",
-          "informational_note": "Ginger can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -3616,7 +3571,55 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
+          ],
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3875,14 +3878,15 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Ginkgo inhibits platelet aggregation (PAF antagonism). Bleeding risk amplified with warfarin or antiplatelet therapy.",
-          "action": "If you take warfarin, aspirin, or another antiplatelet/anticoagulant, avoid ginkgo unless your prescriber clears it.",
+          "evidence_level": "moderate",
+          "mechanism": "Ginkgo may increase the risk of bleeding in people taking anticoagulants such as warfarin. The warfarin label names Ginkgo biloba among botanicals whose effects would be expected to add to warfarin's.",
+          "action": "If you take a blood thinner, talk to your prescriber before using ginkgo and ask how bleeding should be monitored.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/ginkgo"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
-          "alert_body": "If you take anticoagulants, do not combine with this product. Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
+          "alert_body": "Ginkgo may increase bleeding with blood thinners such as warfarin. Talk to your prescriber before using it, and report unusual bruising or bleeding.",
           "informational_note": "Ginkgo has antiplatelet activity — relevant to anyone on blood-thinning medication.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -3903,15 +3907,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.nccih.nih.gov/health/ginkgo",
-            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
           }
         },
         {
@@ -3945,16 +3946,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.nccih.nih.gov/health/ginkgo",
-            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
-          }
+          "materiality": "presence",
+          "min_effective_dose": null
         }
       ],
       "pregnancy_lactation": {
@@ -5804,18 +5797,20 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
-          "action": "Monitor blood pressure and review supplement use with clinician.",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Glycyrrhizin in licorice can raise blood pressure and lower potassium, working against blood-pressure treatment. The EU herbal monograph for licorice root says it may counteract the action of antihypertensive medicines. A meta-analysis of glycyrrhizic-acid trials found higher blood pressure and lower plasma potassium; in healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks, and people with hypertension respond more strongly. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice while taking blood-pressure medicine unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
           "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
             "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/",
             "https://pubmed.ncbi.nlm.nih.gov/38246526/",
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
-          "alert_headline": "May affect blood-pressure control",
-          "alert_body": "Licorice can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding licorice.",
-          "informational_note": "Licorice can affect blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Can work against blood-pressure medicine",
+          "alert_body": "Glycyrrhizin in licorice can raise blood pressure and lower potassium. If you take blood-pressure medicine, avoid it unless your prescriber has reviewed it. Licorice not labeled DGL may contain it.",
+          "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -5835,7 +5830,54 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "A14: avoid for glycyrrhizin-containing licorice; verified DGL excluded; unknown preparation is not assumed to be DGL. Wording and sources prepared by agent from the EMA monograph and cited studies."
+          }
+        },
+        {
+          "drug_class_id": "cardiac_glycosides",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Glycyrrhizin in licorice can lower blood potassium, and low potassium makes digoxin toxicity more likely. The EU herbal monograph for licorice root says it is not to be used together with cardiac glycosides, and the digoxin (LANOXIN) label lists hypokalemia among conditions that may predispose to digoxin toxicity. A meta-analysis of glycyrrhizic-acid trials found lower plasma potassium. The sources set no amount of glycyrrhizin below which this concern does not apply. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice with digoxin or another cardiac glycoside unless your prescriber advises it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/"
+          ],
+          "alert_headline": "Can raise digoxin toxicity risk",
+          "alert_body": "Glycyrrhizin in licorice can lower potassium, making digoxin toxicity more likely. If you take digoxin, avoid it unless your prescriber advises it. Licorice not labeled DGL may contain it.",
+          "informational_note": "Licorice with glycyrrhizin can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "cardiac_glycosides"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "F4: avoid for glycyrrhizin-containing licorice with cardiac glycosides; verified DGL excluded; no glycyrrhizin floor. Wording and sources prepared by agent from the EMA monograph and LANOXIN label."
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -5873,8 +5915,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team",
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; original rule by pharmaguide_clinical_team",
       "dose_thresholds": []
     },
     {
@@ -6752,24 +6794,26 @@
           "min_effective_dose": null
         },
         {
-          "drug_class_id": "anticoagulants",
-          "severity": "contraindicated",
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "avoid",
           "evidence_level": "established",
           "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
-          "action": "Do not combine St. John's Wort with warfarin or other vitamin-K antagonists. Discuss alternatives with your prescriber.",
+          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
           "sources": [
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://pubmed.ncbi.nlm.nih.gov/15089812/",
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "Do not combine with warfarin",
-          "alert_body": "St John’s wort can reduce warfarin’s anticoagulant effect. Tell your anticoagulant prescriber about any use or change and ask about INR monitoring.",
+          "alert_headline": "Avoid St. John's wort with warfarin",
+          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -6783,7 +6827,56 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
+          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
+          "sources": [
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+            "https://pubmed.ncbi.nlm.nih.gov/15089812/",
+            "https://www.nccih.nih.gov/health/st-johns-wort"
+          ],
+          "alert_headline": "Avoid St. John's wort with warfarin",
+          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
+          "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -8940,17 +9033,52 @@
       ],
       "drug_class_rules": [
         {
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
+          ],
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Potential additive bleeding tendency.",
-          "action": "Monitor with clinician guidance.",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take warfarin, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/ginger"
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
           ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Ginger extract has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger extract and ask about INR or bleeding checks.",
-          "informational_note": "Ginger extract can affect clotting — relevant to people on anticoagulants.",
+          "alert_headline": "May add to warfarin's bleeding risk",
+          "alert_body": "Ginger supplements may add to bleeding risk with warfarin; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8962,7 +9090,10 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -8984,8 +9115,8 @@
         "direction": "unknown",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-02-28",
-      "review_owner": "pharmaguide_clinical_team",
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Source-content review (agent), 2026-11-11: aligned with RULE_IQM_GINGER_BLEEDING (Dr. Pham A9, ginger + warfarin); the NCCIH ginger page it cited does not mention bleeding",
       "dose_thresholds": []
     },
     {
@@ -10465,9 +10596,10 @@
           "drug_class_id": "nsaids",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from omega-3 (EPA/DHA) supplements. A possible interaction remains a precaution.",
-          "action": "Monitor for GI symptoms when combining omega-3 (EPA/DHA) with NSAIDs. Take NSAIDs with food.",
+          "mechanism": "Omega-3 fatty acids (EPA/DHA) may prolong bleeding time. The prescription omega-3 label asks for periodic monitoring with drugs that affect coagulation; applying it to supplements and NSAIDs is an extrapolation.",
+          "action": "If you take an NSAID regularly, mention omega-3 supplements to your clinician or pharmacist, especially if you have other bleeding risks.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=21cfa4ce-0b05-47ed-b268-339eb1b83b75",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
@@ -10493,7 +10625,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         }
       ],
       "dose_thresholds": [],
@@ -11712,15 +11849,58 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
+          "drug_class_id": "vitamin_k_antagonists",
           "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Multiple case reports and pharmacovigilance data document glucosamine-associated INR elevation in patients on stable warfarin therapy. A systematic pharmacovigilance review (Knudsen & Sokol, 2008) identified 20 FDA MedWatch reports and 21 WHO reports of altered coagulation (increased INR, bleeding) with glucosamine and warfarin, including one case of intraventricular bleed and subdural hematoma. A dose-response relationship was observed: one patient's INR rose from 2.3 to 3.9 after dose escalation from 1000 to 3000 mg/day, then to 4.7 on further dose reduction delay, normalizing after glucosamine discontinuation. The mechanism is unknown — glucosamine is not a known inhibitor of CYP2C9 or CYP3A4.",
-          "action": "Inform your prescriber if taking glucosamine while on warfarin. Check INR within 2-4 weeks of starting or stopping glucosamine. Dose escalation of glucosamine may destabilize previously stable anticoagulation control.",
+          "evidence_level": "moderate",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
+          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
-            "https://pubmed.ncbi.nlm.nih.gov/23946031/"
+            "https://pubmed.ncbi.nlm.nih.gov/23946031/",
+            "https://www.medicines.org.uk/emc/product/14333/smpc"
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
+          "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "moderate",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
+          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "https://pubmed.ncbi.nlm.nih.gov/14986566/",
+            "https://pubmed.ncbi.nlm.nih.gov/23946031/",
+            "https://www.medicines.org.uk/emc/product/14333/smpc"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
@@ -11736,7 +11916,10 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -11745,7 +11928,12 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12066,23 +12254,26 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Warfarin-associated INR reports involving cranberry do not establish CYP2C9 inhibition as their clinical mechanism. Studies and preparations differ; retain prescriber and INR review.",
-          "action": "If you take warfarin, monitor INR when using cranberry extract or drinking ≥1 L cranberry juice/day.",
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
+          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cranberry"
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://pubmed.ncbi.nlm.nih.gov/18516070/",
+            "https://pubmed.ncbi.nlm.nih.gov/19553405/"
           ],
           "alert_headline": "May raise INR on warfarin",
-          "alert_body": "High-dose cranberry extracts or large amounts of cranberry juice can raise INR in people on warfarin. Mention cranberry use to your prescriber.",
-          "informational_note": "Cranberry may increase warfarin levels at high doses — UK MHRA issued an advisory.",
+          "alert_body": "Cranberry supplements and concentrates may raise INR in people taking warfarin; the evidence is mixed. Talk to your anticoagulation team before starting or changing them.",
+          "informational_note": "Cranberry may change INR in people taking warfarin; UK warfarin labeling advises avoiding cranberry products.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -12096,7 +12287,56 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
+          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://pubmed.ncbi.nlm.nih.gov/18516070/",
+            "https://pubmed.ncbi.nlm.nih.gov/19553405/"
+          ],
+          "alert_headline": "May raise INR on warfarin",
+          "alert_body": "Cranberry supplements and concentrates may raise INR in people taking warfarin; the evidence is mixed. Talk to your anticoagulation team before starting or changing them.",
+          "informational_note": "Cranberry may change INR in people taking warfarin; UK warfarin labeling advises avoiding cranberry products.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -14175,23 +14415,25 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
+          "drug_class_id": "vitamin_k_antagonists",
           "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Case reports raise possible warfarin concerns with CoQ10, but a randomized study of 100 mg/day in 24 stable warfarin users found no INR or warfarin-dose effect. The retained content does not establish a universal 100 mg interaction threshold.",
-          "action": "Tell your warfarin prescriber about CoQ10 and ask about monitoring when starting, stopping or changing it.",
+          "evidence_level": "probable",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
+          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
           "sources": [
-            "https://www.nccih.nih.gov/health/coenzyme-q10"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/"
           ],
-          "alert_headline": "May mildly reduce warfarin effect",
+          "alert_headline": "May reduce warfarin effect",
           "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
-          "informational_note": "CoQ10 may affect INR at high doses — relevant to anyone on warfarin.",
+          "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -14205,7 +14447,55 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
+          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/"
+          ],
+          "alert_headline": "May reduce warfarin effect",
+          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
+          "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "doacs",
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "statins",
@@ -16441,18 +16731,20 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "caution",
+          "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy. In healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks; people with hypertension respond more strongly.",
-          "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
+          "mechanism": "Glycyrrhizin in licorice can raise blood pressure and lower potassium, working against blood-pressure treatment. The EU herbal monograph for licorice root says it may counteract the action of antihypertensive medicines. A meta-analysis of glycyrrhizic-acid trials found higher blood pressure and lower plasma potassium; in healthy young adults, licorice supplying 100 mg/day glycyrrhizic acid, a level WHO has suggested is unlikely to harm most adults, raised home systolic blood pressure within 2 weeks, and people with hypertension respond more strongly. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+          "action": "Avoid glycyrrhizin-containing licorice while taking blood-pressure medicine unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; treat a licorice product that does not say it is DGL as containing glycyrrhizin.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
+            "https://www.nccih.nih.gov/health/licorice-root",
+            "https://pubmed.ncbi.nlm.nih.gov/28660884/",
             "https://pubmed.ncbi.nlm.nih.gov/38246526/",
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
-          "alert_headline": "May reduce blood-pressure medication effect",
-          "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
-          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Can work against blood-pressure medicine",
+          "alert_body": "Glycyrrhizin in licorice can raise blood pressure and lower potassium. If you take blood-pressure medicine, avoid it unless your prescriber has reviewed it. Licorice not labeled DGL may contain it.",
+          "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -16472,7 +16764,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "A14: avoid for glycyrrhizin-containing licorice; verified DGL excluded; unknown preparation is not assumed to be DGL. Wording and sources prepared by agent from the EMA monograph and cited studies."
+          }
         }
       ],
       "dose_thresholds": [
@@ -16548,8 +16846,8 @@
           "https://pubmed.ncbi.nlm.nih.gov/28158597/"
         ]
       },
-      "last_reviewed": "2026-04-09",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-11",
+      "review_owner": "Dr. Pham (clinical review 2026-11-11, licorice A14/F4 severity and DGL scope); monograph and label passages read by agent; original rule by pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED",
@@ -20468,7 +20766,7 @@
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98e451e1-e4d7-4439-a675-c5457ba20975"
           ],
           "alert_headline": "Works against anticholinergic medications",
-          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it — these effects cancel. If you take an anticholinergic medication, talk to your prescriber before use.",
+          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it, so the two can work against each other. If you take an anticholinergic medication, talk to your prescriber before use.",
           "informational_note": "Huperzine A boosts acetylcholine — relevant to people on anticholinergic medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -20519,8 +20817,8 @@
           "drug_class_id": "anticholinergics",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect, potentially reducing the therapeutic efficacy of anticholinergics (e.g., overactive bladder treatment with oxybutynin) or creating unpredictable CNS effects.",
-          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. The therapeutic effect of anticholinergics may be reduced. Monitor for loss of efficacy.",
+          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect. For medicines taken for their anticholinergic action (e.g., oxybutynin for overactive bladder), that could reduce their therapeutic effect; for medicines whose anticholinergic effect is a side effect (e.g., diphenhydramine, tricyclic antidepressants), the practical effect of the combination is not established.",
+          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. If the medicine is taken for its anticholinergic action (for example, oxybutynin for overactive bladder), watch for it working less well.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36950691/"
           ],
@@ -22016,14 +22314,14 @@
           "drug_class_id": "immunosuppressants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EPIDIOLEX label advises monitoring and possible dose adjustment for susceptible oral P-glycoprotein substrates, including tacrolimus and sirolimus. This should not be generalized to clinically proven inhibition of all CYP3A4 substrates.",
-          "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised oral everolimus exposure about 2.5-fold, and that exposure to other oral P-glycoprotein substrates, such as sirolimus and tacrolimus, may rise; it advises drug-level monitoring and dose adjustment. This should not be generalized to clinically proven inhibition of all CYP3A4 substrates.",
+          "action": "Monitor everolimus, tacrolimus or sirolimus levels closely; a dose reduction may be needed. Tell the team that prescribes it about CBD use.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May increase exposure to some transplant drugs",
-          "alert_body": "CBD can increase exposure to certain transplant drugs. Talk to your transplant prescriber before use; appropriate drug-level monitoring or prescribed dose adjustment may be needed.",
-          "informational_note": "CBD affects immune function — relevant to people on immunosuppressants.",
+          "alert_headline": "May raise levels of some immunosuppressant medicines",
+          "alert_body": "CBD can raise levels of some immunosuppressants, such as everolimus, tacrolimus or sirolimus. Ask that medicine's prescriber first; drug-level monitoring or a prescribed dose change may be needed.",
+          "informational_note": "Prescription CBD raised everolimus levels in a label study — relevant to anyone on everolimus, tacrolimus or sirolimus.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -22944,18 +23242,19 @@
       "drug_class_rules": [
         {
           "drug_class_id": "maois",
-          "severity": "contraindicated",
-          "evidence_level": "limited",
+          "severity": "avoid",
+          "evidence_level": "moderate",
           "mechanism": "SAMe is a methyl donor studied as an antidepressant. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because combining it with the MAOI can cause serotonin syndrome, and a toxic interaction with the antidepressant clomipramine has been reported. Other MAOI labels do not name SAMe, so applying this to every MAOI is a class inference. No study of SAMe with an MAOI was found.",
-          "action": "If you take an MAOI, do not combine it with SAMe. Do not stop or change your MAOI to use SAMe; your prescriber manages any change and the washout time.",
+          "action": "If you take an MAOI, avoid SAMe. If your MAOI is tranylcypromine (Parnate), its label says the two must not be combined. Do not stop or change your MAOI to use SAMe; your prescriber manages any change and the washout time.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa",
             "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
             "https://pubmed.ncbi.nlm.nih.gov/7854515/",
             "https://pubmed.ncbi.nlm.nih.gov/8434674/"
           ],
-          "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "If you take an MAO inhibitor, do not combine it with this product. The tranylcypromine label lists SAMe as contraindicated because the combination can cause serotonin syndrome.",
+          "alert_headline": "Avoid combining with MAOIs",
+          "alert_body": "If you take an MAO inhibitor, avoid this product. SAMe raises serotonin activity; the tranylcypromine (Parnate) label lists it as contraindicated because of serotonin syndrome.",
           "informational_note": "SAMe raises serotonin activity, which matters for anyone taking an MAOI or another antidepressant.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -22980,7 +23279,8 @@
           "clinical_review": {
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "Her contraindication covers tranylcypromine, carried by the exact pair DSI_TRANYLCYPROMINE_SAME. A profile that says only MAOI does not identify the medicine, so this class rule keeps its published avoid: the other MAOIs are pending ask 1, and a contraindicated profile rule would hide SAMe's conditional note until G4."
           }
         }
       ],

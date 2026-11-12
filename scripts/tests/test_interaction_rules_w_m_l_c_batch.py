@@ -43,20 +43,21 @@ def find_drug_class_rule(rules, db, canonical_id, drug_class_id):
 W_FAMILY = [
     # (label, db, canonical_id, drug_class_id, expected_severity)
     ("W1",  "ingredient_quality_map", "vitamin_k",      "vitamin_k_antagonists", "caution"),
-    # 2026-07 dose-floor review supersedes the original 2026-04 lock:
-    # ginkgo x anticoagulants is dose-dependent and now warns as caution
-    # at/above the authored 120 mg floor; trace doses suppress.
+    # Dr. Pham's review (2026-11-11, audits/clinical_review_20261111) supersedes the
+    # 2026-04 locks for W2, W3, W6 and W12: ginkgo and garlic are caution on presence
+    # (the 120 mg and 600 mg floors had no source), St. John's wort is avoid for
+    # warfarin, and cranberry is caution for warfarin.
     ("W2",  "ingredient_quality_map", "ginkgo",         "anticoagulants", "caution"),
-    ("W3",  "ingredient_quality_map", "garlic",         "anticoagulants", "monitor"),
+    ("W3",  "ingredient_quality_map", "garlic",         "anticoagulants", "caution"),
     ("W4",  "ingredient_quality_map", "fish_oil",       "anticoagulants", "caution"),
     ("W5a", "ingredient_quality_map", "turmeric",       "anticoagulants", "caution"),
     ("W5b", "ingredient_quality_map", "curcumin",       "anticoagulants", "caution"),
-    ("W6",  "ingredient_quality_map", "st_johns_wort",  "anticoagulants", "contraindicated"),
+    ("W6",  "ingredient_quality_map", "st_johns_wort",  "anticoagulants", "avoid"),
     ("W7",  "ingredient_quality_map", "coq10",          "anticoagulants", "monitor"),
     ("W8",  "ingredient_quality_map", "dong_quai",      "anticoagulants", "avoid"),
     ("W9",  "ingredient_quality_map", "ginseng",        "anticoagulants", "caution"),
     ("W11", "ingredient_quality_map", "vitamin_e",      "anticoagulants", "caution"),
-    ("W12", "ingredient_quality_map", "cranberry",      "anticoagulants", "monitor"),
+    ("W12", "ingredient_quality_map", "cranberry",      "anticoagulants", "caution"),
     ("W10", "ingredient_quality_map", "bromelain",      "anticoagulants", "monitor"),
 ]
 
@@ -84,7 +85,8 @@ M_FAMILY = [
     ("M6",  "ingredient_quality_map",        "ginseng",           "maois", "caution"),
     ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "maois", "contraindicated"),
     # Raised from avoid by Dr. Pham 2026-11-11: the PARNATE label lists SAMe as contraindicated.
-    ("M8",  "ingredient_quality_map",        "same",              "maois", "contraindicated"),
+    # Class rule stays avoid; tranylcypromine is contraindicated by its exact pair (Dr. Pham A3, ask 1 pending).
+    ("M8",  "ingredient_quality_map",        "same",              "maois", "avoid"),
     ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "maois", "contraindicated"),
 ]
 
