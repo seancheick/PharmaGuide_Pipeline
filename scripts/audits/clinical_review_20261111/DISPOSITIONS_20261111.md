@@ -126,10 +126,16 @@ and so Dr. Pham's sign-off (question 7).
 | A6 garlic + warfarin | Pair Moderate; rule monitor → caution on presence. Removed the 600 mg floor **and** a rule-level tier the packet did not show (> 1200 mg avoid, otherwise monitor), which replaced the sub-rule severity in the enricher; its source (NCCIH garlic) states no dose. Caution now ships at every amount |
 | A7 glucosamine + warfarin | Pair Minor → Moderate; rule caution, warfarin only; "2–4 weeks" removed; PMID 18363538 and the UK SmPC cited; PMID 23946031 kept (teaching case, INR 3.9 after a glucosamine–chondroitin supplement; full text read 2026-11-11) |
 | A8 cranberry + warfarin | Pair Moderate, rule monitor → caution, warfarin only; mixed evidence (PMIDs 18516070, 19553405); UK avoid instruction recorded in evidence_notes; MHRA link removed |
-| A9 ginger + warfarin | Pair Minor → Moderate; rule caution; cohort (17723077) and crossover (15801937) cited with limits; NCCIH ginger page removed (it does not mention bleeding) |
+| A9 ginger + warfarin | Pair Minor → Moderate; rule caution, warfarin only (identified VKA, or an unidentified blood thinner; DOACs excluded) with copy naming warfarin; cohort (17723077) and crossover (15801937) cited with limits; NCCIH ginger page removed (it does not mention bleeding) |
 | A10 fish oil + NSAIDs | Pair Moderate → Minor (background lane); rule monitor; LOVAZA label with the extrapolation stated; icosapent ethyl named as separate; "with food" removed |
 
 Agent dispositions in the same batch (not Dr. Pham's decisions, no review record on them):
+- Ginger's blood-thinner scope (outside review on PR #447, reproduced): the rule first kept every blood thinner, but
+  its sources cover warfarin users and healthy volunteers only, so it now has the warfarin-only scope of A2, A4, A7
+  and A8. Ginkgo and garlic keep every blood thinner: each cites an NCCIH page that names blood thinners in general.
+- `RULE_OTHER_GINGER_EXTRACT_BLEEDING` (the same subject under its other-ingredient identity) cited the NCCIH ginger
+  page, which does not mention bleeding, warfarin or platelets (read 2026-11-11), and claimed "mild antiplatelet or
+  anticoagulant activity". It now carries the A9 finding and scope (`apply_batch3a_ginger_scope.py`).
 - The 600 mg (garlic) and 120 mg (ginkgo) floors also sat on the antiplatelet sub-rules; same unsupported floor, removed.
 - The same floors on the antihypertensive sub-rules (garlic 600 mg, ginkgo 120 mg) and garlic's diabetes tier stay for
   batch 4 with the other noise rows.
