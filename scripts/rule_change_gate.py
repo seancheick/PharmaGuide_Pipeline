@@ -29,6 +29,11 @@ nothing
 Both coverage records are bound to the rule's fingerprint, so an alert or
 attestation written for an earlier correction cannot cover a later one.
 
+Who a rule reaches includes the medicines in each class it names (the DB's
+drug_class_map, read through the app's class crosswalk). A medicine added to a
+class therefore changes every hard rule that names the class, even when the rule
+text is unchanged. Rules that name no mapped class keep their earlier fingerprint.
+
 The emergency catalog path
 --------------------------
 A ban or recall reaches phones through `sync_safety_alerts.py`, which never waits
@@ -103,6 +108,10 @@ _WHAT_COLUMNS = (
 )
 _PROFILE_VOLATILE = {"sources", "source_urls"}
 
+# The app's class crosswalk (PharmaGuide ai medication_class_bridge.dart
+# `_profileGateClassOverrides`): every other `class:x` reaches profile id `x`.
+APP_PROFILE_GATE_OVERRIDES = {"class:antiplatelet_agents": "antiplatelets"}
+
 
 class RuleGateError(RuntimeError):
     """The comparison itself could not run. Publication stops."""
@@ -140,8 +149,13 @@ def _rank(severity: Any) -> int:
     return _RANK.get(str(severity or "").strip().lower(), _RANK["contraindicated"])
 
 
-def _interaction_rule(row: Mapping[str, Any]) -> Rule:
+def _interaction_rule(row: Mapping[str, Any], members: Mapping[str, List[str]]) -> Rule:
     who = {name: row.get(name) for name in _WHO_COLUMNS}
+    # A class pair reaches every medicine in the class, so membership is part of who it warns.
+    classes = {side: members[row.get(f"{side}_id")] for side in ("agent1", "agent2")
+               if row.get(f"{side}_type") == "drug_class" and row.get(f"{side}_id") in members}
+    if classes:
+        who["class_members"] = classes
     what = {name: row.get(name) for name in _WHAT_COLUMNS}
     types = {row.get("agent1_type"), row.get("agent2_type")}
     return Rule(
@@ -161,7 +175,8 @@ def _alert_can_express(sub: Mapping[str, Any]) -> bool:
 
 
 def _sub_rule(
-    key: str, canonical_id: str, sub: Mapping[str, Any], severity: Any, *, alertable: bool
+    key: str, canonical_id: str, sub: Mapping[str, Any], severity: Any, *, alertable: bool,
+    members: Mapping[str, List[str]],
 ) -> Rule:
     body = {k: v for k, v in sub.items() if k not in _PROFILE_VOLATILE}
     who = {
@@ -169,34 +184,43 @@ def _sub_rule(
         "profile_gate": sub.get("profile_gate"),
         "applies": key.rsplit("#", 1)[-1],
     }
+    content = {"canonical_id": canonical_id, "body": body}
+    # The medicines in each class the sub-rule names decide who it reaches. Rules naming no
+    # mapped class keep their earlier fingerprint, so existing attestations stay bound.
+    gate = sub.get("profile_gate") or {}
+    named = {sub.get("drug_class_id"), *((gate.get("requires") or {}).get("drug_classes_any") or ()),
+             *((gate.get("excludes") or {}).get("drug_classes_any") or ())}
+    classes = {name: members[name] for name in sorted(n for n in named if n in members)}
+    if classes:
+        who["class_members"] = content["class_members"] = classes
     return Rule(
         key=key,
         rank=_rank(severity),
         who=_digest(who),
-        fingerprint=_digest({"canonical_id": canonical_id, "body": body}),
+        fingerprint=_digest(content),
         alertable=alertable,
         subject=canonical_id,
     )
 
 
-def _profile_rules(rule: Mapping[str, Any]) -> Iterable[Rule]:
+def _profile_rules(rule: Mapping[str, Any], members: Mapping[str, List[str]]) -> Iterable[Rule]:
     """One entry per sub-rule: a rule's severity lives on each of them."""
     rule_id = str(rule.get("id"))
     canonical_id = str((rule.get("subject_ref") or {}).get("canonical_id") or "")
     for sub in rule.get("drug_class_rules") or []:
         yield _sub_rule(
             f"{rule_id}#drug_class:{sub.get('drug_class_id')}",
-            canonical_id, sub, sub.get("severity"), alertable=True,
+            canonical_id, sub, sub.get("severity"), alertable=True, members=members,
         )
     for sub in rule.get("condition_rules") or []:
         yield _sub_rule(
             f"{rule_id}#condition:{sub.get('condition_id')}",
-            canonical_id, sub, sub.get("severity"), alertable=_alert_can_express(sub),
+            canonical_id, sub, sub.get("severity"), alertable=_alert_can_express(sub), members=members,
         )
     for index, sub in enumerate(rule.get("dose_thresholds") or []):
         yield _sub_rule(
             f"{rule_id}#dose:{index}",
-            canonical_id, sub, sub.get("severity_if_met"), alertable=False,
+            canonical_id, sub, sub.get("severity_if_met"), alertable=False, members=members,
         )
     life_stage = rule.get("pregnancy_lactation")
     if isinstance(life_stage, dict) and life_stage:
@@ -209,8 +233,21 @@ def _profile_rules(rule: Mapping[str, Any]) -> Iterable[Rule]:
         worst = max(stated, key=_rank) if stated else "informational"
         yield _sub_rule(
             f"{rule_id}#pregnancy_lactation", canonical_id, life_stage, worst,
-            alertable=_alert_can_express(life_stage),
+            alertable=_alert_can_express(life_stage), members=members,
         )
+
+
+def _class_members(con: sqlite3.Connection) -> Tuple[Dict[str, List[str]], Dict[str, List[str]]]:
+    """Medicines in each class, keyed by `class:` id (pairs) and by profile id (profile rules)."""
+    by_class: Dict[str, List[str]] = {}
+    by_profile: Dict[str, set] = {}
+    for row in con.execute("SELECT class_id, drug_rxcuis_json, excluded_drug_rxcuis_json FROM drug_class_map"):
+        class_id = str(row["class_id"])
+        rxcuis = set(json.loads(row["drug_rxcuis_json"] or "[]")) - set(json.loads(row["excluded_drug_rxcuis_json"] or "[]"))
+        by_class[class_id] = sorted(rxcuis)
+        profile_id = APP_PROFILE_GATE_OVERRIDES.get(class_id, class_id.removeprefix("class:"))
+        by_profile.setdefault(profile_id, set()).update(rxcuis)
+    return by_class, {key: sorted(value) for key, value in by_profile.items()}
 
 
 def load_rules(db_path: Path) -> Dict[str, Rule]:
@@ -220,13 +257,14 @@ def load_rules(db_path: Path) -> Dict[str, Rule]:
         con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
         con.row_factory = sqlite3.Row
         try:
+            by_class, by_profile = _class_members(con)
             for row in con.execute("SELECT * FROM interactions"):
                 if row["retired_at"]:
                     continue
-                rule = _interaction_rule(dict(row))
+                rule = _interaction_rule(dict(row), by_class)
                 rules[rule.key] = rule
             for (raw,) in con.execute("SELECT rule_json FROM profile_warning_rules"):
-                for rule in _profile_rules(json.loads(raw)):
+                for rule in _profile_rules(json.loads(raw), by_profile):
                     rules[rule.key] = rule
         finally:
             con.close()

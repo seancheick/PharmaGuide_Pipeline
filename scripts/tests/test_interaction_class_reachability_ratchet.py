@@ -11,13 +11,13 @@ fixes land.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parents[1] / "data"
+sys.path.insert(0, str(DATA.parent))
 
-# The app's only class crosswalk today (PharmaGuide ai
-# lib/services/medications/medication_class_bridge.dart `_profileGateClassOverrides`).
-APP_PROFILE_GATE_OVERRIDES = {"class:antiplatelet_agents": "antiplatelets"}
+from rule_change_gate import APP_PROFILE_GATE_OVERRIDES  # noqa: E402  (the app's class crosswalk)
 CEILING = 8
 KNOWN_UNREACHABLE_CLASSES = {
     # Enzyme-substrate groups and antiarrhythmics: membership needs a
