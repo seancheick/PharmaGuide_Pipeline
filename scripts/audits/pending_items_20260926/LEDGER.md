@@ -5414,3 +5414,8 @@ EMSAM pairs, 155 Flutter focused tests and 34 warning composer tests passed. Sev
 frozen-label comparisons preserved the scored and cleaned records. Current CI is
 tracked by the PRs. Clinical activation and exposure holds remain recorded in
 DISPOSITIONS. Final built artifact and native app acceptance are outstanding.
+
+CI run 43316165829 found a stale SAMe identifier count and two missing citation
+topic mappings for the new scoped classes. The corrections preserve the SAMe
+identity assertion and the citation audit coverage. All 181 affected tests passed
+together. The corrected candidate gets a fresh combined CI run.
