@@ -629,7 +629,7 @@ Will NOT create: a new profile-gate field, exposure threshold or separate regist
 | Q1 EMSAM | Confirmed patch identities reach the signed contraindication through exact pairs and a product-specific profile class. Oral and ingredient-only controls keep the MAOI fallback. The Stack consumer collapses identical authored pair rows when the selected and generic RxCUIs identify the same medication. |
 | Q5 mixed CBD regimens | The existing class map represents the unassessed remainder. The scoped finding fires alongside a named finding, and the existing unspecified-class fallback fires once on its own. This preserves the existing grade while H2 remains held. |
 | Q2 vitamin E | Removed the fixed surgery interval. Surgical-team management, existing caution and the quantitative hold are retained. Flutter's tested UL and activity totals are distinct; those tests alone do not establish eligibility to reduce interaction prominence for ordinary exposure. |
-| H1–H5 and other open items | Explicit activation, severity, wording and amount-handling holds in the relayed notes remain in force. The named oral-digoxin caution remains covered by Q5. #470 is the selected sirolimus correction; #469 overlaps and should not be integrated as a second fix. |
+| H1–H5 and other open items | Explicit activation, severity, wording and amount-handling holds in the relayed notes remain in force. The named oral-digoxin caution remains covered by Q5. #469 merged the sirolimus correction. Duplicate #470 was closed. |
 
 #468 reconciles main through #465 and is paired with app #234. Focused verification:
 883 pipeline tests plus the 240-test gate slice, 155 Flutter tests and 34 warning

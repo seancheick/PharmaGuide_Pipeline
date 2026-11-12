@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-11-12",
-    "total_entries": 98
+    "total_entries": 97
   },
   "reviewed": [
     {
@@ -368,15 +368,6 @@
       "reviewed_at": "2026-09-26"
     },
     {
-      "pmid": "25312732",
-      "rule_id": "RULE_IQM_GREEN_TEA_HYPERTENSION",
-      "sub_rule": "condition:hypertension",
-      "live_title": "Overview of green tea interaction with cardiovascular drugs.",
-      "rationale": "Review of green tea interactions with cardiovascular drugs; human data include nadolol, a beta-blocker antihypertensive, which the verifier's topic stems do not cover. The primary nadolol/OATP1A2 trial (24419562) is cited beside it for the numbers and mechanism.",
-      "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
-      "reviewed_at": "2026-09-26"
-    },
-    {
       "pmid": "25864370",
       "rule_id": "RULE_IQM_MAGNESIUM_HYPERTENSION",
       "sub_rule": "condition:heart_disease",
@@ -622,7 +613,7 @@
     {
       "pmid": "24419562",
       "rule_id": "RULE_BOTAN_MATCHA_BETA_BLOCKERS",
-      "sub_rule": "drug:beta_blockers",
+      "sub_rule": "drug:nadolol",
       "live_title": "Green tea ingestion greatly reduces plasma concentrations of nadolol in healthy subjects.",
       "rationale": "Source-material citation: matcha is powdered whole green-tea leaf. The study gave brewed green tea (700 mL/day for 14 days) with nadolol and found nadolol Cmax and AUC down about 85% and a smaller systolic blood-pressure effect, the interaction this sub-rule names.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",
@@ -631,7 +622,7 @@
     {
       "pmid": "29480324",
       "rule_id": "RULE_BOTAN_MATCHA_BETA_BLOCKERS",
-      "sub_rule": "drug:beta_blockers",
+      "sub_rule": "drug:nadolol",
       "live_title": "Role of (-)-epigallocatechin gallate in the pharmacokinetic interaction between nadolol and green tea in healthy volunteers.",
       "rationale": "Constituent citation: EGCG, the main green-tea catechin, which whole-leaf matcha contains. A single dose of EGCG-rich green tea extract lowered nadolol AUC to 0.72 and 0.60 of control, and EGCG inhibited OATP1A2-mediated nadolol uptake.",
       "reviewed_by": "agent citation triage 2026-09-26 (not clinician-reviewed)",

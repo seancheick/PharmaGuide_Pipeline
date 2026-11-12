@@ -67,8 +67,8 @@ def _vitamin_pair(beta: bool) -> dict:
         "applies_to": "specific_drug",
         "evidence_notes": (
             "F1, Dr. Pham review 2026-11-11: oral isotretinoin plus vitamin A is avoid; beta-carotene must not "
-            "be automatically exempted. Major for beta-carotene is agent application of that precaution, "
-            "pending Dr. Pham confirmation, not a direct trial or a preformed-retinol toxicity claim. "
+            "be automatically exempted. The follow-up signed by Dr. Pham and relayed by Sean retains a separate "
+            "Major precaution with the provitamin A qualification. "
             if beta else
             "F1, Dr. Pham review 2026-11-11: avoid oral isotretinoin plus supplemental vitamin A. "
         ) + "Wording prepared by agent, not reviewed by Dr. Pham. Scope is supplements and oral isotretinoin, "
@@ -125,8 +125,8 @@ def apply() -> None:
                 "Wording prepared by agent, not reviewed by Dr. Pham.",
             },
             "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; "
-            "calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent "
-            "application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. "
+            "calcium is caution with formulation-specific timing. The signed follow-up supports magnesium caution "
+            "with oral bisphosphonates and medicine-specific timing. Zoledronic acid is excluded. "
             "Release limitation: the ingredient-level class does not by itself distinguish oral from "
             "intravenous ibandronate; route qualification must be verified in the consumer before release. "
             "No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham.",

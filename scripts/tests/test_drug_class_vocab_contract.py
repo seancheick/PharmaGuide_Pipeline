@@ -239,3 +239,15 @@ def test_every_interaction_rule_drug_class_id_in_vocab(drug_classes):
         f"drug_class_ids in source data NOT in vocab: {unknown}. "
         "Either add to vocab or fix the source data."
     )
+
+
+@pytest.mark.parametrize(
+    ("scoped_id", "parent_id"),
+    [("nadolol", "beta_blockers"), ("emsam_patch", "maois")],
+)
+def test_scoped_classes_reuse_parent_education(drug_classes, scoped_id, parent_id):
+    by_id = {entry["id"]: entry for entry in drug_classes}
+    scoped = by_id[scoped_id]
+    assert scoped["user_selectable"] is False
+    for field in ("group_label", "commonly_used_for"):
+        assert scoped[field] == by_id[parent_id][field]

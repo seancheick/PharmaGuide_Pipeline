@@ -1018,11 +1018,14 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
 
 def test_green_tea_nadolol_rules_cite_the_primary_trial():
     rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
-    for sub in (_sub_rule(rule, "condition_id", "hypertension"),
-                _sub_rule(rule, "drug_class_id", "nadolol")):
+    for rule_id in ("RULE_IQM_GREEN_TEA_HYPERTENSION", "RULE_BOTAN_MATCHA_BETA_BLOCKERS"):
+        scoped = _rule(rule_id)
+        assert not any(s["condition_id"] == "hypertension" for s in scoped["condition_rules"])
+        sub = _sub_rule(scoped, "drug_class_id", "nadolol")
         assert _pmid("24419562") in sub["sources"]
-        assert "85%" in sub["mechanism"]
-        assert "OATP1A2" in sub["mechanism"]
+        assert sub["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert "85%" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
+    assert "OATP1A2" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
     nadolol = _sub_rule(rule, "drug_class_id", "nadolol")
     assert nadolol["severity"] == "avoid"
     assert nadolol["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
@@ -1482,6 +1485,7 @@ def test_vitamin_e_copy_sets_no_400_iu_boundary_and_never_calls_the_effect_mild(
     # "Blood thinner" includes DOAC users; the old action named only warfarin or an antiplatelet.
     assert "warfarin or an antiplatelet" not in anticoagulants["action"]
     assert "blood thinner" in anticoagulants["action"]
+    assert "bleeding" in surgery["alert_body"]
     assert "surgical team" in surgery["alert_body"]
     assert "whether and when" in surgery["alert_body"]
     assert "week" not in surgery["alert_body"] and "stop" not in surgery["alert_headline"].lower()

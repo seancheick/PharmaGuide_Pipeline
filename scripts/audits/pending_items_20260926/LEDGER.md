@@ -5398,7 +5398,7 @@ pass (168). Cause details are in the manifest changelog entry.
 ## November 12 — Codex remaining interaction batches (in progress)
 
 User requested remaining batches 6–8, held-item research and all verified bugs encountered. Worktree
-`codex/interaction-remaining`, original source baseline 1890f4e2d. CBD source-fix PR #470 supersedes closed #467 and overlaps #469.
+`codex/interaction-remaining`, original source baseline 1890f4e2d. CBD source-fix PR #469 merged. Duplicate PRs #467 and #470 were closed.
 Owner/authority/per-entry receipts and remaining clinical holds: clinical_review_20261111 DISPOSITIONS,
 BATCH6_RESEARCH, batch7_timing_research and HELD_RESEARCH. Will NOT create a second clinical engine.
 Sean approved optional timing `excluded_member_rxcuis` plus the app reader on2026-11-12. This is a

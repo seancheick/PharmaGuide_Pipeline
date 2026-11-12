@@ -89,7 +89,7 @@ VITAMIN_E_SURGERY = {
     ),
     "last_reviewed": TODAY,
     "alert_headline": "Review vitamin E before surgery",
-    "alert_body": "Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
+    "alert_body": "High-dose vitamin E may increase bleeding risk. Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
     "clinical_review": review(Q2_NOTE + " Follow-up: use clinician-directed surgery advice without a fixed interval."),
 }
 

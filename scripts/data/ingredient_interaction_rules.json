@@ -4500,47 +4500,6 @@
       },
       "condition_rules": [
         {
-          "condition_id": "hypertension",
-          "severity": "informational",
-          "evidence_level": "theoretical",
-          "mechanism": "A human study found about 85% lower nadolol exposure after green-tea consumption, consistent with inhibition of intestinal OATP1A2 uptake. This nadolol-specific evidence does not establish a caffeine-mediated 400 mg extract threshold or the same effect for every antihypertensive medicine.",
-          "action": "Ask the nadolol prescriber before using green tea or concentrated catechin products; the retained studies do not validate a universal spacing interval.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/24419562/",
-            "https://pubmed.ncbi.nlm.nih.gov/25312732/"
-          ],
-          "alert_headline": "Check green tea use if you take nadolol",
-          "alert_body": "Green tea and catechin preparations can reduce nadolol exposure. If you take nadolol, talk to your prescriber before using them. Effects on other blood-pressure medicines need separate review.",
-          "informational_note": "High blood pressure alone does not establish this interaction; the evidence concerns nadolol.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "hypertension"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "neutral",
-          "materiality": "presence",
-          "min_effective_dose": null,
-          "clinical_review": {
-            "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-11-11",
-            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
-            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
-          }
-        },
-        {
           "condition_id": "liver_disease",
           "severity": "avoid",
           "evidence_level": "established",
@@ -4684,24 +4643,24 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "beta_blockers",
+          "drug_class_id": "nadolol",
           "severity": "avoid",
           "evidence_level": "established",
           "mechanism": "Matcha is powdered whole green-tea leaf. Green tea inhibits OATP1A2, the intestinal uptake transporter that carries nadolol into the body: in volunteers, 700 mL of green tea daily for 14 days cut nadolol exposure by about 85% and reduced its effect on systolic blood pressure. A single dose of EGCG-rich green tea extract lowered nadolol exposure by 28-40%, so EGCG is a key contributor.",
-          "action": "If you take nadolol or another beta blocker, ask your prescriber before using matcha supplements, and do not take them at the same time.",
+          "action": "Avoid matcha supplements with nadolol unless your prescriber advises it. A protective spacing interval has not been established.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24419562/",
             "https://pubmed.ncbi.nlm.nih.gov/29480324/"
           ],
           "alert_headline": "May reduce nadolol effect",
-          "alert_body": "Green tea, including matcha, can sharply lower nadolol levels and weaken blood-pressure control. If you take a beta blocker, ask your prescriber before using it.",
+          "alert_body": "If you take nadolol, ask your prescriber before using matcha supplements. Green tea can reduce nadolol absorption and weaken blood-pressure control.",
           "informational_note": "Matcha is whole green-tea leaf; green tea blocks a gut transporter that absorbs nadolol.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "beta_blockers"
+                "nadolol"
               ],
               "profile_flags_any": []
             },
@@ -4715,7 +4674,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md",
+            "notes": "G1 supplies the decision. Codex source and applicability implementation 2026-11-12; this wording is agent-authored, not a new clinician review. No new numerical threshold."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -8388,7 +8353,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/21051774/"
           ],
           "alert_headline": "Review vitamin E before surgery",
-          "alert_body": "Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
+          "alert_body": "High-dose vitamin E may increase bleeding risk. Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
           "informational_note": "Vitamin E can increase bleeding — relevant before scheduled surgery.",
           "profile_gate": {
             "gate_type": "condition",

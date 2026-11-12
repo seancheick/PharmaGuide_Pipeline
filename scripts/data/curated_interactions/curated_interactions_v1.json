@@ -3663,7 +3663,7 @@
       "clinical_confidence": "high",
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
+      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. The signed follow-up supports magnesium caution with oral bisphosphonates and medicine-specific timing. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
     },
     {
       "id": "DSI_GINKGO_ANTIPLATELET",
@@ -4068,7 +4068,7 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "specific_drug",
-      "evidence_notes": "F1, Dr. Pham review 2026-11-11: oral isotretinoin plus vitamin A is avoid; beta-carotene must not be automatically exempted. Major for beta-carotene is agent application of that precaution, pending Dr. Pham confirmation, not a direct trial or a preformed-retinol toxicity claim. Wording prepared by agent, not reviewed by Dr. Pham. Scope is supplements and oral isotretinoin, not foods, unrelated carotenoids or topical retinoids. RxNorm 6064 is isotretinoin, not tretinoin.",
+      "evidence_notes": "F1, Dr. Pham review 2026-11-11: oral isotretinoin plus vitamin A is avoid; beta-carotene must not be automatically exempted. The signed follow-up retains the separate Major precaution with the provitamin A qualification. Wording prepared by agent, not reviewed by Dr. Pham. Scope is supplements and oral isotretinoin, not foods, unrelated carotenoids or topical retinoids. RxNorm 6064 is isotretinoin, not tretinoin.",
       "direction": "harmful",
       "materiality": "presence"
     },
@@ -4107,7 +4107,7 @@
       "clinical_confidence": "high",
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. Magnesium Major to Moderate is agent application of F3 pending Dr. Pham confirmation. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
+      "evidence_notes": "F3, Dr. Pham review 2026-11-11: manageable oral-absorption interactions; calcium is caution with formulation-specific timing. The signed follow-up supports magnesium caution with oral bisphosphonates and medicine-specific timing. Zoledronic acid is excluded. Release limitation: the ingredient-level class does not by itself distinguish oral from intravenous ibandronate; route qualification must be verified in the consumer before release. No source establishes one universal interval. Wording prepared by agent, not reviewed by Dr. Pham."
     },
     {
       "id": "DSI_EMSAM_SAME_617716",

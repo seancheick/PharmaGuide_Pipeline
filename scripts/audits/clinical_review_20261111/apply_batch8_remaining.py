@@ -87,11 +87,15 @@ def apply():
     row['profile_gate']['requires']['drug_classes_any'] = ['nadolol']
     rule['drug_class_rules'] = [row]
     reviewed.append(row)
-    row = next(x for x in rule['condition_rules'] if x['condition_id'] == 'hypertension')
-    row.update(severity='informational', direction='neutral',
-               alert_headline='Check green tea use if you take nadolol',
-               informational_note='High blood pressure alone does not establish this interaction; the evidence concerns nadolol.')
-    reviewed.append(row)
+    rule['condition_rules'] = [x for x in rule['condition_rules'] if x['condition_id'] != 'hypertension']
+    matcha = rules['RULE_BOTAN_MATCHA_BETA_BLOCKERS']['drug_class_rules'][0]
+    matcha.update(
+        drug_class_id='nadolol',
+        action='Avoid matcha supplements with nadolol unless your prescriber advises it. A protective spacing interval has not been established.',
+        alert_body='If you take nadolol, ask your prescriber before using matcha supplements. Green tea can reduce nadolol absorption and weaken blood-pressure control.',
+    )
+    matcha['profile_gate']['requires']['drug_classes_any'] = ['nadolol']
+    reviewed.append(matcha)
     for row in reviewed:
         row['clinical_review'] = {'reviewer': 'Dr. Pham', 'reviewed_at': '2026-11-11',
             'file': 'audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md',

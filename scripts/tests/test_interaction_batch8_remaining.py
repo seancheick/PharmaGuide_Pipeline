@@ -65,7 +65,7 @@ def test_green_tea_nadolol_scope_does_not_flag_other_beta_blockers():
     classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
     assert classes['class:nadolol']['member_rxcuis'] == ['7226']
     assert 'nadolol' in [x['id'] for x in json.loads((DATA / 'clinical_risk_taxonomy.json').read_text())['drug_classes']]
-    assert next(x for x in r['condition_rules'] if x['condition_id'] == 'hypertension')['severity'] == 'informational'
+    assert all(x['condition_id'] != 'hypertension' for x in r['condition_rules'])
 
 
 def test_known_niacinamide_suppressed_but_mixed_and_unknown_retained():
