@@ -977,3 +977,23 @@ def test_route_driver_does_not_discard_other_objectively_major_actives():
         assert expected <= evidence_owner_canonicals(product, module="fiber_digestive")
         assert {"ashwagandha", "l_theanine"} <= evidence_required_canonicals(product, module="fiber_digestive")
         assert _evidence(product)["score"] > 0
+
+
+def test_named_bcaa_aggregate_keeps_its_source_linked_members_required():
+    from evidence_resolver import evidence_required_canonicals
+
+    raw = _raw("evidence_named_bcaa_74828_raw.json")
+    product = _enrich(raw)
+    required = evidence_required_canonicals(product, module="sports")
+    assert {"l_leucine", "l_isoleucine", "l_valine"} <= required
+
+
+def test_named_multi_enzyme_keeps_its_printed_enzyme_review_required():
+    from evidence_resolver import evidence_required_canonicals
+
+    product = _enrich("evidence_named_multi_enzyme_298024_raw.json")
+    assert "pepsin" in evidence_required_canonicals(product, module="fiber_digestive")
+
+    product["product_name"] = "Betaine HCl with Enzymes"
+    product["fullName"] = product["product_name"]
+    assert "pepsin" not in evidence_required_canonicals(product, module="fiber_digestive")

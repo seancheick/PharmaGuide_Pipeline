@@ -1093,3 +1093,30 @@ def test_oversized_source_proof_is_not_parsed(tmp_path, monkeypatch):
     monkeypatch.setattr(audit, '_SOURCE_PROOF_MAX_BYTES', path.stat().st_size)
     loaded, _ = audit._load_scoring_source_proof(path, tmp_path)
     assert loaded['verified_sources']['batch:1']['id'] == 'kept'
+
+
+@pytest.mark.parametrize(('module', 'state', 'points'), [
+    ('omega', 'evaluated_authority', 5),
+    ('probiotic', 'evaluated_null', 0),
+    ('probiotic', 'no_qualifying_human_evidence', 0),
+])
+def test_current_evidence_receipt_checks_native_authority_and_reviewed_zero(
+    monkeypatch, module, state, points,
+):
+    from copy import deepcopy
+
+    from assessment_readiness import _current_evidence_dimension_receipt
+    from scoring_v4.modules import omega_evidence, probiotic_evidence
+
+    owner = omega_evidence if module == 'omega' else probiotic_evidence
+    receipt = {
+        'score': points,
+        'max': 20,
+        'components': {'native_points': points},
+        'penalties': {},
+        'metadata': {'evidence_result_state': state},
+    }
+    monkeypatch.setattr(owner, 'score_evidence', lambda _: deepcopy(receipt))
+    assert _current_evidence_dimension_receipt({}, module, receipt)
+    forged = {**receipt, 'components': {'native_points': points + 1}}
+    assert not _current_evidence_dimension_receipt({}, module, forged)
