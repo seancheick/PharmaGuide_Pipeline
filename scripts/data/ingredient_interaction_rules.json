@@ -23857,7 +23857,7 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-12",
             "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
-            "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM is contraindicated through its serotonergic-drug language, but this rule is gated on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user gets avoid here."
+            "notes": "Q1: avoid as the class fallback, prescriber review required. The exact contraindications are the pairs DSI_TRANYLCYPROMINE_SAME (the label names SAM-e) and DSI_PHENELZINE_SAME (the label's serotonergic category, recorded as interpretation). Confirmed EMSAM uses the separately gated contraindication. Oral and ingredient-only selegiline keep this fallback."
           }
         },
         {
