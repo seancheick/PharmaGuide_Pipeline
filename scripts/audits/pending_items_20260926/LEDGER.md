@@ -5398,9 +5398,19 @@ pass (168). Cause details are in the manifest changelog entry.
 ## November 12 — Codex remaining interaction batches (in progress)
 
 User requested remaining batches 6–8, held-item research and all verified bugs encountered. Worktree
-`codex/interaction-remaining`, source baseline1890f4e2d; independent CBD source-fix PR467 (78a0a7c24).
+`codex/interaction-remaining`, original source baseline 1890f4e2d. CBD source-fix PR #470 supersedes closed #467 and overlaps #469.
 Owner/authority/per-entry receipts and remaining clinical holds: clinical_review_20261111 DISPOSITIONS,
 BATCH6_RESEARCH, batch7_timing_research and HELD_RESEARCH. Will NOT create a second clinical engine.
 Sean approved optional timing `excluded_member_rxcuis` plus the app reader on2026-11-12. This is a
 behavioral data/consumer contract batch. PR465f676212cf/466b3ab4424c CI green; four older PR bodies fixed.
 Completed: 786 focused owner/consumer tests; local564passed/24declared opt-in skips and skip guard; strict citation verification; 17 frozen real-label comparisons with identical cleaned/scored records. Route consumer and omega display regressions pass. Chromium picolinate scope uses the existing fail-open form owner; unknown forms retain qualified copy. App makecheck5632passed/2declared skips and analyzer clean, then47 taxonomy/display checks. After main reconciliation:729 focused checks, local564passed/24declared skips, strict sources and17 repeated comparisons pass. Qualification PRs: pipeline467/468 and app234; consult exact-head CI before integration. Integration and release qualification remain separate. No release/corpus run. Full evidence and remaining named clinical decisions are in DISPOSITIONS and HELD_RESEARCH.
+
+
+November 12 signed engineering follow-up: #468 incorporates main through #465 and
+is mergeable. Implementation is in 9b054837c with the vitamin E copy in 5a4f62b4a.
+The Flutter candidate d7edddfb carries the reference assets and consumer tests in #234.
+The 883 focused pipeline tests, 564 local tests with 24 declared skips, 12 verified
+EMSAM pairs, 155 Flutter focused tests and 34 warning composer tests passed. Seventeen
+frozen-label comparisons preserved the scored and cleaned records. Current CI is
+tracked by the PRs. Clinical activation and exposure holds remain recorded in
+DISPOSITIONS. Final built artifact and native app acceptance are outstanding.
