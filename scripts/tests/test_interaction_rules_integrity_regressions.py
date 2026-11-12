@@ -667,24 +667,38 @@ ARICEPT_LABEL = (
 )
 
 
+DONEPEZIL_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=76bf638e-dbde-418e-8977-1caf009990bc"
+)
+
+
 def test_huperzine_anticholinergic_rule_cites_ache_pharmacology_and_class_label():
+    """Dr. Pham Q6 (2026-11-12): avoid without prescriber approval for medicines taken for their antimuscarinic
+    effect; caution with an evidence limitation for the rest of the anticholinergic class."""
     rule = _rule("RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS")
-    anticholinergics = _sub_rule(rule, "drug_class_id", "anticholinergics")
+    subset = _sub_rule(rule, "drug_class_id", "antimuscarinics")
+    broad = _sub_rule(rule, "drug_class_id", "anticholinergics")
 
     # 19370686 is a Cochrane review of huperzine for vascular dementia.
-    assert anticholinergics["sources"] == [_pmid("25191267"), ARICEPT_LABEL]
-    assert anticholinergics["severity"] == "avoid"
-    assert "interfere with the activity of anticholinergic" in anticholinergics["mechanism"]
-    assert "toxidrome" not in anticholinergics["mechanism"]
-    # Class-level label statement, no huperzine study: not "established".
-    assert anticholinergics["evidence_level"] == "probable"
-    # The label names no example drugs and states no two-way effect.
-    for stale in ("each can blunt the other", "prescribing information for cholinesterase "
-                  "inhibitors such as donepezil states that, because of their mechanism of "
-                  "action, they have the potential to interfere with the activity of "
-                  "anticholinergic medications (for example"):
-        assert stale not in anticholinergics["mechanism"], stale
-    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+    assert subset["sources"] == [_pmid("25191267"), ARICEPT_LABEL, DONEPEZIL_LABEL]
+    assert broad["sources"][:3] == [_pmid("25191267"), ARICEPT_LABEL, DONEPEZIL_LABEL]
+    assert (subset["severity"], broad["severity"]) == ("avoid", "caution")
+    for sub in (subset, broad):
+        assert "interfere with the activity of anticholinergic" in sub["mechanism"]
+        assert "toxidrome" not in sub["mechanism"]
+        # The label names no example drugs and states no two-way effect.
+        for stale in ("each can blunt the other", "prescribing information for cholinesterase "
+                      "inhibitors such as donepezil states that, because of their mechanism of "
+                      "action, they have the potential to interfere with the activity of "
+                      "anticholinergic medications (for example"):
+            assert stale not in sub["mechanism"], stale
+    # Class-level label statement, no huperzine interaction study: Q6 calls the extension a pharmacological
+    # inference, which is the taxonomy's "theoretical" (plausibility, limited direct human evidence); for the
+    # incidental members the practical effect is not established either.
+    assert (subset["evidence_level"], broad["evidence_level"]) == ("theoretical", "theoretical")
+    assert "pharmacological inference" in subset["mechanism"]
+    assert rule["last_reviewed"] == "2026-11-12"  # Dr. Pham Q6
 
 
 EMA_RHODIOLA = (
