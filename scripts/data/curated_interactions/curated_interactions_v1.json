@@ -3533,8 +3533,8 @@
       "agent2_canonical_id": "vitamin_e",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "High-dose vitamin E can affect coagulation, but ODS does not establish a fish-oil/vitamin-E combination boundary at 180 mg (about 400 IU of natural vitamin E). Clinically important bleeding from this specific pair and its dose boundary remain uncertain.",
-      "management": "Ask a clinician or pharmacist to review high supplemental vitamin E with fish oil, especially with medicines or conditions that increase bleeding risk. Do not assume an amount below the old screening cutoff establishes no interaction.",
+      "mechanism": "High-dose vitamin E can affect coagulation. The amount at which combining it with fish oil might increase clinically important bleeding is unknown.",
+      "management": "Ask a clinician or pharmacist to review high supplemental vitamin E with fish oil, especially with medicines or conditions that increase bleeding risk.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
