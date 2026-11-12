@@ -351,6 +351,17 @@ ipratropium, umeclidinium, aclidinium, atropine, methscopolamine and propantheli
 work); the lowered severity for the incidental members needs its release-gate alert or attestation on the final
 candidate (not prepared by this lane).
 
+### Batch 9: release-gate expressibility for drug-class rules (`rule_change_gate.py`)
+
+| Row | Outcome |
+|---|---|
+| Section 4 gate (Part B, confirmed in Part D) | `_profile_rules` passed `alertable=True` for every `drug_class_rules` entry, while condition and pregnancy/lactation rules use `_alert_can_express`. Drug-class sub-rules now use the same check: a gate with a dose, a product-form exclude or a nutrient-form exclude needs a product in hand, so an alert cannot carry it and a reviewed attestation covers the change. A profile-only drug-class gate stays alertable (an attestation alone still does not cover a new hard rule) |
+
+Fail-first tests in `test_rule_change_gate.py` (dose, product form, nutrient form; plus the expressible control).
+Current data: one drug-class sub-rule has such a gate (`RULE_IQM_NIACIN_DIABETES` / statins, a niacinamide
+nutrient-form exclude, caution), below the hard tier, so no release-gate outcome changes today. Engineering change;
+no clinical content.
+
 ### Batch 4: CBD named-medicine split, F7 (`apply_answers_b4_cbd.py`)
 
 Sources read 2026-11-12: EPIDIOLEX label (setid 8bf27097, effective 2026-05-29; 5.1, 7.2, 7.4, 12.3) and PMID 39601108
