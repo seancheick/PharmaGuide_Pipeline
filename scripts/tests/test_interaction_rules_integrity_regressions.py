@@ -13,6 +13,8 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
+import pytest
+
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 RULES = json.loads((DATA / "ingredient_interaction_rules.json").read_text())[
@@ -256,7 +258,8 @@ def test_cascara_rule_cites_the_eu_monograph_and_drops_unsourced_claims():
         "do not use cascara sagrada in liver disease",
     ):
         assert stale not in copy, stale
-    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+    # Dr. Pham section 2 (2026-11-12) decided the digoxin row; the re-sourcing above was agent work.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 def test_laxative_ghost_pmids_are_not_cited_anywhere():
@@ -286,7 +289,8 @@ def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
         "makes digoxin more toxic",
     ):
         assert stale not in copy, stale
-    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+    # Dr. Pham section 2 (2026-11-12) decided the digoxin row; the re-sourcing above was agent work.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 UKTIS_CONSTIPATION = "https://uktis.org/monographs/treatment-of-constipation-in-pregnancy/"
@@ -1402,3 +1406,106 @@ def test_coq10_cholesterol_copy_does_not_assume_statin_use_or_deficiency():
     assert "if you take a statin" in sub_rule["alert_body"].lower()
     assert "high cholesterol alone does not establish a CoQ10 deficiency" in sub_rule["informational_note"]
     assert sub_rule["profile_gate"]["requires"]["conditions_any"] == ["high_cholesterol"]
+
+
+VITAMIN_E_RULE = "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+
+
+def _vitamin_e_bleeding_subs() -> tuple[dict, list[dict]]:
+    rule = _rule(VITAMIN_E_RULE)
+    return rule, [
+        _sub_rule(rule, "drug_class_id", "anticoagulants"),
+        _sub_rule(rule, "condition_id", "bleeding_disorders"),
+        _sub_rule(rule, "condition_id", "surgery_scheduled"),
+    ]
+
+
+AGENT_WORDING = "Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+NOT_CONSUMER_TEXT = {"mechanism", "notes", "sources", "clinical_review", "review_owner"}
+
+
+def _consumer_strings(node, key=None):
+    """Every string in a rule except provenance and mechanism text, with the key that holds it."""
+    if key in NOT_CONSUMER_TEXT:
+        return
+    if isinstance(node, dict):
+        for k, v in node.items():
+            yield from _consumer_strings(v, k)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _consumer_strings(v, key)
+    elif isinstance(node, str):
+        yield key, node
+
+
+def test_vitamin_e_copy_sets_no_400_iu_boundary_and_never_calls_the_effect_mild():
+    """Dr. Pham Q2 (2026-11-12): 400 IU/day is not a boundary below which the interaction disappears, and the effect
+    is not necessarily mild. The NIH fact sheet's "probably exceeds 400 IU/day" stays in a mechanism only with that
+    qualification. Every consumer string of the rule is checked, not only the bleeding rows."""
+    rule, subs = _vitamin_e_bleeding_subs()
+    for key, text in _consumer_strings(rule):
+        assert "400" not in text and "mild" not in text.lower(), (key, text)
+    for sub in subs:
+        label = sub.get("drug_class_id") or sub["condition_id"]
+        if "400" in sub["mechanism"]:
+            assert "not an established threshold" in sub["mechanism"], label
+        for stale in ("anchored to", "≥400", "~400 IU/day and above", "mildly"):
+            assert stale not in sub["mechanism"], (label, stale)
+        review = sub["clinical_review"]
+        assert review["reviewer"] == "Dr. Pham" and AGENT_WORDING in review["notes"], label
+    anticoagulants, _, surgery = subs
+    assert "probably exceeds 400 IU/day" in anticoagulants["mechanism"]
+    # "Blood thinner" includes DOAC users; the old action named only warfarin or an antiplatelet.
+    assert "warfarin or an antiplatelet" not in anticoagulants["action"]
+    assert "blood thinner" in anticoagulants["action"]
+    # The surgery row's alert text and stop window predate Q2; its review block must not read as her endorsing them.
+    assert "predate this review and were not reviewed by Dr. Pham" in surgery["clinical_review"]["notes"]
+    assert rule["last_reviewed"] == "2026-11-12"
+    assert "Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)" in rule["review_owner"]
+
+
+def test_vitamin_e_numeric_suppression_stays_held():
+    """Q2: numerical suppression stays held until amount handling is demonstrated. No threshold moves, and no
+    bleeding row gains a dose gate, a minimum effective dose or dose-dependent materiality."""
+    rule, subs = _vitamin_e_bleeding_subs()
+    assert [(t["target_id"], t["comparator"], t["value"], t["unit"]) for t in rule["dose_thresholds"]] == [
+        ("pregnancy", ">", 1000, "mg"), ("lactation", ">", 1000, "mg"),
+        ("pregnancy", ">", 800, "mg"), ("lactation", ">", 800, "mg"),
+    ]
+    for sub in subs:
+        label = sub.get("drug_class_id") or sub["condition_id"]
+        assert sub["materiality"] == "presence", label
+        assert sub.get("min_effective_dose") is None, label
+        assert sub["profile_gate"]["dose"] is None, label
+
+
+@pytest.mark.parametrize("rule_id,name", [
+    ("RULE_IQM_SENNA_PREGNANCY", "senna"), ("RULE_IQM_CASCARA_SAGRADA_PREGNANCY", "cascara"),
+])
+def test_laxative_digoxin_rows_keep_avoid_unsupervised_use_with_potassium_context(rule_id, name):
+    """Dr. Pham section 2 (2026-11-12): keep "avoid unsupervised use" with potassium-loss context. The monographs
+    require medical consultation and set no dose or duration cutoff, so the copy does not narrow the advice to
+    prolonged use; the laxative itself is not said to make digoxin toxic, and the consumer is not handed clinician
+    tasks."""
+    rule = _rule(rule_id)
+    digoxin = _sub_rule(rule, "drug_class_id", "cardiac_glycosides")
+    assert digoxin["severity"] == "avoid"
+    assert digoxin["alert_headline"] == "Avoid unsupervised use with digoxin"
+    body = digoxin["alert_body"]
+    assert "potassium" in body and "without your prescriber's advice" in body
+    assert "unsupervised prolonged" not in body
+    assert "potassium" in digoxin["informational_note"]
+    action = digoxin["action"].lower()
+    for clinician_task in ("osmotic agent", "monitor serum", "potassium-sparing approach", "avoid prolonged use"):
+        assert clinician_task not in action, clinician_task
+    assert f"do not use {name} without your prescriber's advice" in action
+    assert "have to consult a doctor (4.4)" in digoxin["mechanism"]
+    assert "no dose or duration that clears the combination" in digoxin["mechanism"]
+    review = digoxin["clinical_review"]
+    assert AGENT_WORDING in review["notes"] and "potassium-loss and preparation context" in review["notes"]
+    # Dr. Pham decided the digoxin row only; the rule's other rows stay attributed to their original owners.
+    assert rule["review_owner"].startswith(
+        "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only)"
+    )
+    assert "other rows: original rule pharmaguide_clinical_team" in rule["review_owner"]
+    assert rule["last_reviewed"] == "2026-11-12"
