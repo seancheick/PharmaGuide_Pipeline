@@ -460,6 +460,31 @@ def test_warfarin_only_findings_follow_an_identified_warfarin_and_fall_back_only
         'RULE_IQM_COQ10_HEART_DISEASE_STATINS'}
 
 
+def test_betrixaban_is_a_doac_and_leaves_the_unidentified_fallback():
+    """BEVYXXA: betrixaban is an oral factor Xa inhibitor (ATC B01AF, inside the doacs class's ATC scope) and a
+    P-gp substrate, so it reads as a DOAC: no warfarin INR text, and St. John's wort still shows avoid. The
+    injected direct thrombin inhibitors are ATC B01AE but not oral; they stay in the fallback (question 7)."""
+    classes = json.loads((DATA / 'drug_classes.json').read_text())['classes']
+
+    def profile(rxcui):
+        return {cid.removeprefix('class:') for cid, c in classes.items()
+                if not cid.startswith('_') and rxcui in c.get('member_rxcuis', [])}
+
+    betrixaban = profile('1927851')
+    assert {'anticoagulants', 'doacs'} <= betrixaban and 'vitamin_k_antagonists' not in betrixaban
+    import profile_gate_evaluator as pge
+
+    for rule_id in WARFARIN_ONLY_RULES:
+        assert _anticoagulant_hits(rule_id, {'drug_classes': betrixaban}) == [], rule_id
+    sjw_doac = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'doacs')
+    assert sjw_doac['severity'] == 'avoid'
+    assert pge.evaluate_profile_gate(sjw_doac['profile_gate'], {'drug_classes': sorted(betrixaban)}, {},
+                                     base_severity='avoid').fires
+    for name, rxcui in (('argatroban', '15202'), ('bivalirudin', '60819'), ('desirudin', '114934'),
+                        ('lepirudin', '237057')):
+        assert profile(rxcui) == {'anticoagulants'}, name
+
+
 def test_coq10_warfarin_copy_does_not_call_the_effect_mild_and_records_the_bleeding_signal():
     pair = _pairs()['DSI_WAR_COQ10']
     assert '17723077' in pair['source_pmids'] and 'self-reported bleeding' in _pair_text(pair)
