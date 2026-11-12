@@ -213,6 +213,30 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
 | DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE | `grapefruit` / `coffee` → none | food advisories; no supplement id by design |
 | DSI_STATINS_RYR; DSI_ANTICOAG_CBD, DSI_ANTIHYP_CBD, DSI_STATINS_CBD | unchanged | stored and shipped ids normalize to the same supplement (`BANNED_RED_YEAST_RICE` / `RISK_RED_YEAST_RICE` → red yeast rice; `cbd` / `BANNED_CBD_US` → cbd) |
 
+### Batch 3c part 1 implemented: fluoroquinolone spacing (`apply_batch3c_fluoroquinolone_spacing.py`)
+
+| Row | Implemented as |
+|---|---|
+| A12 zinc + fluoroquinolones | Three exact pairs, each Moderate with its own label interval and direction: `DSI_ZINC_CIPROFLOXACIN` (at least 2 hours before or 6 hours after; CIPRO setid 888dc7f9), `DSI_ZINC_LEVOFLOXACIN` (2 hours before or after; levofloxacin setid 5c6c117c), `DSI_ZINC_MOXIFLOXACIN` (4 hours before or 8 hours after; moxifloxacin setid 1e6bc886). Each says injected forms are not affected. The class pair `DSI_ZINC_FLUOROQUINOLONE` Major → Moderate and still tells ofloxacin, delafloxacin and gemifloxacin users to follow their own label; the app's exact-over-class rule shows the exact pair to users of the three named medicines |
+| A13 calcium + ciprofloxacin | `DSI_CALCIUM_CIPROFLOXACIN` Major → Moderate; calcium supplements, multivitamins with calcium and antacids at least 2 hours before or 6 hours after; not with milk, yogurt or calcium-fortified juice on their own, while the label allows a meal that contains them; injected ciprofloxacin not affected |
+
+Labels read 2026-11-11 from DailyMed SPL XML; RxCUIs 2551, 82122 and 139462 checked live; PMID 1524699 (a 1992
+review) stays as supporting evidence. The profile rules (`RULE_IQM_ZINC`, `RULE_IQM_CALCIUM` fluoroquinolone rows)
+were already caution with "the interval on the antibiotic label", so they agree without change.
+
+### Batch 3c part 2 (timing rules, rows C and G3): constraint found before authoring
+
+The timing contract (`timing_optimization.dart`, `TimingRelation`) rejects a `separate_from` rule without a positive
+`minimum_hours`, and has no "take together" or combination-information relation. So three decisions cannot be
+published as written without a new relation type (a new semantic owner, which needs Sean): iron–calcium "different
+times of day" (publishable only by adopting MedlinePlus's 2-hour context, which Dr. Pham allows), iron–zinc
+non-precise advice (also needs the ≥25 mg elemental iron condition, and no dose gate is proven), and L-theanine–caffeine
+optional combination information. Plan for the rest, not yet authored or source-checked: publish levothyroxine–magnesium on D27
+with the evidence split; split psyllium into liquid guidance, label spacing and 3 hours for digoxin, salicylates and
+nitrofurantoin; reject calcium–vitamin D and quercetin–vitamin C into `timing_rules_rejected.json`; keep melatonin,
+bromelain, probiotics, soy and EGCG held with her decision recorded; calcium carbonate with food waits on form
+matching.
+
 ## Batch 4: noise reductions (after quantity checks)
 
 | Row | Decision |

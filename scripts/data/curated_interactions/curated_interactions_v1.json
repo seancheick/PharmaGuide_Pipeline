@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-11",
-    "total_entries": 95,
+    "total_entries": 98,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -3413,26 +3413,28 @@
       "agent2_name": "Calcium",
       "agent2_id": "C0006675",
       "agent2_canonical_id": "calcium",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Calcium ions can form poorly absorbed complexes with oral ciprofloxacin, reducing ciprofloxacin exposure and risking antibiotic treatment failure.",
-      "management": "Take oral ciprofloxacin at least 2 hours before or 6 hours after calcium-containing supplements, multivitamins, or antacids, as directed by the prescription label.",
+      "management": "Take ciprofloxacin tablets or liquid at least 2 hours before or 6 hours after calcium supplements, multivitamins with calcium, or calcium-containing antacids, as the ciprofloxacin label directs. Do not take ciprofloxacin with milk, yogurt or calcium-fortified juice on their own; the label allows taking it with a meal that contains these foods. This applies to ciprofloxacin taken by mouth; injected ciprofloxacin is not affected.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/1524699/",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d10f7c93-a08b-4e9c-bfa2-6646e3ea21bd"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d10f7c93-a08b-4e9c-bfa2-6646e3ea21bd",
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
       ],
       "source_pmids": [
         "1524699"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-07-29T00:00:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_and_current_label_2026_07_29"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "CIPRO label (setid 888dc7f9, effective 2026-03-02) sections 2.4 and 7: at least 2 hours before or 6 hours after calcium-containing products; not with dairy products or calcium-fortified juices alone, but may be taken with a meal that contains these products. RxCUI 2551 checked live. Severity and spacing decided by Dr. Pham (clinical review 2026-11-11, DR_PHAM_REVIEW_20261111.md A12/A13); label passages read by agent."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -3448,10 +3450,10 @@
       "agent2_name": "Zinc",
       "agent2_id": "C0043481",
       "agent2_canonical_id": "zinc",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Zinc can bind oral fluoroquinolones in the gastrointestinal tract, reducing antibiotic absorption and risking treatment failure.",
-      "management": "Separate oral fluoroquinolones from zinc-containing supplements and multivitamins. The timing interval differs by drug, so follow the prescription label or pharmacist instructions; do not apply one interval to the entire class.",
+      "management": "Separate oral fluoroquinolones from zinc-containing supplements and multivitamins. The timing interval differs by drug, so follow the prescription label or pharmacist instructions; do not apply one interval to the entire class. Injected forms are not affected.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/1524699/",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d10f7c93-a08b-4e9c-bfa2-6646e3ea21bd",
@@ -3462,13 +3464,14 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-07-29T00:00:00Z",
+        "verified_at": "2026-11-11",
         "verified_with": {
-          "rxnorm": false,
+          "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_and_current_labels_2026_07_29"
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "Class pair kept for fluoroquinolones without an exact pair (ofloxacin, delafloxacin, gemifloxacin); ciprofloxacin, levofloxacin and moxifloxacin have exact pairs with their label intervals. Severity and spacing decided by Dr. Pham (clinical review 2026-11-11, DR_PHAM_REVIEW_20261111.md A12/A13); label passages read by agent."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -3585,6 +3588,120 @@
       "evidence_notes": "SINEMET (carbidopa and levodopa) label, read 2026-11-11: carbidopa/levodopa and iron salts, or multivitamins containing iron salts, should be taken together with caution, because iron salts can chelate levodopa and carbidopa and reduce their bioavailability. The label gives no spacing interval, so none is stated. Combination products (carbidopa/levodopa, carbidopa/levodopa/entacapone) reach this pair through their levodopa ingredient (RxCUI 6375). INBRIJA (levodopa inhalation powder) label (setid 077c0f39, effective 2026-07-20) section 7.3: iron salts or multivitamins containing iron salts can form chelates with levodopa and reduce its bioavailability; no interval given.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "iron",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_ZINC_CIPROFLOXACIN",
+      "type": "Med-Sup",
+      "agent1_name": "Ciprofloxacin",
+      "agent1_id": "2551",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Zinc can bind ciprofloxacin in the gut and reduce how much of the antibiotic is absorbed, which can make the infection treatment less effective.",
+      "management": "Take ciprofloxacin tablets or liquid at least 2 hours before or 6 hours after zinc supplements or multivitamins that contain zinc, as the ciprofloxacin label directs. This applies to ciprofloxacin taken by mouth; injected ciprofloxacin is not affected.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0",
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
+      ],
+      "source_pmids": [
+        "1524699"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "CIPRO label (setid 888dc7f9, effective 2026-03-02) sections 2.4 and 7: take at least 2 hours before or 6 hours after products containing calcium, iron or zinc. RxCUI 2551 and C0043481 checked live. Severity and spacing decided by Dr. Pham (clinical review 2026-11-11, DR_PHAM_REVIEW_20261111.md A12/A13); label passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
+      "evidence_notes": "CIPRO label (setid 888dc7f9, effective 2026-03-02) sections 2.4 and 7: take at least 2 hours before or 6 hours after products containing calcium, iron or zinc.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "zinc",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_ZINC_LEVOFLOXACIN",
+      "type": "Med-Sup",
+      "agent1_name": "Levofloxacin",
+      "agent1_id": "82122",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Zinc can bind levofloxacin in the gut and reduce how much of the antibiotic is absorbed, which can make the infection treatment less effective.",
+      "management": "Take levofloxacin tablets or liquid at least 2 hours before or 2 hours after zinc supplements or multivitamins that contain zinc, as the levofloxacin label directs. This applies to levofloxacin taken by mouth; injected levofloxacin is not affected.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5c6c117c-9d91-48f4-9aaa-ee70b99218c2",
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
+      ],
+      "source_pmids": [
+        "1524699"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "Levofloxacin tablets label (setid 5c6c117c, effective 2026-06-29) sections 2 and 7.1: at least two hours before or two hours after multivitamin preparations with zinc. RxCUI 82122 and C0043481 checked live. Severity and spacing decided by Dr. Pham (clinical review 2026-11-11, DR_PHAM_REVIEW_20261111.md A12/A13); label passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Levofloxacin tablets label (setid 5c6c117c, effective 2026-06-29) sections 2 and 7.1: at least two hours before or two hours after multivitamin preparations with zinc.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "zinc",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_ZINC_MOXIFLOXACIN",
+      "type": "Med-Sup",
+      "agent1_name": "Moxifloxacin",
+      "agent1_id": "139462",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Zinc can bind moxifloxacin in the gut and reduce how much of the antibiotic is absorbed, which can make the infection treatment less effective.",
+      "management": "Take moxifloxacin tablets at least 4 hours before or 8 hours after zinc supplements or multivitamins that contain zinc, as the moxifloxacin label directs. This applies to moxifloxacin taken by mouth; injected moxifloxacin is not affected.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=1e6bc886-eec9-4cd8-be78-7563817457f2&type=display",
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
+      ],
+      "source_pmids": [
+        "1524699"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "agent_label_content_review_2026_11_11",
+        "notes": "Moxifloxacin tablets label (setid 1e6bc886, effective 2025-10-09) sections 2.2 and 7.1: at least 4 hours before or 8 hours after products containing magnesium, aluminum, iron or zinc, including multivitamins. RxCUI 139462 and C0043481 checked live. Severity and spacing decided by Dr. Pham (clinical review 2026-11-11, DR_PHAM_REVIEW_20261111.md A12/A13); label passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Moxifloxacin tablets label (setid 1e6bc886, effective 2025-10-09) sections 2.2 and 7.1: at least 4 hours before or 8 hours after products containing magnesium, aluminum, iron or zinc, including multivitamins.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "zinc",
       "direction": "harmful",
       "materiality": "presence"
     }
