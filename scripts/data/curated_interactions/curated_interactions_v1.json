@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-11-11",
-    "total_entries": 98,
+    "last_updated": "2026-11-12",
+    "total_entries": 101,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -718,18 +718,18 @@
     {
       "id": "DSI_SSRI_SJW",
       "type": "Med-Sup",
-      "agent1_name": "SSRIs (class)",
-      "agent1_id": "class:ssris",
+      "agent1_name": "SSRIs and SNRIs (class)",
+      "agent1_id": "class:antidepressants_ssri_snri",
       "agent2_name": "St. John's Wort",
       "agent2_id": "C0813171",
-      "severity": "Contraindicated",
+      "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "St. John's Wort has serotonergic activity. Combining it with an SSRI or SNRI can cause serotonin syndrome, which can be life-threatening. Symptoms can include agitation, high temperature, muscle rigidity or clonus, and seizures.",
-      "management": "Do not combine St. John's Wort with an SSRI or SNRI without specialist direction. Any change or switch must be planned by your prescriber; the required washout depends on the medicines and clinical circumstances. Do not stop your prescribed antidepressant on your own. Seek emergency care immediately if serotonin syndrome symptoms appear.",
+      "mechanism": "St. John's wort has serotonergic activity. Combining it with an SSRI or SNRI can cause serotonin syndrome, which can be life-threatening; SSRI and SNRI labels list it among serotonergic products that raise that risk. Symptoms can include agitation, high temperature, muscle rigidity or clonus, and seizures.",
+      "management": "Avoid St. John's wort while taking an SSRI or SNRI unless your prescriber directs and monitors the combination. Do not stop or switch your antidepressant on your own. Seek emergency care right away if signs of serotonin syndrome appear.",
       "source_urls": [
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fda754f6-d0f3-4dce-a17a-927d64f912f7",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c848a5d8-ba94-4c84-80e3-0bf35fb8e32e",
         "https://pubmed.ncbi.nlm.nih.gov/17868285/",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram",
         "https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth"
       ],
       "source_pmids": [
@@ -737,13 +737,14 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-11-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "SSRI and SNRI labels read on DailyMed 2026-11-12 (ZOLOFT fda754f6, EFFEXOR XR c848a5d8, PRISTIQ 0f43610c, FETZIMA f371258d, SAVELLA 16a4a314) list St. John's wort among serotonergic drugs that raise serotonin-syndrome risk; their management is monitoring and none contraindicates the combination. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (section 2)."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -751,20 +752,22 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "st_johns_wort",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "SSRI and SNRI labels read on DailyMed 2026-11-12 (ZOLOFT fda754f6, EFFEXOR XR c848a5d8, PRISTIQ 0f43610c, FETZIMA f371258d, SAVELLA 16a4a314) list St. John's wort among serotonergic drugs that raise serotonin-syndrome risk; their management is monitoring and none contraindicates the combination. Avoid is Dr. Pham's decision (2026-11-12, section 2); contraindicated is reserved for an exact source, and none was found. No universal washout is given. The medicine side covers SSRIs and SNRIs, the profile rule's audience."
     },
     {
       "id": "DSI_SSRI_5HTP",
       "type": "Med-Sup",
-      "agent1_name": "SSRIs (class)",
-      "agent1_id": "class:ssris",
+      "agent1_name": "SSRIs and SNRIs (class)",
+      "agent1_id": "class:antidepressants_ssri_snri",
       "agent2_name": "5-HTP",
       "agent2_id": "C0000578",
-      "severity": "Major",
+      "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "5-HTP is a serotonin precursor, and MSK advises against unsupervised use with serotonergic medicines including SSRIs. A reported sertraline case involved multiple medicines/supplements and exercise; it supports a serious concern but not a pair-specific incidence or numerical safe dose.",
-      "management": "Do not add 5-HTP during SSRI treatment without prescriber review. Do not stop or switch antidepressants yourself; any washout depends on the exact medicine. Suspected serotonin syndrome, including agitation with fever, muscle rigidity or altered consciousness, requires emergency care.",
+      "mechanism": "5-HTP is a serotonin precursor. Taken with an SSRI or SNRI antidepressant it adds to serotonin activity and can contribute to serotonin syndrome. Health Canada's 5-HTP monograph lists use with antidepressants as a contraindication. A reported sertraline case involved several medicines and supplements; it supports a serious concern but no event rate or safe dose.",
+      "management": "Do not take 5-HTP with an SSRI or SNRI antidepressant. Do not stop or switch your antidepressant to use 5-HTP; your prescriber plans any change and the washout time. Seek emergency care for suspected serotonin syndrome, such as agitation with fever, muscle rigidity or confusion.",
       "source_urls": [
+        "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",
         "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
         "https://pubmed.ncbi.nlm.nih.gov/28839121/"
       ],
@@ -773,22 +776,23 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-11-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "Health Canada 5-HTP monograph read 2026-11-12. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (section 2)."
       },
-      "evidence_basis": "authoritative_review",
+      "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "5_htp",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Health Canada natural health product monograph '5-Hydroxy-L-tryptophan' (dated 2024-08-28), Risk information, Contraindication(s), all uses: do not use if you are taking antidepressants. Jurisdiction: Canada; scope: licensed natural health products with 5-HTP. Severity: Dr. Pham, 2026-11-12 (section 2). The medicine side covers SSRIs and SNRIs, the profile rule's audience; the monograph names antidepressants. MSKCC advises against unsupervised use with serotonergic medicines; PMID 28839121 is a sertraline case with several co-exposures."
     },
     {
       "id": "DSI_SSRI_SAME",
@@ -1873,6 +1877,76 @@
       "materiality": "presence"
     },
     {
+      "id": "DSI_RASAGILINE_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Rasagiline",
+      "agent1_id": "134748",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Rasagiline is an MAO-B inhibitor used for Parkinson's disease. Its label lists St. John's wort as contraindicated, next to medicines it contraindicates because of the risk of serotonin syndrome.",
+      "management": "Do not take St. John's wort with rasagiline. Do not stop or change rasagiline yourself; ask your prescriber about any change. Seek emergency care for signs of serotonin syndrome.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=68cef20f-10c0-475e-af95-b7799355c7e9"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "Rasagiline tablets label (DailyMed setid 68cef20f, effective 2026-10-23), section 4: contraindicated for use with St. John's wort. RxCUI 134748 (rasagiline, IN, active) checked on RxNav 2026-11-12. Agent review under the 2026-11-06 delegation (label-sourced identity and scope), not a clinician review; Part B 3D of the 2026-11-12 answers."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
+      "evidence_notes": "Rasagiline tablets label (DailyMed setid 68cef20f, effective 2026-10-23), section 4: contraindicated for use with St. John's wort. RxCUI 134748 (rasagiline, IN, active) checked on RxNav 2026-11-12. Exact coverage only: rasagiline is not added to the MAOI class, whose other rules were not reviewed for it.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_SAFINAMIDE_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Safinamide",
+      "agent1_id": "1922448",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Safinamide (Xadago) is an MAO-B inhibitor used for Parkinson's disease. Its label contraindicates St. John's wort because the combination could cause life-threatening serotonin syndrome.",
+      "management": "Do not take St. John's wort with safinamide. Do not stop or change safinamide yourself; ask your prescriber about any change. Seek emergency care for signs of serotonin syndrome.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c4d65f28-983f-42b4-bb23-023ae0fe81b2"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "XADAGO label (DailyMed setid c4d65f28, effective 2026-10-05), sections 4 and 7.3: concomitant use with St. John's wort is contraindicated. RxCUI 1922448 (safinamide, IN, active) checked on RxNav 2026-11-12. Agent review under the 2026-11-06 delegation (label-sourced identity and scope), not a clinician review; Part B 3D of the 2026-11-12 answers."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
+      "evidence_notes": "XADAGO label (DailyMed setid c4d65f28, effective 2026-10-05), sections 4 and 7.3: concomitant use with St. John's wort is contraindicated. RxCUI 1922448 (safinamide, IN, active) checked on RxNav 2026-11-12. Exact coverage only: safinamide is not added to the MAOI class, whose other rules were not reviewed for it.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
       "id": "DSI_MAOI_5HTP",
       "type": "Med-Sup",
       "agent1_name": "MAOIs (class)",
@@ -1882,25 +1956,27 @@
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
       "mechanism": "5-HTP is a serotonin precursor. Combining it with medicines that affect serotonin can cause serious adverse effects. MSK reports mania with an MAOI and 5-HTP and serotonin syndrome with linezolid, an antibiotic MAOI; these reports do not establish a class-wide event rate or safe dose.",
-      "management": "Do not add 5-HTP while using an MAOI without the prescriber reviewing it. Do not stop or switch the MAOI yourself; any product-specific washout must follow the exact medicine and a clinician-directed plan. Suspected serotonin syndrome requires emergency care.",
+      "management": "Do not take 5-HTP with an MAOI. Do not stop or switch your MAOI to use 5-HTP; your prescriber plans any change and the product-specific washout. Seek emergency care for suspected serotonin syndrome.",
       "source_urls": [
-        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01"
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
+        "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=5htp&lang=eng",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-11-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "Health Canada monograph and PARNATE section 4 read 2026-11-12. Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (section 2)."
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
-      "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus.",
+      "evidence_notes": "Health Canada's 5-HTP monograph (Canada, dated 2024-08-28) contraindicates use with antidepressants; the tranylcypromine (PARNATE) label lists hydroxytryptophan among products not to combine with it. MSKCC reports mania with an MAOI and 5-HTP and serotonin syndrome with linezolid. Severity kept as strong protection (Dr. Pham, 2026-11-12, section 2). Applying it to oral selegiline, which is used for Parkinson's disease rather than depression, is a class inference.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "5_htp",
       "direction": "harmful",
@@ -1914,31 +1990,32 @@
       "agent1_id": "class:maois",
       "agent2_name": "SAMe",
       "agent2_id": "C0036002",
-      "severity": "Contraindicated",
+      "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "SAMe raises serotonin activity. The tranylcypromine (PARNATE) label lists SAMe as contraindicated because the combination can cause serotonin syndrome. The other MAOI labels do not name SAMe; for them this warning is applied by class inference while a clinician reviews each medicine. No study of SAMe with an MAOI was found.",
-      "management": "Do not combine SAMe with an MAOI. Do not stop or change a prescribed MAOI to use SAMe; the prescriber must manage any medication change or product-specific washout.",
+      "mechanism": "SAMe raises serotonin activity, and an MAOI taken with a serotonergic product can cause serotonin syndrome. The tranylcypromine (PARNATE) label lists SAM-e as contraindicated. The phenelzine (NARDIL) and selegiline patch (EMSAM) labels contraindicate serotonergic drugs as a category without naming SAMe. Other MAOI labels do not name SAMe, so for them this warning is a class inference. No study of SAMe with an MAOI was found.",
+      "management": "Do not add SAMe while taking an MAOI without your prescriber's approval. Do not stop or switch your prescribed medicine to use SAMe. Your prescriber manages any medication change and the washout time.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3",
         "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-11-11",
+        "verified_at": "2026-11-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": true
+          "pubmed": false
         },
-        "method": "agent_label_content_review_2026_11_11",
-        "notes": "PARNATE and NARDIL labels read on DailyMed. Dr. Pham's contraindication covers tranylcypromine; the class severity is the published value, kept pending ask 1 (audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md)."
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "PARNATE, NARDIL and EMSAM labels read on DailyMed 2026-11-12. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q1)."
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
       "applies_to": "whole_class",
-      "evidence_notes": "Class record. Tranylcypromine has its own exact pair (DSI_TRANYLCYPROMINE_SAME). The labels for phenelzine (NARDIL), isocarboxazid (MARPLAN) and selegiline (EMSAM, ZELAPAR) do not name SAMe (read 2026-11-11). NARDIL contraindicates concomitant serotoninergic agents as a category; whether SAMe falls under it is part of ask 1 to Dr. Pham. The class severity is kept, not lowered, until that decision.",
+      "evidence_notes": "Class record (avoid; prescriber review required). Dr. Pham, 2026-11-12 (Q1): tranylcypromine is contraindicated (exact pair DSI_TRANYLCYPROMINE_SAME); phenelzine is contraindicated through NARDIL's serotonergic-agent category, a clinical interpretation (exact pair DSI_PHENELZINE_SAME); confirmed EMSAM is contraindicated through its serotonergic-drug language (section 7.1), but this record is keyed on the MAOI class, which does not tell EMSAM apart from oral selegiline, so an EMSAM user receives it; oral selegiline (ZELAPAR) and other or unidentified MAOIs are avoid, a documented class inference. The EMSAM 6 mg exception concerns dietary tyramine only.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",
@@ -1975,6 +2052,42 @@
       "clinical_confidence": "medium",
       "applies_to": "specific_drug",
       "evidence_notes": "PARNATE (tranylcypromine) sections 4.1 and 7 list SAM-e as contraindicated (serotonin syndrome).",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_PHENELZINE_SAME",
+      "type": "Med-Sup",
+      "agent1_name": "Phenelzine",
+      "agent1_id": "8123",
+      "agent2_name": "SAMe",
+      "agent2_id": "C0036002",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "SAMe raises serotonin activity. The phenelzine (NARDIL) label says phenelzine must not be used with serotonergic agents because of serious, sometimes fatal reactions. The label does not name SAMe; treating SAMe as one of those agents is a clinical interpretation.",
+      "management": "Do not take SAMe with phenelzine. Do not stop or switch phenelzine to use SAMe; your prescriber manages any medication change and the washout time.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa",
+        "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-12",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "NARDIL label (DailyMed setid 513a41d0, effective 2026-11-05) read 2026-11-12: Contraindications and Precautions (Drug Interactions) prohibit concomitant serotoninergic agents; SAMe is not named. RxCUI 8123 (phenelzine, IN, active) checked on RxNav. Severity: Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (Q1)."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "low",
+      "applies_to": "specific_drug",
+      "evidence_notes": "NARDIL (phenelzine) contraindicates concomitant serotoninergic agents as a category. SAMe is not named; applying the category to SAMe is the clinical interpretation Dr. Pham signed on 2026-11-12 (Q1), recorded separately from an explicitly named contraindication such as PARNATE's (DSI_TRANYLCYPROMINE_SAME).",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",
