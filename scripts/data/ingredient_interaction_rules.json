@@ -5809,7 +5809,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "Can work against blood-pressure medicine",
-          "alert_body": "Licorice that contains glycyrrhizin can raise blood pressure and lower potassium, working against blood-pressure medicine. If you take blood-pressure medication, avoid it unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "alert_body": "Glycyrrhizin in licorice can raise blood pressure and lower potassium. If you take blood-pressure medicine, avoid it unless your prescriber has reviewed it. Licorice not labeled DGL may contain it.",
           "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -5850,7 +5850,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/28660884/"
           ],
           "alert_headline": "Can raise digoxin toxicity risk",
-          "alert_body": "Licorice that contains glycyrrhizin can lower potassium, which makes digoxin toxicity more likely. If you take digoxin, avoid it unless your prescriber advises it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "alert_body": "Glycyrrhizin in licorice can lower potassium, making digoxin toxicity more likely. If you take digoxin, avoid it unless your prescriber advises it. Licorice not labeled DGL may contain it.",
           "informational_note": "Licorice with glycyrrhizin can lower potassium — relevant to people taking digoxin or other cardiac glycosides.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -16743,7 +16743,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12574791/"
           ],
           "alert_headline": "Can work against blood-pressure medicine",
-          "alert_body": "Licorice that contains glycyrrhizin can raise blood pressure and lower potassium, working against blood-pressure medicine. If you take blood-pressure medication, avoid it unless your prescriber has reviewed it. Verified DGL licorice is a different preparation; a product that does not say it is DGL may contain glycyrrhizin.",
+          "alert_body": "Glycyrrhizin in licorice can raise blood pressure and lower potassium. If you take blood-pressure medicine, avoid it unless your prescriber has reviewed it. Licorice not labeled DGL may contain it.",
           "informational_note": "Licorice with glycyrrhizin can raise blood pressure — relevant to people taking blood-pressure medication.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -22320,8 +22320,8 @@
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
           "alert_headline": "May raise levels of some immunosuppressant medicines",
-          "alert_body": "CBD can raise levels of certain immunosuppressant medicines, such as everolimus, tacrolimus or sirolimus. Talk to the prescriber of that medicine before use; drug-level monitoring or a prescribed dose adjustment may be needed.",
-          "informational_note": "Prescription CBD raised everolimus levels in a label study; relevant to people taking everolimus, tacrolimus or sirolimus.",
+          "alert_body": "CBD can raise levels of some immunosuppressants, such as everolimus, tacrolimus or sirolimus. Ask that medicine's prescriber first; drug-level monitoring or a prescribed dose change may be needed.",
+          "informational_note": "Prescription CBD raised everolimus levels in a label study — relevant to anyone on everolimus, tacrolimus or sirolimus.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

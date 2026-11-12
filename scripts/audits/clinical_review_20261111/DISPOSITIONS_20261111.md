@@ -197,6 +197,10 @@ Agent dispositions in the same batch (not Dr. Pham's decisions):
   cancer). Severity and gate unchanged. Two gaps go to ask 5.
 - **Licorice citation.** `RULE_BOTANICAL_LICORICE_ROOT` dropped PMID 31605160 and its "failed BP control" claim: the
   paper is a glycyrrhizin-metabolite biomarker study, not an interaction study.
+- **Copy length** (`apply_batch3b_part2_copy_limits.py`). The licorice antihypertensive and digoxin bodies and the
+  CBD immunosuppressant body and note were over the authoring limits (`validate_safety_copy`). Each is shortened
+  only: severity, "avoid" with the prescriber condition, the DGL distinction, the named medicines and the sources
+  are unchanged, and the `action` fields keep the full wording.
 - **Twelve stored canonical ids** that differed from what the build ships, one disposition each. Nothing shipped
   changes; a test keeps stored and shipped ids equal.
 
