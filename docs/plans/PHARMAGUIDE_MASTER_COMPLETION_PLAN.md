@@ -2499,3 +2499,32 @@ confirms aerial-part extract for the BulkSupplements labels and seed
 extract standardized to 3% polyphenols for Pure Encapsulations. Neither
 source establishes a clinical benchmark. The focused source tests passed
 432 checks. No bounded results have been added to the global census.
+
+### Finite beta close-out
+
+- [x] Confirm the existing 48-product source-transfer replay. PR 453 is
+  ready for review. The local corpus checkpoint passed 564 checks and 24
+  declared skips. Exact-head hosted qualification remains in progress.
+- [ ] Qualify the five Perilla records through the existing literature
+  Evidence and botanical Dose owners. The 450 mg aerial-part and 150 mg
+  seed-extract amounts are verified label facts. The seed-extract paper
+  PMID 41227657 uses cell models. The human GI pilot PMID 24885816 does
+  not establish matching retail preparation or a general Dose threshold.
+  Retain the exact preparation and independent safety/exposure holds.
+- [ ] Freeze the integrated pipeline and Flutter sources with the
+  interaction orchestrator before the single final candidate pass.
+  PRs 449 and 452 are stacked on the 448 and 449 branches respectively.
+  PR 450 and its app companion require coordinated consumer validation.
+  Run the existing interaction rule-change gate on the frozen candidate.
+- [ ] Validate the candidate Core, blobs and barcode journeys for complete,
+  safety-suppressed and legitimately partial products. Confirm public
+  score suppression and verify Product Detail and Stack against the
+  same interaction artifact.
+
+The publication contract still requires 15,293 complete cohort IDs.
+The proposed beta alternative would instead require all 15,447 cohort
+IDs to have an accounted-for disposition, 100% of published numerical
+scores to have current source-qualified receipts, no unresolved
+safety-critical publication failures, partial products excluded from
+public numeric ratings, and explicit measured usable coverage. It is
+a policy proposal only. The existing 99% threshold remains binding.
