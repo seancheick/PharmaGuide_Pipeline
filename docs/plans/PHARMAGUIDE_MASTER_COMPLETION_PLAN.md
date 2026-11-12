@@ -2539,3 +2539,12 @@ on 311425 is retained without assuming a ratio. All five passed the
 bounded Clean → Enrich → Score → Blob/Core projection. Unspecified, leaf
 and seed-oil controls cannot inherit the exact review. 423 focused checks
 passed. No census increment or installed-app acceptance is claimed.
+
+The Perilla implementation is stacked as PR 455 on PR 453. Main advanced
+through interaction PRs 445 and 447 during qualification. Refresh both
+candidates against the agreed integration source before the final run.
+For the six retained partials, the bounded Core/Blob and share projection
+kept partial status and omitted numeric share scores. The Core retains
+internal scores and tiers. Existing Flutter reader, Product Detail and
+recommendation guards passed 28 focused tests. Actual installed candidate
+scan, ranking and share acceptance remain open.

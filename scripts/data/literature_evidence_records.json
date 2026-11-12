@@ -4,7 +4,7 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-11-10",
-    "total_entries": 845,
+    "total_entries": 846,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -17802,7 +17802,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "fcf6f5e7d108ab2a717042c040d561b33a3eab57d9b2969680fe5dbd778ab210",
+          "source_sha256": "ce049e3f004e00df704bcb66f26fb71c5f32c04e68c57df490c37189187cec98",
           "source_ids": [
             "PMID:24885816",
             "PMID:41227657"
@@ -17837,7 +17837,7 @@
         "preparation": "The two separately declared extract preparations specified in applicability",
         "purpose": "General efficacy Dose assessment only",
         "population": "Adult catalog review; no applicable human exposure benchmark",
-        "exposure_basis": "Printed amount per serving retained without conversion",
+        "exposure_basis": "per_use",
         "units": "mg",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [

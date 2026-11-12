@@ -226,3 +226,19 @@ def test_perilla_exact_review_does_not_transfer_to_other_labels(normalizer, enri
         assert resolution.blocking_reasons
         assert resolution.points_eligible is False
         assert resolution.owner_facts.get("literature_evidence", {}).get("pmids") != ["24885816"]
+
+
+def test_perilla_review_uses_counted_registry_and_verified_per_use_reference():
+    import json
+
+    from data_batch import recount
+    from dose_assessment import verified_reference_citations
+    from evidence_resolver import _LITERATURE_EVIDENCE_PATH
+
+    registry = json.loads(_LITERATURE_EVIDENCE_PATH.read_text())
+    assert not recount(_LITERATURE_EVIDENCE_PATH.name, registry)
+    record = next(row for row in registry["literature_evidence_records"]
+                  if row["canonical_id"] == "perilla_unspecified")
+    assert record["reference_semantics"]["exposure_basis"] == "per_use"
+    assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
+    assert verified_reference_citations(record)
