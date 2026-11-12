@@ -8,7 +8,8 @@ selectable) plus 13 rule-only drug classes referenced by interaction
 rules but not surfaced as profile picks (CYP substrates, narrow families).
 
 Locked decisions:
-  - Exactly 32 drug classes (16 user_selectable + 16 rule-only; antimuscarinics Q6 and nadolol G1 added 2026-11-12)
+  - Exactly 39 drug classes (16 user_selectable + 23 rule-only; antimuscarinics added 2026-11-12, Dr. Pham Q6;
+    seven CBD medicine classes added 2026-11-12, Dr. Pham Q5)
   - Lean schema + extras: id, name, notes, examples, rx_status, user_selectable
   - v1.1.0 sheet-facing consumer fields: group_label (clean noun bucket) +
     commonly_used_for (one sentence, "commonly used" phrasing, never "treats");
@@ -43,21 +44,21 @@ def drug_classes(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.1.0"
-    assert md["total_entries"] == 32
+    assert md["total_entries"] == 39
     assert md["user_selectable_count"] == 16
-    assert md["rule_only_count"] == 16
+    assert md["rule_only_count"] == 23
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_32_drug_classes_locked(drug_classes):
-    assert len(drug_classes) == 32
+def test_exactly_39_drug_classes_locked(drug_classes):
+    assert len(drug_classes) == 39
 
 
 def test_user_selectable_split_correct(drug_classes):
     selectable = [d for d in drug_classes if d.get("user_selectable")]
     rule_only = [d for d in drug_classes if not d.get("user_selectable")]
     assert len(selectable) == 16, f"expected 16 user_selectable; got {len(selectable)}"
-    assert len(rule_only) == 16, f"expected 16 rule-only; got {len(rule_only)}"
+    assert len(rule_only) == 23, f"expected 23 rule-only; got {len(rule_only)}"
 
 
 REQUIRED_FIELDS = {

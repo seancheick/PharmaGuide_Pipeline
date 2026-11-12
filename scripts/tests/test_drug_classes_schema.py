@@ -26,6 +26,12 @@ import pytest
 DRUG_CLASSES_PATH = Path(__file__).resolve().parent.parent / "data" / "drug_classes.json"
 
 EXPECTED_CLASSES = {
+    # Dr. Pham Q5 (2026-11-12): single-medicine classes for the CBD findings.
+    "class:stiripentol",
+    "class:everolimus",
+    "class:tacrolimus",
+    "class:sirolimus",
+    "class:digoxin",
     "class:opioids",
     "class:fluconazole_sensitive_statins",
     "class:cyp3a4_metabolized_statins",
@@ -102,6 +108,11 @@ CANONICAL_ANCHORS = {
     "class:benzodiazepines": ["alprazolam", "diazepam", "lorazepam"],
     "class:nsaids": ["ibuprofen", "naproxen", "diclofenac"],
     "class:anticonvulsants": ["phenytoin", "carbamazepine"],
+    "class:stiripentol": ["stiripentol"],
+    "class:everolimus": ["everolimus"],
+    "class:tacrolimus": ["tacrolimus"],
+    "class:sirolimus": ["sirolimus"],
+    "class:digoxin": ["digoxin"],
     "class:diabetes_meds": ["metformin"],
     "class:insulins": ["insulin glargine"],
     "class:corticosteroids": ["prednisone", "dexamethasone"],

@@ -8338,15 +8338,15 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "probable",
-          "last_reviewed": "2026-07-04",
-          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors. A meta-analysis of RCTs found a 22% increased risk of hemorrhagic stroke (Schurks 2010, pooled RR 1.22); the signal is anchored to ~400 IU/day supplemental doses and compounds with anticoagulant or antiplatelet use.",
+          "last_reviewed": "2026-11-12",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors. A meta-analysis of randomized trials found a 22% increased risk of hemorrhagic stroke (Schurks 2010, pooled RR 1.22). The NIH fact sheet says the supplemental amount needed for clinically significant medication interactions is unknown but probably exceeds 400 IU/day, which is not an established threshold. The risk adds to anticoagulant or antiplatelet use.",
           "action": "Use caution with supplemental vitamin E if you have a bleeding disorder. Review it with your clinician, especially if you also take blood thinners.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21051774/"
           ],
           "alert_headline": "High-dose vitamin E may increase bleeding",
-          "alert_body": "High-dose vitamin E (about 400 IU/day or more) can inhibit clotting and raise bleeding risk. If you have a bleeding disorder or take blood thinners, review vitamin E use with your clinician.",
+          "alert_body": "High-dose vitamin E can raise bleeding risk; the amount that matters is not established. If you have a bleeding disorder or take blood thinners, review vitamin E use with your clinician.",
           "informational_note": "Vitamin E can affect clotting at high doses — relevant to people with bleeding disorders.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8368,14 +8368,20 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "surgery_scheduled",
           "severity": "caution",
           "evidence_level": "probable",
-          "last_reviewed": "2026-07-04",
-          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, raising perioperative bleeding risk at high supplemental doses (~400 IU/day and above).",
+          "last_reviewed": "2026-11-12",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, which can raise perioperative bleeding risk at high supplemental doses; the amount that matters is not established.",
           "action": "Tell your surgical team about vitamin E supplements and follow their instructions about whether and when to stop them.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
@@ -8404,7 +8410,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Only the mechanism changed in this row; its alert text and action predate this review and were not reviewed by Dr. Pham. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "lactation",
@@ -8446,14 +8458,14 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Antiplatelet activity at high doses (≥400 IU/day) via vitamin K-epoxide reductase competition.",
-          "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using vitamin E supplements.",
+          "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. The NIH Office of Dietary Supplements says large doses taken with anticoagulant or antiplatelet medicines such as warfarin can increase bleeding risk, especially with low vitamin K intake, and that the supplemental amount needed for clinically significant effects is unknown but probably exceeds 400 IU/day. That figure is not an established threshold below which the interaction disappears.",
+          "action": "If you take a blood thinner, talk to your prescriber before using vitamin E supplements, and tell them how much you take.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
           ],
           "alert_headline": "Bleeding risk at high doses",
-          "alert_body": "Vitamin E above 400 IU/day can mildly thin the blood and raise bleeding risk when combined with warfarin or aspirin-type drugs.",
-          "informational_note": "Vitamin E at high dose has antiplatelet effect — relevant to anyone on blood thinners.",
+          "alert_body": "Large doses of vitamin E can affect clotting and add to bleeding risk with blood thinners. The amount that matters is not known. Talk to your prescriber before taking vitamin E.",
+          "informational_note": "Vitamin E at high doses can have an antiplatelet effect — relevant to anyone on blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -8474,7 +8486,13 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q2: 400 IU/day is not a boundary below which the interaction disappears; the effect is not necessarily mild. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [
@@ -8676,8 +8694,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team; Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",
@@ -18293,16 +18311,16 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. This is not evidence that every ordinary brief exposure causes a direct drug interaction.",
-          "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
+          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monographs for senna leaf and pod say hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). They set no dose or duration that clears the combination and do not show that every brief use causes toxicity.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use senna without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
-          "alert_headline": "Can increase digoxin toxicity",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, ask your prescriber before using this laxative and avoid unsupervised prolonged use.",
-          "informational_note": "Senna can lower potassium — relevant to people on digoxin or other cardiac glycosides.",
+          "alert_headline": "Avoid unsupervised use with digoxin",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "informational_note": "Prolonged or heavy senna use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -18322,7 +18340,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: keep 'avoid unsupervised use,' with potassium-loss and preparation context; the monographs require medical consultation and set no dose or duration cutoff. Her preparation guidance names aloe, which batch 5b handles. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -18362,8 +18386,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only); wording by agent, not reviewed by Dr. Pham; other rows: original rule pharmaguide_clinical_team, agent re-sourcing 2026-04-26"
     },
     {
       "id": "RULE_IQM_CHASTEBERRY_PREGNANCY",
@@ -18992,15 +19016,15 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. This is not evidence that every ordinary brief exposure causes a direct drug interaction.",
-          "action": "Avoid cascara sagrada with cardiac glycosides. If constipation management is required, select a potassium-sparing approach and monitor serum potassium and digoxin levels.",
+          "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monograph for cascara bark says hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). It sets no dose or duration that clears the combination and does not show that every brief use causes toxicity.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use cascara without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
-          "alert_headline": "Can increase digoxin toxicity",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, ask your prescriber before using this laxative and avoid unsupervised prolonged use.",
-          "informational_note": "Cascara can lower potassium — relevant to people on digoxin or other cardiac glycosides.",
+          "alert_headline": "Avoid unsupervised use with digoxin",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "informational_note": "Prolonged or heavy cascara use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -19020,7 +19044,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Section 2: keep 'avoid unsupervised use,' with potassium-loss and preparation context; the monographs require medical consultation and set no dose or duration cutoff. Her preparation guidance names aloe, which batch 5b handles. Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+          }
         }
       ],
       "dose_thresholds": [],
@@ -19058,8 +19088,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only); wording by agent, not reviewed by Dr. Pham; other rows: original rule pharmaguide_clinical_team, agent re-sourcing 2026-04-26"
     },
     {
       "id": "RULE_IQM_ALOE_FEROX",
@@ -22458,14 +22488,15 @@
           "condition_id": "seizure_disorder",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
-          "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+          "mechanism": "Prescription cannabidiol (EPIDIOLEX) is FDA-approved for seizures in Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex. Over-the-counter CBD products are not FDA-approved and can vary in dose and purity. With some seizure medicines, prescription cannabidiol raised drug levels (clobazam's active form, stiripentol) or made liver-enzyme rises more common (valproate); those findings appear separately.",
+          "action": "If you have a seizure disorder, talk to your neurologist before using CBD, and do not use an over-the-counter CBD product in place of prescribed seizure treatment.",
           "sources": [
-            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
           "alert_headline": "CBD — seizure clinician guidance",
-          "alert_body": "Prescription cannabidiol treats specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures or take antiseizure medication, use CBD only with clinician guidance.",
-          "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder.",
+          "alert_body": "Prescription cannabidiol is approved for specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures, talk to your neurologist before using CBD.",
+          "informational_note": "OTC CBD products vary in dose and purity; prescription cannabidiol is a separate product.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -22485,7 +22516,13 @@
             "dose": null
           },
           "direction": "neutral",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: keep seizure-condition guidance with an accurate claim; a condition note does not replace the drug-specific findings. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
           "condition_id": "pregnancy",
@@ -22523,24 +22560,61 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticonvulsants",
+          "drug_class_id": "clobazam",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EPIDIOLEX label reports increased exposure to N-desmethylclobazam during concomitant clobazam use and a higher liver-enzyme elevation risk with valproate. These findings apply to the studied prescription cannabidiol preparation and specific combinations; the label does not establish identical effects for every anticonvulsant.",
-          "action": "Ask your neurologist before adding CBD. The prescriber should manage clobazam-related adverse effects, liver monitoring with valproate, and any medication adjustment.",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised N-desmethylclobazam, clobazam's active metabolite, about 3-fold in healthy subjects, with no effect on clobazam itself, which may increase clobazam-related adverse reactions such as sleepiness and sedation. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take clobazam, talk to your neurologist before using CBD and tell them about new sleepiness or other side effects. Do not change your clobazam dose yourself.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May affect seizure medication",
-          "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
-          "informational_note": "CBD may affect anticonvulsant therapy — relevant to people on seizure medications.",
+          "alert_headline": "May increase clobazam side effects such as sleepiness",
+          "alert_body": "Prescription CBD raised levels of clobazam's active form, which can add to sleepiness. If you take clobazam, talk to your neurologist before using CBD.",
+          "informational_note": "Prescription CBD raised levels of clobazam's active form in label studies.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticonvulsants",
-                "clobazam",
+                "clobazam"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: increased exposure to clobazam's active metabolite; greater sedation risk. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "valproate",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "The EPIDIOLEX label reports that liver-enzyme (transaminase) elevations were more common when prescription cannabidiol was taken with valproate: most ALT elevations in the controlled studies occurred in patients taking valproate. Cannabidiol did not raise valproate exposure (no effect in healthy subjects; small, not clinically relevant decreases in patients). These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take a valproate medicine, talk to your prescriber before using CBD; liver blood tests may be needed. Do not change your valproate dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Liver enzymes rose more often with valproate",
+          "alert_body": "With valproate, prescription CBD raised liver enzymes more often in label studies. If you take valproate, talk to your prescriber before using CBD; liver tests may be needed.",
+          "informational_note": "Prescription CBD with valproate raised liver enzymes more often in label studies.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
                 "valproate"
               ],
               "profile_flags_any": []
@@ -22555,26 +22629,32 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: greater liver-enzyme elevation risk; not described as increased valproate exposure. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
-          "drug_class_id": "immunosuppressants",
+          "drug_class_id": "stiripentol",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised oral everolimus exposure about 2.5-fold, and that exposure to other oral P-glycoprotein substrates, such as sirolimus and tacrolimus, may rise; it advises drug-level monitoring and dose adjustment. This should not be generalized to clinically proven inhibition of all CYP3A4 substrates.",
-          "action": "Monitor everolimus, tacrolimus or sirolimus levels closely; a dose reduction may be needed. Tell the team that prescribes it about CBD use.",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol raised stiripentol exposure (AUC up 55% in healthy subjects and 30% in patients with epilepsy) and advises monitoring for stiripentol-related adverse reactions. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take stiripentol, talk to your neurologist before using CBD and tell them about new side effects. Do not change your stiripentol dose yourself.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
-          "alert_headline": "May raise levels of some immunosuppressant medicines",
-          "alert_body": "CBD can raise levels of some immunosuppressants, such as everolimus, tacrolimus or sirolimus. Ask that medicine's prescriber first; drug-level monitoring or a prescribed dose change may be needed.",
-          "informational_note": "Prescription CBD raised everolimus levels in a label study — relevant to anyone on everolimus, tacrolimus or sirolimus.",
+          "alert_headline": "May raise stiripentol levels",
+          "alert_body": "Prescription CBD raised stiripentol levels in label studies, which can add to its side effects. If you take stiripentol, talk to your neurologist before using CBD.",
+          "informational_note": "Prescription CBD raised stiripentol levels in label studies.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "immunosuppressants"
+                "stiripentol"
               ],
               "profile_flags_any": []
             },
@@ -22588,7 +22668,212 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: add stiripentol; increased exposure; monitor for adverse effects. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "everolimus",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "The EPIDIOLEX label reports that prescription cannabidiol (12.5 mg/kg twice daily) raised everolimus peak levels and total exposure about 2.5-fold in healthy subjects; it advises monitoring everolimus levels, with dosing managed by the prescriber. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take everolimus, talk to the specialist who prescribes it before using CBD; they may check your everolimus levels. Do not change your everolimus dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "May raise everolimus levels",
+          "alert_body": "Prescription CBD raised everolimus levels about 2.5-fold in a label study. If you take everolimus, talk to the specialist who prescribes it before using CBD.",
+          "informational_note": "Prescription CBD raised everolimus levels in a label study.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "everolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: increased exposure; specialist management of levels and dosing. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "tacrolimus",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "In an open-label, fixed-sequence crossover study in 12 healthy adults (interim analysis), cannabidiol titrated to 5 mg/kg twice daily for 14 days raised tacrolimus peak levels 4.2-fold and total exposure 3.1-fold after a single 5 mg oral dose. The EPIDIOLEX label also says exposure to oral P-glycoprotein substrates such as tacrolimus may increase. The study used prescription-level doses; the effect of lower-dose over-the-counter or topical CBD is not established.",
+          "action": "If you take tacrolimus by mouth, talk to your transplant or specialist team before using CBD; they may check your tacrolimus levels. Do not change your tacrolimus dose yourself.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/39601108/",
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "May raise levels of tacrolimus taken by mouth",
+          "alert_body": "In a study using prescription-level CBD doses, tacrolimus levels rose about 3-fold. If you take tacrolimus by mouth, talk to your transplant or specialist team before using CBD.",
+          "informational_note": "Prescription-level CBD doses raised oral tacrolimus levels in a study in healthy adults.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "tacrolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: tacrolimus gets its own record; a controlled human PK study found increased exposure. Graded established like everolimus: a measured human PK effect, with the label naming tacrolimus. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "sirolimus",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming sirolimus, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a potential interaction described for the transporter, not one measured with sirolimus. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD; they may check your sirolimus levels. Do not change your sirolimus dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Possible rise in levels of sirolimus taken by mouth",
+          "alert_body": "The prescription CBD label says sirolimus levels may rise; this was not measured directly. If you take sirolimus by mouth, talk to your transplant or specialist team before using CBD.",
+          "informational_note": "Prescription CBD may raise levels of sirolimus taken by mouth; not measured directly.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "sirolimus"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: potential interaction described for oral P-gp substrates, distinguished from a measured interaction. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "digoxin",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "The EPIDIOLEX label says exposure to other orally administered P-glycoprotein substrates, naming digoxin, may increase with prescription cannabidiol, and suggests considering drug-level monitoring. This is a potential interaction described for the transporter, not one measured with digoxin. These findings concern the studied prescription oral cannabidiol; the size of the effect for over-the-counter or topical CBD products is not established.",
+          "action": "If you take digoxin by mouth, talk to your prescriber before using CBD; they may check your digoxin level. Do not change your digoxin dose yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Possible rise in levels of digoxin taken by mouth",
+          "alert_body": "The prescription CBD label says digoxin levels may rise; this was not measured directly. If you take digoxin by mouth, talk to your prescriber before using CBD.",
+          "informational_note": "Prescription CBD may raise levels of digoxin taken by mouth; not measured directly.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "digoxin",
+                "cardiac_glycosides"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: add a qualified CBD-digoxin finding, distinguished from a measured interaction. The 'Digoxin / Heart rhythm medication' picker class also reaches it, so every copy field is conditional on digoxin taken by mouth (Q4: an unknown medicine keeps a conditional message). Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
+        },
+        {
+          "drug_class_id": "anticonvulsants",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Among seizure medicines, the EPIDIOLEX label reports dedicated interaction studies only with clobazam, valproate and stiripentol, which have their own findings. It reports no specific effect on other seizure medicines, so none is claimed here.",
+          "action": "If you take a seizure medicine, talk to the doctor who prescribes it before using CBD. Do not change your seizure medicine yourself.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+          ],
+          "alert_headline": "Ask before using CBD with seizure medicines",
+          "alert_body": "The prescription CBD label reports studies with only a few seizure medicines. If you take a seizure medicine, talk to the doctor who prescribes it before using CBD.",
+          "informational_note": "The prescription CBD label reports interaction studies with only a few seizure medicines.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticonvulsants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "stiripentol"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-12",
+            "file": "audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md",
+            "notes": "Q5: end the implication that every anticonvulsant shares the demonstrated interaction; keep a qualified review message for other seizure medicines until their evidence is assessed. Consumer wording, membership, severity and evidence grading: agent work, not reviewed by Dr. Pham."
+          }
         },
         {
           "drug_class_id": "anticoagulants",
@@ -22693,8 +22978,8 @@
           "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
         ]
       },
-      "last_reviewed": "2026-04-14",
-      "review_owner": "drug_label_mining"
+      "last_reviewed": "2026-11-12",
+      "review_owner": "Dr. Pham (signed answers 2026-11-12, Q5: the seizure-medicine, immunosuppressant and digoxin findings and the seizure-condition note; findings and scope only); wording, membership, severity, evidence grading and labels read by agent; the anticoagulant, sedative and pregnancy sub-rules are unchanged from the original rule (drug_label_mining)"
     },
     {
       "id": "RULE_BANNED_PENNYROYAL_PREGNANCY",
