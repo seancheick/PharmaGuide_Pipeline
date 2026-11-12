@@ -554,8 +554,8 @@ def test_deferred_cui_semantic_findings_are_resolved(iqm):
 def test_same_curated_interactions_use_promoted_substance_cui(curated_interactions):
     agent2_ids = _agent2_ids(curated_interactions)
     assert "C0445247" not in agent2_ids
-    # MAOI class pair, tranylcypromine exact pair (2026-11-11) and the others.
-    assert agent2_ids.count("C0036002") == 4
+    # MAOI class pair, tranylcypromine (2026-11-11) and phenelzine (2026-11-12) exact pairs, and the others.
+    assert agent2_ids.count("C0036002") == 5
 
 
 def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
