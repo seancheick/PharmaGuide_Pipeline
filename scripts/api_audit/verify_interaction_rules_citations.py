@@ -157,7 +157,12 @@ TOPIC_STEMS = {
               "selegiline"],
     "serotonergic_medications": ["seroton", "tramadol", "triptan", "linezolid"],
     "cardiac_glycosides": ["digoxin", "digitoxin", "digitalis", "hypokal", "potassium"],
-    "anticholinergics": ["cholinerg", "acetylcholin", "muscarin", "cholinesterase"],
+    # Tokens match by prefix, so "anticholinerg"/"antimuscarin" need their own stems; scopolamine is a member of
+    # both classes (the prototype antimuscarinic).
+    "anticholinergics": ["cholinerg", "anticholinerg", "acetylcholin", "muscarin", "antimuscarin",
+                         "cholinesterase", "scopolamin"],
+    "antimuscarinics": ["cholinerg", "anticholinerg", "acetylcholin", "muscarin", "antimuscarin",
+                        "cholinesterase", "scopolamin", "oxybutynin", "overactive bladder"],
     "anticonvulsants": ["anticonvuls", "antiepilep", "seizur", "epilep", "phenytoin",
                         "valpro", "carbamazep"],
     "thiazide_diuretics": ["thiazide", "diuret", "potassium", "hypokal"],

@@ -80,6 +80,8 @@ EXPECTED_CLASSES = {
     "class:thyroid_medications",
     "class:antidepressants_ssri_snri",
     "class:anticholinergics",
+    # Dr. Pham Q6 (2026-11-12): the members taken for their antimuscarinic effect.
+    "class:antimuscarinics",
     "class:hypoglycemics_high_risk",
     "class:hypoglycemics_lower_risk",
     "class:hypoglycemics_unknown",
@@ -116,6 +118,7 @@ CANONICAL_ANCHORS = {
     "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
     "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],
     "class:serotonergic_medications": ["linezolid", "amitriptyline", "tramadol", "buspirone"],
+    "class:antimuscarinics": ["oxybutynin", "benztropine", "scopolamine"],
     "class:enzyme_inducing_antiseizure_medications": ["phenytoin", "carbamazepine", "phenobarbital", "primidone"],
 }
 
