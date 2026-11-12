@@ -381,6 +381,34 @@ levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other 
 bundled taxonomy and vocabulary drift test need the new classes (37/21 entries); the removal of the immunosuppressant
 sub-rule and the new class map must ship in the same interaction-DB build.
 
+### Batch 4 source correction: sirolimus observational measurements (Codex, 2026-11-12)
+
+The original batch 4 sirolimus mechanism, body and note said the interaction was not measured.
+Live NCBI EFetch content verification of [PMID 31924480](https://pubmed.ncbi.nlm.nih.gov/31924480/)
+finds a retrospective TSC series of 25 patients, including seven taking sirolimus, with median
+sirolimus trough increase 5.1 ng/mL after cannabidiol. This is observational evidence, not a
+controlled sirolimus interaction trial or a universal effect size for OTC/topical products.
+
+Corrected only the sirolimus source/copy and evidence attribution. `probable` follows the existing
+taxonomy's partial-human-support definition. Caution, action, headline, drug matching, gates,
+direction and all other medicines are unchanged; digoxin remains a theoretical label precaution.
+The existing b4 apply script produces the correction, with a regression separating sirolimus
+from the unchanged digoxin control. Agent source review and wording, not reviewed by Dr. Pham;
+all named clinical holds remain held.
+
+Validation class: behavioral clinical evidence/copy. Fail-first named regression reproduced a
+missing-source failure before the data edit. `data_batch check --since d4d8203fc`: exactly
+`interaction_rules/RULE_BANNED_CBD_INTERACTIONS`, zero problems. Safety-copy check passed; Python
+correctness found zero new findings. Strict rule citation verifier: five on-topic, zero suspects,
+PASS. General citation verifier: zero evaluated matches/mismatches; this is not independent
+content proof, which comes from the explicit EFetch source check above. The two-file owner/consumer
+slice passed 111 cases and exposed one copy-clarity failure (the body must explicitly name sirolimus
+levels). The final body fixes that wording; the failing node and both changed source-measurement
+nodes then passed (3/3), and safety-copy validation passed again. Full-registry comparison against
+`d4d8203fc` confirms parity outside six sirolimus fields: evidence level, mechanism, alert body,
+informational note, sources and clinical-review notes. Independent review, combined local and
+exact-candidate CI remain integration requirements; no release qualification or device check is claimed.
+
 ## Questions for Dr. Pham
 
 **Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:
