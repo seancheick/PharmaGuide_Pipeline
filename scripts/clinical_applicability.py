@@ -667,6 +667,20 @@ def qualifying_purpose_outcomes(context: Mapping, *, include_nonpositive: bool =
     return qualifying, held
 
 
+def outcomes_beyond_exposure(context: Mapping) -> list:
+    """Qualifying outcomes that show more than exposure, target engagement or an
+    unvalidated physiological response.
+
+    Sean, November 12, 2026 (DR_PHAM_ANSWERS_20261112.md Part C): such a finding
+    cannot by itself unlock the primary Evidence floor. The reviewed outcome row
+    names it with ``surrogate_class``; an unclassified surrogate (an accepted one
+    such as blood pressure, or a functional measure) is not excluded. Ordinary
+    Evidence still reads ``qualifying_purpose_outcomes``.
+    """
+    qualifying, _ = qualifying_purpose_outcomes(context)
+    return [row for row in qualifying if not row.get("surrogate_class")]
+
+
 def evaluated_purpose_outcomes(context: Mapping) -> list:
     """Null, mixed or unfavorable primary findings of a context with no positive one.
 
