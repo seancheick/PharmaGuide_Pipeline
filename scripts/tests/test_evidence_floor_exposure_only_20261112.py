@@ -28,12 +28,13 @@ from clinical_evidence_schema import SURROGATE_CLASSES, validate_ingredient_cont
 FIXTURES = Path(__file__).parent / "fixtures"
 
 # Every reviewed context whose qualifying finding is classified, and the class of each
-# classified outcome row. A context is classified only when every qualifying outcome shows
-# no more than the supplied compound or its stores (exposure), the material's direct
+# classified outcome row. A context is classified when every qualifying outcome shows no
+# more than the supplied compound or its stores (exposure), the material's direct
 # biochemical action (target engagement), or a physiological change that is not an
 # established clinical measure defining or monitoring the studied condition. Blood
-# pressure, lipids, glycemia, TSH and functional measures are not classified, and a context
-# with any qualifying functional or accepted outcome stays unclassified.
+# pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in
+# hyperhomocysteinemia and functional measures are not classified, and a context with any
+# qualifying functional or accepted outcome stays unclassified.
 CLASSIFIED = {
     ("INGR_CREATINE_ETHYL_ESTER", "creatine_ethyl_ester_19228401_muscle_content"): {"exposure"},
     ("INGR_REDUCED_GLUTATHIONE", "ingr_reduced_glutathione_24791752"): {
@@ -52,7 +53,43 @@ CLASSIFIED = {
         "unvalidated_physiological_response"},
     ("INGR_L_CARNOSINE", "l_carnosine_27040154_primary_glycemic"): {
         "unvalidated_physiological_response"},
+    ("PRECLIN_NMN", "nmn_glucose_lipid_review_39531138"): {"exposure"},  # meta-analysis: no floor base
 }
+
+# Every other scoring-eligible context whose qualifying finding is surrogate-only, kept as an
+# accepted clinical measure of its condition or a functional measure recorded as a surrogate.
+# A review that makes a context surrogate-only (for example a mixed context losing its
+# functional row) must classify it or add it here.
+ACCEPTED = {
+    ("BRAND_QUATREFOLIC", "quatrefolic_nonqualifying_merck_folate_rct_23698160"),  # homocysteine in hyperhomocysteinemia
+    ("INGR_BACOPA", "ingr_bacopa_24252493_bounded_adult_extract_review"),  # cognitive task
+    ("INGR_BERBERINE_HCL", "ingr_berberine_hcl_34956436_scoped_source"),  # HbA1c in type 2 diabetes
+    ("INGR_CAFFEINE", "ingr_caffeine_33800853_scoped_source"),  # attention task
+    ("INGR_CERAMIDES", "ingr_ceramides_38999848"),  # TEWL for a dry skin barrier (close call)
+    ("INGR_CERAMIDES", "ingr_ceramides_35719159_ceramide_subgroup"),  # skin hydration
+    ("INGR_CREATINE_MONOHYDRATE", "creatine_monohydrate_resistance_training_body_composition_39074168"),  # lean mass
+    ("INGR_GARLIC", "garlic_hypertension_meta_32010325"),  # blood pressure
+    ("INGR_GLYCINE", "ingr_glycine_22529837_sleep_restriction_source_scope"),  # psychomotor vigilance
+    ("INGR_L_ARGININE", "ingr_l_arginine_34967840_blood_pressure"),  # blood pressure
+    ("INGR_L_CARNOSINE", "l_carnosine_38172006_primary_glycemic"),  # OGTT glucose (close call)
+    ("INGR_L_THEANINE", "ingr_l_theanine_40314930_scoped_source"),  # reaction time
+    ("INGR_L_TYROSINE", "ingr_l_tyrosine_24433977"),  # response inhibition task
+    ("INGR_L_TYROSINE", "ingr_l_tyrosine_25598314"),  # task switching
+    ("INGR_L_TYROSINE", "ingr_l_tyrosine_36548401"),  # reaction times
+    ("INGR_L_TYROSINE", "ingr_l_tyrosine_42275440"),  # choice performance
+    ("INGR_MAGNESIUM_GENERIC", "ingr_magnesium_generic_41000008_scoped_synthesis"),  # blood pressure
+    ("INGR_PANTETHINE", "ingr_pantethine_24600231"),  # LDL cholesterol
+    ("INGR_PLANT_STEROLS", "ingr_plant_sterols_24144075_bounded_source_scope"),  # LDL cholesterol
+    ("INGR_POTASSIUM", "ingr_potassium_40612568_scoped_source"),  # blood pressure
+    ("INGR_PSYLLIUM_HUSK", "ingr_psyllium_30239559_lipid_marker_review"),  # LDL cholesterol
+    ("INGR_QUERCETIN", "ingr_quercetin_27405810_scoped_source"),  # blood pressure
+    ("INGR_SELENIUM", "ingr_selenium_38243784_scoped_source"),  # TSH in Hashimoto's (close call)
+    ("INGR_TAURINE", "ingr_taurine_26781281_prehypertension_bp"),  # blood pressure
+    ("PRECLIN_BERBERINE_GENERIC", "preclin_berberine_generic_34956436_scoped_source"),  # HbA1c in type 2 diabetes
+}
+
+ATTRIBUTION = ("Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's "
+               "Evidence-floor rule")
 
 
 def _context(record_id, context_id):
@@ -88,13 +125,33 @@ def test_every_classified_row_is_a_surrogate_in_a_valid_context():
 
 
 def test_only_the_reviewed_contexts_are_classified():
-    """No blanket rule: accepted surrogates (blood pressure, lipids, glycemia, TSH),
-    functional performance measures and every other context stay unclassified."""
+    """No blanket rule: accepted surrogates, functional measures and every other context
+    stay unclassified."""
     classified = {(entry_id, context["context_id"])
                   for entry_id, entry in reviewed_entries().items()
                   for context in entry.get("study_contexts") or []
                   if any("surrogate_class" in row for row in context.get("outcomes") or [])}
     assert classified == set(CLASSIFIED)
+
+
+def test_every_surrogate_only_finding_was_reviewed_under_the_rule():
+    """The census: each scoring-eligible context whose qualifying outcomes are all
+    surrogates is either classified or a reviewed accepted/functional measure."""
+    surrogate_only = {(entry_id, context["context_id"])
+                      for entry_id, entry in reviewed_entries().items()
+                      for context in entry.get("study_contexts") or []
+                      if context.get("scoring_eligible") is True
+                      and (rows := qualifying_purpose_outcomes(context)[0])
+                      and all(row.get("kind") == "surrogate" for row in rows)}
+    assert not set(CLASSIFIED) & ACCEPTED
+    assert surrogate_only == set(CLASSIFIED) | ACCEPTED
+
+
+def test_classified_contexts_record_the_classification_as_agent_work():
+    for record_id, context_id in CLASSIFIED:
+        limitations = " ".join(_context(record_id, context_id)["limitations"])
+        assert ATTRIBUTION in limitations and "DR_PHAM_ANSWERS_20261112.md Part C" in limitations
+        assert "not part of this context's clinician review" in limitations
 
 
 # --- the clinical-outcome owner -------------------------------------------------------
@@ -123,9 +180,9 @@ def test_accepted_and_functional_findings_remain_beyond_exposure(record_id, cont
 
 # --- the Evidence owner: mixed research and no borrowing ------------------------------
 
-def _scoped_match(record_id, context_ids):
-    return {"id": record_id, "standard_name": "Test Ingredient", "study_type": "rct_single",
-            "evidence_level": "ingredient-human", "effect_direction": "positive_weak",
+def _scoped_match(record_id, context_ids, study_type="rct_single"):
+    return {"id": record_id, "standard_name": "Test Ingredient", "study_type": study_type,
+            "evidence_level": "ingredient-human", "effect_direction": "positive_strong",
             "applicability_assessment": {"status": "applicable", "population_applicability": {
                 "state": "eligible", "context_ids": list(context_ids)}}}
 
@@ -144,17 +201,25 @@ EXPOSURE = {"kind": "surrogate", "surrogate_class": "exposure"}
 FUNCTIONAL = {"kind": "patient_important"}
 
 
-@pytest.mark.parametrize("contexts,qualified,beyond", [
-    ([_ctx("a", EXPOSURE)], ["a"], False),                                # exposure alone
-    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["a", "b"], True),     # mixed: the functional one qualifies
-    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["a"], False),         # no borrowing from a non-applicable context
-    ([_ctx("a", {"kind": "surrogate"})], ["a"], True),                    # unclassified surrogate: no blanket exclusion
-    ([], [], True),                                                       # no reviewed context: rule cannot apply
+@pytest.mark.parametrize("contexts,qualified,study_type,expected", [
+    ([_ctx("a", EXPOSURE)], ["a"], "rct_single", None),                     # exposure alone: no floor
+    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["a", "b"], "rct_single", "rct_single"),  # mixed: functional qualifies
+    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["a"], "rct_single", None),  # no borrowing from a non-applicable context
+    ([_ctx("a", {"kind": "surrogate"})], ["a"], "rct_single", "rct_single"),  # unclassified surrogate: no blanket exclusion
+    ([], [], "rct_single", "rct_single"),                                   # no reviewed context: rule cannot apply
+    # An exposure-only trial cannot strengthen the floor either: two families, one beyond exposure.
+    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["a", "b"], "rct_multiple", "rct_single"),
+    ([_ctx("a", FUNCTIONAL), _ctx("b", FUNCTIONAL)], ["a", "b"], "rct_multiple", "rct_multiple"),
+    # The record's own design is kept when no exposure-only trial supplied the second family.
+    ([_ctx("b", FUNCTIONAL)], ["b"], "rct_multiple", "rct_multiple"),
+    ([_ctx("a", EXPOSURE), {**_ctx("b", FUNCTIONAL), "evidence_role": "meta_analysis"}], ["a", "b"],
+     "rct_multiple", "rct_multiple"),
+    ([_ctx("a", EXPOSURE), _ctx("b", FUNCTIONAL)], ["b", 7], "rct_single", "rct_single"),  # non-string ids ignored
 ])
-def test_finding_beyond_exposure_reads_only_the_applicable_contexts(monkeypatch, contexts, qualified, beyond):
+def test_floor_study_type_reads_only_the_applicable_contexts(monkeypatch, contexts, qualified, study_type, expected):
     from scoring_v4.modules import generic_evidence as ge
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {"TEST_RECORD": _record_with(contexts)})
-    assert ge._finding_beyond_exposure(_scoped_match("TEST_RECORD", qualified)) is beyond
+    assert ge._floor_study_type(_scoped_match("TEST_RECORD", qualified, study_type)) == expected
 
 
 # --- the production seam on real labels ---------------------------------------------

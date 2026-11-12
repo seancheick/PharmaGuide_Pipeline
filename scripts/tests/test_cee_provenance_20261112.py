@@ -23,6 +23,7 @@ def test_cee_context_review_is_attributed_to_dr_pham_with_seans_statement():
     assert "DR_PHAM_ANSWERS_20261112.md" in review["notes"]
     assert "Fix it, it was dr pham" in review["notes"]
     assert "prepared by Codex" in review["notes"]
+    assert review["basis"].startswith("Agent-prepared source reading (Codex):")
 
 
 def test_cee_text_says_strength_power_and_body_composition_were_measured():

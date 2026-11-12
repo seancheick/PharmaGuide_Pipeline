@@ -2,11 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.4",
+    "schema_version": "5.7.0",
     "last_updated": "2026-11-12",
     "total_entries": 224,
     "changelog": [
-      "2026-11-12: Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure of the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only). Blood pressure, lipids, glycemia, TSH and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, not a new clinician review.",
+      "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -2968,7 +2968,8 @@
             "No CVD/heart failure/statin myopathy clinical benefit proved; small population.",
             "FMD is a surrogate; the trial does not show cardiovascular events, heart-failure, statin-myopathy or energy benefit. Signed A006 rejects clinical-outcome and general-energy transfers; credit is limited to this endothelial-function finding.",
             "Small single-centre trial with per-protocol analysis (48 of 51); no FMD difference at week 4. Product supplied by Kaneka; funding from university and institute grants; authors declare no conflicts.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "clinical_review": {
             "reviewer": "Dr. Pham",
@@ -4385,7 +4386,8 @@
             "Lonza-funded; one author affiliated with Lonza. No independent replication inferred.",
             "Soreness is secondary to the stated primary muscle-disruption purpose. MRI surrogate names only itself under current rubric; no general recovery/performance/weight claim.",
             "Included in 32154768: one primary evidence family, never a second independent trial alongside that synthesis. Cross publication participant overlap not established; 11788381 is not 11880112.",
-            "Exact LCLT preparation/source-declared delivered L-carnitine only; no freebase/fumarate/ALCAR equivalence or general Dose benchmark."
+            "Exact LCLT preparation/source-declared delivered L-carnitine only; no freebase/fumarate/ALCAR equivalence or general Dose benchmark.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -29763,7 +29765,8 @@
             "Supplier/brand and exact capsule excipient list not established; capsules reported as 750 mg BHCl with hypromellose shells from a GMP-compliant facility. No quantitative dose assay performed.",
             "Six large capsules were difficult to swallow; extra water varied and disintegration/food effects may contribute variability. No general safety clearance, medication recommendation or retail exposure equivalence.",
             "One randomized family of nine; do not add three dose arms or other HCl PK studies as independent replications. Existing other source assessments stay completed non-scoring within their actual scopes.",
-            "Comparison 1 reports all three doses significant but starts the control clock at food administration and treated clocks 15 minutes later; it does not supply aligned-clock low-dose credit."
+            "Comparison 1 reports all three doses significant but starts the control clock at food administration and treated clocks 15 minutes later; it does not supply aligned-clock low-dose credit.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "clinical_review": {
             "reviewer": "Codex /root source review; independent full-primary/rubric check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
@@ -30519,7 +30522,7 @@
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-12",
       "notable_studies": "PMID39531138: eight metabolic RCTs/342reportedparticipants,Table1 trial-specific250–2000mg/day14days–12weeks,pooled fasting glucose/lipids null. PMID35215405:108older adults,250mg/day12weeks,primary sleep/fatigue,secondary physical tests,mixed timing/within-group signals. PMID38789831:60older adults,250mg/day12weeks,primary stepping null,secondarywalk/sleep signals; PMID36443648:14older diabetic men,250mg/day24weeks,primary grip/walk null; both retained from inspected abstracts with original-method limitations. PMID39116016:12studies/513participants,mostly null metabolic markers; PMID39185644:9studies/412participants and inconsistently labeled SMDunits; neither counted as independent replication or fully qualified here. Trial lists are not assumed identical; missing full texts are not converted into invented methods.",
       "references_structured": [
         {
@@ -30783,7 +30786,8 @@
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
-              "outcome_role": "direct_between_group_effect"
+              "outcome_role": "direct_between_group_effect",
+              "surrogate_class": "exposure"
             }
           ],
           "limitations": [
@@ -30792,7 +30796,8 @@
             "The nulls concern pooled fasting/metabolic markers; included Yoshino2021 PMID33888596 reports improved muscle insulin sensitivity in prediabetic women. This is not proof all metabolic effects are absent.",
             "Narrative sample-range14–108 conflicts with Table1 descriptions; do not use the narrative or overlapping reviews to construct a unique aggregate enrollment.",
             "Review declares one coauthor a Current Diabetes Reports section editor; institutional open-access support and no research grant reported. Original trial funding varies; no blanket independent-funding assertion.",
-            "This fully inspected source supports the accepted nonaffirmative current-catalog scope; it is not an affirmative general-aging/energy assessment."
+            "This fully inspected source supports the accepted nonaffirmative current-catalog scope; it is not an affirmative general-aging/energy assessment.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -36906,7 +36911,8 @@
             "No clearly prespecified primary/secondary hierarchy established; retain not_reported rather than inventing primary status.",
             "Completer-only analysis excluded 21 participants; baseline hormone imbalances, multiple comparisons and limited statistical reporting constrain interpretation. Natreon funded the study.",
             "The separate uncontrolled processed-shilajit oligospermia study (20078516) is retained in research history, not a second PrimaVie RCT or proof of preparation equivalence.",
-            "Context authored and source-verified by Codex on 2026-10-29 under Dr. Pham's existing 2026-10-28 pre-approval of fully source-verified contexts, attested by Sean. Prior signed returned batch5 acceptance was received 2026-10-25; that receipt date is not asserted as its signing date."
+            "Context authored and source-verified by Codex on 2026-10-29 under Dr. Pham's existing 2026-10-28 pre-approval of fully source-verified contexts, attested by Sean. Prior signed returned batch5 acceptance was received 2026-10-25; that receipt date is not asserted as its signing date.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ]
         }
       ],
@@ -46500,7 +46506,8 @@
             "The paper names HFC-1 as 'the evaluation outcome' and powers the sample on it but does not formally designate a prespecified primary endpoint or control multiplicity; hierarchy recorded as not_reported per Dr. Pham's 2026-10-28 primary-endpoint rule.",
             "Objective ciliary-accommodation surrogate after a laboratory VDT task; subjective eye-strain scores were not the outcome. Funded by Omnica, the extract maker, and two authors are Omnica employees.",
             "Credit is limited to VDT-related eye fatigue/accommodation (Eye & Vision) with a 36% anthocyanin standardized extract at 240 mg/day; it does not establish retinal, night-vision, glycemic or lipid benefit or apply to unstandardized fruit powders.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -49781,7 +49788,8 @@
             "Full text not open access; PubMed abstract only. Dosage form, completer counts and funding were not verifiable.",
             "Primary outcome is a hormone level in healthy young men, not a symptom or clinical outcome; no hypogonadism treatment claim.",
             "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited, outcome-specific credit for the exact branded formula; hormone biomarkers are not fertility, long-term health or disease prevention.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -52059,7 +52067,8 @@
             "Selected placebo contrasts differ from within-arm baseline comparisons; not every dose/time/compartment was positive.",
             "One trial, 54 completers; two active dose arms, repeated timepoints and immune subsets add no independent replication.",
             "Kyowa-funded study and supplied products; sponsor/research support disclosures retained. No safety reassurance or lower-dose equivalence.",
-            "Current NCT01044277 API declares blood glutathione status primary and oxidative-stress/immune biomarkers secondary, with linked PMID 24791752. Registry first posted 2010-01-07 before reported 2010-02 start; current wording updated 2022. Unchanged 2010 prospective outcome wording was not verified. The washout trajectory is descriptive within-group change, not a claim of placebo contrast or persistent efficacy."
+            "Current NCT01044277 API declares blood glutathione status primary and oxidative-stress/immune biomarkers secondary, with linked PMID 24791752. Registry first posted 2010-01-07 before reported 2010-02 start; current wording updated 2022. Unchanged 2010 prospective outcome wording was not verified. The washout trajectory is descriptive within-group change, not a claim of placebo contrast or persistent efficacy.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -52218,7 +52227,8 @@
             "Exact NSK-SD acute biomarker experiment only; no generic nattokinase-preparation or chronic-regimen equivalence.",
             "Selected coagulation/fibrinolysis marker changes do not establish prevention/treatment of thrombosis, cardiovascular events or substitution for medication.",
             "12 healthy young men and eight-hour follow-up; no pregnancy, pediatric, disease-population or safety conclusion.",
-            "Original literature positive_moderate label is retained verbatim. This proposed native mixed interpretation is an independently reviewed positive/null marker assessment, not a generic multiplier mapping or the glutamine 30108163 exception."
+            "Original literature positive_moderate label is retained verbatim. This proposed native mixed interpretation is an independently reviewed positive/null marker assessment, not a generic multiplier mapping or the glutamine 30108163 exception.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "dose": {
             "measurement_type": "enzyme_activity",
@@ -52595,13 +52605,14 @@
             "Published muscle-content group contrast and within-arm time finding are distinct. Retain baseline/contrast interpretation limits and the contradictory Discussion; do not require unprovided raw data merely to finish review or invent a corrected effect.",
             "Serum creatinine was higher inCEE; this does not by itself establish renal injury or renal safety. No new warning threshold or safety decision.",
             "Conservative existing Desai aggregate evidence-family group is reused solely because this trial is already in its accepted included-study inventory. Source192identity is preserved; this does not mean all pooled studies are one cohort or preparations are equivalent. It prevents adding the same witness twice beside monohydrate.",
-            "Source enrollment accounting and regimen wording limitations remain;30completers are not42randomized. No salt/free-creatine mass conversion or lower-dose equivalence."
+            "Source enrollment accounting and regimen wording limitations remain;30completers are not42randomized. No salt/free-creatine mass conversion or lower-dose equivalence.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "clinical_review": {
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full official PMC2649889 source read; reported unranked between-group biochemical finding and null physical outcomes qualified under existing rubric without a new interaction/ANCOVA or public-data requirement.",
+            "basis": "Agent-prepared source reading (Codex): full official PMC2649889 source read; reported unranked between-group biochemical finding and null physical outcomes qualified under existing rubric without a new interaction/ANCOVA or public-data requirement.",
             "notes": "Reviewer corrected 2026-11-12 on Sean's statement that this context review was Dr. Pham's (\"Fix it, it was dr pham\"; scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md, Part B section 5). The source reading and extraction were prepared by Codex agents (/root/scientific_review, independently rechecked by /root/grouped_correctness_check); that preparation is agent work, the clinician review is Dr. Pham's. reviewed_at is the recorded context review date, not asserted as her signing date."
           }
         }
@@ -52987,7 +52998,8 @@
           "limitations": [
             "One dropout and three placebo participants excluded after randomization for substantial weight loss. Small complete-case analysis and postrandomization exclusions limit confidence.",
             "HOMA-IR is indirect; seasonal/lifestyle changes could contribute to the rise in both arms. Do not claim absolute insulin-resistance improvement or proven prevention.",
-            "Small, limited adult trials with surrogate outcomes do not demonstrate diabetes prevention, reduced clinical events, general athletic benefit, a universal effective dose or safety clearance."
+            "Small, limited adult trials with surrogate outcomes do not demonstrate diabetes prevention, reduced clinical events, general athletic benefit, a universal effective dose or safety clearance.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ],
           "clinical_review": {
             "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
@@ -53890,7 +53902,8 @@
             "Formal primary-versus-secondary rank is not reported in the retrieved primary abstract. The declared objective and direct controlled result support only an approved-unranked acute MPS finding under the existing rubric. No hidden registered hierarchy, prospective registration or full primary Methods review is asserted.",
             "The precise source regimen is 0.30 g/kg LEAN body mass once after exercise. Absolute fixed dose values are intentionally empty; do not treat0.30g as an absolute dose, substitute total body weight, invent a daily minimum or use a reported mean as an efficacy threshold.",
             "The full companion establishes calcium caseinate and the shared study; it adds no independent clinical replication. Primary/companion participant-count differences are retained without adding enrollment.",
-            "Whey-versus-caseinate equality is not formal equivalence, superior nutrition or universal interchangeable digestion. Milk allergy and every independent amount/Dose/safety hold remain separate."
+            "Whey-versus-caseinate equality is not formal equivalence, superior nutrition or universal interchangeable digestion. Milk allergy and every independent amount/Dose/safety hold remain separate.",
+            "Outcome surrogate_class values are agent classification (Claude, 2026-11-12) applying Sean's Evidence-floor rule (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part C), with an independent blind check; they are not part of this context's clinician review."
           ]
         },
         {
