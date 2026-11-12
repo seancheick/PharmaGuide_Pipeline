@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-11-11",
-    "total_entries": 93,
+    "total_entries": 95,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -631,7 +631,7 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit",
+      "agent2_canonical_id": null,
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit and grapefruit juice can raise blood levels of some statins by slowing an enzyme in the gut that breaks them down. The effect is large with simvastatin and lovastatin; with atorvastatin it matters mainly with large amounts of juice (more than 1.2 liters a day). Higher statin levels can raise the chance of muscle aches or weakness.",
       "practical_guidance": "On simvastatin, skip grapefruit juice. On lovastatin, ask your prescriber before having grapefruit. On atorvastatin, avoid large amounts (more than 1.2 liters a day). Pravastatin, rosuvastatin and fluvastatin aren't affected by grapefruit.",
@@ -942,6 +942,7 @@
       "mechanism": "Glycyrrhizin-containing licorice can increase blood pressure and reduce potassium, potentially undermining blood-pressure treatment. A systematic review/meta-analysis found these effects with chronic glycyrrhizic-acid ingestion; NCCIH warns that people with hypertension can have serious effects even with small amounts.",
       "management": "Avoid glycyrrhizin-containing licorice during blood-pressure treatment unless the clinician has reviewed it. A product described as deglycyrrhizinated (DGL) is a different preparation, but the label must establish that identity; do not assume an unspecified licorice product or DGL is universally safe.",
       "source_urls": [
+        "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
         "https://www.nccih.nih.gov/health/licorice-root",
         "https://pubmed.ncbi.nlm.nih.gov/28660884/"
       ],
@@ -1000,7 +1001,7 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ephedra",
+      "agent2_canonical_id": "BANNED_EPHEDRA",
       "direction": "harmful",
       "materiality": "presence",
       "evidence_notes": "General ephedrine-alkaloid hazard is sourced; beta-blocker-specific mechanism and risk magnitude are not established by the cited study."
@@ -1042,7 +1043,7 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit",
+      "agent2_canonical_id": null,
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit slows down how your body processes some blood pressure medicines (felodipine, nifedipine, amlodipine), so more of the drug ends up in your bloodstream. This can cause dizziness, flushing, or low blood pressure.",
       "practical_guidance": "Skip grapefruit and grapefruit juice while on these medicines. The effect can last 1–3 days, so timing the dose around grapefruit doesn't really help.",
@@ -1533,7 +1534,7 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "coffee",
+      "agent2_canonical_id": null,
       "alert_style": "food_advisory_note",
       "note_body": "Coffee, especially espresso, can reduce how much levothyroxine your body absorbs when you take them close together. This isn't dangerous, but it can mean your thyroid medicine doesn't work as well.",
       "practical_guidance": "Take levothyroxine with water on an empty stomach, and wait at least 30–60 minutes before having coffee or breakfast.",
@@ -1705,7 +1706,7 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit",
+      "agent2_canonical_id": null,
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit raises the level of transplant medicines (cyclosporine, tacrolimus, sirolimus) in your blood. Even small changes in level matter for these drugs because they have a narrow safe range.",
       "practical_guidance": "Avoid grapefruit and grapefruit juice entirely while on transplant immunosuppressants. Be consistent — even occasional grapefruit can shift your levels.",
@@ -1817,7 +1818,7 @@
       "applies_to": "whole_class",
       "evidence_notes": "The established food interaction has medicine-, route- and dose-specific labeling. The existing pairwise consumer cannot automatically confirm those contexts; unknowns retain a review warning.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "tyramine",
+      "agent2_canonical_id": "ADD_TYRAMINE_RICH_EXTRACT",
       "alert_style": "food_advisory_note",
       "note_body": "Some MAOIs impair the breakdown of tyramine from foods and can cause a dangerous rise in blood pressure. The food restrictions depend on your exact medicine, route and dose.",
       "practical_guidance": "Ask your prescriber which food list applies. EMSAM 6 mg/24-hour treatment does not require a modified diet only after confirming no 9 or 12 mg/24-hour use during the previous 2 weeks, while 9 and 12 mg/24-hour treatment does, including for 2 weeks after stopping or reducing the dose. Severe headache or chest pain after a meal needs emergency care.",
@@ -2904,7 +2905,7 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "nootropic_vinpocetine",
+      "agent2_canonical_id": "vinpocetine",
       "direction": "harmful",
       "materiality": "presence"
     },
@@ -3156,7 +3157,7 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "probiotic_unspecified",
+      "agent2_canonical_id": "probiotics",
       "direction": "harmful",
       "materiality": "presence"
     },
@@ -3509,6 +3510,81 @@
       "evidence_notes": "UK SmPC, Acetylcysteine 200 mg Powder for Oral Solution, §4.5 (read 2026-11-11): concurrent use causes significant hypotension and headache; monitor and warn for hypotension. US acetylcysteine labels (Acetadote, inhalation solution) do not mention nitroglycerin. PMID 9120179 (n=200, transdermal nitroglycerin with oral NAC) reports headache, not blood pressure. No source was read for other nitrates, so the pair names nitroglycerin only. No dose boundary is established.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "nac",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_CARDIACGLYC_LICORICE",
+      "type": "Med-Sup",
+      "agent1_name": "Cardiac glycosides (class)",
+      "agent1_id": "class:cardiac_glycosides",
+      "agent2_name": "Licorice root (glycyrrhizin)",
+      "agent2_id": "C0086555",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Glycyrrhizin in licorice can lower blood potassium, and low potassium makes digoxin toxicity more likely. The EU herbal monograph for licorice root says it is not to be used together with cardiac glycosides, and the digoxin (LANOXIN) label lists hypokalemia among conditions that may predispose to digoxin toxicity. A meta-analysis of glycyrrhizic-acid trials found lower plasma potassium. The sources set no amount of glycyrrhizin below which this concern does not apply. Verified deglycyrrhizinated (DGL) licorice is a different preparation; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+      "management": "Avoid glycyrrhizin-containing licorice with digoxin or another cardiac glycoside unless the prescriber advises it. A product described as deglycyrrhizinated (DGL) is a different preparation, but the label must establish that identity; a licorice product that does not say it is DGL is treated as containing glycyrrhizin.",
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-glycyrrhiza-glabra-l-glycyrrhiza-inflata-bat-glycyrrhiza-uralensis-fisch-radix-revision-1_en.pdf",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc",
+        "https://pubmed.ncbi.nlm.nih.gov/28660884/"
+      ],
+      "source_pmids": [
+        "28660884"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "method": "agent_label_content_review_2026_11_11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "notes": "EMA/HMPC/108399/2024 Rev. 1 section 4.5, the LANOXIN warnings on hypokalemia and the PMID 28660884 abstract read 2026-11-11; C0086555 (UMLS, licorice) checked live; class:cardiac_glycosides members are RxNorm-verified in drug_classes.json. Severity and DGL scope decided by Dr. Pham (clinical review 2026-11-11, F4); passages read by agent."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class",
+      "evidence_notes": "EU herbal monograph on liquorice root (EMA/HMPC/108399/2024, Final Rev. 1, 4 March 2026; covers Glycyrrhiza glabra, G. inflata and G. uralensis root), 4.5: not to be used concomitantly with diuretics, cardiac glycosides, corticosteroids, stimulant laxatives or other medicines that may aggravate electrolyte imbalance. LANOXIN (digoxin) label: hypokalemia may predispose to digoxin toxicity. PMID 28660884 (meta-analysis of 18 studies of daily glycyrrhizic acid): plasma potassium fell. No study of the combination's outcome was read, and the sources set no glycyrrhizin amount below which the concern does not apply. Verified DGL routes to its own identity and does not meet this pair.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "licorice",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DSI_LEVODOPA_IRON",
+      "type": "Med-Sup",
+      "agent1_name": "Levodopa",
+      "agent1_id": "6375",
+      "agent2_name": "Iron (supplement)",
+      "agent2_id": "C0302583",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Iron salts can form chelates with levodopa (and with carbidopa in combination tablets) and so reduce how much of the medicine is available to the body. The carbidopa/levodopa (SINEMET) and inhaled levodopa (INBRIJA) labels name iron salts, including multivitamins that contain them; this finding covers every iron supplement as a precaution.",
+      "management": "If you take levodopa, talk to your prescriber or pharmacist before starting an iron supplement or a multivitamin with iron. The carbidopa/levodopa label says to take them together with caution, and the inhaled levodopa (INBRIJA) label says iron can reduce how much levodopa is available to the body. Neither label gives a spacing interval, so ask how to time them.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=077c0f39-a3a2-4b2b-a184-09131889dcfb"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-11-11",
+        "method": "agent_label_content_review_2026_11_11",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "notes": "SINEMET (setid 9b17b028) drug-interaction and patient text read 2026-11-11; RxCUI 6375 (levodopa, ingredient, Active) and C0302583 (UMLS, iron) checked live. Severity and the no-interval scope decided by Dr. Pham (clinical review 2026-11-11, F2); label passages read by agent. INBRIJA (levodopa inhalation powder) label (setid 077c0f39, effective 2026-07-20) section 7.3: iron salts or multivitamins containing iron salts can form chelates with levodopa and reduce its bioavailability; no interval given. Read by agent 2026-11-11."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
+      "evidence_notes": "SINEMET (carbidopa and levodopa) label, read 2026-11-11: carbidopa/levodopa and iron salts, or multivitamins containing iron salts, should be taken together with caution, because iron salts can chelate levodopa and carbidopa and reduce their bioavailability. The label gives no spacing interval, so none is stated. Combination products (carbidopa/levodopa, carbidopa/levodopa/entacapone) reach this pair through their levodopa ingredient (RxCUI 6375). INBRIJA (levodopa inhalation powder) label (setid 077c0f39, effective 2026-07-20) section 7.3: iron salts or multivitamins containing iron salts can form chelates with levodopa and reduce its bioavailability; no interval given.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "iron",
       "direction": "harmful",
       "materiality": "presence"
     }

@@ -3705,6 +3705,22 @@ class EnhancedDSLDNormalizer:
             parent = self.ingredient_map.get(literal[0], {})
             return parent.get("standard_name", name), True, forms or []
 
+        # Preprocessing erases parentheticals, so "Licorice root extract
+        # (deglycyrrhizinated)" would read as whole licorice. When the
+        # parenthetical names a distinct botanical preparation (every word of
+        # it is in that record's name) and the printed comma form is a curated
+        # alias of the record, the record owns the row. Source or processing
+        # parentheticals ("(Glycyrrhiza glabra)", "(natural)") keep the base.
+        trailing = re.fullmatch(r"(.+?)\s*\(([^()]+)\)\s*", name)
+        if trailing:
+            registry = self._canonical_identity_registry
+            comma = registry.resolve_verified_preferred(f"{trailing.group(1)}, {trailing.group(2)}")
+            if comma and comma[1] in {"botanical_ingredients", "standardized_botanicals"}:
+                standard = registry.standard_names[(comma[1], comma[0])]
+                record_words = set(re.findall(r"[a-z0-9]+", f"{standard} {comma[0]}".lower()))
+                if set(re.findall(r"[a-z0-9]+", trailing.group(2).lower())) <= record_words:
+                    return standard, True, forms or []
+
         # Preprocess the input name
         processed_name = self.matcher.preprocess_text(name)
 
