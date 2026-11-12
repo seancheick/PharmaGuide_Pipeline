@@ -174,16 +174,16 @@ def test_avoid_severity_is_downgraded_to_informational():
     )
 
 
-def test_contraindicated_severity_suppresses_until_profile_match():
+def test_contraindicated_severity_is_a_conditional_note_until_profile_match():
     """Contraindicated rules inside condition_rules[] / drug_class_rules[]
     are by definition profile-scoped — they live under a condition_id or
     drug_class_id and only apply when the user's profile matches.
 
-    Sprint E1.1.2 (2026-04-21): display_mode_default defaults to
-    ``suppress`` for these rules so profile-less users don't see copy
-    like "Do not use during pregnancy". Flutter's on-device filter
-    promotes them to critical-intensity rendering when the profile
-    matches, using ``severity_contextual == "contraindicated"``.
+    Dr. Pham G4 (2026-11-11) replaces Sprint E1.1.2's suppress default: like
+    avoid, they default to ``informational`` so a user whose medicines or
+    conditions are unknown gets a conditional note, never a personal banner
+    (``critical``). Flutter promotes them on a profile match, using
+    ``severity_contextual == "contraindicated"``.
     """
     enriched = _fixture_with_interaction_severities("contraindicated")
     blob = build_detail_blob(enriched, make_scored())
@@ -194,10 +194,13 @@ def test_contraindicated_severity_suppresses_until_profile_match():
     ]
     assert contra_hits
     for w in contra_hits:
-        # Default rendering for profile-less user: suppressed
-        assert w["display_mode_default"] == "suppress"
-        # On-device promoted render intensity when profile matches: critical
+        assert w["display_mode_default"] == "informational"
         assert w["severity_contextual"] == "contraindicated"
+    assert [
+        w for w in blob["warnings_profile_gated"]
+        if w.get("source") == "interaction_rules"
+        and w.get("severity") == "contraindicated"
+    ], "a conditional note belongs in the profile-gated subset, like avoid"
 
 
 def test_banned_substance_is_always_critical():

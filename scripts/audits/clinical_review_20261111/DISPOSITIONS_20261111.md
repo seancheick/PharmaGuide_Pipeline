@@ -257,6 +257,20 @@ matching.
 | G4 kidney profile | Conditional wording with the existing field; no stage questionnaire now |
 | G4 anonymous users | Show avoid and contraindicated drug/condition findings as conditional notes when applicability is unknown; no personalized verdict |
 
+G4 anonymous users, implemented ahead of batch 4 (an independent review found the app dropped every unmatched
+profile-scoped finding, so SAMe's avoid note never reached anyone without a profile): `build_final_db` marks
+contraindicated profile-scoped findings `informational`, like avoid (was `suppress` since Sprint E1.1.2; never
+`critical`). The app shows such a finding as a conditional note in "Good to know" ("Relevant if you take: MAOIs";
+"Add your medicines to check whether it applies to you") only while that profile axis is empty: no medicines for a
+drug-class finding, no conditions for a condition finding, and no life-stage note for a profile that says male. No
+severity badge, review count, verdict or Stack effect; a matched profile gets the full warning instead, and a note
+that repeats a shown warning is dropped. Caution and monitor findings stay hidden without a match. Rows with one
+message become one note naming every class or condition (warfarin-type and other blood thinners; pregnancy and
+breastfeeding). A user whose entered medicines matched no class is told to ask the pharmacist, and no note shows
+while those classes load. Agent choices, open for review: the note shows the headline and the vocabulary names, not
+the rule's `informational_note` (not every note has been reviewed for this use); it adds one row to the "Good to
+know" count; once any medicine resolves to a class, the medicine axis counts as answered.
+
 ## Questions for Dr. Pham
 
 1. **SAMe with MAOIs other than tranylcypromine.** The current labels for phenelzine (NARDIL), isocarboxazid

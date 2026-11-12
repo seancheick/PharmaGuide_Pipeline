@@ -1754,3 +1754,15 @@ def test_rejected_inferred_form_retains_verified_parent_unknown_form(enricher):
     assert match and match['canonical_id'] == 'cranberry'
     assert match['form_id'] == unknown_form_quality(quality['cranberry'])['form_id']
     assert match['bio_score'] == unknown_form_quality(quality['cranberry'])['bio_score']
+
+
+@pytest.mark.parametrize('raw_source_text', ['Hemp oil', None, 'Hemp oil (Cannabis sativa)'])
+def test_disclosed_form_is_preparation_proof_never_the_row_identity(enricher, raw_source_text):
+    # Disclosed forms may prove a preparation of the row's own parent; an
+    # unrelated extract form must not become the row's identity, whether or
+    # not the raw source text differs from the ingredient name.
+    match = enricher._match_quality_map(
+        'Hemp oil', 'Hemp oil', enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': 'Green Tea Extract'}], raw_source_text=raw_source_text,
+    )
+    assert match is None
