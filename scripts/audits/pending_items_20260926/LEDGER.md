@@ -5381,3 +5381,16 @@ A114supersession; a35label all-route/affected/held correction proof is underway.
 Clinical population/outcome text still receives canonical applicability checks;
 this remains the behavioral batch rung, not a claim that strings cannot matter.
 Performance/final independent review/local/exactCI/integration remain pending.
+
+## November 12 — Four stale raw canaries refreshed (branch `claude/canary-drift-classify`)
+
+Class: tests only (fixture expectations); no runtime or data change. On main 847ed5ccc the raw canary check
+failed 4 of 33. The batch runner's preflight runs this check, so these drifts would stop the next corpus rebuild.
+Running the raw check at each first-parent merge from #417 (33/33 unchanged) shows where each change entered:
+- 223084: score 49.6 → 56.9 at #421 (new `INGR_CREATINE_ETHYL_ESTER`, PMID 19228401, mixed; existing primary
+  floor 11 × 0.6); status partial → complete at #425.
+- 182730: status at #431 (last pending L-glutamine context, PMID 34844156, finished as no-credit).
+- 180417, 306381: status at #439 (ADR-0007 ginkgo attestation; taurine context, PMID 26781281).
+Each PMID was content-checked against PubMed. The stored outputs from the 2026-11-11 corpus run already carried
+these values. After the refresh, raw and stored checks are both 33/33. The fixture and manifest consumer tests
+pass (168). Cause details are in the manifest changelog entry.
