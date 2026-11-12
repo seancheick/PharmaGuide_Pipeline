@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-11-11",
+    "last_updated": "2026-11-12",
     "total_entries": 10,
     "purpose": "Wave 8 critical-only drug-supplement interaction additions",
     "selection_policy": "Only interactions with label-backed avoid guidance, narrow-therapeutic-index treatment-failure risk, severe electrolyte risk, antibiotic treatment-failure risk, or human PK evidence. No Minor/monitor entries.",
@@ -26,23 +26,25 @@
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1523ab32-2c2c-6501-e063-6394a90aa0b3",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=291011aa-60eb-4109-b59c-1c521fbeac4f",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ba74e3cd-b06f-4145-b284-5fd6b84ff3c9",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e77d3400-56ad-11e3-949a-0800200c9a66"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e77d3400-56ad-11e3-949a-0800200c9a66",
+        "https://www.medicines.org.uk/emc/product/6905/smpc"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_at": "2026-11-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_rxnorm_and_label_review_2026_05_26"
+        "method": "agent_label_content_review_2026_11_12",
+        "notes": "Each label read 2026-11-12. ELIQUIS (apixaban, section 7.2) and rivaroxaban (section 7) name St. John's wort among combined P-gp and strong CYP3A inducers to avoid. PRADAXA (dabigatran, section 5.5) says P-gp inducers such as rifampin reduce exposure and should generally be avoided; it does not name St. John's wort. SAVAYSA (edoxaban, US, section 7.2) says to avoid rifampin and does not name St. John's wort; the UK Lixiana SmPC (section 4.5, revised 24 July 2025) lists St. John's wort among P-gp inducers to use with caution, so avoid for edoxaban is PharmaGuide precautionary policy (exact record DSI_EDOXABAN_SJW). Betrixaban (BEVYXXA) is no longer on DailyMed and was not re-read; it is avoid by Dr. Pham's section 2 decision. Dr. Pham, audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md (section 2)."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "DailyMed labeling for apixaban and rivaroxaban explicitly names St. John's wort among combined P-gp/CYP3A inducers to avoid; dabigatran and edoxaban labels warn against P-gp inducers that reduce exposure.",
+      "evidence_notes": "Each label read 2026-11-12. ELIQUIS (apixaban, section 7.2) and rivaroxaban (section 7) name St. John's wort among combined P-gp and strong CYP3A inducers to avoid. PRADAXA (dabigatran, section 5.5) says P-gp inducers such as rifampin reduce exposure and should generally be avoided; it does not name St. John's wort. SAVAYSA (edoxaban, US, section 7.2) says to avoid rifampin and does not name St. John's wort; the UK Lixiana SmPC (section 4.5, revised 24 July 2025) lists St. John's wort among P-gp inducers to use with caution, so avoid for edoxaban is PharmaGuide precautionary policy (exact record DSI_EDOXABAN_SJW). Betrixaban (BEVYXXA) is no longer on DailyMed and was not re-read; it is avoid by Dr. Pham's section 2 decision.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "st_johns_wort",
       "direction": "harmful",
