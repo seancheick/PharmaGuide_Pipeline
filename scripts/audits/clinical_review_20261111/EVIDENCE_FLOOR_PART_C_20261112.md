@@ -13,22 +13,23 @@ below applies Sean's rule. It is not a clinician review.
 |---|---|---|
 | Outcome contract | `clinical_evidence_schema.py::_outcome_errors` | optional `surrogate_class` (`exposure`, `target_engagement`, `unvalidated_physiological_response`), valid only on `kind: surrogate` rows |
 | Clinical-outcome owner | `clinical_applicability.py::outcomes_beyond_exposure` | qualifying outcomes without a `surrogate_class` |
-| Evidence owner | `generic_evidence.py::_primary_mass_floor` via `_finding_beyond_exposure` | skips a floor anchor when none of the match's own applicable, scoring-eligible contexts has such an outcome |
+| Evidence owner | `generic_evidence.py::_primary_mass_floor` via `_floor_study_type` | skips a floor anchor when none of the match's own applicable, scoring-eligible contexts has such an outcome; an exposure-only trial family cannot make the floor `rct_multiple` (strong base) either |
 
-The helper reads only the match's `population_applicability.context_ids`, so a classified context
+`_applicable_contexts` (shared with `_qualified_trial_families`) reads only the match's `population_applicability.context_ids`, so a classified context
 cannot borrow a functional result from another preparation or population. A match with no reviewed
 context keeps today's behavior. Ordinary Evidence points, the nutrition-authority floor, the omega
 floor, review status and every config magnitude are unchanged. No product override, no export field
 and no rule on `purpose` or `kind`.
 
-## Classification (11 entries, `backed_clinical_studies.json`)
+## Classification (12 entries, `backed_clinical_studies.json`)
 
 Criterion: a context is classified only when every qualifying outcome shows no more than the
 supplied compound or its stores (exposure), the material's direct biochemical action (target
 engagement), or a physiological change that is not an established clinical measure that defines or
 monitors the studied condition. A context with any qualifying functional or accepted outcome stays
 unclassified. Non-qualifying surrogate rows in a classified context carry the same class for
-consistency, which has no scoring effect.
+consistency, which has no scoring effect. Each classified context records in its `limitations` that
+the classification is agent work applying Sean's rule, not part of that context's clinician review.
 
 | Entry / context | Qualifying finding | Class |
 |---|---|---|
@@ -43,6 +44,7 @@ consistency, which has no scoring effect.
 | BRAND_KANEKA_UBIQUINOL / 32326664 | flow-mediated dilation (and NOx, LDL oxidation lag) | unvalidated response |
 | BRAND_CARNIPURE / 11788381 | MRI muscle-tissue disruption | unvalidated response |
 | INGR_L_CARNOSINE / 27040154 | HOMA-IR in non-diabetic adults | unvalidated response |
+| PRECLIN_NMN / 39531138 | blood NAD+ (meta-analysis; no floor base) | exposure |
 
 An independent blind classifier, given the rule and the outcome records but not my labels, agreed on
 the first seven and proposed the last four. It was unsure about three contexts. I kept all three as
@@ -54,8 +56,40 @@ accepted surrogates, each a clinical measure of its studied condition:
 
 They are close calls for Sean. Selenium anchors 37 labels.
 
-One interpretation to confirm: a reviewer's credit scope that limits a finding to its marker is not
-treated as "explicitly accepted". If it were, CEE, the case that prompted the rule, would be exempt.
+**Census.** 37 scoring-eligible contexts have qualifying outcomes that are all surrogates. 12 are
+classified above. The other 25 are accepted clinical measures or functional measures recorded as
+surrogates:
+
+- blood pressure: potassium, magnesium, garlic, quercetin, arginine, taurine
+- LDL cholesterol: psyllium, plant sterols, pantethine
+- HbA1c in type 2 diabetes: berberine (two records)
+- TSH in Hashimoto's: selenium
+- OGTT glucose: carnosine 38172006
+- homocysteine in hyperhomocysteinemia: Quatrefolic
+- TEWL and skin hydration: ceramides (two contexts)
+- lean mass: creatine monohydrate
+- cognitive and psychomotor tasks: bacopa, caffeine, glycine, theanine, tyrosine (four contexts)
+
+`test_every_surrogate_only_finding_was_reviewed_under_the_rule` pins this split. A later review that
+makes a context surrogate-only must classify it or add it to the accepted list. One example is a mixed
+context such as Carnipure 20045157 losing its soreness row.
+
+**Judgment calls for Sean:**
+
+- **Explicitly accepted.** A reviewer's credit scope that limits a finding to its marker is not
+  treated as "explicitly accepted". If it were, CEE, the case that prompted the rule, would be exempt.
+  Kaneka's signed limitation reads "FMD is a surrogate; the trial does not show cardiovascular events
+  … credit is limited to this endothelial-function finding". Bilberry's trial named HFC-1 as its
+  evaluation outcome. Sean's yes is needed before merge, because bilberry moves 38 labels (13 of them
+  down a tier).
+- **FMD versus TEWL.** Both are instrument measures. TEWL is kept because it quantifies the studied
+  condition itself (water loss through a dry skin barrier). FMD is classified because endothelial
+  dysfunction is an intermediate pathway state without symptoms; its relevance rests on cardiovascular
+  outcomes the trial did not measure.
+- **PrimaVie.** The men were screened with the ADAM symptom questionnaire, not biochemically diagnosed
+  as testosterone-deficient. So testosterone did not define the studied condition, and the context is
+  classified.
+- **Impact today.** Neither Kaneka nor PrimaVie anchors a floor on any current label.
 
 ## Floor contributors
 
@@ -73,7 +107,9 @@ rows and recorded each anchor's entry and contexts.
 127 labels: the 95 classified-only labels and 32 controls. The controls are mixed Carnipure, carnosine
 and Tesnor, plus potassium, selenium, psyllium, glycine, CoQ10, ceramides and cranberry. Baseline is
 `648f27224` (main); candidate is `5c6b7b763`. `compare`: **95 changed, exactly the predicted set; all
-32 controls identical.** Per-label values: `evidence_floor_part_c_movement_20261112.json`.
+32 controls identical.** The review-fix commit `af8691468` (floor-strength fix, NMN, attribution) was
+re-measured on the same frozen inputs: 0 of 127 differ from `5c6b7b763`, 0 of 15 Perilla labels differ
+from main, and the raw canaries pass 33/33. Per-label values: `evidence_floor_part_c_movement_20261112.json`.
 
 | Cause (anchor) | n | Floor raw | Evidence /20 | Ordinary points | Total Δ | Tier moves |
 |---|---|---|---|---|---|---|
@@ -146,6 +182,36 @@ No defect found.
 - The census used stored enriched inputs. The final corpus build is the complete measurement. The
   canaries and the replay found no movement outside the predicted 95.
 - `test_scoring_snapshot_v1.py` reads stored corpus output, so it runs only after Sean's build.
+- The `local` rung in this clean worktree had 427 passed and 0 failed. 137 corpus/build-dependent
+  tests were skipped because there is no `scripts/products`, and the skip guard rejects those skips.
+  They read stored build artifacts that this batch cannot change before the corpus build.
+- The changed entries' citations were checked by running the backed-studies verifier's own `main()`
+  on the 11 entries: 72/72 PMIDs ok, with 0 title mismatches, drifts, ghost suspects or not-found.
 
 Receipts (frozen inputs, snapshots, full records, compare reports, canary log, data patches):
 `~/pg_quality/evidence_floor_part_c_20261112/`.
+
+## Independent review (fresh context, requirement plus diff only)
+
+No blockers. The findings and what was done with each:
+
+1. **Agent classification inside Dr. Pham-signed contexts.** Fixed. Each classified context's
+   `limitations` now says the classification is agent work and not part of that clinician review, and
+   the CEE `basis` names the agent-prepared reading. The interpretation of "explicitly accepted" is
+   Sean's call (see the judgment calls above).
+2. **FMD versus TEWL, and PrimaVie.** The reasoning is recorded above. Neither Kaneka nor PrimaVie
+   anchors any current label.
+3. **Rows classified depending on their siblings.** Addressed with the census pin rather than
+   piecemeal row edits: a context that becomes surrogate-only must be classified or accepted, so CI
+   would fail first.
+4. **NMN NAD+ unclassified.** Fixed (exposure; it has no floor base).
+5. **An exposure-only trial family could still make the floor `rct_multiple`.** Fixed in
+   `_floor_study_type`. The first version over-applied the downgrade to designs stated by the record
+   itself. The owner slice caught it (2 failures in `test_evidence_prominence_ownership.py`), and it
+   was corrected with fail-first regression cases. No current label moves.
+6. **Glycemia wording, duplicated context selection, schema version.** Fixed: "glycemia in diabetes or
+   prediabetes", one shared `_applicable_contexts`, and schema 5.7.0.
+
+**Owner/consumer slice** (43 files that read the floor, schema or applicability owners):
+- On the first fix version: 3,302 passed, 2 failed. Those were the over-applied downgrade.
+- After the correction: those files plus the floor files, 125 + 871 passed.
