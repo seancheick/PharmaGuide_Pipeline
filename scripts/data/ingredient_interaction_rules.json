@@ -18200,14 +18200,14 @@
           "severity": "avoid",
           "evidence_level": "theoretical",
           "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monographs for senna leaf and pod say hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). They set no dose or duration that clears the combination and do not show that every brief use causes toxicity.",
-          "action": "If you take digoxin or another cardiac glycoside, do not use senna without your prescriber's advice. Ask your prescriber which laxative suits you; they may check your potassium.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use senna without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-folium-revision-1_en.pdf",
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-senna-alexandrina-mill-cassia-senna-l-cassia-angustifolia-vahl-fructus-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
           "alert_headline": "Avoid unsupervised use with digoxin",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
           "informational_note": "Prolonged or heavy senna use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -18905,13 +18905,13 @@
           "severity": "avoid",
           "evidence_level": "theoretical",
           "mechanism": "Prolonged or excessive stimulant-laxative use can cause potassium loss, which can increase digoxin toxicity risk. The EU herbal monograph for cascara bark says hypokalaemia resulting from long-term laxative abuse potentiates the action of cardiac glycosides (4.5), and that patients taking cardiac glycosides have to consult a doctor (4.4). It sets no dose or duration that clears the combination and does not show that every brief use causes toxicity.",
-          "action": "If you take digoxin or another cardiac glycoside, do not use cascara without your prescriber's advice. Ask your prescriber which laxative suits you; they may check your potassium.",
+          "action": "If you take digoxin or another cardiac glycoside, do not use cascara without your prescriber's advice. They may check your potassium.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d91e3646-4c63-4512-ab22-db39c085c4dc"
           ],
           "alert_headline": "Avoid unsupervised use with digoxin",
-          "alert_body": "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, do not use this laxative without your prescriber's advice.",
+          "alert_body": "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If you take digoxin, do not use this laxative without your prescriber's advice.",
           "informational_note": "Prolonged or heavy cascara use can lower potassium, which matters for people taking digoxin.",
           "profile_gate": {
             "gate_type": "drug_class",

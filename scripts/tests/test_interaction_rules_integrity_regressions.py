@@ -1494,8 +1494,11 @@ def test_laxative_digoxin_rows_keep_avoid_unsupervised_use_with_potassium_contex
     body = digoxin["alert_body"]
     assert "potassium" in body and "without your prescriber's advice" in body
     assert "unsupervised prolonged" not in body
+    # One wording for the same concern as aloe (batch 5b): LANOXIN 5.3 names toxicity, not a vague "risk".
+    assert "raise the risk of digoxin side effects" in body
     assert "potassium" in digoxin["informational_note"]
     action = digoxin["action"].lower()
+    assert "which laxative suits you" not in action  # no source for choosing a laxative
     for clinician_task in ("osmotic agent", "monitor serum", "potassium-sparing approach", "avoid prolonged use"):
         assert clinician_task not in action, clinician_task
     assert f"do not use {name} without your prescriber's advice" in action

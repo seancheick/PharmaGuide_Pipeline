@@ -107,12 +107,12 @@ def laxative(name: str, monograph: str, plural: bool) -> dict:
         ),
         "action": (
             f"If you take digoxin or another cardiac glycoside, do not use {name} without your prescriber's advice. "
-            "Ask your prescriber which laxative suits you; they may check your potassium."
+            "They may check your potassium."
         ),
         "alert_headline": "Avoid unsupervised use with digoxin",
         "alert_body": (
-            "Prolonged or excessive laxative use can lower potassium and increase digoxin risk. If you take digoxin, "
-            "do not use this laxative without your prescriber's advice."
+            "Prolonged or excessive laxative use can lower potassium and raise the risk of digoxin side effects. If "
+            "you take digoxin, do not use this laxative without your prescriber's advice."
         ),
         "informational_note": f"Prolonged or heavy {name} use can lower potassium, which matters for people taking digoxin.",
         "clinical_review": review(
