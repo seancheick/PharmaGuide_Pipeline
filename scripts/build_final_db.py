@@ -7920,13 +7920,14 @@ def build_detail_blob(
     # ban_context. Values:
     #
     #   - "critical"      — always show. Substance-level hazard (banned,
-    #                        adulterant, contaminant) OR severity ==
-    #                        contraindicated. User profile is irrelevant.
-    #   - "informational" — show as neutral note regardless of profile.
-    #                        Used for rules that are material but not
-    #                        alarming without matching profile (e.g.,
-    #                        berberine + hypoglycemics when user has no
-    #                        declared diabetes meds).
+    #                        adulterant, contaminant). User profile is
+    #                        irrelevant. Profile-scoped interaction findings
+    #                        never use it, whatever their severity.
+    #   - "informational" — a neutral note without a profile match. Profile-
+    #                        scoped avoid and contraindicated findings use it;
+    #                        the app shows them as conditional notes only
+    #                        while that profile axis is empty (Dr. Pham G4,
+    #                        2026-11-11) and as the full warning on a match.
     #   - "suppress"      — do not render without profile match. On-device
     #                        filter promotes to "alert" if profile
     #                        matches.
@@ -8078,13 +8079,21 @@ def build_detail_blob(
     # profile-scoped. The authored copy carries condition-specific
     # language ("during pregnancy", "for liver disease", ...). Rendering
     # such copy to a profile-less user is medically wrong (e.g. a male
-    # user seeing "Do not use during pregnancy"). The invariant:
-    # profile-gated rules default to `suppress`; Flutter promotes to
-    # alert-level severity on device when the user's profile matches
-    # the rule's condition_id / drug_class_id.
+    # user seeing "Do not use during pregnancy"). The invariant: profile-
+    # gated caution, monitor and info rules default to `suppress`; avoid and
+    # contraindicated ship `informational`, which the app renders only as a
+    # conditional note while that profile axis is empty (no pregnancy note
+    # for a profile that says male). Flutter promotes to alert-level severity
+    # on device when the user's profile matches the rule's condition_id /
+    # drug_class_id.
     #
-    #   contraindicated → "suppress" (was "critical" pre-E1.1.2; Flutter
-    #                                  promotes to critical on profile match)
+    #   contraindicated → "informational" (Dr. Pham G4, 2026-11-11: show
+    #                                       avoid and contraindicated as
+    #                                       conditional notes when
+    #                                       applicability is unknown; was
+    #                                       "suppress" since E1.1.2 and
+    #                                       "critical" before. Flutter
+    #                                       promotes on profile match)
     #   avoid           → "informational" (show as neutral note without
     #                                       profile; Flutter promotes to
     #                                       "alert" if profile matches)
@@ -8094,9 +8103,10 @@ def build_detail_blob(
     # `severity_contextual` is the severity the app should render when NO
     # profile matches — downgraded to "informational" for avoid/caution
     # rules, untouched for contraindicated so the promoted render is
-    # still alarming when profile matches.
+    # still alarming when profile matches. The app's conditional note
+    # (G4) does not render it.
     _INTERACTION_DISPLAY_MODE = {
-        "contraindicated": "suppress",
+        "contraindicated": "informational",
         "avoid": "informational",
         "caution": "suppress",
         "monitor": "suppress",
