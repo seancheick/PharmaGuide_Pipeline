@@ -83,7 +83,13 @@ def test_profile_rules_use_narrow_wave8_drug_classes() -> None:
         for r in by_subject["potassium"]["drug_class_rules"]
     )
     assert any(
-        r.get("drug_class_id") == "beta_blockers" and r.get("severity") == "avoid"
+        r.get("drug_class_id") == "nadolol" and r.get("severity") == "avoid"
+        for r in by_subject["green_tea_extract"]["drug_class_rules"]
+    )
+    # Signed G1 and the primary trial name nadolol; other beta-blockers
+    # must not inherit its absorption warning.
+    assert not any(
+        r.get("drug_class_id") in {"beta_blockers", "antihypertensives"}
         for r in by_subject["green_tea_extract"]["drug_class_rules"]
     )
     for mineral in ("calcium", "iron", "magnesium", "zinc"):

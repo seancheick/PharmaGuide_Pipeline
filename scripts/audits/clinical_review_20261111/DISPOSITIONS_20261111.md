@@ -462,6 +462,9 @@ were repeated against dd4a441b7: cleaned/scored records unchanged, 16 intentiona
 Qualification CI is tracked on pipeline PR468 and app PR234; merge only after the exact candidate
 passes. CBD source correction PR467 is rebased at 689102aea; its earlier source candidate passed
 CI and local checks, and its current candidate has a fresh qualification run.
+PR468's first completed CI shard caught an obsolete Wave8 assertion requiring green tea to target
+all beta-blockers. Reproduced the failing node, then pinned nadolol/avoid and explicitly prohibited
+both broader classes. The Wave8 and Batch8 owner files pass together; no production behavior changed.
 Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
 release or main push authorized.
 
