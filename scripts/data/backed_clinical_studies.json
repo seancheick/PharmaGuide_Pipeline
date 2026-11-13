@@ -19021,19 +19021,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "fat oxidation ↑",
-        "antioxidant ↑",
-        "metabolic rate ↑"
+        "Small body-weight changes; mixed body-composition findings",
+        "Source-specific oxidative-stress biomarkers; no established clinical protection"
       ],
       "health_goals_supported": [
-        "Weight Management",
-        "Increase Energy",
-        "Healthy Aging/Longevity"
+        "Weight Management"
       ],
-      "notes": "Human evidence supports green-tea catechins for small reductions in body weight, body fat, and some oxidative-stress markers, especially when caffeine is present. Effects are generally modest rather than transformative. Preparation applicability is limited to source-declared extract/catechin interventions; a generic species name, whole-leaf powder, or explicitly theanine-targeted preparation does not establish that scope. This bounded matching review does not establish clinical efficacy at every label amount or validate the legacy aggregate enrollment.",
+      "notes": "Human findings for green-tea extract/catechin preparations are small and mixed. A species name, whole-leaf powder or theanine-targeted preparation does not establish extract applicability. Dr. Pham's October 28 fourth and fifth rulings retain the specific source/preparation/population/outcome acceptance hold; routine agent-review delegation does not lift it. Liver-safety handling belongs to the separate safety owner and is not changed. This factual correction awards no credit and does not validate legacy aggregate enrollment or trial counts. Source wording checked by Codex and an independent source-review agent on November 13, 2026; agent review, not clinician acceptance.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
-      "notable_studies": "Recent GRADE-based pooled evidence includes PMID 38031409, which found small but statistically significant benefits for body mass, BMI, and oxidative-stress endpoints. Earlier catechin-plus-caffeine evidence is captured in PMID 19597519 and remains directionally supportive for fat oxidation, though clinical effect sizes are modest.",
+      "last_updated": "2026-11-13",
+      "notable_studies": "PMID 38031409 reports small, mixed body-composition and oxidative-stress findings across heterogeneous green-tea extract/catechin preparations. PMID 19597519 assesses weight loss and weight maintenance, with a small average effect; it does not establish a metabolic-rate or energy benefit. Neither review establishes efficacy for every retail preparation.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19107,12 +19104,9 @@
       "total_enrollment": 1210,
       "registry_completed_trials_count": 144,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Weight Management; published_tags=RCT,meta-analysis; registry_completed_trials_count=144; total_enrollment=1210; endpoint_tags=focus_memory,cardiovascular,glycemic_control,muscle_recovery; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Retained positive_weak source classification: small and mixed weight/body-composition findings in PMID 38031409 and weight loss/maintenance in PMID 19597519. This is not activation; the specific clinical acceptance hold remains. Legacy aggregate enrollment/trial totals are not independently established by this correction.",
       "endpoint_relevance_tags": [
-        "focus_memory",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "weight_management"
       ],
       "reference_semantics": {
         "reference_type": "no_benchmark",
@@ -19163,7 +19157,8 @@
           ]
         }
       },
-      "study_contexts": []
+      "study_contexts": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_MILK_THISTLE",

@@ -76,7 +76,7 @@ def test_quantified_nested_extract_owns_its_evidence_and_amount(enricher):
     assessment = assess_clinical_applicability(product, {
         "id": "INGR_GREEN_TEA", "matched_source_row_refs": [subject["raw_source_path"]]}, assess_amount=False)
     assert assessment["status"] == "unresolved"
-    assert assessment["reason_code"] == "invalid_applicability_contract"
+    assert assessment["reason_code"] == "clinical_sources_ineligible"
     assert assessment["matched_source_row_refs"] == ["ingredientRows[1].nestedRows[1]"]
 
 
@@ -100,7 +100,7 @@ def test_nested_display_only_child_cannot_borrow_the_complex_amount(enricher):
         "id": "INGR_GREEN_TEA", "matched_source_row_refs": ["ingredientRows[1].nestedRows[1]"]},
         assess_amount=False)
     assert assessment["status"] == "unresolved"
-    assert assessment["reason_code"] == "invalid_applicability_contract"
+    assert assessment["reason_code"] == "clinical_sources_ineligible"
     child = next(row for row in product["activeIngredients"][0]["nestedIngredients"]
                  if row["raw_source_path"] == "ingredientRows[1].nestedRows[1]")
     assert row_exposure(product, child, basis="daily", unit="mg").benchmark_amount is None

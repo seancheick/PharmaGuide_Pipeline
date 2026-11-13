@@ -84,3 +84,13 @@ outcome, not the abstract's blanket low-to-high description; included-source map
 Maca already has reviewed literature under maca_root, which the queue's maca identity does not reach.
 Citrus has an incomplete applicability contract; drug-grade phlebotonics do not establish crude-mixture
 benefit. No whole-family zero, preparation equivalence or clinical authorization is inferred here.
+
+Green-tea correction: the October28 fourth/fifth signed rulings expressly retain source/scope
+acceptance, and November6 routine-review delegation exempts that hold. INGR_GREEN_TEA now explicitly
+sets scoring_eligible false; empty contexts, weak observed direction, references and preparation
+boundaries remain. Unsupported energy/longevity/metabolic-rate/fat-oxidation wording and unrelated
+endpoint tags are corrected to the reviewed weight/body-composition scope. Independent applied-diff
+source review passes; exact one-record data_batch check passes;124 affected tests pass. Synthetic
+preparation-matching fixtures explicitly supply synthetic eligibility; real-record tests retain the
+hold and exact source-row guards. The earlier pending patch retains47 included-study PMIDs plus12
+bibliography-only citations; this batch neither deletes nor newly certifies those mappings.

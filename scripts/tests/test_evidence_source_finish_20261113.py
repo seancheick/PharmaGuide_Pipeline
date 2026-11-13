@@ -102,3 +102,14 @@ def test_psyllium_retains_scoped_fda_regularity_reference_without_borrowing_lipi
     assert not reference.get("pmid")
     assert "granular" in reference["notes"]
     assert any(c["context_id"] == "ingr_psyllium_30239559_lipid_marker_review" for c in record["study_contexts"])
+
+
+def test_green_tea_preserves_specific_signed_hold_and_source_scope(records):
+    record = records["INGR_GREEN_TEA"]
+    assert record["scoring_eligible"] is False
+    assert "Dr. Pham" in record["notes"]
+    assert "fat oxidation" not in record["notable_studies"].lower()
+    assert "weight loss and weight maintenance" in record["notable_studies"]
+    assert set(record["health_goals_supported"]) == {"Weight Management"}
+    assert record["effect_direction"] == "positive_weak"
+    assert record["study_contexts"] == []
