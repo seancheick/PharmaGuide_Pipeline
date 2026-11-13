@@ -149,6 +149,10 @@ def _valid_policy(policy: Any) -> bool:
     """Validate reviewed constraints before any matching or numeric comparisons."""
     if not isinstance(policy, Mapping) or not isinstance(policy.get("scope"), str):
         return False
+    if "source_references" in policy:
+        from clinical_evidence_schema import context_source_errors
+        if context_source_errors({"source_references": policy["source_references"]}):
+            return False
     if "studied_population" in policy and not isinstance(policy["studied_population"], str):
         return False
     for field in ("dosage_forms", "required_form_terms", "supported_outcomes", "source_pmids",
@@ -508,15 +512,15 @@ def _claim_excluded_when_alone(product: Mapping, policy: Mapping) -> bool:
 def _valid_native_claim_scope(context: Mapping) -> bool:
     """The approved native extension carries exclusions, not new dose rules."""
     policy = context.get("applicability")
-    sources = context.get("source_pmids")
+    from clinical_evidence_schema import context_source_ids, context_source_errors
+    sources = context_source_ids(context)
     return bool(
         _valid_policy(policy) and policy.get("scope") == "ingredient"
         and context.get("purpose") in {"treatment", "challenge"}
-        and set(policy) <= {"scope", "source_pmids", "excluded_claim_terms"}
-        and policy.get("excluded_claim_terms") and policy.get("source_pmids")
-        and isinstance(sources, list)
-        and all(isinstance(source, str) for source in sources)
-        and set(policy["source_pmids"]) <= set(sources)
+        and set(policy) <= {"scope", "source_pmids", "source_references", "excluded_claim_terms"}
+        and policy.get("excluded_claim_terms") and not context_source_errors(policy)
+        and not context_source_errors(context)
+        and context_source_ids(policy) <= sources
     )
 
 
@@ -1023,11 +1027,10 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
             or not isinstance(published, list)
             or any(not isinstance(pmid, (str, int)) or isinstance(pmid, bool) for pmid in published)):
         return {"is_complete": False, "errors": ["clinical_source_references_invalid"], "context_ids": []}
-    declared_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")}
-    declared_pmids.update(str(pmid) for pmid in published
-                          if re.fullmatch(r"[1-9][0-9]*", str(pmid)))
-    excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
-                      and not clinical_record_sources_eligible({"references_structured": [ref]})}
+    from clinical_evidence_schema import context_source_ids, declared_source_ids, expand_source_ids
+    from evidence_resolver import _held_clinical_source_ids
+    declared_pmids = declared_source_ids(reference)
+    excluded_pmids = _held_clinical_source_ids(reference)
     eligible_pmids = declared_pmids - excluded_pmids
     errors = [str(context.get("context_id") or "unknown") + ":review.approval_required"
               for context in contexts if not context_review_finished(context)]
@@ -1039,9 +1042,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         # Validate every declared source, including completed mixed/negative
         # and source-transfer decisions; unread or unbound history stays open.
         contributing = contexts
-        reviewed_sources = {str(pmid) for context in contexts
-                            for pmid in (context.get("source_pmids")
-                                         if isinstance(context.get("source_pmids"), list) else [])}
+        reviewed_sources = set().union(*(expand_source_ids(reference, context_source_ids(context))
+                                         for context in contexts))
         if not declared_pmids or declared_pmids - reviewed_sources:
             errors.append("clinical_source_rejection_coverage_incomplete")
         # An explicit parent eligibility hold still wins. The existing exact
@@ -1055,8 +1057,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     for context in contributing:
         if not clinical_review_provenance_valid(context):
             errors.append(str(context.get("context_id") or "unknown") + ":clinical_review_source_unbound")
-        context_sources = context.get("source_pmids")
-        context_pmids = {str(pmid) for pmid in context_sources} if isinstance(context_sources, list) else set()
+        context_pmids = expand_source_ids(reference, context_source_ids(context))
         prefix = str(context.get("context_id") or "unknown") + ":"
         if context_pmids - declared_pmids:
             errors.append(prefix + "clinical_context_source_not_in_record")
@@ -1090,10 +1091,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
 def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
     from evidence_resolver import clinical_record_sources_eligible
     source_pmids = policy.get("source_pmids") or None
+    source_references = policy.get("source_references") or None
     return [
         context for context in reference.get("study_contexts") or []
         if isinstance(context, Mapping)
-        and clinical_record_sources_eligible(reference, context=context, source_pmids=source_pmids)
+        and clinical_record_sources_eligible(reference, context=context, source_pmids=source_pmids,
+                                             source_references=source_references)
     ]
 
 
@@ -1213,10 +1216,11 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     original_ids = {context.get("context_id") for context in reference.get("study_contexts") or []
                     if context.get("scoring_eligible") is True}
     qualifying_ids = {context.get("context_id") for context, _ in qualifying}
-    qualifying_sources = {str(pmid) for context, _ in qualifying
-                          for pmid in context.get("source_pmids") or []}
+    from clinical_evidence_schema import context_source_ids, expand_source_ids
+    qualifying_sources = set().union(*(expand_source_ids(reference, context_source_ids(context))
+                                       for context, _ in qualifying))
     full_scope = (bool(original_ids) and original_ids <= qualifying_ids
-                  and set(map(str, policy.get("source_pmids") or [])) <= qualifying_sources)
+                  and expand_source_ids(reference, context_source_ids(policy)) <= qualifying_sources)
     conditions = {_key(context.get("condition")) for context, _ in qualifying}
     components["supported_outcomes"] = (policy["supported_outcomes"]
         if full_scope and policy.get("supported_outcomes") else
@@ -1260,10 +1264,11 @@ def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Map
         dated = date.fromisoformat(policy.get("reviewed_at", "")) <= date.today()
     except (TypeError, ValueError):
         dated = False
-    sources = set(policy.get("source_pmids") or [])
-    eligible_sources = {str(ref.get("pmid")) for ref in reference.get("references_structured") or []
-                        if isinstance(ref, Mapping) and ref.get("pmid")
-                        and clinical_record_sources_eligible({"references_structured": [ref]})}
+    from clinical_evidence_schema import context_source_ids, expand_source_ids, reference_source_ids
+    sources = expand_source_ids(reference, context_source_ids(policy))
+    eligible_sources = set().union(*(reference_source_ids(ref)
+        for ref in reference.get("references_structured") or []
+        if isinstance(ref, Mapping) and clinical_record_sources_eligible({"references_structured": [ref]})))
     if reference.get("documented_review_scope") == policy:
         # A documented source review carries its own verified sources; the
         # population and outcome owners below still decide the label's match.
@@ -1296,6 +1301,11 @@ def _context_applicability_policy(policy: Mapping, context: Mapping) -> dict | N
             or not _valid_policy(scoped) or (policy and not _valid_policy(policy))):
         return None
     merged = {**policy, **scoped}
+    if "source_references" in scoped or ("source_pmids" in scoped and "source_references" in policy):
+        for field in ("source_pmids", "source_references"):
+            merged.pop(field, None)
+            if field in scoped:
+                merged[field] = scoped[field]
     # A source-specific child may add required preparation evidence but cannot
     # replace its parent's conjunction. Existing flat OR terms keep their
     # legacy merge behavior; when a child supplies groups, retain the parent's
@@ -1317,11 +1327,11 @@ def _context_applicability_policy(policy: Mapping, context: Mapping) -> dict | N
                 return None
         elif parent_delivery:
             merged["dosage_forms"] = list(parent_delivery)
-    sources = scoped.get("source_pmids")
-    context_sources = context.get("source_pmids")
-    if (not _valid_policy(merged) or not isinstance(sources, list) or not sources
-            or not _valid_policy({"scope": "ingredient", "source_pmids": context_sources})
-            or not set(sources) <= set(context_sources)):
+    from clinical_evidence_schema import context_source_ids, context_source_errors
+    sources = context_source_ids(scoped)
+    context_sources = context_source_ids(context)
+    if (not _valid_policy(merged) or context_source_errors(scoped) or not sources
+            or context_source_errors(context) or not sources <= context_sources):
         return None
     return merged
 
@@ -1818,14 +1828,9 @@ def filter_clinical_matches(
                     # Consumer study attribution follows the selected contexts,
                     # not rejected or unfinished siblings in the canonical
                     # research inventory. Completeness still reads that owner.
-                    qualified_pmids = {str(pmid)
-                        for context in reference.get("study_contexts") or []
-                        if context.get("context_id") in qualified_ids
-                        for pmid in context.get("source_pmids") or []}
+                    from clinical_evidence_schema import selected_source_references
                     if isinstance(scoped_entry.get("references_structured"), list):
-                        scoped_entry["references_structured"] = [ref
-                            for ref in scoped_entry["references_structured"]
-                            if isinstance(ref, dict) and str(ref.get("pmid")) in qualified_pmids]
+                        scoped_entry["references_structured"] = selected_source_references(reference, qualified_ids)
                 if (scoped_entry.get("study_type") != decision["qualifying_study_type"]
                         or len(qualified_ids) < len(reference.get("study_contexts") or [])):
                     # A stronger record or excluded sibling cannot lend its

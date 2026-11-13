@@ -775,3 +775,16 @@ def test_november1_countersignature_is_not_a_blanket_registry_approval():
               if ctx.get("clinical_review", {}).get("countersigned_at") == "2026-11-01"}
     assert signed == {context_id for _, context_id, _ in NOVEMBER1_COUNTERSIGNED_CONTEXTS}
     assert len(signed) == 8
+
+
+def test_native_doi_context_keeps_attribution_without_fabricating_pmid(registry):
+    row = registry["STRAIN_LGG"]["study_contexts"][0]
+    row.pop("source_pmids")
+    row["source_references"] = [{"doi": "10.1000/native-review-test"}]
+    result = assessment(strain_product(dose=1e9))
+    recorded = next(c for c in result["study_contexts"] if c["context_id"] == row["context_id"])
+    assert recorded["status"] == "source_context_recorded"
+    assert recorded["source_references"] == row["source_references"]
+    assert result["scoring_source_pmids"] == []
+    assert "10.1000/native-review-test" not in result["source_pmids"]
+    assert result["dose_applicable"] is False

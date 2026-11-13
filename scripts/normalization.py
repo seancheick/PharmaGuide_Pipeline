@@ -1023,3 +1023,12 @@ def disclosed_marker_percentage(parent_mass_mg, children, markers):
         if 0 < percentage <= 100.5:
             percentages.append(min(percentage, 100.0))
     return round(max(percentages), 4) if percentages else 0.0
+
+
+def normalize_doi(value):
+    """Canonical DOI spelling, including an explicitly supplied DOI resolver URL."""
+    if not isinstance(value, str):
+        return None
+    value = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", value.strip(), flags=re.I)
+    value = value.removeprefix("doi:").strip().lower()
+    return value if re.fullmatch(r"10\.\d{4,9}/[^\s]+", value) else None

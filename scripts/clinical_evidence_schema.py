@@ -7,12 +7,19 @@ The validator is deliberately side-effect free so a review packet or patch
 checker can use it without changing the registry. Complete-review validation
 checks attributable metadata and full source shape, not canonical publication or
 reviewer credentials; runtime consumers additionally bind the approved source.
+
+Contexts may retain source_pmids or use source_references with DOI/HTTPS URL
+pointers to the parent's references_structured inventory (Sean, 2026-11-13).
+Pointers establish identity only. Source content, review provenance, preparation
+scope and explicit holds remain separate qualification requirements.
 """
 
 from __future__ import annotations
 
 import math
-from normalization import ENZYME_ACTIVITY_UNITS, canonicalize_enzyme_activity_unit
+from copy import deepcopy
+from urllib.parse import urlsplit
+from normalization import ENZYME_ACTIVITY_UNITS, canonicalize_enzyme_activity_unit, normalize_doi
 from collections.abc import Mapping, Set
 
 
@@ -158,13 +165,121 @@ def _text_list(value: object, *, allow_empty: bool = False) -> bool:
     )
 
 
+
+def reference_source_ids(reference: Mapping) -> frozenset[str]:
+    """Identifiers for one declared source; DOI URLs are aliases, not new sources."""
+    if not isinstance(reference, Mapping):
+        return frozenset()
+    ids = set()
+    pmid = reference.get("pmid")
+    if isinstance(pmid, (str, int)) and not isinstance(pmid, bool) and str(pmid).isdecimal() and not str(pmid).startswith("0"):
+        ids.add(str(pmid))
+    doi = normalize_doi(reference.get("doi"))
+    if doi:
+        ids.add("doi:" + doi)
+    url = reference.get("url") or reference.get("source_url")
+    if isinstance(url, str):
+        try:
+            parts = urlsplit(url.strip())
+        except ValueError:
+            return frozenset()
+        if not any(char.isspace() for char in url.strip()) and parts.scheme == "https" and parts.hostname and not parts.username and not parts.password:
+            linked_doi = normalize_doi(url)
+            if linked_doi:
+                if doi and doi != linked_doi:
+                    return frozenset()
+                ids.add("doi:" + linked_doi)
+            else:
+                ids.add("url:" + url.strip())
+    return frozenset(ids)
+
+
+def context_source_ids(context: Mapping) -> frozenset[str]:
+    """Source pointers only; identity does not establish review or numerical credit."""
+    pmids = context.get("source_pmids")
+    references = context.get("source_references")
+    ids = {str(pmid) for pmid in (pmids if isinstance(pmids, list) else [])
+           if isinstance(pmid, (str, int)) and not isinstance(pmid, bool)}
+    for reference in references if isinstance(references, list) else []:
+        ids.update(reference_source_ids(reference))
+    return frozenset(ids)
+
+
+def context_source_errors(context: Mapping) -> list[str]:
+    """Preserve PMID compatibility while validating the opt-in structured pointers."""
+    errors = []
+    pmids = context.get("source_pmids")
+    structured = context.get("source_references")
+    if pmids is not None and not _text_list(pmids, allow_empty=structured is not None):
+        errors.append("context.source_pmids_invalid")
+    if structured is not None:
+        if (not isinstance(structured, list) or not structured
+                or any(not isinstance(ref, Mapping) or not ref
+                       or set(ref) - {"doi", "url"}
+                       or ("doi" in ref and not normalize_doi(ref["doi"]))
+                       or ("url" in ref and not reference_source_ids({"url": ref["url"]}))
+                       or not reference_source_ids(ref) for ref in structured)):
+            errors.append("context.source_references_invalid")
+    if not errors and not context_source_ids(context):
+        errors.append("context.source_pmids_invalid")
+    return errors
+
+
+def expand_source_ids(reference: Mapping, ids) -> frozenset[str]:
+    """Join aliases only when the reviewed parent explicitly declares them together."""
+    expanded = set(ids)
+    groups = [reference_source_ids(ref) for ref in (reference.get("references_structured") or [])]
+    while True:
+        previous = len(expanded)
+        for group in groups:
+            if expanded & group:
+                expanded.update(group)
+        if len(expanded) == previous:
+            return frozenset(expanded)
+
+
+def declared_source_ids(reference: Mapping) -> frozenset[str]:
+    ids = {str(pmid) for pmid in (reference.get("published_studies") or [])
+           if str(pmid).isdecimal() and not str(pmid).startswith("0")}
+    for ref in (reference.get("references_structured") or []):
+        ids.update(reference_source_ids(ref))
+    return frozenset(ids)
+
+
+def selected_source_references(reference: Mapping, context_ids) -> list:
+    """Project the selected contexts' declared citations without losing non-PMID sources."""
+    selected = set(context_ids)
+    sources = set().union(*(context_source_ids(context)
+        for context in (reference.get("study_contexts") or [])
+        if isinstance(context, Mapping) and context.get("context_id") in selected))
+    sources = expand_source_ids(reference, sources)
+    return [deepcopy(ref) for ref in (reference.get("references_structured") or [])
+            if isinstance(ref, Mapping) and reference_source_ids(ref) & sources]
+
+
 def _source_provenance_errors(context: Mapping, dose: Mapping) -> list[str]:
     status = dose.get("dose_status")
     provenance = dose.get("source_provenance")
-    if status != "verified":
+    if status != "verified" and not (context.get("source_references") and isinstance(provenance, Mapping)):
         return []
     if not isinstance(provenance, Mapping):
         return ["dose.source_provenance_required_for_verified"]
+    if context.get("source_references"):
+        errors = []
+        # PMID/DOI are identity claims; a publisher URL may just locate the
+        # reviewed text. Every typed identity must be explicitly context-bound.
+        typed = {key: provenance[key] for key in ("pmid", "doi") if key in provenance}
+        identities = reference_source_ids(typed or provenance)
+        if (not identities or not identities <= context_source_ids(context)
+                or ("pmid" in typed and not reference_source_ids({"pmid": typed["pmid"]}))
+                or ("doi" in typed and not normalize_doi(typed["doi"]))):
+            errors.append("dose.source_provenance.reference_not_in_context")
+        locator = provenance.get("source_url")
+        if locator is not None and not reference_source_ids({"url": locator}):
+            errors.append("dose.source_provenance.source_url_invalid")
+        if not _nonempty_text(provenance.get("location")):
+            errors.append("dose.source_provenance.location_required")
+        return errors
     pmid = provenance.get("pmid")
     if not _nonempty_text(pmid):
         return ["dose.source_provenance.pmid_required"]
@@ -353,8 +468,7 @@ def validate_frozen_context(
     # iterates them, so they must never reach the dose and outcome rules.
     if not _text_list(context.get("components")):
         errors.append("context.components_invalid")
-    if not _text_list(context.get("source_pmids")):
-        errors.append("context.source_pmids_invalid")
+    errors.extend(context_source_errors(context))
     if errors:
         return errors
     if context.get("context_schema_version") != CONTEXT_SCHEMA_VERSION:
@@ -419,7 +533,7 @@ def validate_frozen_context(
         # an instruction to invent an amount. It still needs a source locator.
         provenance = dose.get("source_provenance")
         if (not isinstance(provenance, Mapping)
-                or provenance.get("pmid") not in context.get("source_pmids", [])
+                or not reference_source_ids(provenance) & context_source_ids(context)
                 or not _nonempty_text(provenance.get("location"))):
             errors.append("dose.source_locator_required_for_complete_review")
         for outcome in context.get("outcomes") or []:
@@ -458,7 +572,7 @@ def validate_ingredient_context(
             {**context, "review_status": "rejected_source"},
             known_component_ids=known_component_ids,
         )
-        allowed = {"context_schema_version", "context_id", "components", "source_pmids",
+        allowed = {"context_schema_version", "context_id", "components", "source_pmids", "source_references",
                    "review_status", "scoring_eligible", "clinical_review", "dose", "limitations"}
         dose = context.get("dose")
         if (set(context) - allowed or not isinstance(dose, Mapping)
@@ -479,7 +593,8 @@ def validate_ingredient_context(
             errors.append("context.components_invalid")
         elif known_component_ids is not None and set(context["components"]) - known_component_ids:
             errors.append("context.components_unknown")
-        if not _text_list(sources) or any(
+        errors.extend(context_source_errors(context))
+        if sources and _text_list(sources) and any(
                 not pmid.isascii() or not pmid.isdecimal() or pmid.startswith("0") for pmid in sources):
             errors.append("context.source_pmids_invalid")
         if not _nonempty_text(context.get("context_id")):
@@ -491,10 +606,12 @@ def validate_ingredient_context(
         dose = context.get("dose")
         provenance = dose.get("source_provenance") if isinstance(dose, Mapping) else None
         if (not isinstance(provenance, Mapping)
-                or str(provenance.get("pmid") or "") not in (sources or [])
+                or not reference_source_ids(provenance) & context_source_ids(context)
                 or not _nonempty_text(provenance.get("location"))
                 or not _nonempty_text(provenance.get("source_url"))):
             errors.append("dose.source_provenance_required")
+        if context.get("source_references") and isinstance(dose, Mapping):
+            errors.extend(_source_provenance_errors(context, dose))
         if not _text_list(context.get("limitations")):
             errors.append("limitations.required_for_complete_review")
         if authoring:

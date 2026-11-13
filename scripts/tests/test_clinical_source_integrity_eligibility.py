@@ -3145,3 +3145,141 @@ def test_nac_oxidative_stress_sentence_stays_within_its_exercise_source(completi
     notes = completion_source_records['INGR_NAC']['notes']
     assert 'measurably lowers oxidative-stress markers' not in notes
     assert 'after exercise' in notes and '39632267' in notes and '9230243' in notes
+
+
+@pytest.fixture
+def non_pubmed_source_record(monkeypatch):
+    import clinical_applicability as ca
+    from clinical_applicability import reviewed_entries
+    record = copy.deepcopy(reviewed_entries()["INGR_PSYLLIUM_HUSK"])
+    context = next(c for c in record["study_contexts"] if c.get("scoring_eligible") is True)
+    context.pop("source_pmids")
+    context["source_references"] = [{"doi": "10.1000/source-review-test"}]
+    context.pop("applicability", None)
+    context["dose"]["source_provenance"].pop("pmid", None)
+    context["dose"]["source_provenance"]["doi"] = "10.1000/source-review-test"
+    context["dose"]["source_provenance"]["source_url"] = "https://doi.org/10.1000/source-review-test"
+    record["study_contexts"] = [context]
+    record["published_studies"] = []
+    record["references_structured"] = [{"doi": "10.1000/source-review-test", "scoring_eligible": True}]
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {record["id"]: record})
+    return record
+
+
+def test_reviewed_doi_context_joins_declared_source_without_fake_pmid(non_pubmed_source_record):
+    from clinical_applicability import assess_clinical_source_review
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert er.clinical_record_sources_eligible(record, context=context)
+    assert assess_clinical_source_review(record)["is_complete"]
+    assert "source_pmids" not in context
+
+
+@pytest.mark.parametrize("hold", ["retracted", "expression_of_concern", "scoring_eligible"])
+def test_doi_context_cannot_bypass_a_held_pmid_alias(non_pubmed_source_record, hold):
+    record = non_pubmed_source_record
+    reference = record["references_structured"][0]
+    reference["pmid"] = "12345678"
+    reference[hold] = False if hold == "scoring_eligible" else True
+    record["references_structured"].append({"pmid": "87654321", "scoring_eligible": True})
+    assert not er.clinical_record_sources_eligible(record, context=record["study_contexts"][0])
+
+
+def test_doi_context_provenance_must_name_its_own_source(non_pubmed_source_record):
+    context = non_pubmed_source_record["study_contexts"][0]
+    context["dose"]["source_provenance"]["doi"] = "10.1000/unrelated"
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+@pytest.mark.parametrize("reference", [{}, {"doi": "not a DOI"}, {"url": "javascript:alert(1)"}])
+def test_context_source_reference_must_be_valid(non_pubmed_source_record, reference):
+    context = non_pubmed_source_record["study_contexts"][0]
+    context["source_references"] = [reference]
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+def test_doi_context_applicability_and_receipt_preserve_selected_source(non_pubmed_source_record):
+    from clinical_applicability import filter_clinical_matches
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    context["applicability"] = {**record["applicability"], "source_references": context["source_references"]}
+    context["applicability"].pop("source_pmids", None)
+    record["applicability"] = copy.deepcopy(context["applicability"])
+    row = {"name": "Psyllium husk powder", "raw_source_text": "Psyllium husk powder",
+           "canonical_id": "psyllium", "mapped": True, "quantity": 5, "unit": "g",
+           "raw_source_path": "ingredientRows[0]"}
+    product = {"fullName": "Psyllium husk", "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    match = {**record, "ingredient": row["name"], "matched_canonical_ids": ["psyllium"],
+             "matched_source_row_refs": [row["raw_source_path"]]}
+    matches, rejected = filter_clinical_matches(product, [match], assess_amount=False,
+                                                require_claim_alignment=False)
+    assert matches, rejected
+    assert matches[0]["references_structured"] == record["references_structured"]
+    assert matches[0]["applicability_assessment"]["status"] == "applicable"
+
+
+def test_official_url_context_requires_declared_bound_reference(non_pubmed_source_record):
+    from clinical_applicability import assess_clinical_source_review
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    url = "https://www.fda.gov/example-reviewed-authority-document"
+    context["source_references"] = [{"url": url}]
+    context["dose"]["source_provenance"].pop("doi")
+    context["dose"]["source_provenance"]["source_url"] = url
+    record["references_structured"] = [{"url": url, "scoring_eligible": True}]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert er.clinical_record_sources_eligible(record, context=context)
+    assert assess_clinical_source_review(record)["is_complete"]
+    record["references_structured"][0]["url"] += "/unrelated"
+    assert not er.clinical_record_sources_eligible(record, context=context)
+
+
+def test_selected_doi_references_do_not_lend_mutable_canonical_facts(non_pubmed_source_record):
+    from clinical_evidence_schema import selected_source_references
+    record = non_pubmed_source_record
+    record["references_structured"][0]["supports_claims"] = ["reviewed"]
+    refs = selected_source_references(record, [record["study_contexts"][0]["context_id"]])
+    refs[0]["supports_claims"].append("invented")
+    assert record["references_structured"][0]["supports_claims"] == ["reviewed"]
+
+
+def test_doi_url_alias_keeps_transitive_source_hold(non_pubmed_source_record):
+    record = non_pubmed_source_record
+    record['references_structured'] = [
+        {'doi': '10.1000/source-review-test', 'pmid': '12345678'},
+        {'pmid': '12345678', 'url': 'https://example.org/reviewed-paper'},
+        {'url': 'https://example.org/reviewed-paper', 'retracted': True},
+    ]
+    context = record['study_contexts'][0]
+    context['source_references'] = [{'url': 'https://doi.org/10.1000/SOURCE-REVIEW-TEST'}]
+    assert not er.clinical_record_sources_eligible(record, context=context)
+
+
+def test_selected_doi_receipt_excludes_unrelated_bibliography(non_pubmed_source_record):
+    from clinical_evidence_schema import selected_source_references
+    record = non_pubmed_source_record
+    record['references_structured'].append({'doi': '10.1000/unrelated', 'title': 'Not selected'})
+    selected = selected_source_references(record, [record['study_contexts'][0]['context_id']])
+    assert selected == [record['references_structured'][0]]
+
+
+@pytest.mark.parametrize('sources', [None, [], {}, '10.1000/source-review-test', [None]])
+def test_non_pubmed_source_pointer_rejects_empty_or_wrong_shape(non_pubmed_source_record, sources):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['source_references'] = sources
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+@pytest.mark.parametrize('extra', [{'pmid': '999999'}, {'source_url': 'javascript:invalid'}])
+def test_doi_provenance_cannot_hide_foreign_identifier_or_invalid_locator(non_pubmed_source_record, extra):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['dose']['source_provenance'].update(extra)
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+def test_doi_provenance_allows_publisher_locator(non_pubmed_source_record):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['dose']['source_provenance']['source_url'] = 'https://publisher.example/article/full.pdf'
+    assert validate_ingredient_context(context, require_complete_review=True) == []

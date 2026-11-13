@@ -462,27 +462,23 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
-def _held_clinical_source_pmids(entry: Mapping[str, Any]) -> Set[str]:
-    """Source-integrity exclusions, wherever the canonical record stores them.
+def _held_clinical_source_ids(entry: Mapping[str, Any]) -> frozenset[str]:
+    """Integrity/eligibility holds follow every explicitly declared source alias."""
+    from clinical_evidence_schema import context_source_ids, expand_source_ids, reference_source_ids
+    held = set()
+    for ref in entry.get("references_structured") or []:
+        if isinstance(ref, Mapping) and (ref.get("retracted") or ref.get("expression_of_concern")
+                                        or ref.get("scoring_eligible") is False):
+            held.update(reference_source_ids(ref))
+    for context in entry.get("study_contexts") or []:
+        if isinstance(context, Mapping) and context.get("source_integrity") in {"retracted", "expression_of_concern"}:
+            held.update(context_source_ids(context))
+    return expand_source_ids(entry, held)
 
-    A record-level credit hold is not itself a retraction. An explicit source
-    integrity hold, including one recorded on a context, follows that PMID.
-    """
-    held = {
-        str(ref["pmid"])
-        for ref in entry.get("references_structured") or []
-        if isinstance(ref, Mapping) and ref.get("pmid")
-        and (ref.get("retracted") or ref.get("expression_of_concern")
-             or ref.get("scoring_eligible") is False)
-    }
-    held.update(
-        str(pmid)
-        for context in entry.get("study_contexts") or []
-        if isinstance(context, Mapping)
-        and context.get("source_integrity") in {"retracted", "expression_of_concern"}
-        for pmid in context.get("source_pmids") or []
-    )
-    return held
+
+def _held_clinical_source_pmids(entry: Mapping[str, Any]) -> Set[str]:
+    """Existing PMID consumers keep PMID-only values, with shared alias holds."""
+    return {source for source in _held_clinical_source_ids(entry) if source.isdecimal()}
 
 
 def _reviewed_general_conclusion(context) -> bool:
@@ -498,7 +494,7 @@ def _reviewed_general_conclusion(context) -> bool:
             and not validate_ingredient_context(context, require_complete_review=True))
 
 
-def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
+def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None, source_references=None) -> bool:
     """Honor source holds, joined to the context and optional signed source scope."""
     if entry.get("scoring_eligible") is False or is_reference_only(entry):
         return False
@@ -514,15 +510,14 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, 
                     else validate_ingredient_context)
         if validate(context, require_complete_review=True):
             return False
-        declared = {str(pmid) for pmid in entry.get("published_studies") or []
-                    if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
-        declared.update(str(ref["pmid"]) for ref in references
-                        if isinstance(ref, Mapping) and ref.get("pmid"))
-        excluded = _held_clinical_source_pmids(entry)
-        eligible = declared - excluded
-        if source_pmids is not None:
-            eligible &= {str(pmid) for pmid in source_pmids}
-        sources = {str(pmid) for pmid in context.get("source_pmids") or []}
+        from clinical_evidence_schema import context_source_ids, declared_source_ids, expand_source_ids
+        declared = declared_source_ids(entry)
+        eligible = declared - _held_clinical_source_ids(entry)
+        if source_pmids is not None or source_references is not None:
+            selected = context_source_ids({"source_pmids": source_pmids or [],
+                                           "source_references": source_references or []})
+            eligible &= expand_source_ids(entry, selected)
+        sources = expand_source_ids(entry, context_source_ids(context))
         return bool(sources and not (sources - declared) and sources & eligible)
     contexts = entry.get("study_contexts")
     if contexts:
@@ -1322,12 +1317,8 @@ def _resolve_evidence_for_row(
                 decision.get("status") == "not_applicable"
                 and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
             )
-            declared_pmids = set()
-            if preparation_excluded:
-                declared_pmids = {str(ref["pmid"]) for ref in study.get("references_structured") or []
-                                  if isinstance(ref, dict) and ref.get("pmid")}
-                declared_pmids.update(str(pmid) for pmid in study.get("published_studies") or []
-                                      if re.fullmatch(r"[1-9][0-9]*", str(pmid)))
+            from clinical_evidence_schema import context_source_ids, declared_source_ids, expand_source_ids
+            declared_pmids = declared_source_ids(study) if preparation_excluded else set()
             unfinished_contexts.append(any(
                 not context_review_finished(context)
                 and not (
@@ -1338,7 +1329,7 @@ def _resolve_evidence_for_row(
                     and context.get("human_status") == "confirmed"
                     and _clinical_review_metadata_valid(context)
                     and not validate_ingredient_context(context, known_component_ids={study["id"]})
-                    and set(context["source_pmids"]) <= declared_pmids
+                    and expand_source_ids(study, context_source_ids(context)) <= declared_pmids
                 )
                 for context in study.get("study_contexts") or []
             ))

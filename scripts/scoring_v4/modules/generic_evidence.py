@@ -449,13 +449,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             # This receipt attributes the selected numerical contribution, not
             # the canonical inventory of related or unfinished research.
             # Source-review completeness still uses the full canonical record.
-            qualified_pmids = {
-                str(pmid) for context in reference.get("study_contexts") or []
-                if isinstance(context, dict) and context.get("context_id") in context_ids
-                for pmid in context.get("source_pmids") or []
-            }
-            source_refs = [ref for ref in source_refs
-                           if isinstance(ref, dict) and str(ref.get("pmid")) in qualified_pmids]
+            from clinical_evidence_schema import selected_source_references
+            source_refs = selected_source_references(reference, context_ids)
         interpreted_sources = _effect_direction_assessment(entry)["source_pmids"]
         if interpreted_sources is not None:
             source_refs = [ref for ref in source_refs if str(ref.get("pmid")) in interpreted_sources]

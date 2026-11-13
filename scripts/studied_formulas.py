@@ -15,7 +15,7 @@ from pathlib import Path
 
 from clinical_applicability import (reviewed_entries, assess_context_population,
                                     assess_native_claimed_purpose, context_delivery_matches)
-from clinical_evidence_schema import OUTCOME_HIERARCHIES
+from clinical_evidence_schema import OUTCOME_HIERARCHIES, context_source_errors
 from identity_integrity import has_nonlive_microbial_derivative_evidence
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
@@ -744,7 +744,7 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         result["source_pmids"] = sorted(set(result["source_pmids"]) | {
             pmid for context in result["study_contexts"]
             if context.get("status") == "source_context_recorded"
-            for pmid in context["source_pmids"]})
+            for pmid in context.get("source_pmids", [])})
         if not reference:
             status = "strain_reference_unreviewed"
         elif not clinical_strain_identity_matches(row.get("strain"), reference):
@@ -1040,7 +1040,7 @@ def _valid_native_study_context_payload(context: Mapping, reference_id: str) -> 
     if (not all(isinstance(context.get(key), str) and context[key].strip()
                 for key in ("context_id", "condition", "trial_family"))
             or context.get("review_status") not in NATIVE_CONTEXT_REVIEW_STATUSES
-            or not text_list(context.get("source_pmids"))
+            or context_source_errors(context)
             or not text_list(context.get("components"))
             or reference_id not in context["components"]
             # A tested component the registry cannot hold (an unnamed or

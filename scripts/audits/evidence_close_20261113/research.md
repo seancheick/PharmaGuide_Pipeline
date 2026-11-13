@@ -298,3 +298,31 @@ recompute only after integrated final rebuild. L-phenylalanine authority and
 horsetail preparation-specific record reconciliation remain investigation candidates.
 
 Combined follow-up checkpoint46bc015e6: `scripts/test.sh local` passes564tests,24declaredopt-ins in152.69s; skipguardpasses. PR478qualifies this source; exactCIpending.
+
+
+## DOI and official-document source references (2026-11-13)
+
+Sean approved extending existing review records to DOI-only papers and official authority documents.
+Owner: `clinical_evidence_schema` source identity/provenance, `clinical_applicability` review and
+preparation matching, `evidence_resolver` eligibility, and existing `references_structured` citation
+projection. Evidence: source-pointer caller search and independent source-review seam audit.
+Will NOT create: a registry, fake PMID, automatic authority tier, new Dose gate or parallel scorer.
+
+`source_references` contains compact `doi`/`url` pointers; PMID pointers retain their meaning.
+Aliases join only through the parent's explicitly declared references. Retraction, concern and
+source eligibility holds follow aliases. Selected contexts project only their declared citations,
+with independent copies; native recorded contexts retain their source pointers without credit.
+Typed provenance identifiers must all be context-bound; a valid publisher URL may locate full text.
+Independent review caught a foreign-PMID/invalid-locator loophole; regression tests failed first,
+then passed after fixing the shared validator. No clinical records or numerical grades changed.
+
+Validation: 1,252 named owner/consumer tests passed in 28.94s; Python correctness reports no new
+findings. On 18 identical frozen enriched products, complete scored artifacts differ only by scoring
+timestamps; no scores, safety, completion, warnings or citations changed. Warm median 2.8859s before
+and 2.8641s after; peak RSS 197,918,720 vs 222,691,328 bytes. Both runs preserve inputs exactly.
+The small single-process memory difference is recorded, not evidence of a sustained regression.
+Receipts: `/Users/seancheick/pg_quality/evidence-close-20261113/source-refs-*` and `nonpubmed-*`.
+Combined local and exact-branch CI qualification remain pending. This source-format batch alone does
+not finish inulin or proline: exact preparation, guideline/exposure scoring and source-bound wording
+still need their separate reviewed activation. The current PMID-only signed glutamine interpretation
+is unchanged; native numerical DOI attribution is not activated by this batch.
