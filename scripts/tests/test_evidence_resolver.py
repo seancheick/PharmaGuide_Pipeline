@@ -1819,6 +1819,19 @@ def _excluded_preparation_product(name, canonical, form, *, pid="preparation-fix
                  "evidence_data": {"clinical_matches": []}}
 
 
+@pytest.mark.parametrize("name,form", [
+    ("Valerian", "valerian root powder"),
+    ("Valerian", "valerian (unspecified)"),
+    ("Valerian (Valeriana officinalis) extract", "valerian (unspecified)"),
+])
+def test_valerian_canonical_reaches_existing_completed_zero(name, form):
+    row, product = _excluded_preparation_product(name, "valerian", form)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == "reference_only_clinical_record"
+    assert not result.blocking_reasons
+
+
 @pytest.mark.parametrize("pid,ref", [
     ("31147", "ingredientRows[5].nestedRows[1]"), ("4258", "ingredientRows[0]"),
     ("65944", "ingredientRows[0]"), ("66890", "ingredientRows[0]"), ("69393", "ingredientRows[0]"),
