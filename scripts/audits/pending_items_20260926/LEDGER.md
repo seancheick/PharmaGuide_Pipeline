@@ -5501,3 +5501,5 @@ PR477now25d83bfc1 includes a verified stale pending-copy test correction (73A9pa
 CI43524878679pending. App236merged. Follow-up local/CI qualification still pending;
 no rebuild/release. Psyllium3raw probe finds no wiring defect; rank26–50triage is
 not completed clinical review. Details/receipts in existing evidence-close research.
+
+Follow-up46bc015e6 localcheckpoint:564pass/24declaredopt-ins,152.69s,skipguardpass. PR478openedagainstmain; exactCIpending, nointegration/releaseclaim.

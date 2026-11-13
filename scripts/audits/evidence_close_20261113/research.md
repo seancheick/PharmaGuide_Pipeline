@@ -296,3 +296,5 @@ no new grade or schema change. Generic control is not verified whole seed.
 Receipts:external psyllium-probe/stable.jsonl and full records. Queue is stale;
 recompute only after integrated final rebuild. L-phenylalanine authority and
 horsetail preparation-specific record reconciliation remain investigation candidates.
+
+Combined follow-up checkpoint46bc015e6: `scripts/test.sh local` passes564tests,24declaredopt-ins in152.69s; skipguardpasses. PR478qualifies this source; exactCIpending.
