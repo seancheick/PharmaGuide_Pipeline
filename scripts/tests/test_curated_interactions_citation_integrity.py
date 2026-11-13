@@ -49,7 +49,8 @@ def test_fish_oil_case_report_cannot_define_a_one_gram_warning_floor():
     assert 'up to 1 g/day' not in text
     assert '≥3 g/day' not in text
     assert 'most research' in text and 'inr' in text
-    assert pair['severity'] == 'Moderate'
+    assert pair['severity'] == 'Minor'  # Signed G1 ordinary omega-3 monitoring.
+    assert pair['display_layer'] == 'background'
 
 
 def test_ginkgo_warfarin_mechanism_keeps_mixed_evidence_explicit():
@@ -93,7 +94,7 @@ def test_real_source_pairs_preserve_clinical_tier_and_identity_through_export():
         'DSI_GINKGO_ANTIPLATELET': ('avoid', 'ginkgo', 'moderate'),
         'DSI_SSRI_SJW': ('avoid', 'st_johns_wort', 'established'),  # Dr. Pham 2026-11-12, section 2
         'DSI_STATINS_RYR': ('avoid', 'red_yeast_rice', 'established'),
-        'DSI_WAR_OMEGA3': ('caution', 'fish_oil', 'probable'),
+        'DSI_WAR_OMEGA3': ('monitor', 'fish_oil', 'probable'),
         'DSI_WAR_VITK': ('caution', 'vitamin_k', 'established'),
         'DSI_LEVOTHYROXINE_CALCIUM': ('caution', 'calcium', 'established'),
         'DSI_LEVOTHYROXINE_IRON': ('caution', 'iron', 'established'),

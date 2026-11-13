@@ -637,7 +637,8 @@ def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
     # 18296328 (EEG) and 35378276 (anxiety NMA) measure no blood pressure.
     assert antihypertensives["sources"] == [_pmid("23107346"), _pmid("17891480")]
     assert sedatives["sources"] == [_pmid("18296328"), _pmid("35378276")]
-    assert (antihypertensives["severity"], sedatives["severity"]) == ("caution", "caution")
+    assert (antihypertensives["severity"], sedatives["severity"]) == ("informational", "caution")
+    assert antihypertensives["direction"] == "neutral"  # Signed G1: no demonstrated harmful drug interaction.
     assert "caffeine" in antihypertensives["mechanism"]
     assert "without inducing drowsiness" in sedatives["mechanism"]
     # The action must not assert a driving impairment its sources contradict.
@@ -1017,12 +1018,21 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
 
 def test_green_tea_nadolol_rules_cite_the_primary_trial():
     rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
-    for sub in (_sub_rule(rule, "condition_id", "hypertension"),
-                _sub_rule(rule, "drug_class_id", "antihypertensives")):
-        assert sub["sources"] == [_pmid("24419562"), _pmid("25312732")]
-        assert "85%" in sub["mechanism"]
-        assert "OATP1A2" in sub["mechanism"]
-    assert rule["last_reviewed"] == "2026-04-23"  # agent re-sourcing, not a clinical review
+    for rule_id in ("RULE_IQM_GREEN_TEA_HYPERTENSION", "RULE_BOTAN_MATCHA_BETA_BLOCKERS"):
+        scoped = _rule(rule_id)
+        assert not any(s["condition_id"] == "hypertension" for s in scoped["condition_rules"])
+        sub = _sub_rule(scoped, "drug_class_id", "nadolol")
+        assert _pmid("24419562") in sub["sources"]
+        assert sub["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert "85%" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
+    assert "OATP1A2" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
+    nadolol = _sub_rule(rule, "drug_class_id", "nadolol")
+    assert nadolol["severity"] == "avoid"
+    assert nadolol["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert not {"antihypertensives", "beta_blockers"}.intersection(
+        r["drug_class_id"] for r in rule["drug_class_rules"]
+    )
+    assert rule["last_reviewed"] == "2026-04-23"  # authoring does not invent clinician review
 
 
 # Wrong-topic citations removed by the 2026-09 triage: (PMID, rule, sub-rule).
@@ -1475,8 +1485,10 @@ def test_vitamin_e_copy_sets_no_400_iu_boundary_and_never_calls_the_effect_mild(
     # "Blood thinner" includes DOAC users; the old action named only warfarin or an antiplatelet.
     assert "warfarin or an antiplatelet" not in anticoagulants["action"]
     assert "blood thinner" in anticoagulants["action"]
-    # The surgery row's alert text and stop window predate Q2; its review block must not read as her endorsing them.
-    assert "predate this review and were not reviewed by Dr. Pham" in surgery["clinical_review"]["notes"]
+    assert "bleeding" in surgery["alert_body"]
+    assert "surgical team" in surgery["alert_body"]
+    assert "whether and when" in surgery["alert_body"]
+    assert "week" not in surgery["alert_body"] and "stop" not in surgery["alert_headline"].lower()
     assert rule["last_reviewed"] == "2026-11-12"
     assert "Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)" in rule["review_owner"]
 

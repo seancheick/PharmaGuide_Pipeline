@@ -1149,3 +1149,38 @@ def test_rasagiline_and_safinamide_get_their_label_st_johns_wort_contraindicatio
         assert label in pair['source_urls'] and pair['applies_to'] == 'specific_drug'
         assert _verified(pair_id)['evidence_level'] == 'established'
         assert not [cid for cid, c in classes.items() if rxcui in c['member_rxcuis']], pair_id
+def test_batch8_unknown_kidney_function_requires_review_without_blanket_avoid():
+    for ident in ('RULE_IQM_MAGNESIUM_HYPERTENSION', 'RULE_IQM_POTASSIUM_HYPERTENSION'):
+        row = next(r for r in _rules()[ident]['condition_rules'] if r['condition_id'] == 'kidney_disease')
+        assert row['severity'] == 'caution'
+        assert 'before' in row['action'].lower()
+        assert row['profile_gate']['dose'] is None
+        assert row.get('min_effective_dose') is None
+        assert row['direction'] == 'harmful'
+    potassium = _rules()['RULE_IQM_POTASSIUM_HYPERTENSION']
+    assert next(r for r in potassium['drug_class_rules'] if r['drug_class_id'] == 'potassium_sparing_diuretics')['severity'] == 'avoid'
+
+
+def test_batch8_unproven_zinc_and_theanine_interactions_are_neutral_information():
+    for ident, target in [('RULE_IQM_ZINC', 'thyroid_medications'), ('RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES', 'antihypertensives')]:
+        row = next(r for r in _rules()[ident]['drug_class_rules'] if r['drug_class_id'] == target)
+        assert (row['severity'], row['direction'], row['evidence_level']) == ('informational', 'neutral', 'theoretical')
+        assert row['profile_gate']['dose'] is None
+        assert row.get('min_effective_dose') is None
+    # The established antibiotic interaction is a different concern.
+    assert next(r for r in _rules()['RULE_IQM_ZINC']['drug_class_rules'] if r['drug_class_id'] == 'fluoroquinolones')['severity'] == 'caution'
+
+
+def test_batch8_vitamin_d_does_not_claim_class_wide_bleeding_or_a_dose_boundary():
+    rule = _rules()['RULE_INGREDIENT_VITAMIN_D']
+    rows = [r for r in rule['drug_class_rules'] if r['drug_class_id'] != 'thiazide_diuretics']
+    assert len(rows) == 1
+    row = rows[0]
+    assert row['drug_class_id'] == 'vitamin_k_antagonists'
+    assert row['severity'] == 'informational' and row['direction'] == 'neutral'
+    assert 'warfarin' in row['alert_body'].lower() and 'deficiency' in row['alert_body'].lower()
+    text = json.dumps(row).lower()
+    for wrong in ('8983860', '10,000', 'mild antiplatelet', 'shared metabolic pathways'):
+        assert wrong not in text
+    assert row['profile_gate']['dose'] is None
+    assert row['profile_gate']['requires']['drug_classes_any'] == ['vitamin_k_antagonists']

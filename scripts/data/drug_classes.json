@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-11-12",
-    "total_classes": 58,
-    "total_members": 1007,
+    "total_classes": 61,
+    "total_members": 1058,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -23,9 +23,100 @@
       "verify_command": "python3 scripts/api_audit/verify_drug_class_rxcuis.py"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 58
+    "total_entries": 61
   },
   "classes": {
+    "class:cbd_other_anticonvulsants": {
+      "display_name": "Other seizure medicines",
+      "description": "Existing seizure medicine members without a named CBD finding. Signed Q5; membership follows the verified parent identities.",
+      "member_rxcuis": [
+        "46795",
+        "18846",
+        "1739745",
+        "2045371",
+        "2002",
+        "2265690",
+        "2598",
+        "23420",
+        "1482502",
+        "4135",
+        "4136",
+        "1112990",
+        "24812",
+        "4328",
+        "72236",
+        "2604689",
+        "623400",
+        "28439",
+        "114477",
+        "6757",
+        "6758",
+        "6825",
+        "47858",
+        "32624",
+        "32894",
+        "1356552",
+        "33253",
+        "8134",
+        "33309",
+        "8183",
+        "8691",
+        "34568",
+        "69036",
+        "10240",
+        "31914",
+        "38404",
+        "10827",
+        "14851",
+        "39998"
+      ],
+      "member_names": [
+        "barbexaclone",
+        "beclamide",
+        "brivaracetam",
+        "cannabidiol",
+        "carbamazepine",
+        "cenobamate",
+        "clonazepam",
+        "dipropylacetamide",
+        "eslicarbazepine",
+        "ethosuximide",
+        "ethotoin",
+        "ezogabine",
+        "felbamate",
+        "fenfluramine",
+        "fosphenytoin",
+        "ganaxolone",
+        "lacosamide",
+        "lamotrigine",
+        "levetiracetam",
+        "mephenytoin",
+        "mephobarbital",
+        "metharbital",
+        "methsuximide",
+        "oxcarbazepine",
+        "paramethadione",
+        "perampanel",
+        "phenacemide",
+        "phenobarbital",
+        "phensuximide",
+        "phenytoin",
+        "primidone",
+        "progabide",
+        "rufinamide",
+        "sulthiame",
+        "tiagabine",
+        "topiramate",
+        "trimethadione",
+        "vigabatrin",
+        "zonisamide"
+      ],
+      "rxclass_id": "N03A",
+      "atc_codes": [
+        "N03A"
+      ],
+      "notes": "Existing seizure medicine members without a named CBD finding. Signed Q5; membership follows the verified parent identities."
+    },
     "class:statins": {
       "display_name": "Statins",
       "description": "HMG-CoA reductase inhibitors used for cholesterol management",
@@ -1822,23 +1913,28 @@
     },
     "class:bisphosphonates": {
       "display_name": "Bisphosphonates",
-      "description": "Bone resorption inhibitors — alendronate, risedronate, zoledronic acid, etc.",
+      "description": "Bisphosphonate medicines with oral formulations; mineral-interaction rules concern oral absorption.",
       "member_rxcuis": [
         "46041",
         "115264",
-        "73056",
-        "77655"
+        "73056"
       ],
       "member_names": [
         "alendronate",
         "ibandronate",
-        "risedronate",
-        "zoledronic acid"
+        "risedronate"
       ],
       "rxclass_id": "M05BA",
       "atc_codes": [
         "M05BA"
-      ]
+      ],
+      "excluded_member_rxcuis": [
+        "77655",
+        "904952",
+        "904954",
+        "904955"
+      ],
+      "notes": "F3 (Dr. Pham, 2026-11-11): zoledronic acid 77655 is intravenous-only and excluded from oral-absorption rules. Alendronate, ibandronate and risedronate identities checked live in RxNorm 2026-11-12. Intravenous ibandronate shares ingredient 115264 with tablets: exact nonoral concepts 904952 (prefilled syringe), 904954 (Boniva prefilled syringe), and 904955 (injection) are excluded, verified against RxNorm related SCD/SBD concepts on 2026-11-12. Consumer qualification must prove that selected-product exclusions take precedence over its ingredient membership; do not apply oral timing to an injection. Unknown route retains qualified oral wording."
     },
     "class:antiplatelet_agents": {
       "display_name": "Antiplatelet Agents",
@@ -2834,6 +2930,59 @@
         "C01AA"
       ],
       "notes": "Single-medicine rule class for Dr. Pham's Q5 (signed 2026-11-12): the cannabidiol finding names digoxin with the claim its source supports. Also a member of class:cardiac_glycosides. RxNorm ingredient RxCUI and RxClass ATC read 2026-11-12. Membership is by ingredient, so every route matches."
+    },
+    "class:nadolol": {
+      "display_name": "Nadolol",
+      "description": "Nadolol, kept as its own class for the green-tea interaction that names it.",
+      "member_rxcuis": [
+        "7226"
+      ],
+      "member_names": [
+        "nadolol"
+      ],
+      "rxclass_id": "C07AA",
+      "atc_codes": [
+        "C07AA"
+      ],
+      "notes": "Single-medicine class, following clobazam and lithium. RxNorm 7226 content-verified as nadolol, IN, unsuppressed on 2026-11-12. G1 limits green-tea coverage to the studied medicine; no class-wide beta-blocker extrapolation."
+    },
+    "class:emsam_patch": {
+      "display_name": "EMSAM patch",
+      "description": "Confirmed selegiline transdermal products from RxNorm EMSAM relationships. Excludes ingredient-only and oral selegiline. Signed Q1.",
+      "member_rxcuis": [
+        "865206",
+        "865208",
+        "865210",
+        "865212",
+        "865214",
+        "865216",
+        "617716",
+        "1175941",
+        "1296229",
+        "1295063",
+        "1806068",
+        "1806071"
+      ],
+      "member_names": [
+        "24 hr selegiline 0.25 mg/hr transdermal system",
+        "24 hr selegiline 0.25 mg/hr transdermal system [emsam]",
+        "24 hr selegiline 0.375 mg/hr transdermal system",
+        "24 hr selegiline 0.375 mg/hr transdermal system [emsam]",
+        "24 hr selegiline 0.5 mg/hr transdermal system",
+        "24 hr selegiline 0.5 mg/hr transdermal system [emsam]",
+        "emsam",
+        "emsam topical product",
+        "emsam transdermal product",
+        "selegiline transdermal product",
+        "selegiline transdermal system",
+        "selegiline transdermal system [emsam]"
+      ],
+      "rxclass_id": "N06AF",
+      "atc_codes": [
+        "N06AF",
+        "N06AG"
+      ],
+      "notes": "Confirmed selegiline transdermal products from RxNorm EMSAM relationships. Excludes ingredient-only and oral selegiline. Signed Q1."
     }
   }
 }

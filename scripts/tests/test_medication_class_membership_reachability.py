@@ -236,13 +236,13 @@ def test_each_medicine_the_cbd_label_names_gets_its_own_finding(medicine):
     rxcui, own = CBD_NAMED[medicine]
     findings = cbd_findings([rxcui])
     assert own in findings, medicine
-    assert "anticonvulsants" not in findings, medicine  # the general review message is for other seizure medicines
+    assert not {"anticonvulsants", "cbd_other_anticonvulsants"} & findings, medicine  # the general review message is for other seizure medicines
 
 
 @pytest.mark.parametrize("name,rxcui", [("levetiracetam", "114477"), ("lamotrigine", "28439"), ("phenytoin", "8183")])
 def test_other_seizure_medicines_get_a_qualified_review_message(name, rxcui):
     """Q5: keep a qualified review message for other seizure medicines until their evidence is assessed."""
-    assert cbd_findings([rxcui]) == {"anticonvulsants"}, name
+    assert cbd_findings([rxcui]) == {"cbd_other_anticonvulsants"}, name
     general = cbd_sub("anticonvulsants")
     assert general["evidence_level"] == "theoretical"
     # Limited to what the label reports; no universal "not assessed" claim, no scope sentence about findings it
@@ -308,10 +308,9 @@ def test_cbd_findings_say_what_each_source_measured():
     assert "open-label" in tacrolimus["mechanism"] and "interim analysis" in tacrolimus["mechanism"]
     # Both are measured human PK effects, graded alike.
     assert tacrolimus["evidence_level"] == cbd_sub("everolimus")["evidence_level"] == "established"
-    for medicine in ("sirolimus", "digoxin"):
-        sub = cbd_sub(medicine)
-        assert "not measured directly" in sub["alert_body"] and sub["evidence_level"] == "theoretical", medicine
-        assert "not one measured with " + medicine in sub["mechanism"], medicine
+    digoxin = cbd_sub("digoxin")
+    assert "not measured directly" in digoxin["alert_body"] and digoxin["evidence_level"] == "theoretical"
+    assert "not one measured with digoxin" in digoxin["mechanism"]
     for medicine in ("tacrolimus", "sirolimus", "digoxin"):
         sub = cbd_sub(medicine)
         assert "by mouth" in sub["alert_body"] and "by mouth" in sub["action"], medicine
@@ -326,6 +325,24 @@ def test_cbd_findings_say_what_each_source_measured():
         for instruction in ("dose reduction", "reduce the dose", "monitor ", "adjust"):
             assert instruction not in action, (drug_class_id, instruction)
         assert "yourself" in action, drug_class_id
+
+
+def test_cbd_sirolimus_retains_observational_measurement_without_trial_claim():
+    """PMID 31924480 measured sirolimus troughs; it was not a controlled PK trial."""
+    sub = cbd_sub("sirolimus")
+    assert "https://pubmed.ncbi.nlm.nih.gov/31924480/" in sub["sources"]
+    assert sub["severity"] == "caution"
+    assert sub["evidence_level"] == "probable"
+    assert "retrospective" in sub["mechanism"]
+    assert "seven" in sub["mechanism"] and "5.1 ng/mL" in sub["mechanism"]
+    assert "not a controlled" in sub["mechanism"]
+    assert "observational" in sub["alert_body"]
+    assert "observational" in sub["informational_note"]
+    for field in ("mechanism", "alert_body", "informational_note"):
+        assert "not measured directly" not in sub[field]
+        assert "not one measured with sirolimus" not in sub[field]
+    assert "Agent source correction" in sub["clinical_review"]["notes"]
+    assert sub["profile_gate"]["requires"]["drug_classes_any"] == ["sirolimus"]
 
 
 def test_seizure_condition_guidance_makes_an_accurate_claim():
@@ -522,3 +539,48 @@ def test_anticholinergic_findings_say_the_wording_is_agent_work():
         assert "by agent" in rule["review_owner"]
         for sub in rule["drug_class_rules"]:
             assert "agent work, not reviewed by Dr. Pham" in sub["clinical_review"]["notes"], (rule_id, sub["drug_class_id"])
+
+
+def test_cbd_general_review_survives_stiripentol_in_mixed_regimen():
+    assert cbd_findings(["2054968", "114477"]) == {
+        "stiripentol", "cbd_other_anticonvulsants",
+    }
+
+
+def test_emsam_supplement_rule_requires_patch_identity():
+    import profile_gate_evaluator as pge
+    rules = _load("ingredient_interaction_rules.json")["interaction_rules"]
+    same = next(rule for rule in rules if rule["id"] == "RULE_IQM_SAME")
+    for rx, severity in [("865208", "contraindicated"), ("9639", "avoid"), ("", None)]:
+        classes = sorted(rule_classes_for(rx)) if rx else []
+        findings = [
+            row["severity"] for row in same["drug_class_rules"]
+            if pge.evaluate_profile_gate(row["profile_gate"], {"drug_classes": classes}, {},
+                                         base_severity=row["severity"]).fires
+        ]
+        assert findings == ([severity] if severity else [])
+
+
+def test_emsam_patch_profile_members_and_exact_pairs_agree():
+    patch = _load("drug_classes.json")["classes"]["class:emsam_patch"]
+    ids = set(patch["member_rxcuis"])
+    assert {"9639", "1158174"}.isdisjoint(ids)
+    pairs = {
+        row["agent1_id"]: row
+        for row in _load("curated_interactions/curated_interactions_v1.json")["interactions"]
+        if row["id"].startswith("DSI_EMSAM_SAME_")
+    }
+    assert set(pairs) == ids
+    assert all(row["severity"] == "Contraindicated" for row in pairs.values())
+
+
+def test_cbd_subset_preserves_existing_pair_export_class_tags():
+    from build_interaction_db import build_rxcui_to_class
+
+    authored = _load("drug_classes.json")
+    classes = authored["classes"]
+    scoped = classes["class:cbd_other_anticonvulsants"]["member_rxcuis"]
+    previous = {"classes": {key: value for key, value in classes.items()
+                            if key != "class:cbd_other_anticonvulsants"}}
+    before, after = map(build_rxcui_to_class, (previous, authored))
+    assert all(after[rx] == before[rx] for rx in scoped)

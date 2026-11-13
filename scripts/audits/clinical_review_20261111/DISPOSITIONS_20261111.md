@@ -283,7 +283,7 @@ made under the 2026-11-06 delegation and independently checked; it is not a clin
 |---|---|
 | Q1 SAMe + tranylcypromine | Kept: exact pair `DSI_TRANYLCYPROMINE_SAME` Contraindicated (PARNATE names SAM-e) |
 | Q1 SAMe + phenelzine | New exact pair `DSI_PHENELZINE_SAME` (RxCUI 8123) Contraindicated through NARDIL's serotonergic-agent category; the record says the label does not name SAMe and that applying the category is the clinical interpretation (evidence tier probable) |
-| Q1 SAMe + confirmed EMSAM | **Not implemented in this batch.** The class pair and `RULE_IQM_SAME`/maois are keyed on the MAOI class (selegiline 9639), so an EMSAM user gets avoid, as oral selegiline does; the rule's action still names the Emsam patch as contraindicated. Independent review found the app also matches the RxCUI the user picked (`stack_interaction_checker.dart`), so exact pairs on EMSAM's product RxCUIs (brand 617716 plus its SBD/SCD and group concepts, about a dozen) could carry Contraindicated on the pair surface; the profile-rule surface would stay avoid. Open follow-up |
+| Q1 SAMe + confirmed EMSAM | Implemented in #468. The existing medication class map identifies verified EMSAM brand and transdermal product RxCUIs, and the pair and profile records carry the signed contraindication. Oral and ingredient-only selegiline keep the signed MAOI fallback. |
 | Q1 SAMe + oral selegiline, other or unidentified MAOI | Class pair `DSI_MAOI_SAME` Contraindicated → Major, matching `RULE_IQM_SAME`/maois (avoid). Both carry Q1's consumer text ("Do not add SAMe while taking an MAOI without your prescriber's approval. Do not stop or switch your prescribed medicine to use SAMe.") and state the class inference. The Contraindicated/avoid split is closed |
 | 5-HTP + SSRIs/SNRIs | `DSI_SSRI_5HTP` Major → Contraindicated, matching the profile rule; Health Canada 5-HTP monograph (dated 2024-08-28; contraindication: antidepressants) cited with jurisdiction and scope. Pair widened from SSRIs to SSRIs and SNRIs, the rule's audience. Self-managed washout text removed from the SSRI/SNRI and MAOI sub-rules; `DSI_MAOI_5HTP` gains the monograph and PARNATE (hydroxytryptophan), drops "universally contraindicated … consensus", and its management now says do not take 5-HTP with an MAOI, matching its severity and the rule (it said "without the prescriber reviewing it"); oral selegiline's contraindication is recorded as a class inference |
 | 5-HTP + other serotonergic medicines | Unchanged (avoid). Held question: tricyclics are antidepressants under the monograph's contraindication (see the hold list) |
@@ -422,6 +422,34 @@ levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other 
 bundled taxonomy and vocabulary drift test need the new classes (38/22 entries with batch 3), the removal of the immunosuppressant
 sub-rule and the new class map must ship in the same interaction-DB build.
 
+### Batch 4 source correction: sirolimus observational measurements (Codex, 2026-11-12)
+
+The original batch 4 sirolimus mechanism, body and note said the interaction was not measured.
+Live NCBI EFetch content verification of [PMID 31924480](https://pubmed.ncbi.nlm.nih.gov/31924480/)
+finds a retrospective TSC series of 25 patients, including seven taking sirolimus, with median
+sirolimus trough increase 5.1 ng/mL after cannabidiol. This is observational evidence, not a
+controlled sirolimus interaction trial or a universal effect size for OTC/topical products.
+
+Corrected only the sirolimus source/copy and evidence attribution. `probable` follows the existing
+taxonomy's partial-human-support definition. Caution, action, headline, drug matching, gates,
+direction and all other medicines are unchanged; digoxin remains a theoretical label precaution.
+The existing b4 apply script produces the correction, with a regression separating sirolimus
+from the unchanged digoxin control. Agent source review and wording, not reviewed by Dr. Pham;
+all named clinical holds remain held.
+
+Validation class: behavioral clinical evidence/copy. Fail-first named regression reproduced a
+missing-source failure before the data edit. `data_batch check --since d4d8203fc`: exactly
+`interaction_rules/RULE_BANNED_CBD_INTERACTIONS`, zero problems. Safety-copy check passed; Python
+correctness found zero new findings. Strict rule citation verifier: five on-topic, zero suspects,
+PASS. General citation verifier: zero evaluated matches/mismatches; this is not independent
+content proof, which comes from the explicit EFetch source check above. The two-file owner/consumer
+slice passed 111 cases and exposed one copy-clarity failure (the body must explicitly name sirolimus
+levels). The final body fixes that wording; the failing node and both changed source-measurement
+nodes then passed (3/3), and safety-copy validation passed again. Full-registry comparison against
+`d4d8203fc` confirms parity outside six sirolimus fields: evidence level, mechanism, alert body,
+informational note, sources and clinical-review notes. Independent review, combined local and
+exact-candidate CI remain integration requirements; no release qualification or device check is claimed.
+
 ### Batch 5a: vitamin E wording (Q2), senna and cascara with digoxin (`apply_answers_b5a_vitamin_e_laxatives.py`)
 
 Sources read 2026-11-12: NIH ODS vitamin E fact sheet, "Anticoagulant and antiplatelet medications" (in-app browser;
@@ -533,3 +561,113 @@ history.
    Also: argatroban, bivalirudin, desirudin and lepirudin are identified but reach the unidentified blood-thinner
    fallback and its warfarin-addressed text. Should these four injected direct thrombin inhibitors get a class of
    their own that the fallback excludes? (Betrixaban now reads as a DOAC: its label and ATC code place it there.)
+
+## Codex remaining interaction batches (2026-11-12)
+
+Authority: Sean's handoff and instruction to fix all verified defects encountered; existing F1/F3/G1/G3
+clinical decisions remain governing. New wording/research below is agent work, not clinician review.
+Sean explicitly approved the optional `excluded_member_rxcuis` timing field and companion app fix in
+chat on 2026-11-12. The field extends the existing timing owner; it does not establish a new interval,
+severity, relation type or clinical policy. Other named clinical holds remain held.
+
+Owner: curated pair registry, drug_classes, medication_depletions, timing_rules/rejected and ingredient
+interaction rules; evidence: matrix interaction_rules/interaction_db plus existing apply scripts and
+consumer readers. Will NOT create: an alternative scorer, registry or clinical decision owner.
+
+- Open-PR chores: #459/#461/#462/#464 descriptions now include Validation and Remaining release work.
+  #465 exact f676212cf and #466 exact b3ab4424c passed all eight fast shards and merge readiness;
+  no CI defect required a code change on those heads. Later rebases need their own qualification.
+- Batch 6a/6b: source implementation and focused checks are in `BATCH6_RESEARCH_20261112.md`.
+  Isotretinoin/vitamin A and separate beta-carotene records; formulation-specific calcium/magnesium
+  bisphosphonate guidance; zoledronic acid and verified IV ibandronate product exclusions; hidden
+  SINEMET B6 source record and no-blanket-B6 regression. Brand lookup is not consumer hydration proof.
+- Batch 7: `batch7_timing_research.md` owns per-entry source/identity results. Approved magnesium
+  precaution and three scoped psyllium records; two rejected together claims. Consumer route bug
+  is being fixed under Sean's explicit field approval; not release-qualified yet.
+- Batch 8: signed source corrections are in progress. Kidney care-team caution, neutral theanine and
+  zinc information, and conditional warfarin/vitamin-D-deficiency-treatment copy have focused proof.
+  The vitamin D gate remains the existing VKA group with explicitly conditional warfarin wording;
+  this is not a claim of exact-warfarin targeting. No unknown amount enables a downgrade.
+- Additional confirmed bug: CBD/sirolimus was incorrectly described as never measured. A seven-patient
+  sirolimus subgroup in PMID 31924480 supplies observational evidence. Narrow correction prepared on
+  `codex/cbd-sirolimus-source` (78a0a7c24, PR #467), keeping caution/management/matching unchanged.
+
+Validation class: behavioral clinical data and consumer contract. Fail-first and per-entry source
+checks are recorded in receipts. Completed owner/consumer slice: 786 passed. Local checkpoint:
+564 passed, 24 declared live-stack opt-in skips; skip guard passed. Strict changed-rule citations
+PASS; safety-copy validator OK with zero warnings. Parent reviewed all source decisions and diffs;
+research agents independently checked route IDs and chromium form applicability.
+
+Frozen raw-label replay covers 17 products (14 original plus fish oil1024, B-complex219244 and
+complex green-tea27350). Every cleaned and scored record is identical before/after; warning copy,
+severity, source and scope changes are intentional. All17 enriched records carry taxonomy metadata
+changes; 16 detail blobs change and aloe control267819 retains its blob. Chromium chloride69497,
+histidinate219950 and brown-rice-chelate219244 lose the picolinate thyroid finding; picolinate3234
+retains it. Omega products1024 and complex27350, niacinamide219244 and B6-containing labels cover
+the remaining changed owners. Full paths and frozen manifests are under
+`/Users/seancheick/pg_quality/interaction-remaining-20261112`; source fingerprints accompany snapshots.
+No shared scoring runtime changed; no score/amount/role delta was observed.
+
+App route exclusions, decimal RxNorm ranking and omega presentation have focused regressions.
+The full app checkpoint found stale vocabulary/schema test expectations and a Git LFS pointer in
+the worktree; expectations now match the authored contract and the existing catalog was downloaded.
+All affected failure files pass. Full app `make check` passed: 5,632 passed, two declared skips,
+analyzer clean. A further 47 taxonomy/display checks passed after the integration reconciliation.
+Paired app PR: seancheick/Pharmaguide.ai#234.
+
+Reconciled with origin/main dd4a441b7, preserving the injected-anticoagulant category and the
+EPA/DHA theoretical evidence. Rebased owner slice: 729 passed; local: 564 passed, 24 declared
+opt-in skips, skip guard passed. Strict citations and safety copy pass. All 17 frozen comparisons
+were repeated against dd4a441b7: cleaned/scored records unchanged, 16 intentional blob changes.
+Qualification CI is tracked on pipeline PR468 and app PR234; merge only after the exact candidate
+passes. CBD source correction PR467 is rebased at 689102aea; its earlier source candidate passed
+CI and local checks, and its current candidate has a fresh qualification run.
+PR468's first completed CI shard caught an obsolete Wave8 assertion requiring green tea to target
+all beta-blockers. Reproduced the failing node, then pinned nadolol/avoid and explicitly prohibited
+both broader classes. The Wave8 and Batch8 owner files pass together; no production behavior changed.
+The completed run also found missing review attribution on the chromium split and the absent existing
+background classification on the lowered omega pair. Both were fixed at their authoring script/data
+owner. Pregnancy/lactation remains owned once by the unscoped chromium record; the coverage tests
+now resolve that explicit sibling owner instead of requiring a duplicate assessment. Source-grounded
+count, vitamin-D scope/direction and omega severity assertions were updated without weakening dose
+or publication guards. All ten affected files passed together: 172 tests. The app PR234 and CBD PR467
+source candidates passed their complete CI runs; pipeline PR468 is undergoing its corrected checkpoint.
+Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
+release or main push authorized.
+
+### Remaining clinical decisions and recommendations
+
+The consolidated source-supported recommendations are in `HELD_RESEARCH_20261112.md`; Batch 6b adds
+exact-regimen levodopa/B6, IV-calcium-only digoxin evidence, nitrates/PDE5 with amino acids, and charcoal.
+The INBRIJA example in the old handoff is corrected: its indicated use accompanies carbidopa/levodopa,
+so the inhaler's single ingredient does not prove absence of a decarboxylase inhibitor in the regimen.
+Do not call these agent recommendations Dr. Pham approvals or silently activate held warnings.
+
+Product recommendation: do not add a new together/non-precise timing relation solely to clear three
+held rows. Iron/calcium, iron/zinc and theanine/caffeine retain their specific source/contract holds;
+no bonus or invented interval. Likewise, do not infer latex content from unknown aloe processing or
+create a new preparation verdict merely to remove uncertainty. A future uncertainty display requires
+an explicit meaning and consumer contract; existing preparation evidence stays honest meanwhile.
+
+
+## Signed engineering follow-up
+
+Owner: the existing curated pairs, ingredient interaction rules and medication class map.
+Consumer owners are the Flutter MedicationClassBridge, warning composer and Stack pair checker.
+Evidence: the RxNorm EMSAM relationships, product properties, DailyMed EMSAM §7.1,
+signed Part A Q1/Q2/Q5 and Sean's two relayed clinical follow-up notes.
+Will NOT create: a new profile-gate field, exposure threshold or separate registry.
+
+| Item | Source and consumer disposition |
+|---|---|
+| Q1 EMSAM | Confirmed patch identities reach the signed contraindication through exact pairs and a product-specific profile class. Oral and ingredient-only controls keep the MAOI fallback. The Stack consumer collapses identical authored pair rows when the selected and generic RxCUIs identify the same medication. |
+| Q5 mixed CBD regimens | The existing class map represents the unassessed remainder. The scoped finding fires alongside a named finding, and the existing unspecified-class fallback fires once on its own. This preserves the existing grade while H2 remains held. |
+| Q2 vitamin E | Removed the fixed surgery interval. Surgical-team management, existing caution and the quantitative hold are retained. Flutter's tested UL and activity totals are distinct; those tests alone do not establish eligibility to reduce interaction prominence for ordinary exposure. |
+| H1–H5 and other open items | Explicit activation, severity, wording and amount-handling holds in the relayed notes remain in force. The named oral-digoxin caution remains covered by Q5. #469 merged the sirolimus correction. Duplicate #470 was closed. |
+
+#468 reconciles main through #465 and is paired with app #234. Focused verification:
+883 pipeline tests plus the 240-test gate slice, 155 Flutter tests and 34 warning
+composer tests. Citation and safety-copy checks passed. Seventeen frozen labels
+showed unchanged cleaned and scored records. The three changed detail blobs reflect
+the vitamin E wording reconciliation. The pipeline and app PRs carry CI status.
+The final interaction database, installed-app and chatbot acceptance remain release work.
