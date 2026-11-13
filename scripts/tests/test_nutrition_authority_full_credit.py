@@ -53,3 +53,20 @@ def test_full_floor_converts_to_full_pillar():
     pillar = _pillar_evidence({"score": FULL, "metadata": {}}, cfg["pillars"]["evidence"]["weight"],
                               "generic_single_molecule", cfg)
     assert pillar["score"] == 20.0
+
+
+def test_capped_amino_acid_role_keeps_a_valid_readiness_receipt():
+    """An immune-routed L-lysine label: the immune Evidence cap (17) sits below
+    the full role value (18). The receipt must read the capped score, not demand
+    score == floor, or a finished product is marked unready."""
+    from assessment_readiness import _current_nutrition_authority_receipt
+    from test_evidence_resolver import _eaa_product
+
+    product = _eaa_product('l_lysine', 'L-Lysine', 'l-lysine base', quantity=1000)
+    product['supplement_type'] = {'type': 'single_nutrient'}
+    product['primary_type'] = 'immune_support'
+    payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert payload['metadata']['immune_support_evidence_cap_applied'] is True
+    assert payload['metadata']['primary_evidence_floor'] == FULL
+    assert payload['score'] == payload['metadata']['immune_support_evidence_cap'] < FULL
+    assert _current_nutrition_authority_receipt(product, payload) is True

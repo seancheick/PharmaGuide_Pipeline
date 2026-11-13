@@ -1658,7 +1658,11 @@ def _purpose_essential_canonical(
 
 
 def _purpose_owner_canonicals(product: Dict[str, Any]) -> set:
-    """The shared role owner's purpose subjects, with the single-subject fallback."""
+    """The shared role owner's purpose subjects, with the single-subject fallback.
+
+    Same prominent set as ``evidence_resolver.evidence_owner_canonicals``; only the
+    no-prominent-row fallback differs (one competing, non-lent subject here).
+    """
     from evidence_resolver import evidence_prominent_row_keys
 
     owners = {canonical for _, canonical in evidence_prominent_row_keys(product)}

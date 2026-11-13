@@ -1485,6 +1485,11 @@ def _current_nutrition_authority_receipt(product: Mapping, evidence: Mapping) ->
     meta = _safe_dict(evidence.get("metadata"))
     canonical = _purpose_essential_canonical(dict(product))
     floor = nutrition_authority_floor_value(dict(product), canonical)
+    # The scorer applies its existing immune/joint Evidence caps after the floor.
+    scored = floor
+    for cap_key in ("immune_support_evidence_cap", "joint_support_evidence_cap"):
+        if meta.get(f"{cap_key}_applied") is True and isinstance(meta.get(cap_key), (int, float)):
+            scored = min(scored, round(float(meta[cap_key]), 4))
     # Preserve the established vitamin/mineral receipt contract. The new EAA
     # role additionally requires its current source/form-bound reference.
     if canonical in DRI_ESSENTIAL_NUTRIENTS:
@@ -1496,7 +1501,7 @@ def _current_nutrition_authority_receipt(product: Mapping, evidence: Mapping) ->
         and meta.get("nutrition_authority_canonical") == canonical
         and meta.get("nutrition_authority_floor_applied") is True
         and meta.get("primary_evidence_floor_decisive") is True
-        and evidence.get("score") == meta.get("primary_evidence_floor") == floor
+        and meta.get("primary_evidence_floor") == floor and evidence.get("score") == scored
         and _safe_dict(evidence.get("components")).get("primary_evidence_floor") == floor
         and meta.get("source_references") == nutrition_authority_references(dict(product), canonical))
 
