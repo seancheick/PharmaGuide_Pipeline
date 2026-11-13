@@ -1,7 +1,7 @@
 {
  "_metadata": {
   "source": "stored Nov 12 scored outputs (scripts/products/output_*_scored), stale lineage; recompute ranks after the integrated rebuild",
-  "scope": "material Evidence owners held as not_yet_evaluated; excludes blend members (no longer blockers after 346492e46), omega (held on purpose for undisclosed EPA/DHA), and engineering classes C2 (shadow literature) and C3 (unfinished record contexts)",
+  "scope": "material Evidence owners held as not_yet_evaluated; excludes blend members, which stop holding after 346492e46 only when the label has a qualifying material row (on a blend-only label every owner, members included, still holds through evidence_required_canonicals and is not ranked here), omega (held on purpose for undisclosed EPA/DHA), and engineering classes C2 (shadow literature) and C3 (unfinished record contexts)",
   "products_held_by_this_class": 3569,
   "cleared_by_top_150": 2658,
   "decision": "Sean 2026-11-13: review the top 150 for beta; the remainder ships with Evidence pending",
