@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
-    "last_updated": "2026-11-12",
+    "last_updated": "2026-11-13",
     "total_entries": 224,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
@@ -6511,6 +6511,37 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_id": "brand_setria_24791752_body_stores_biomarker",
+          "components": [
+            "BRAND_SETRIA"
+          ],
+          "source_pmids": [
+            "24791752"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No efficacy credit: outcomes are glutathione levels in body compartments, an exposure biomarker; the abstract does not name the Setria material."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "24791752",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24791752/"
+            }
+          },
+          "limitations": [
+            "Abstract: 6-month double-blind placebo-controlled RCT in 54 healthy non-smoking adults, oral glutathione 250 or 1,000 mg/day. Blood glutathione rose versus baseline at 1, 3 and 6 months at both doses; at 6 months the high dose raised erythrocyte, plasma and lymphocyte levels 30-35% and buccal cells 260%, and the low dose raised blood and erythrocyte levels 17% and 29% (P < 0.05). In most cases levels returned to baseline after a 1-month washout. The oxidized-to-reduced glutathione ratio fell in both dose groups at 6 months.",
+            "Secondary immune markers were measured in a subset only; natural killer cytotoxicity rose more than twofold versus placebo at 3 months in the high-dose group. Not a clinical outcome.",
+            "Exact branded material identity is not stated in the abstract; no Setria-specific transfer.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
         }
       ]
     },
@@ -8387,6 +8418,67 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_id": "brand_biocell_22486722_oa_symptoms_single_trial",
+          "components": [
+            "BRAND_BIOCELL"
+          ],
+          "source_pmids": [
+            "22486722"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit transferred: one positive trial whose full text could not be read."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "22486722",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/22486722/"
+            }
+          },
+          "limitations": [
+            "Abstract: randomized double-blind placebo-controlled trial, 80 adults with physician-verified hip and/or knee osteoarthritis and baseline pain of at least 4; 2 g/day BioCell Collagen for 70 days. Intent-to-treat VAS pain fell versus placebo at day 70 (p < 0.001); WOMAC improved at days 35 (p = 0.017) and 70 (p < 0.001); physical activity improved at days 35 (p = 0.007) and 70 (p < 0.001); tolerability comparable to placebo.",
+            "Positive finding preserved as reported; not independently replicated here. The first author's listed affiliation is AIBMR Life Sciences, Inc.; funding roles are not readable from the abstract.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "brand_biocell_31221944_skin_appearance",
+          "components": [
+            "BRAND_BIOCELL"
+          ],
+          "source_pmids": [
+            "31221944"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: cosmetic skin-appearance outcomes in healthy women; full text not readable."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "31221944",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31221944/"
+            }
+          },
+          "limitations": [
+            "Abstract: 12-week double-blind placebo-controlled trial in 128 women aged 39-59 (113 completed); 500 mg BioCell Collagen twice daily (1 g/day; at least 300 mg hydrolyzed type II collagen, 100 mg chondroitin sulfate, 50 mg hyaluronic acid per 500 mg).",
+            "Reported versus placebo: facial lines and wrinkles (P = .019), crow's feet (P = .05), elasticity (P = .008), indirect cutaneous collagen content (P < .001), visual grading and wrinkle width (P = .046), and less dryness and erythema; no difference in skin-surface water content or retention; no reported adverse reactions. Instrumental and visual cosmetic endpoints, not a health outcome.",
+            "A co-author (Schauss) is also first author of the BioCell osteoarthritis trial (PMID 22486722).",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
         }
       ]
     },
@@ -19543,6 +19635,37 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_id": "ingr_lion_mane_18844328_mci_small_trial",
+          "components": [
+            "INGR_LION_MANE"
+          ],
+          "source_pmids": [
+            "18844328"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit transferred: small single trial; the benefit faded after stopping; full text not readable."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "18844328",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/18844328/"
+            }
+          },
+          "limitations": [
+            "Abstract: double-blind parallel placebo-controlled trial in 30 Japanese adults aged 50-80 with mild cognitive impairment (15 per group); four 250 mg tablets containing 96% Yamabushitake (Hericium erinaceus) dry powder three times daily for 16 weeks, then 4 weeks off.",
+            "Scores on a cognitive scale based on the Revised Hasegawa Dementia Scale were higher than placebo at weeks 8, 12 and 16 and fell significantly 4 weeks after intake stopped. No adverse laboratory effects were reported.",
+            "The first author is affiliated with a mushroom producer (Hokuto Corporation). Preparation (part and extraction) is not further specified in the abstract; no transfer to extracts.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
         }
       ]
     },
@@ -22518,7 +22641,7 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established. November 8, 2026: two additional bounded source-content reviews completed by Codex research agent and independently checked by Codex /root. PMID 27492975 preserves a positive primary finding for exact Orafti GR Inulin, with null secondary findings and increased gas; exact preparation transfer remains unestablished. PMID 38309832 preserves small positive lipid/weight findings and null outcomes without numerical meta-analysis transfer. PMID 35833477 full Methods remains unread; no whole-ingredient completion or general Dose benchmark follows. November 8 source-access update, reviewed by Codex /root/creapure_source_review and independently checked by Codex /root: four official PMID 35833477 supplements are recovered and publisher-checksum verified (publisher supplement record https://api.figshare.com/v2/articles/20310018, linked to the original paper). The secondary-outcome extraction retains mixed/null and adverse gastrointestinal findings and identifies some baseline-only comparisons; this is not independent qualification of its primary trials. The supplied MEDLINE strategy is dated January 27, 2020, while the abstract reports searches through January 2021; the main Methods update-search reconciliation remains unread. No source completion, preparation equivalence, microbiome-surrogate clinical benefit or Dose benchmark is inferred.",
+      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established. November 8, 2026: two additional bounded source-content reviews completed by Codex research agent and independently checked by Codex /root. PMID 27492975 preserves a positive primary finding for exact Orafti GR Inulin, with null secondary findings and increased gas; exact preparation transfer remains unestablished. PMID 38309832 preserves small positive lipid/weight findings and null outcomes without numerical meta-analysis transfer. PMID 35833477 full Methods remains unread; on November 13, 2026 it closed as a no-credit source decision (agent review of the abstract and recovered supplements), so no credit or general Dose benchmark follows from it. November 8 source-access update, reviewed by Codex /root/creapure_source_review and independently checked by Codex /root: four official PMID 35833477 supplements are recovered and publisher-checksum verified (publisher supplement record https://api.figshare.com/v2/articles/20310018, linked to the original paper). The secondary-outcome extraction retains mixed/null and adverse gastrointestinal findings and identifies some baseline-only comparisons; this is not independent qualification of its primary trials. The supplied MEDLINE strategy is dated January 27, 2020, while the abstract reports searches through January 2021; the main Methods update-search reconciliation remains unread. No source completion, preparation equivalence, microbiome-surrogate clinical benefit or Dose benchmark is inferred.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-10-28",
       "notable_studies": "PMID 35833477: chicory-derived inulin-type fructans increase Bifidobacterium (surrogate), with bowel-function benefits in healthy subjects; gastrointestinal-disorder bifidogenic subgroup was not significant. PMID 34555168: healthy-adult ITF review; 11 of 20 stool-frequency studies positive and nine null, mixed calcium-related findings (absorption, balance and serum concentrations are distinct outcomes); effects depend on preparation/chain length. PMID 38309832: 55 RCTs/2518 participants, small LDL/triglyceride/body-weight changes with low to very low certainty and little to no significant effect on other risk factors. These review totals are not unique trial-enrollment or published-replication counts for this entry.",
@@ -22923,7 +23046,7 @@
             "BENEO funded the trial and had input in design/outcome selection; BENEO and BioTeSys author roles disclosed. Do not describe this as independent commercial replication.",
             "Two dropouts and eight further exclusions; per-protocol result with fewer than the 48 planned completers. Preserve observed primary benefit and null/adverse secondary results.",
             "A qualified single RCT cannot inherit the parent systematic-review/meta-analysis scoring weight. Use the existing scoring owner, exact material scope and retained positive_weak finding; no new grade or benchmark.",
-            "Independent source 35833477 remains unfinished; no whole-ingredient or product completion follows automatically."
+            "Independent source 35833477 closed separately as a no-credit decision on 2026-11-13; this trial alone sets no whole-ingredient credit."
           ]
         },
         {
@@ -23070,6 +23193,37 @@
             "Source reports 16 low risk, 22 high risk and 17 some-concern trials. Two eligible trials lacked usable data. No cardiovascular event prevention or general safety conclusion.",
             "PMID 26151029 chicory-root-tea citation exists in Table 1; its primary Methods are not qualified here. Do not convert unqualified raw-root preparation into no human research.",
             "Separate PMID 35833477 full Methods/source review remains on hold; parent mixed effect direction, Dose, safety and independent review holds remain unchanged."
+          ]
+        },
+        {
+          "context_id": "ingr_inulin_35833477_chicory_itf_meta",
+          "components": [
+            "INGR_INULIN"
+          ],
+          "source_pmids": [
+            "35833477"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: microbiome-surrogate and pooled bowel-function findings across preparations; the main Methods update-search reconciliation stays unread."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "35833477",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35833477/"
+            }
+          },
+          "limitations": [
+            "Abstract: systematic review with random-effects meta-analyses of RCTs (at least 7 days) of chicory-derived inulin-type fructans at 3-20 g/day; Bifidobacterium abundance SMD 0.83 (95% CI 0.58-1.08; 50 studies; 2,525 participants aged 0-83); bifidogenic in healthy and impaired populations except gastrointestinal disorders; bowel-function benefits in healthy subjects. Searches ran to January 2021. PROSPERO CRD42020162892.",
+            "Two authors list BENEO-Institute affiliations. From this record's earlier 2026-11-08 agent review, not the abstract: the four recovered publisher supplements retain mixed, null and adverse gastrointestinal secondary findings, and the main-text update-search reconciliation is unread.",
+            "Bifidobacterium abundance is a surrogate, not a clinical benefit. Pooled preparations and ages do not establish equivalence for any one product's inulin or FOS.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
           ]
         }
       ]
@@ -26438,6 +26592,98 @@
             "29941810",
             "20205737",
             "29246280"
+          ]
+        },
+        {
+          "context_id": "preclin_astaxanthin_generic_32755613_cardiometabolic_meta",
+          "components": [
+            "PRECLIN_ASTAXANTHIN_GENERIC"
+          ],
+          "source_pmids": [
+            "32755613"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: mostly null cardiometabolic biomarkers; the positive findings are small or subgroup-only."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "32755613",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32755613/"
+            }
+          },
+          "limitations": [
+            "Abstract: meta-analysis of 14 eligible articles (RCTs per the title). No association with fasting glucose, HbA1c, total or LDL cholesterol, triglycerides, BMI, body weight, or systolic or diastolic blood pressure.",
+            "HDL cholesterol rose by a weighted mean of 1.473 mg/dL (95% CI 0.319-2.627). CRP fell only in subgroups of at least 12 weeks or more than 12 mg/day; the abstract reports these CRP units inconsistently (mg/l and mg/dl).",
+            "Biomarker outcomes only; no clinical endpoint.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "preclin_astaxanthin_generic_35091276_oxidative_inflammation_meta",
+          "components": [
+            "PRECLIN_ASTAXANTHIN_GENERIC"
+          ],
+          "source_pmids": [
+            "35091276"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: oxidative-stress and inflammation biomarkers only, from small pooled trials."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "35091276",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35091276/"
+            }
+          },
+          "limitations": [
+            "Abstract: systematic review and meta-analysis of 12 placebo-controlled RCTs (380 participants). Malondialdehyde fell (SMD -0.95; 95% CI -1.67 to -0.23), notably in type 2 diabetes; IL-6 fell in type 2 diabetes (-0.70 pg/mL); CRP and TNF-alpha did not change significantly.",
+            "Few trials for other oxidative markers; in overweight subjects astaxanthin appeared to improve superoxide dismutase activity and reduce serum isoprostane. Biomarker outcomes only; no clinical endpoint.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "preclin_astaxanthin_generic_38243785_fatigue_cognition_exercise_meta",
+          "components": [
+            "PRECLIN_ASTAXANTHIN_GENERIC"
+          ],
+          "source_pmids": [
+            "38243785"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: fatigue rests on two studies, cognition is not significant, and the exercise gains depend on concurrent training."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38243785",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38243785/"
+            }
+          },
+          "limitations": [
+            "Abstract: meta-analysis of 11 RCTs (346 healthy participants). Two studies showed a trend toward less subjective fatigue. After 8-12 weeks, cognitive accuracy was called marginally significant by the authors (SMD 0.12; 95% CI -0.02 to 0.26, which includes zero); reaction time was not significant (SMD -0.08; 95% CI -0.26 to 0.10).",
+            "With regular training, fat oxidation (SMD 2.56) and physical performance (SMD 0.62) improved; subgroups favored aerobic exercise (SMD 0.45), at least 20 mg/day and more than 12 weeks. The abstract's interval for the longer-duration subgroup (SMD 0.66; 95% CI 0.13-0.63) does not contain its point estimate.",
+            "Exercise outcomes are combined with training and do not transfer to a general fatigue or cognition benefit.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
           ]
         }
       ]
@@ -46004,7 +46250,7 @@
       "health_goals_supported": [],
       "effect_direction": "positive_strong",
       "total_enrollment": 500,
-      "notes": "Black seed oil (Nigella sativa) has strong evidence from multiple large meta-analyses (16-30 RCTs) with consistent glycemic and blood pressure endpoints. FBG and HbA1c reductions are well-replicated across studies.",
+      "notes": "Human sources concern glycemic, lipid and blood-pressure outcomes across seed and oil preparations. PMID 40210172 (16 RCTs in type 2 diabetes) reports lower fasting glucose, HbA1c, total and LDL cholesterol with several null outcomes; PMID 37341696 reports small blood-pressure reductions with very high heterogeneity; PMID 21675032 is a seed-capsule dose study in type 2 diabetes without a stated placebo arm. On November 13, 2026 these three sources closed as no-credit decisions from their PubMed abstracts (agent review, not clinician review); no general benefit transfers to black seed oil.",
       "last_updated": "2026-10-28",
       "notable_studies": "NCT04989101 (n=500): Nigelle 5 in Prevention of Influanza. NCT04553705 (n=150): Omega-3, Nigella Sativa, Indian Costus, Quinine, Anise Seed, Deglycyrrhizinated Licorice, Artemisinin, Febrifugine on Immunity of Patients With (COVID-19). NCT06030141 (n=108): Investigation of the Effect of Nigella Sativa Oil and Sesame Oil in Preventing Phlebitis.",
       "references_structured": [
@@ -46149,6 +46395,97 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_id": "ingr_black_seed_oil_21675032_t2dm_seed_capsule_doses",
+          "components": [
+            "INGR_BLACK_SEED_OIL"
+          ],
+          "source_pmids": [
+            "21675032"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: seed-capsule adjunct dose study in type 2 diabetes with no placebo arm stated; not the oil."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "21675032",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21675032/"
+            }
+          },
+          "limitations": [
+            "Abstract: 94 adults with type 2 diabetes on oral hypoglycemic drugs randomized to 1, 2 or 3 g/day Nigella sativa seed capsules for 3 months. At 2 g/day fasting glucose, 2-hour glucose and HbA1c (-1.52%) fell from baseline, HOMA2 insulin resistance fell (P < 0.01) and beta-cell function rose (P < 0.02); 1 g/day showed non-significant trends; 3 g/day added no further benefit. Renal and hepatic function were not adversely affected.",
+            "Comparisons in the abstract are against baseline across dose groups; no placebo group is stated.",
+            "Seed capsules, not black seed oil; adjunct use in diabetes does not transfer to general use.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "ingr_black_seed_oil_37341696_blood_pressure_meta",
+          "components": [
+            "INGR_BLACK_SEED_OIL"
+          ],
+          "source_pmids": [
+            "37341696"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: small pooled blood-pressure reductions with very high heterogeneity."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "37341696",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37341696/"
+            }
+          },
+          "limitations": [
+            "Abstract: updated systematic review and random-effects meta-analysis of RCTs in adults (searched to August 2022). Systolic -3.06 mmHg (95% CI -3.89 to -2.22; I-squared 84.7%) and diastolic -2.69 mmHg (95% CI -3.72 to -1.66; I-squared 97.3%).",
+            "The abstract does not state the number of trials, the preparations or the populations; seed and oil preparations cannot be separated from it.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "ingr_black_seed_oil_40210172_t2dm_cardiometabolic_meta",
+          "components": [
+            "INGR_BLACK_SEED_OIL"
+          ],
+          "source_pmids": [
+            "40210172"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: adjunct findings limited to type 2 diabetes, with mixed preparations and several null outcomes."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40210172",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40210172/"
+            }
+          },
+          "limitations": [
+            "Abstract: meta-analysis of 16 RCTs in type 2 diabetes. Fasting glucose -21.43 mg/dL, HbA1c -0.44, total cholesterol -18.80 mg/dL and LDL -19.53 mg/dL. No significant effect on 2-hour glucose, insulin, HOMA, triglycerides, HDL, liver enzymes, creatinine, weight or BMI.",
+            "Fasting glucose fell in trials longer than 8 weeks; subgroups suggested HbA1c, HOMA and LDL effects with the oil form, more than 1 g/day and 8 weeks or less. Population-specific adjunct evidence; no transfer to people without diabetes.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
         }
       ]
     },
@@ -46301,6 +46638,67 @@
           "limitations": [
             "Animal research: broiler chickens given aflatoxin B1 with or without sea buckthorn berry oil. Never human clinical evidence for this record (Dr. Pham third ruling set, 2026-10-28).",
             "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+          ]
+        },
+        {
+          "context_id": "ingr_sea_buckthorn_20554904_dry_eye_single_trial",
+          "components": [
+            "INGR_SEA_BUCKTHORN"
+          ],
+          "source_pmids": [
+            "20554904"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit transferred: one trial with mixed significance across analyses; full text not readable."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "20554904",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/20554904/"
+            }
+          },
+          "limitations": [
+            "Abstract: double-blind randomized parallel trial in 100 adults aged 20-75 with dry eye symptoms (86 completed); 2 g/day sea buckthorn oil or placebo oil for 3 months, fall to winter.",
+            "Tear osmolarity rose less than placebo (ITT P = 0.04; per protocol P = 0.02). Redness differed in ITT (P = 0.04) but not per protocol (P = 0.11); burning differed per protocol (P = 0.04) but not in ITT (P = 0.05).",
+            "Oil preparation only; the seed versus pulp source is not specified in the abstract.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
+          ]
+        },
+        {
+          "context_id": "ingr_sea_buckthorn_36043374_metabolic_syndrome_meta",
+          "components": [
+            "INGR_SEA_BUCKTHORN"
+          ],
+          "source_pmids": [
+            "36043374"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician review; independent abstract re-read by a fresh-context Claude agent",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "No credit: lipid changes confined to people with abnormal lipids, with high heterogeneity."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "36043374",
+              "location": "PubMed abstract.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/36043374/"
+            }
+          },
+          "limitations": [
+            "Abstract: meta-analysis of 15 RCTs. Overall, triglycerides, total cholesterol and LDL fell and HDL rose (SMD scale); subgroup analysis found lipid reductions only in people with abnormal lipid metabolism. No effect on blood glucose, blood pressure or BMI.",
+            "Authors report high heterogeneity that persists after subgroup analysis; the abstract does not describe the preparations.",
+            "No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the PubMed abstract and does not establish that full text is unavailable elsewhere.",
+            "Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a finding that the ingredient lacks support."
           ]
         }
       ]
