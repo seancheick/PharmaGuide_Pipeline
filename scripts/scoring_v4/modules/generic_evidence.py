@@ -133,8 +133,10 @@ _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # established DRI (RDA/AI) has evidence of *necessity* even without a
 # product-specific RCT — "no RCT in our data" must not mean "no evidence of
 # usefulness" for a nutrient the body provably requires (copper at evidence 0 was
-# the failure). The floor is 10 — deliberately BELOW the 14 strong clinical
-# floor (established necessity < RCT-proven effect).
+# the failure). A product whose every purpose-owning ingredient has that role
+# earns the generic Evidence reference, as essential-nutrient panels reach their
+# ceiling (Sean, 2026-11-13). A mixed formula keeps the configured floor, so a
+# vitamin never lifts another ingredient's Evidence by its presence.
 # Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
@@ -324,9 +326,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # clinical outcomes. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a strong clinical 14 stays 14).
         auth_canon = _purpose_essential_canonical(product)
+        authority_floor = nutrition_authority_floor_value(product, auth_canon)
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
-                and primary_floor < NUTRITION_AUTHORITY_FLOOR):
-            primary_floor = NUTRITION_AUTHORITY_FLOOR
+                and primary_floor < authority_floor):
+            primary_floor = authority_floor
             nutrition_authority_canonical = auth_canon
             if not floor_canonical:
                 floor_canonical = auth_canon
@@ -1649,28 +1652,46 @@ def _purpose_essential_canonical(
     excess are independent Dose/Safety judgments and do not decide Evidence.
     """
     if owner_canonicals is None:
-        from evidence_resolver import evidence_prominent_row_keys
-        owner_canonicals = {canonical for _, canonical in evidence_prominent_row_keys(product)}
-        if not owner_canonicals:
-            # Preserve the existing single-subject fallback; multiple active
-            # identities never get a heaviest-mass authority anchor.
-            subjects = {str(row.get("canonical_id") or "").strip().lower()
-                        for row in _competing_active_rows(product) if isinstance(row, dict)
-                        and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
-            if len(subjects) == 1:
-                owner_canonicals = subjects
+        owner_canonicals = _purpose_owner_canonicals(product)
+    candidates = _authority_canonicals(product) & owner_canonicals
+    return sorted(candidates)[0] if candidates else None
+
+
+def _purpose_owner_canonicals(product: Dict[str, Any]) -> set:
+    """The shared role owner's purpose subjects, with the single-subject fallback."""
+    from evidence_resolver import evidence_prominent_row_keys
+
+    owners = {canonical for _, canonical in evidence_prominent_row_keys(product)}
+    if not owners:
+        # Preserve the existing single-subject fallback; multiple active
+        # identities never get a heaviest-mass authority anchor.
+        subjects = {str(row.get("canonical_id") or "").strip().lower()
+                    for row in _competing_active_rows(product) if isinstance(row, dict)
+                    and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
+        if len(subjects) == 1:
+            owners = subjects
+    return owners
+
+
+def _authority_canonicals(product: Dict[str, Any]) -> set:
+    """Active canonicals whose row has a source-qualified nutritional role."""
     from evidence_resolver import nutrition_authority_for_row
 
-    candidates = set()
-    for row in _competing_active_rows(product):
-        if not isinstance(row, dict):
-            continue
-        canonical = str(row.get("canonical_id") or "").strip().lower()
-        if owner_canonicals is not None and canonical not in owner_canonicals:
-            continue
-        if nutrition_authority_for_row(row):
-            candidates.add(canonical)
-    return sorted(candidates)[0] if candidates else None
+    return {str(row.get("canonical_id") or "").strip().lower()
+            for row in _competing_active_rows(product)
+            if isinstance(row, dict) and nutrition_authority_for_row(row)}
+
+
+def nutrition_authority_floor_value(product: Dict[str, Any], canonical: Optional[str]) -> float:
+    """Full generic reference when every purpose owner has a nutritional role.
+
+    Otherwise the configured floor. Amount adequacy stays a Dose judgment.
+    """
+    owners = _purpose_owner_canonicals(product)
+    if canonical and owners and owners <= _authority_canonicals(product):
+        from scoring_v4.quality_score_config import config
+        return float(config()["evidence_subscale"]["archetype_reference"]["generic_single_molecule"])
+    return NUTRITION_AUTHORITY_FLOOR
 
 
 def nutrition_authority_references(product: Dict[str, Any], canonical: Optional[str]) -> list:

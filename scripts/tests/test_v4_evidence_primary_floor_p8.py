@@ -118,13 +118,14 @@ def test_floor_not_applied_without_opt_in(reviewed_product):
 def test_trace_strong_ingredient_does_not_floor(reviewed_product):
     # selenium (trace, 0.05 mg) has a strong match; magnesium (primary, 1000 mg)
     # does not. The trace ingredient must NOT anchor the CLINICAL floor (14).
-    # P5: magnesium (mass-dominant essential) earns the nutrition-authority floor
-    # (10); the selenium trace match still does not push it to the clinical tier.
+    # P5: magnesium (the essential purpose owner) earns the nutrition-authority
+    # floor (full since 2026-11-13); the trace selenium match does not anchor it.
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Selenium", "selenium", 50, "mcg")]
     matches = [_match(ingredient="Selenium", standard_name="Selenium", study_type="rct_multiple")]
     out = score_evidence(reviewed_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
     assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
@@ -245,14 +246,15 @@ def test_studied_amount_does_not_gate_evidence_floor(reviewed_product):
 def test_branded_trace_ingredient_does_not_floatreviewed_product(reviewed_product):
     """A branded strong match on a TRACE co-ingredient (not mass-dominant) must
     not float the product to a clinical floor. P5: magnesium (the
-    mass-dominant essential) earns the nutrition-authority floor 10 — the trace
-    branded ashwagandha does NOT lift it to 18."""
+    mass-dominant essential) earns the nutrition-authority floor (full since
+    2026-11-13) on its own role; the trace branded ashwagandha anchors nothing."""
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Sensoril Ashwagandha", "ashwagandha", 50, "mg")]
     matches = [_match(ingredient="Sensoril Ashwagandha", standard_name="Sensoril Ashwagandha",
                       study_type="rct_multiple", evidence_level="branded-rct")]
     out = score_evidence(reviewed_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
     assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
@@ -280,13 +282,14 @@ def test_non_essential_gets_no_authority_floor(reviewed_product):
 
 def test_authority_floor_never_lowers_stronger_floor(reviewed_product):
     """Authority is a floor, never a cap: an essential nutrient with a strong
-    clinical record keeps that higher floor (vitamin D strong = 14 > authority 10)."""
+    clinical record keeps the higher floor. Since 2026-11-13 the established role
+    (full, 18) exceeds the strong clinical floor (14), so the maximum is 18."""
     p = reviewed_product([_ing("Vitamin D", "vitamin_d", 25, "mcg")],
                  [_match(ingredient="Vitamin D", standard_name="Vitamin D",
                          canonical_id="vitamin_d", study_type="rct_multiple",
                          evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
 
 
 def test_authority_floor_is_generic_opt_in_only(reviewed_product):

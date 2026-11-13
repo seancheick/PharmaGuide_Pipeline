@@ -270,7 +270,9 @@ def test_exposure_only_finding_no_longer_anchors_the_floor(fixture, canonical, o
 
 
 @pytest.mark.parametrize("fixture,canonical,floor", [
-    ("evidence_floor_330065_raw.json", "potassium", 14.0),   # accepted surrogate: blood pressure
+    # Potassium is also an essential nutrient, so its established role (full, 18,
+    # since 2026-11-13) is now the decisive floor above the accepted surrogate's 14.
+    ("evidence_floor_330065_raw.json", "potassium", 18.0),   # accepted surrogate: blood pressure
     ("evidence_review_315089_raw.json", "tesnor", 9.35),     # mixed: patient-important AMS context
 ])
 def test_accepted_or_functional_findings_keep_their_floor(fixture, canonical, floor):

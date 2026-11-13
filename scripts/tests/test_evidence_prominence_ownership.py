@@ -156,7 +156,8 @@ def test_evidence_strength_not_relative_mass_selects_between_declared_purposes()
     # Held Vitamin D and unreviewed calcium trial matches cannot supply
     # clinical credit. The independently established nutrient authority remains.
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "calcium"
-    assert payload["metadata"]["primary_evidence_floor"] == 10.0
+    # Both declared purposes are essential nutrients: full credit (2026-11-13).
+    assert payload["metadata"]["primary_evidence_floor"] == 18.0
     assert payload["metadata"]["nutrition_authority_canonical"] == "calcium"
     assert payload["components"]["clinical_evidence_pipeline"] == 0
 
@@ -531,7 +532,8 @@ def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
     independent of which physical row is heaviest."""
     evidence = _evidence(_enrich("prominence_authority_compound_row_306193_raw.json"))
     assert "vitamin_c" in evidence["metadata"]["evidence_owner_canonicals"]
-    assert evidence["components"]["primary_evidence_floor"] == 10.0
+    # Calcium and vitamin C are both essential: full credit (2026-11-13).
+    assert evidence["components"]["primary_evidence_floor"] == 18.0
     assert evidence["metadata"]["nutrition_authority_canonical"] == "calcium"
 
 

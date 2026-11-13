@@ -267,7 +267,9 @@ def test_module_owned_evidence_floor_is_moderate_not_absent() -> None:
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
-    assert out["v4_breakdown"]["module"]["dimensions"]["evidence"]["score"] == 10.0
+    # Full role credit since 2026-11-13; an authority floor is still not
+    # product-specific evidence, so confidence stays moderate.
+    assert out["v4_breakdown"]["module"]["dimensions"]["evidence"]["score"] == 18.0
     assert confidence["evidence"]["level"] == "moderate"
     assert "nutrition_authority_evidence_floor" in confidence["evidence"]["drivers"]
     assert "no_clinical_evidence_matched" not in confidence["evidence"]["drivers"]

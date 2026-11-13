@@ -831,7 +831,7 @@ def test_reference_only_registry_cannot_be_revived_by_stale_enriched_credit(reco
         evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
         assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_b12_cobalamin"
         assert evidence["metadata"]["nutrition_authority_floor_applied"] is True
-        assert evidence["score"] == 10.0
+        assert evidence["score"] == 18.0  # full for an all-essential purpose (2026-11-13)
 
 
 @pytest.mark.parametrize("record_id", [
@@ -2341,7 +2341,7 @@ def test_product_positioning_counts_against_an_ingredient_only_when_attributable
 
 @pytest.mark.parametrize('rid,canonical,name,quantity,unit,authority,status', [
     # Vitamin D3 and Testofen finished as reference-only on 2026-11-11 (no credit either way).
-    ('INGR_VITAMIN_D3', 'vitamin_d', 'Vitamin D3', 25, 'mcg', 10.0, 'not_applicable'),
+    ('INGR_VITAMIN_D3', 'vitamin_d', 'Vitamin D3', 25, 'mcg', 18.0, 'not_applicable'),
     ('BRAND_TESTOFEN', 'fenugreek', 'Testofen Fenugreek Extract', 600, 'mg', 0.0, 'not_applicable'),
     ('INGR_LACTOFERRIN', 'lactoferrin', 'Lactoferrin', 200, 'mg', 0.0, 'unresolved'),
 ])
