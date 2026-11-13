@@ -140,3 +140,13 @@ Sean authorized PR477/236 integration and continuing work. App236 merged asb85aa
 main contains qualifiedcbb20fe6. Pipeline merge waits for these corrected checks and review-thread
 resolution. Valerian follow-up stays separately preserved at codex/evidence-valerian/f64572527.
 No rebuild, catalog publication, installed-app delivery or release is claimed.
+
+### Authority CI completion-copy correction
+
+CI43523089618 shard5 exposed one old zero-credit copy pin for raw312894. Its
+nine-amino-acid blend now retains the existing mixed nutritional-role floor10
+(seven qualified undosed subjects; hydrochloride preparations do not qualify
+for full20). It remains partial/not_yet_reviewed with the Evidence release
+blocker.2505 remains0. Independent source/production review accepts the exact
+score and blocker assertions; all73 A9 completion-scope tests pass. No production
+change in this correction. f5 local checkpoint passed564 with24declared opt-ins.
