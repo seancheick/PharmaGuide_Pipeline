@@ -1351,6 +1351,17 @@
       ],
       "source_commit": "5c6b7b763 (branch claude/evidence-floor-part-c, on origin/main 648f27224)",
       "notes": "Expected movement from Sean's Evidence-floor rule (DR_PHAM_ANSWERS_20261112.md Part C): a finding that shows only exposure, target engagement or an unvalidated physiological response cannot, by itself, unlock the primary Evidence floor. 223084 Creatine Ethyl Ester: the only qualifying finding of INGR_CREATINE_ETHYL_ESTER (PMID 19228401) is higher muscle total-creatine content, classified surrogate_class exposure; strength, power and body composition showed no between-group benefit. The rct_single x mixed floor (6.6 raw) no longer applies; ordinary Evidence points stay 2.4, so Evidence 7.3 -> 2.4 and total 56.9 -> 52.0, tier/grade Needs improvement -> Poor. Status complete, safety no_known_catalog_concern and SAFE unchanged. Raw --check at 5c6b7b763: 32 unchanged, this one drift; the same value is measured by the frozen-label replay (baseline 648f27224 vs candidate)."
+    },
+    {
+      "date": "2026-11-13",
+      "dsld_ids": [
+        293924,
+        294077,
+        298102,
+        321969
+      ],
+      "source_commit": "426951d48 (branch claude/evidence-authority-full, on origin/main e9896fc5e)",
+      "notes": "Expected movement from Sean's decision (2026-11-13): an established nutritional role earns the full Evidence reference (18 raw, 20/20) when every purpose-owning ingredient is an essential nutrient, matching essential-nutrient panels; mixed formulas keep the 10-point floor. 294077 Zinc 15, 298102 Vitamin D and 321969 Iron Bisglycinate move Evidence 11.1 -> 20.0 (total +8.9). 293924 Calcium Magnesium moves 15.6 -> 20.0 (+4.4): its strong magnesium clinical floor (14) is now below the calcium+magnesium role credit (18). Only score, grade and tier changed; status, safety and the other pillars are unchanged."
     }
   ]
 }
