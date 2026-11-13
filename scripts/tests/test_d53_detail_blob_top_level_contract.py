@@ -215,3 +215,19 @@ def test_deprecated_blob_sections_have_no_pipeline_reader() -> None:
         reader = re.compile(rf"""\.get\(\s*["']{key}["']|\[\s*["']{key}["']\s*\](?!\s*=[^=])""")
         readers = sorted(str(p.relative_to(scripts)) for p, text in sources.items() if reader.search(text))
         assert not readers, f"{key} is deprecated but read by {readers}"
+
+
+def test_exported_dose_fields_are_declared():
+    from audit_contract_sync import ACTIVE_CONTRACT
+    from build_final_db import _stamp_dose_contract
+
+    rows = [{"raw_source_path": "ingredientRows[0]"}]
+    _stamp_dose_contract(rows, [{
+        "raw_source_path": "ingredientRows[0]",
+        "dose_role": "declared_total",
+        "per_day_min": 10,
+        "per_day_max": 20,
+        "converted_unit": "mg",
+        "safety_exposure": {"low_per_day": 10},
+    }], {})
+    assert not (set(rows[0]) - ACTIVE_CONTRACT.keys())
