@@ -5468,3 +5468,14 @@ Initial PR477 CI8ba6c1bc completed with30 failures in five shards: obsolete ladd
 syntheticfull-credit input18, and missing newconfig-version history. Relevant correction slices
 208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate
 requires a fresh exact-head CI checkpoint. App PR236cbb20fe6 CI pending. No main/release action.
+
+
+PR477 post-green review: two authority-row bugs reproduced and corrected (hidden qualified blend
+member omitted; same-canonical L/DL preparation full-credit transfer). Existing mixed10 preserved;
+full20 now checks each purpose row.401 owner tests and11 receipt/count/isolation guards pass.
+Independent review accepted corrected source including fallback mutation isolation.18fullraw
+comparisons preserve every public export/score/status/safety value; only Ravage's nondecisive
+nutritional-floor metadata changes. Final timing2.873768s lies within baseline observations;
+RSS192004096 vs repeatedbaseline202522624. Fresh local/CI checkpoint pending. Sean approved merging
+477/236 and continuing. App236 is mergedb85aa7a8; pipeline477 remains open for qualification.
+Valerian commits preserved separately on codex/evidence-valerian/f64572527; no release/rebuild.

@@ -1673,24 +1673,31 @@ def _purpose_essential_canonical(
     return sorted(candidates)[0] if candidates else None
 
 
+def _purpose_owner_rows(product: Dict[str, Any]) -> list:
+    """Purpose subjects retain source-row identity, including undosed members."""
+    def derive():
+        from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
+
+        prominent = evidence_prominent_row_keys(product)
+        if prominent:
+            return [row for row in get_evidence_subject_rows(product)
+                    if isinstance(row, dict) and evidence_row_key(row) in prominent]
+        # Preserve the existing single-subject fallback. A blend total is not a
+        # source row, and several identities never acquire an anchor by mass.
+        rows = [row for row in _competing_active_rows(product)
+                if isinstance(row, dict) and not is_lent_blend_mass(row)
+                and str(row.get("canonical_id") or "").strip()]
+        subjects = {str(row["canonical_id"]).strip().lower() for row in rows}
+        return rows if len(subjects) == 1 else []
+
+    return scoped_product_view(
+        product, ("nutrition_authority_purpose_rows",), lambda: deepcopy(derive()), deepcopy,
+    )
+
+
 def _purpose_owner_canonicals(product: Dict[str, Any]) -> set:
-    """The shared role owner's purpose subjects, with the single-subject fallback.
-
-    Same prominent set as ``evidence_resolver.evidence_owner_canonicals``; only the
-    no-prominent-row fallback differs (one competing, non-lent subject here).
-    """
-    from evidence_resolver import evidence_prominent_row_keys
-
-    owners = {canonical for _, canonical in evidence_prominent_row_keys(product)}
-    if not owners:
-        # Preserve the existing single-subject fallback; multiple active
-        # identities never get a heaviest-mass authority anchor.
-        subjects = {str(row.get("canonical_id") or "").strip().lower()
-                    for row in _competing_active_rows(product) if isinstance(row, dict)
-                    and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
-        if len(subjects) == 1:
-            owners = subjects
-    return owners
+    return {str(row.get("canonical_id") or "").strip().lower()
+            for row in _purpose_owner_rows(product)}
 
 
 def _authority_canonicals(product: Dict[str, Any]) -> set:
@@ -1698,8 +1705,8 @@ def _authority_canonicals(product: Dict[str, Any]) -> set:
     from evidence_resolver import nutrition_authority_for_row
 
     return {str(row.get("canonical_id") or "").strip().lower()
-            for row in _competing_active_rows(product)
-            if isinstance(row, dict) and nutrition_authority_for_row(row)}
+            for row in _competing_active_rows(product, get_evidence_subject_rows(product))
+            if nutrition_authority_for_row(row)}
 
 
 def nutrition_authority_floor_value(product: Dict[str, Any], canonical: Optional[str]) -> float:
@@ -1707,8 +1714,11 @@ def nutrition_authority_floor_value(product: Dict[str, Any], canonical: Optional
 
     Otherwise the configured floor. Amount adequacy stays a Dose judgment.
     """
-    owners = _purpose_owner_canonicals(product)
-    if canonical and owners and owners <= _authority_canonicals(product):
+    from evidence_resolver import nutrition_authority_for_row
+
+    rows = _purpose_owner_rows(product)
+    owners = {str(row.get("canonical_id") or "").strip().lower() for row in rows}
+    if canonical in owners and rows and all(nutrition_authority_for_row(row) for row in rows):
         from scoring_v4.quality_score_config import config
         return float(config()["evidence_subscale"]["archetype_reference"]["generic_single_molecule"])
     return NUTRITION_AUTHORITY_FLOOR
@@ -1720,7 +1730,7 @@ def nutrition_authority_references(product: Dict[str, Any], canonical: Optional[
 
     if canonical != _purpose_essential_canonical(product):
         return []
-    for row in _competing_active_rows(product):
+    for row in _competing_active_rows(product, get_evidence_subject_rows(product)):
         if row.get("canonical_id") == canonical:
             facts = nutrition_authority_for_row(row)
             if facts:

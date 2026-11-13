@@ -371,7 +371,13 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
     product = _enrich(fixture)
     evidence = _evidence(product)
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
-    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
+    if member == "creatine_monohydrate":
+        # Ravage's independently identified, undosed L-leucine has a
+        # nutritional role. This is not a creatine dose or clinical floor.
+        assert evidence["metadata"]["nutrition_authority_canonical"] == "l_leucine"
+        assert evidence["metadata"]["primary_evidence_floor"] == 10.0
+    else:
+        assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     if member == "psyllium":
         from clinical_applicability import assess_clinical_source_review, reviewed_entries
         assert assess_clinical_source_review(reviewed_entries()["INGR_PSYLLIUM_HUSK"])["is_complete"]
