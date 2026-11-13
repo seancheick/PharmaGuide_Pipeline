@@ -248,3 +248,12 @@ or missing. Independent applied-diff review passes. Seven frozen labels243701,33
 labels only change internal hold reasons, two controls unchanged. Last_updated metadata corrected
 after this replay; final combined candidate qualification remains pending. No products released.
 Durable receipts and exact apply script: cohosh-chlorella-* under the existing evidence-close folder.
+### Authority CI completion-copy correction
+
+CI43523089618 shard5 exposed one old zero-credit copy pin for raw312894. Its
+nine-amino-acid blend now retains the existing mixed nutritional-role floor10
+(seven qualified undosed subjects; hydrochloride preparations do not qualify
+for full20). It remains partial/not_yet_reviewed with the Evidence release
+blocker.2505 remains0. Independent source/production review accepts the exact
+score and blocker assertions; all73 A9 completion-scope tests pass. No production
+change in this correction. f5 local checkpoint passed564 with24declared opt-ins.

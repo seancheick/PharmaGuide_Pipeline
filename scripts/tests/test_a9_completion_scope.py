@@ -548,9 +548,12 @@ def test_a_panel_label_holds_on_an_unread_ingredient_it_is_about(pipeline, label
     assert "evidence_assessment_incomplete" in scored["assessment_readiness"]["release_assessment"]["blockers"]
 
 
-@pytest.mark.parametrize("label", ["a9_review_pending_312894_raw.json", "a9_review_pending_2505_raw.json"])
-def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label):
-    from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
+@pytest.mark.parametrize("label, retained_credit", [
+    ("a9_review_pending_312894_raw.json", 10.0),
+    ("a9_review_pending_2505_raw.json", 0.0),
+])
+def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label, retained_credit):
+    from scoring_v4.quality_score import _EVIDENCE_OPEN_REVIEW_REASON, _EVIDENCE_ZERO_REASON
     from scoring_v4.scored_artifact import build_scored_artifact
 
     # Dropping the open row from scope can't turn an unfinished review into a finding.
@@ -558,7 +561,12 @@ def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label)
     evidence = scored["quality_pillars_v4"]["evidence"]
     assert scored["quality_assessment_status"] == "partial"
     assert evidence["display_state"] == "not_yet_reviewed"
-    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
+    assert evidence["score"] == retained_credit
+    assert evidence["reason"] == (
+        _EVIDENCE_OPEN_REVIEW_REASON if retained_credit
+        else _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
+    )
+    assert "evidence_assessment_incomplete" in _release_blockers(scored)
 
 
 def test_an_unfinished_label_says_its_review_is_pending(pipeline):
