@@ -109,8 +109,11 @@ def test_header_identity_does_not_enter_scoring(enrich, dsld_id, pillar, expecte
         botanical = [row for row in dose["dose_contributions"] if row["assessment"] == "botanical_profile"]
         assert botanical and all(row["credit_raw"] > 0 for row in botanical)
         assert all(row["assessment"] == "botanical_profile" for row in botanical)
-        assert scored["quality_assessment_status"] == "partial"
-        assert scored["assessment_readiness"]["release_assessment"]["is_complete"] is False
+        # Echinacea Complex's open members (burdock) are unamounted blend
+        # members and no longer hold it (Sean, 2026-11-13); UP446 still does.
+        complete = dsld_id == 73300
+        assert scored["quality_assessment_status"] == ("complete" if complete else "partial")
+        assert scored["assessment_readiness"]["release_assessment"]["is_complete"] is complete
 
 
 def test_identified_food_blend_member_does_not_route_a_vitamin_product(enrich):
@@ -304,14 +307,16 @@ def _scoring_inputs(artifact):
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
     # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and
     # the vitamins are the Dose panel (60.7 and [12.54] on main).
-    # Grape remains unfinished; cranberry qualification hold lowers Evidence without changing roles or Dose.
-    (40089, {"score": 63.9, "status": "partial",
+    # Grape remains unreviewed but, as an unamounted blend member, no longer holds the product
+    # (Sean, 2026-11-13); cranberry qualification hold lowers Evidence without changing roles or Dose.
+    (40089, {"score": 63.9, "status": "complete",
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
              "dose_credits": [12.83, 15.12, 17.46]}),
     (327402, {"score": 72.8, "status": "partial", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
     # 83.8 on main; 83.9 since PR214 (multi panel form quality reads material rows only).
-    (328104, {"score": 83.9, "status": "partial", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
+    # Its open members (polyphenols, pomegranate, blueberry) are minor blend rows: complete since 2026-11-13.
+    (328104, {"score": 83.9, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
 ])
 def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id, expected):
     """Source-bound values: retain main controls; reviewed Coptis Dose adds neutral only."""
@@ -328,10 +333,14 @@ def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id,
         assert not any(row.get("canonical_id") == "maca"
                        for row in get_scoring_ingredients(product, strict=True).rows)
     if dsld_id in {327402, 328104}:
-        # Nutrient credit cannot complete the required food/botanical owners.
-        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
+        # Nutrient credit cannot complete the required food/botanical owners. In
+        # 328104 the open food rows are minor members of a 50 mg blend, so they
+        # stay unreviewed and disclosed without holding (Sean, 2026-11-13).
+        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is (dsld_id == 328104)
         assert any(row["state"] == "not_yet_evaluated"
                    for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"])
+        if dsld_id == 328104:
+            assert "weren't individually reviewed" in artifact["quality_pillars_v4"]["evidence"]["reason"]
     if dsld_id == 40089:
         from evidence_resolver import resolve_product_evidence
         resolution = resolve_product_evidence(product, owner_scoped=True)
