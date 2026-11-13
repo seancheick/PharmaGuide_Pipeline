@@ -222,3 +222,29 @@ Sean authorized PR477/236 integration and continuing work. App236 merged asb85aa
 main contains qualifiedcbb20fe6. Pipeline merge waits for these corrected checks and review-thread
 resolution. Valerian follow-up stays separately preserved at codex/evidence-valerian/f64572527.
 No rebuild, catalog publication, installed-app delivery or release is claimed.
+
+
+## Black cohosh and Chlorella source corrections — November 13, 2026
+
+Owner: existing INGR_BLACK_COHOSH and INGR_CHLORELLA records in backed_clinical_studies;
+will NOT create a grade, Dose benchmark, registry or new clinical determination. Behavioral
+source-transcription/existing-hold enforcement batch. A048/A056 verification and October28 fifth
+ruling retain specific holds. Parent scoring_eligible=false now makes those holds explicit.
+
+Main and independent source_review read live PubMed abstracts15565808,16039414,17565936,19609225,
+29037431,35331862,23234816. Black-cohosh copy now distinguishes uncontrolled improvement, a null
+whole-population primary analysis with positive subgroup, active-comparator/33%attrition, and
+12-month placebo-null findings; universal safety/regimen claims removed. Chlorella copy retains
+biomarker findings while identifying subgroup limitations, unequal metformin doses in the adjunct
+trial, null lipid outcomes and modeled dose-response limitations. Unsupported longevity goals and
+muscle-recovery attribution removed. Historical effect directions, all references, NCT inventories,
+Dose semantics and empty contexts preserved; no aggregate trial/enrollment validation claimed.
+Both record update dates reflect November13. This is agent source review, not clinician review.
+
+Four regressions failed first;472 source-owner tests pass. Exact data_batch check proves only the
+two named records changed. Scoped strict citation verifier:7claims/7PMIDs pass,0mismatch/drift/ghost
+or missing. Independent applied-diff review passes. Seven frozen labels243701,338997,251578,311326,
+273825 plus312587/293955 controls: public blobs, scores/pillars/status/safety unchanged; five affected
+labels only change internal hold reasons, two controls unchanged. Last_updated metadata corrected
+after this replay; final combined candidate qualification remains pending. No products released.
+Durable receipts and exact apply script: cohosh-chlorella-* under the existing evidence-close folder.

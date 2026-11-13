@@ -45705,17 +45705,15 @@
       "score_contribution": "tier_2",
       "key_endpoints": [
         "Reduced total cholesterol by 9.09 mg/dL, LDL-C by 8.32 mg/dL, systolic BP by 4.51 mmHg, and fasting blood glucose by 4.23 mg/dL in meta-analysis of 19 RCTs (n=797) (PMID: 29037431)",
-        "Reduced serum ALT, AST, triglycerides, and HOMA-IR at 1200 mg/day for 3 months in NAFLD patients (n=76 RCT) (PMID: 23234816)",
-        "Dose-dependent LDL-C reduction significant at 0-1500 mg/day in dose-response meta-analysis of 10 RCTs (n=539) (PMID: 35331862)"
+        "Open-label NAFLD trial reported within-group reductions in ALT, AST, triglycerides and HOMA-IR with 1200 mg/day Chlorella extract plus metformin and vitamin E; metformin doses differed between groups, limiting attribution to Chlorella (PMID: 23234816).",
+        "Ten-RCT synthesis found lower total and LDL cholesterol but no significant triglyceride or HDL change; modeled nonlinear LDL findings do not establish an effective dose threshold (PMID: 35331862)."
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "health_goals_supported": [],
+      "primary_outcome": null,
       "effect_direction": "positive_strong",
       "total_enrollment": 110,
-      "notes": "Chlorella has the strongest meta-analytic evidence base among algae supplements, with 19 RCTs (PMID: 29037431) showing significant cardiovascular risk factor improvements. Blood pressure effects are more consistent than lipid effects. Effective doses are 4g/day or higher for 8+ weeks.",
-      "last_updated": "2026-10-28",
+      "notes": "Reviewed Chlorella studies report selected cardiovascular and metabolic biomarker changes across differing populations and preparations. PMID 29037431 reports subgroup findings by dose and duration; these do not establish a universal effective minimum of 4 g/day or eight weeks. PMID 35331862 reports lower total and LDL cholesterol, with null triglyceride and HDL findings and limited verification of supplement composition. The reviewed sources do not establish superiority over other algae supplements or demonstrate longevity benefit. Dr. Pham's source-content hold remains; no new Evidence credit, Dose benchmark or safety conclusion is assigned.",
+      "last_updated": "2026-11-13",
       "notable_studies": "NCT04567823 (n=80): Nutrient Bioavailability From Microalgae. NCT05016557 (n=36): The Muscle Protein Synthetic Response of Algal and Fungal Protein. NCT05639634 (n=36): The Efficacy of Chlorella Supplementation on Health and Performance Following a 12-week Training Programme.",
       "references_structured": [
         {
@@ -45730,31 +45728,30 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/29037431/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         },
         {
           "pmid": "23234816",
           "url": "https://pubmed.ncbi.nlm.nih.gov/23234816/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         },
         {
           "pmid": "35331862",
           "url": "https://pubmed.ncbi.nlm.nih.gov/35331862/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         }
       ],
       "published_studies_count": 9,
       "registry_completed_trials_count": 9,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=9; registry_completed_trials_count=9; total_enrollment=110; endpoint_tags=cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Historical positive_strong classification retained without new grade acceptance. Reviewed sources report selected cardiovascular and metabolic biomarker changes, null findings on other outcomes, heterogeneous preparations and populations, and limitations on causal attribution. They do not establish longevity or muscle-recovery benefit. The specific source-content hold remains; this correction does not validate aggregate trial or enrollment totals.",
       "endpoint_relevance_tags": [
         "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "glycemic_control"
       ],
       "reference_semantics": {
         "reference_type": "no_benchmark",
@@ -45816,7 +45813,8 @@
           ]
         }
       },
-      "study_contexts": []
+      "study_contexts": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
@@ -47345,18 +47343,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Reduced weekly hot flash scores by 56% and daily hot flash frequency by 50% over 4 weeks in postmenopausal women (PMID: 15565808)",
-        "Decreased Kupperman Index by 47% vs 21% placebo (p<0.018) in moderate-to-severe subgroup over 12 weeks in 122-woman multicenter RCT (PMID: 16039414)",
-        "Reduced hot flush scores by 85% at 6 months vs 62% for fluoxetine in 120-patient comparative RCT (PMID: 17565936)"
+        "Uncontrolled Remifemin pilot: among 21 completers, daily hot-flash frequency fell 50% and weekly scores fell 56% from baseline over four weeks; no concurrent placebo comparison (PMID: 15565808).",
+        "Primary analysis showed no superiority over placebo; Kupperman Index decreased 47% versus 21% in the moderate-to-severe subgroup over 12 weeks (PMID: 16039414).",
+        "Hot-flush scores decreased 85% versus 62% with fluoxetine at six months; no placebo arm and 33% attrition in each group (PMID: 17565936)."
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "health_goals_supported": [],
+      "primary_outcome": null,
       "effect_direction": "mixed",
       "total_enrollment": 355,
-      "notes": "Black cohosh evidence is mixed. Several trials show meaningful hot flash reduction (PMID: 15565808, 16039414, 17565936), but best-controlled RCTs (PMID: 19609225) found no significant benefit vs placebo at 12 months. The Kupperman Index reduction was significant only in moderate-to-severe subgroup. Safety profile is consistently favorable. Typical dose is 40mg/day standardized extract.",
-      "last_updated": "2026-10-28",
+      "notes": "Black cohosh findings differ by preparation and study design. PMID 15565808 reports improvement from baseline in an uncontrolled Remifemin pilot. PMID 16039414 found no superiority in the primary whole-population analysis; a moderate-to-severe subgroup showed improvement. PMID 17565936 compared black cohosh with fluoxetine without a placebo arm and had 33% attrition in each group. PMID 19609225 found no significant vasomotor-symptom benefit versus placebo after 12 months. These findings do not establish a universal regimen or consistently favorable safety profile. Dr. Pham's specific efficacy/applicability hold remains; safety is assessed by its separate owner.",
+      "last_updated": "2026-11-13",
       "notable_studies": "NCT00299364 (n=240): Comparison of the Efficacy and Tolerability of Black Cohosh Vs Tibolone in Patients With Menopausal Symptoms. NCT03461380 (n=220): Effect of Menopause Relief EP-40 in Women With Menopausal Symptoms. NCT06328348 (n=96): Assessing the Synergistic Effects of Black Cohosh, Soy Isoflavones, and SDG Lignans (Soloways TM) on Menopausal Symptoms.",
       "references_structured": [
         {
@@ -47378,30 +47374,28 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/15565808/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         },
         {
           "pmid": "16039414",
           "url": "https://pubmed.ncbi.nlm.nih.gov/16039414/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         },
         {
           "pmid": "17565936",
           "url": "https://pubmed.ncbi.nlm.nih.gov/17565936/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "PubMed abstract content independently checked by Codex on November 13, 2026 for the bounded wording correction; full Methods and exact preparation applicability are not certified, and the existing clinical hold remains."
         }
       ],
       "published_studies_count": 14,
       "registry_completed_trials_count": 14,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=14; registry_completed_trials_count=14; total_enrollment=355; several RCTs report hot-flash improvement, but the best-controlled 12-month placebo trial (PMID 19609225) found no significant benefit versus placebo.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ],
+      "effect_direction_rationale": "Retained mixed classification. Reviewed menopausal-symptom findings include an uncontrolled pilot, a placebo trial with a null primary whole-population analysis and a positive subgroup, an active-comparator trial, and a 12-month placebo-controlled null result. These findings do not establish longevity benefit. The specific clinical acceptance hold remains; this correction assigns no grade and does not validate aggregate trial or enrollment totals.",
+      "endpoint_relevance_tags": [],
       "reference_semantics": {
         "reference_type": "no_benchmark",
         "scope": "General catalog Dose for this exact source-owned preparation; not a clinical-efficacy or safety decision",
@@ -47462,7 +47456,8 @@
           ]
         }
       },
-      "study_contexts": []
+      "study_contexts": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_CERAMIDES",
