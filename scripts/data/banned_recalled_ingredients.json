@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-11-04",
+    "last_updated": "2026-11-12",
     "total_entries": 189,
     "data_source_metadata": {
       "sources": [
@@ -18280,6 +18280,7 @@
         "aloe latex",
         "aloe leaf latex",
         "aloe vera latex",
+        "aloe barbadensis latex",
         "aloe leaf inspissated juice",
         "aloes",
         "aloe ferox",
@@ -18432,6 +18433,11 @@
             "date": "2026-09-25",
             "change": "EU status corrected from banned to under_review: the General Court annulled the Aloe-leaf entry of Regulation (EU) 2021/468 on 2024-11-13 (T-189/21) and the appeal C-38/25 P is pending. Consumer copy no longer claims an EU prohibition.",
             "by": "claude_anthraquinone_laxative_pass"
+          },
+          {
+            "date": "2026-11-12",
+            "change": "Added alias 'aloe barbadensis latex' (Barbados aloes; A. barbadensis is A. vera, whose latex was already an alias). The aloe digoxin, antiarrhythmic, diuretic, pregnancy, kidney and liver interaction rule (RULE_IQM_ALOE_FEROX) now sits on this identity: agent implementation of Dr. Pham's section 2 direction (signed answers 2026-11-12: preparation context), so the negative terms that keep inner-leaf gel out of this entry also keep it out of that rule.",
+            "by": "claude_interaction_lane"
           }
         ]
       },

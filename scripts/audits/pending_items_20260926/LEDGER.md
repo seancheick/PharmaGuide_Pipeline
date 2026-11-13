@@ -5419,3 +5419,13 @@ CI run 43316165829 found a stale SAMe identifier count and two missing citation
 topic mappings for the new scoped classes. The corrections preserve the SAMe
 identity assertion and the citation audit coverage. All 181 affected tests passed
 together. The corrected candidate gets a fresh combined CI run.
+
+## November 12 — Aloe preparation identity for the digoxin warning (branch `claude/interaction-b5b-aloe-preparation`)
+
+Class: behavioral data (interaction rule subject, alias, consumer copy). `RULE_IQM_ALOE_FEROX` now sits on the latex
+identity `RISK_ALOE_LATEX` (Dr. Pham, signed answers 2026-11-12, section 2; agent implementation). Record and
+evidence: `clinical_review_20261111/DISPOSITIONS_20261111.md`, batch 5b. Open items from it:
+- Dr. Pham: a label row named "Aloe ferox gel" now meets no aloe rule (no corpus label names one; 15,414 scanned).
+  Whether oral non-vera aloe gel gets the aloe vera pregnancy/lactation finding is her call.
+- Sean: whole leaf of unknown processing shows no latex finding; showing it as "uncertain" needs a new display state.
+- Identity follow-up: "Decolorized aloe vera whole leaf extract" resolves to no aloe identity, so it meets no aloe rule.
