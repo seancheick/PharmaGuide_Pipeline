@@ -257,3 +257,42 @@ for full20). It remains partial/not_yet_reviewed with the Evidence release
 blocker.2505 remains0. Independent source/production review accepts the exact
 score and blocker assertions; all73 A9 completion-scope tests pass. No production
 change in this correction. f5 local checkpoint passed564 with24declared opt-ins.
+
+### Valerian explicit constituent disclosure — qualified locally
+
+Owner: Clean::_is_standardization_marker_row and existing standardized_botanicals;
+Enrich::_derive_disclosed_marker_percentage now delegates existing max-not-sum
+ratio and whole-word matching to normalization.py. Owner search covered matrix,
+glossary and marker stems. No new registry, public field, tolerance or grade.
+A private transient flag carries raw parent/child proof through existing flattening.
+Clean additionally requires an exact registered child name, exact registered extract
+parent alias, direct child, one identical serving basis, exact quantity operators,
+explicit matching printed percentage and the existing parent mass bound. The
+0.8% form-quality threshold is not used to reject a genuine0.3% disclosure.
+
+Two source-disclosure regressions failed before implementation. Independent review
+found three modified-name false positives; all failed first and exact-name matching
+corrected them. Final owner/identity/Enrich/signoff slice:384passed in65.14s.
+Five frozen full-label replays:328079 restores57.9/complete;333775 restores59.6
+but stayspartial on separate Evidence review. Root and constituent amounts and all
+interaction summaries unchanged; three controls unchanged. Final exact-name guard
+adds zero artifact differences. Independent review accepts source and measured deltas.
+Same five raw inputs, warmup plus three timed runs: median0.496126s/RSS442073088
+before;0.488896s/RSS424476672 after; inputsha27d1a9db98da890dc5e4ffe6dcf11b49810bfba27373e37aa605913697855b81 unchanged.
+No observed regression in this bounded measurement; no corpus speed claim.
+Final seven-label cohosh/chlorella replay equals the earlier reviewed correction
+across full records (zero additional differences). Receipts:valerian-marker-* and
+cohosh-chlorella-final-* under the existing external evidence-close directory.
+
+### Review queue ranks26–50 reuse screen
+
+Read-only record/receipt triage is not25completed reviews. Most are unfinished
+applicability or preparation-specific studies; explicit bromelain/saffron holds
+remain. Psyllium was the strongest reuse hypothesis: stable full raw probes330038
+(huskpowder) and76810(seedhuskpowder) already resolve through INGR_PSYLLIUM_HUSK
+to reviewed human support and complete Evidence.17192 generic Psyllium correctly
+stayspending because source-labelled husk is unresolved. No wiring defect found,
+no new grade or schema change. Generic control is not verified whole seed.
+Receipts:external psyllium-probe/stable.jsonl and full records. Queue is stale;
+recompute only after integrated final rebuild. L-phenylalanine authority and
+horsetail preparation-specific record reconciliation remain investigation candidates.

@@ -5335,6 +5335,9 @@ class EnhancedDSLDNormalizer:
                         )
                         continue
 
+                    nested_ing["_disclosed_marker_percentage_matches"] = (
+                        self._registered_marker_disclosure_matches(ing, nested_ing)
+                    )
                     # Mark as part of a blend
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["parent_source_path"] = ing.get("raw_source_path")
@@ -8689,6 +8692,7 @@ class EnhancedDSLDNormalizer:
             and _marker_parent_dosed
             and (
                 self._parent_is_standardized_botanical_extract(_marker_parent_name)
+                or ing.get("_disclosed_marker_percentage_matches") is True
                 or self._is_analytical_fraction_marker(_marker_parent_name, name)
                 # Curated descriptor identity supplies the missing marker
                 # semantics when the printed parent omits "standardized".
@@ -9741,6 +9745,47 @@ class EnhancedDSLDNormalizer:
         return bool(
             re.search(r"\bother\s+omega\s*-?\s*3\b", str(form.get("name") or ""), re.IGNORECASE)
         )
+
+    def _registered_marker_disclosure_matches(self, parent: Dict, child: Dict) -> bool:
+        """Recognize an explicit child percentage on the same unambiguous serving basis."""
+        parent_name = str(parent.get("name") or "").strip().lower()
+        if "extract" not in parent_name:
+            return False
+        # A lifted grandchild cannot borrow a different ancestor's amount.
+        if not any(child is row for row in parent.get("nestedRows", [])):
+            return False
+        quantities = [row.get("quantity") for row in (parent, child)]
+        if any(not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict)
+               for rows in quantities):
+            return False
+        parent_q, child_q = (rows[0] for rows in quantities)
+        for field in ("servingSizeOrder", "servingSizeQuantity", "servingSizeUnit"):
+            if parent_q.get(field) in (None, "") or parent_q.get(field) != child_q.get(field):
+                return False
+        if any(q.get("operator") not in (None, "", "=") for q in (parent_q, child_q)):
+            return False
+        if not self._marker_fits_inside_parent(child_q.get("quantity"), child_q.get("unit"),
+                                              parent_q.get("quantity"), parent_q.get("unit")):
+            return False
+        printed = re.fullmatch(r"\s*(?:(?:standardized|standardised)\s+to\s+)?(\d+(?:\.\d+)?)\s*%\s*",
+                               str(child.get("notes") or ""), re.IGNORECASE)
+        if not printed:
+            return False
+        parent_mg = float(parent_q["quantity"]) * self._MASS_UNIT_TO_MG[str(parent_q["unit"]).strip().lower()]
+        child_mg = float(child_q["quantity"]) * self._MASS_UNIT_TO_MG[str(child_q["unit"]).strip().lower()]
+        for botanical in self.standardized_botanicals.get("standardized_botanicals", []):
+            names = [botanical.get("standard_name", ""), *botanical.get("aliases", [])]
+            if parent_name not in {str(name).strip().lower() for name in names}:
+                continue
+            markers = botanical.get("markers", [])
+            child_name = str(child.get("name") or "").strip().lower()
+            if child_name not in {str(marker).strip().lower() for marker in markers}:
+                continue
+            percentage = norm_module.disclosed_marker_percentage(
+                parent_mg, [(child_name, child_mg)], markers)
+            if percentage > 0 and percentage == float(printed.group(1)):
+                return True
+        return False
 
     def _parent_is_standardized_botanical_extract(self, parent_name: str) -> bool:
         """True when a parent row name is a dosed standardized botanical extract.

@@ -5491,3 +5491,13 @@ nutritional-floor metadata changes. Final timing2.873768s lies within baseline o
 RSS192004096 vs repeatedbaseline202522624. Fresh local564passed/24declared opt-ins and skipguard passed in151.91s; CI43523089618 pending. Sean approved merging
 477/236 and continuing. App236 is mergedb85aa7a8; pipeline477 remains open for qualification.
 Valerian commits preserved separately on codex/evidence-valerian/f64572527; no release/rebuild.
+
+November13 follow-up: source corrections1741bd894 preserve black-cohosh/chlorella
+clinical holds (472tests,7PMIDcitationchecks,7raw public parity). Valerian explicit
+percentage markers corrected with exact source identity, matching serving basis
+and parent mass guards;384owner tests, reviewed5raw replay and boundedperformance
+pass.328079complete57.9;333775scored59.6butEvidencepartial; warnings/amounts preserved.
+PR477now25d83bfc1 includes a verified stale pending-copy test correction (73A9pass);
+CI43524878679pending. App236merged. Follow-up local/CI qualification still pending;
+no rebuild/release. Psyllium3raw probe finds no wiring defect; rank26–50triage is
+not completed clinical review. Details/receipts in existing evidence-close research.

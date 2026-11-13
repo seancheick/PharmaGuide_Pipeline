@@ -1000,3 +1000,26 @@ def find_affirmative_label_match(pattern, text: str, *, spaced_free: bool = Fals
                 continue
             return candidate
     return None
+
+
+def has_marker_word_match(markers, text):
+    """Match registered marker names at whole-word boundaries."""
+    if not text or not markers:
+        return False
+    return any(re.search(rf"\b{re.escape(marker.lower())}\b", text.lower())
+               for marker in markers)
+
+
+def disclosed_marker_percentage(parent_mass_mg, children, markers):
+    """Largest disclosed marker share; overlapping marker rows are never summed."""
+    if parent_mass_mg is None or parent_mass_mg <= 0 or not markers:
+        return 0.0
+    percentages = []
+    for text, mass_mg in children:
+        if mass_mg is None or not has_marker_word_match(markers, text):
+            continue
+        percentage = mass_mg / parent_mass_mg * 100.0
+        # Existing Enrich display-rounding allowance; Clean applies its stricter mass guard.
+        if 0 < percentage <= 100.5:
+            percentages.append(min(percentage, 100.0))
+    return round(max(percentages), 4) if percentages else 0.0

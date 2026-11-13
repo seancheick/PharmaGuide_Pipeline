@@ -11896,7 +11896,7 @@ class SupplementEnricherV3:
         if parent_mass_mg is None or not markers:
             return 0.0
 
-        percentages: List[float] = []
+        children = []
         nested = ingredient.get("nestedIngredients")
         for child in nested if isinstance(nested, list) else []:
             if not isinstance(child, dict):
@@ -11911,21 +11911,13 @@ class SupplementEnricherV3:
                     "ingredientGroup",
                 )
             )
-            if not self._has_marker_word_match(markers, child_text):
-                continue
             child_quantity = self._to_float_safe(child.get("quantity"))
             child_mass_mg = _normalize_parent_blend_mg(
                 child_quantity,
                 child.get("unit"),
             )
-            if child_mass_mg is None:
-                continue
-            percentage = (child_mass_mg / parent_mass_mg) * 100.0
-            # A tiny allowance covers display rounding, not contradictory data.
-            if 0 < percentage <= 100.5:
-                percentages.append(min(percentage, 100.0))
-
-        return round(max(percentages), 4) if percentages else 0.0
+            children.append((child_text, child_mass_mg))
+        return norm_module.disclosed_marker_percentage(parent_mass_mg, children, markers)
 
     def _has_marker_word_match(self, markers: List[str], text: str) -> bool:
         """
@@ -11942,20 +11934,7 @@ class SupplementEnricherV3:
         Returns:
             True if any marker is found as a word boundary match
         """
-        if not text or not markers:
-            return False
-
-        text_lower = text.lower()
-
-        for marker in markers:
-            marker_lower = marker.lower()
-            # Use word boundary regex to ensure we match whole words
-            # \b matches word boundaries (start/end of word)
-            pattern = rf'\b{re.escape(marker_lower)}\b'
-            if re.search(pattern, text_lower):
-                return True
-
-        return False
+        return norm_module.has_marker_word_match(markers, text)
 
     # -------------------------------------------------------------------------
     # Solution B — Product-name fallback synthesizer
