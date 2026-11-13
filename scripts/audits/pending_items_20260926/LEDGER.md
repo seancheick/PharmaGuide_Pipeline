@@ -5466,5 +5466,18 @@ correction2a3a1d985 independently reviewed,124affected+15projectiontests pass;6f
 all scores/pillars/assessment/safety/blob output with internal holdreason corrections only.
 Initial PR477 CI8ba6c1bc completed with30 failures in five shards: obsolete ladder/reference pins,
 syntheticfull-credit input18, and missing newconfig-version history. Relevant correction slices
-208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate
-requires a fresh exact-head CI checkpoint. App PR236cbb20fe6 CI pending. No main/release action.
+208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate3a1d85543 passed all eight pipeline shards and Merge readiness in run43500088624. App PR236cbb20fe6 passed run43497335461. Both remain unmerged; main-integration approval requested in the active chat. No rebuild or release action.
+
+
+Valerian follow-up9a5b0edd3/ae13ffd25: chemical/root identity correction plus existing completed-zero
+canonical wiring, independently reviewed. Owner: IQM aliases/exclusions, Clean/Enrich identity seam,
+existing recognition variants and INGR_VALERIAN.canonical_id; no new policy/registry. Five raw
+replays show two root-only completions with unchanged scores/safety, two honest unresolved-identity
+holds with root warnings preserved, and one unchanged control. Initial +144% matching slowdown
+reproduced and fixed by bounded immutable static variant reuse; final0.451s vsbaseline0.456s and
+lower RSS,0artifact differences from the optimization. Detailed fail-first and focused-test receipts
+in research.md. Final local564pass/24declared opt-ins,146.73s,skipguardpass. This follow-up is committed
+locally only and still needs exact CI. Remote PR477 remains the qualified3a1 candidate awaiting
+main-integration permission; no corpus rebuild or release. Black cohosh/chlorella source-copy
+corrections remain verified but unapplied; every-held review queue, signed holds and release-gate
+decision remain open.
