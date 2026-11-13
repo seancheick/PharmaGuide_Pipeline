@@ -1,0 +1,2166 @@
+{
+ "_metadata": {
+  "source": "stored Nov 12 scored outputs (scripts/products/output_*_scored), stale lineage; recompute ranks after the integrated rebuild",
+  "scope": "material Evidence owners held as not_yet_evaluated; excludes blend members (no longer blockers after 346492e46), omega (held on purpose for undisclosed EPA/DHA), and engineering classes C2 (shadow literature) and C3 (unfinished record contexts)",
+  "products_held_by_this_class": 3569,
+  "cleared_by_top_150": 2658,
+  "decision": "Sean 2026-11-13: review the top 150 for beta; the remainder ships with Evidence pending",
+  "existing_record_ids_note": "Pointer to verify, not proof: matched by record id (INGR_<canonical or stem>), aliases, ingredient or matched_canonical_ids. A match means a record exists, not that it applies to these labels (example: l_carnitine labels that do not print the salt). A record filed under another name can still be missed; search before starting a first review.",
+  "rubric": "one credited conclusion per ingredient on the five-step ladder; agent review, content-verified, independent second check (ADR-0007 rule 6)"
+ },
+ "queue": [
+  {
+   "rank": 1,
+   "canonical_id": "prebiotics",
+   "label_name_example": "Galactooligosaccharides",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 103,
+   "products_cleared_at_this_step": 59,
+   "cumulative_cleared": 59,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 104
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 2,
+   "canonical_id": "green_tea_extract",
+   "label_name_example": "Green Tea Leaf Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 90,
+   "products_cleared_at_this_step": 56,
+   "cumulative_cleared": 115,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 100
+   },
+   "existing_record_ids": [
+    "INGR_GREEN_TEA"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 3,
+   "canonical_id": "maca",
+   "label_name_example": "Maca (Lepidium meyenii) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 71,
+   "products_cleared_at_this_step": 50,
+   "cumulative_cleared": 165,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 76
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 4,
+   "canonical_id": "citrus_bioflavonoids",
+   "label_name_example": "Citrus Bioflavonoids",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 61,
+   "products_cleared_at_this_step": 46,
+   "cumulative_cleared": 211,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 62
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 5,
+   "canonical_id": "l_carnitine",
+   "label_name_example": "GlycoCarn GPLC",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 53,
+   "products_cleared_at_this_step": 45,
+   "cumulative_cleared": 256,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 54
+   },
+   "existing_record_ids": [
+    "INGR_ACETYL_L_CARNITINE",
+    "INGR_L_CARNITINE"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 6,
+   "canonical_id": "fiber",
+   "label_name_example": "Glucomannan",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 49,
+   "products_cleared_at_this_step": 42,
+   "cumulative_cleared": 298,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 53
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 7,
+   "canonical_id": "isoflavones",
+   "label_name_example": "Soy Isoflavones",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 54,
+   "products_cleared_at_this_step": 41,
+   "cumulative_cleared": 339,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 55
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 8,
+   "canonical_id": "valerian",
+   "label_name_example": "Valerian (Valeriana officinalis) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 58,
+   "products_cleared_at_this_step": 40,
+   "cumulative_cleared": 379,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 63
+   },
+   "existing_record_ids": [
+    "INGR_VALERIAN"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 9,
+   "canonical_id": "5_htp",
+   "label_name_example": "5-HTP",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 40,
+   "products_cleared_at_this_step": 38,
+   "cumulative_cleared": 417,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 41
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 10,
+   "canonical_id": "acai_berry",
+   "label_name_example": "Assai Palm (Acai) (Euterpe oleracea) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 39,
+   "products_cleared_at_this_step": 38,
+   "cumulative_cleared": 455,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 39
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 11,
+   "canonical_id": "olive_leaf",
+   "label_name_example": "Olive Leaf Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 45,
+   "products_cleared_at_this_step": 36,
+   "cumulative_cleared": 491,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 46
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 12,
+   "canonical_id": "nattokinase",
+   "label_name_example": "Nattokinase",
+   "topic": "enzyme",
+   "products_held_touched": 37,
+   "products_cleared_at_this_step": 36,
+   "cumulative_cleared": 527,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 37
+   },
+   "existing_record_ids": [
+    "INGR_NATTOKINASE"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 13,
+   "canonical_id": "lemon_balm",
+   "label_name_example": "Lemon Balm (Melissa officinalis) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 62,
+   "products_cleared_at_this_step": 33,
+   "cumulative_cleared": 560,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 62
+   },
+   "existing_record_ids": [
+    "INGR_LEMON_BALM"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 14,
+   "canonical_id": "chamomile",
+   "label_name_example": "Chamomile (Matricaria recutita) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 48,
+   "products_cleared_at_this_step": 36,
+   "cumulative_cleared": 596,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 49
+   },
+   "existing_record_ids": [
+    "INGR_CHAMOMILE"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 15,
+   "canonical_id": "pine_bark_extract",
+   "label_name_example": "French Maritime Pine Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 34,
+   "products_cleared_at_this_step": 33,
+   "cumulative_cleared": 629,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 34
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 16,
+   "canonical_id": "fenugreek",
+   "label_name_example": "Fenugreek, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 43,
+   "products_cleared_at_this_step": 32,
+   "cumulative_cleared": 661,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 43
+   },
+   "existing_record_ids": [
+    "INGR_FENUGREEK"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 17,
+   "canonical_id": "black_cohosh",
+   "label_name_example": "Black Cohosh Root Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 42,
+   "products_cleared_at_this_step": 32,
+   "cumulative_cleared": 693,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 42
+   },
+   "existing_record_ids": [
+    "INGR_BLACK_COHOSH"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 18,
+   "canonical_id": "green_coffee_bean",
+   "label_name_example": "Green Coffee Bean Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 39,
+   "products_cleared_at_this_step": 31,
+   "cumulative_cleared": 724,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 39
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 19,
+   "canonical_id": "pumpkin",
+   "label_name_example": "Pumpkin extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 31,
+   "products_cleared_at_this_step": 29,
+   "cumulative_cleared": 753,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 31
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 20,
+   "canonical_id": "chlorella",
+   "label_name_example": "Chlorella (Chlorella pyrenoidosa) powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 28,
+   "products_cleared_at_this_step": 27,
+   "cumulative_cleared": 780,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 28
+   },
+   "existing_record_ids": [
+    "INGR_CHLORELLA"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 21,
+   "canonical_id": "dandelion",
+   "label_name_example": "organic Dandelion",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 45,
+   "products_cleared_at_this_step": 26,
+   "cumulative_cleared": 806,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 46
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 22,
+   "canonical_id": "yohimbe",
+   "label_name_example": "Yohimbe Bark Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 38,
+   "products_cleared_at_this_step": 26,
+   "cumulative_cleared": 832,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 39
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 23,
+   "canonical_id": "astragalus",
+   "label_name_example": "Astragalus (Astragalus membranaceus) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 32,
+   "products_cleared_at_this_step": 26,
+   "cumulative_cleared": 858,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 34
+   },
+   "existing_record_ids": [
+    "INGR_ASTRAGALUS"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 24,
+   "canonical_id": "st_johns_wort",
+   "label_name_example": "St. John's Wort (Hypericum perforatum) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 30,
+   "products_cleared_at_this_step": 26,
+   "cumulative_cleared": 884,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 31
+   },
+   "existing_record_ids": [
+    "INGR_ST_JOHNS_WORT"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 25,
+   "canonical_id": "oi_beetroot_powder",
+   "label_name_example": "Beet",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 30,
+   "products_cleared_at_this_step": 26,
+   "cumulative_cleared": 910,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 30
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 26,
+   "canonical_id": "dhea",
+   "label_name_example": "Dehydroepiandrosterone, Micronized",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 30,
+   "products_cleared_at_this_step": 25,
+   "cumulative_cleared": 935,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 30
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 27,
+   "canonical_id": "horny_goat_weed",
+   "label_name_example": "Horny Goat Weed Leaf and Stem Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 29,
+   "products_cleared_at_this_step": 25,
+   "cumulative_cleared": 960,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 29
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 28,
+   "canonical_id": "holy_basil",
+   "label_name_example": "organic Holy Basil",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 34,
+   "products_cleared_at_this_step": 24,
+   "cumulative_cleared": 984,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 34
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 29,
+   "canonical_id": "horsetail",
+   "label_name_example": "organic Spring Horsetail",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 33,
+   "products_cleared_at_this_step": 24,
+   "cumulative_cleared": 1008,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 33
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 30,
+   "canonical_id": "l_phenylalanine",
+   "label_name_example": "DL-Phenylalanine",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 32,
+   "products_cleared_at_this_step": 24,
+   "cumulative_cleared": 1032,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 32
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 31,
+   "canonical_id": "hops",
+   "label_name_example": "Hops (Humulus lupulus) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 28,
+   "products_cleared_at_this_step": 24,
+   "cumulative_cleared": 1056,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 28
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 32,
+   "canonical_id": "broccoli",
+   "label_name_example": "Broccoli",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 32,
+   "products_cleared_at_this_step": 23,
+   "cumulative_cleared": 1079,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 34
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 33,
+   "canonical_id": "mucuna_pruriens",
+   "label_name_example": "Mucuna pruriens",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 23,
+   "products_cleared_at_this_step": 23,
+   "cumulative_cleared": 1102,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 23
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 34,
+   "canonical_id": "l_cysteine",
+   "label_name_example": "L-Cysteine Hydrochloride",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 23,
+   "products_cleared_at_this_step": 23,
+   "cumulative_cleared": 1125,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 23
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 35,
+   "canonical_id": "dimethyl_glycine",
+   "label_name_example": "N, N-Dimethylglycine Hydrochloride",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 23,
+   "products_cleared_at_this_step": 23,
+   "cumulative_cleared": 1148,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 23
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 36,
+   "canonical_id": "fennel",
+   "label_name_example": "standardized Fennel extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 32,
+   "products_cleared_at_this_step": 22,
+   "cumulative_cleared": 1170,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 32
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 37,
+   "canonical_id": "l_proline",
+   "label_name_example": "L-Proline",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 22,
+   "products_cleared_at_this_step": 22,
+   "cumulative_cleared": 1192,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 22
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 38,
+   "canonical_id": "bromelain",
+   "label_name_example": "Bromelain",
+   "topic": "enzyme",
+   "products_held_touched": 46,
+   "products_cleared_at_this_step": 21,
+   "cumulative_cleared": 1213,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 46
+   },
+   "existing_record_ids": [
+    "INGR_BROMELAIN"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 39,
+   "canonical_id": "goji_berry",
+   "label_name_example": "organic Goji Berry",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 20,
+   "products_cleared_at_this_step": 20,
+   "cumulative_cleared": 1233,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 21
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 40,
+   "canonical_id": "stinging_nettle",
+   "label_name_example": "Nettle (Urtica dioica) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 34,
+   "products_cleared_at_this_step": 19,
+   "cumulative_cleared": 1252,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 35
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 41,
+   "canonical_id": "chrysin",
+   "label_name_example": "Chrysin",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 24,
+   "products_cleared_at_this_step": 19,
+   "cumulative_cleared": 1271,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 24
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 42,
+   "canonical_id": "wild_yam",
+   "label_name_example": "Wild Yam",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 22,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 1289,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 22
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 43,
+   "canonical_id": "keratin",
+   "label_name_example": "Keratin",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 20,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 1307,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 20
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 44,
+   "canonical_id": "paba",
+   "label_name_example": "PABA",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 19,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 1325,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 45,
+   "canonical_id": "nha_raspberry_natural",
+   "label_name_example": "organic Raspberry",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 18,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 1343,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 18
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 46,
+   "canonical_id": "diindolylmethane",
+   "label_name_example": "Diindolylmethane",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 18,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 1361,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [
+    "PRECLIN_DIM"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 47,
+   "canonical_id": "schisandra_berry",
+   "label_name_example": "Schisandra Fruit Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 28,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1378,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 28
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 48,
+   "canonical_id": "beta_glucan",
+   "label_name_example": "Mushroom Beta Glucan",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 23,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1395,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 23
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 49,
+   "canonical_id": "psyllium",
+   "label_name_example": "Psyllium",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 20,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1412,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 20
+   },
+   "existing_record_ids": [
+    "INGR_PSYLLIUM_HUSK"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 50,
+   "canonical_id": "saffron",
+   "label_name_example": "Saffron Stigma Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 19,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1429,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [
+    "PRECLIN_SAFFRON"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 51,
+   "canonical_id": "aronia",
+   "label_name_example": "Aronia extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 18,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1446,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 18
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 52,
+   "canonical_id": "alfalfa_leaf",
+   "label_name_example": "Alfalfa concentrate",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 18,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1463,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 18
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 53,
+   "canonical_id": "nha_apple_puree_concentrate",
+   "label_name_example": "Apple powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 17,
+   "products_cleared_at_this_step": 17,
+   "cumulative_cleared": 1480,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 17
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 54,
+   "canonical_id": "gymnema_sylvestre",
+   "label_name_example": "Gymnema (Gymnema sylvestre) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 24,
+   "products_cleared_at_this_step": 16,
+   "cumulative_cleared": 1496,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 25
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 55,
+   "canonical_id": "bitter_melon",
+   "label_name_example": "Bitter Melon (Momordica charantia) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 22,
+   "products_cleared_at_this_step": 21,
+   "cumulative_cleared": 1517,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 22
+   },
+   "existing_record_ids": [
+    "INGR_BITTER_MELON"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 56,
+   "canonical_id": "chaga",
+   "label_name_example": "Chaga Mushroom",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 22,
+   "products_cleared_at_this_step": 16,
+   "cumulative_cleared": 1533,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 22
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 57,
+   "canonical_id": "rhodiola",
+   "label_name_example": "Rhodiola Root Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 19,
+   "products_cleared_at_this_step": 16,
+   "cumulative_cleared": 1549,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [
+    "INGR_RHODIOLA"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 58,
+   "canonical_id": "papaya_fruit_powder",
+   "label_name_example": "Papaya, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 17,
+   "products_cleared_at_this_step": 16,
+   "cumulative_cleared": 1565,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 17
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 59,
+   "canonical_id": "reishi",
+   "label_name_example": "Reishi Mushroom Fruiting Body Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 33,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1580,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 35
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 60,
+   "canonical_id": "chasteberry",
+   "label_name_example": "Chaste Tree fruit extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 22,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1595,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 23
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 61,
+   "canonical_id": "spearmint",
+   "label_name_example": "Neumentix Spearmint leaf extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1610,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 62,
+   "canonical_id": "fo_ti",
+   "label_name_example": "Fo-Ti",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1625,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 63,
+   "canonical_id": "cat_s_claw",
+   "label_name_example": "Cat's Claw (Uncaria tomentosa) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1640,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 64,
+   "canonical_id": "tongkat_ali",
+   "label_name_example": "Tongkat Ali, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1655,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 65,
+   "canonical_id": "raspberry_ketones",
+   "label_name_example": "Raspberry Ketones",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1670,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 66,
+   "canonical_id": "nha_monk_fruit",
+   "label_name_example": "Monk Fruit extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1685,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 67,
+   "canonical_id": "7_keto_dhea",
+   "label_name_example": "7-Keto DHEA",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 1700,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 68,
+   "canonical_id": "phosphatidylcholine",
+   "label_name_example": "Total Phosphatidylcholine",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1714,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 69,
+   "canonical_id": "flaxseed",
+   "label_name_example": "Flax (Linum usitatissimum) powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1728,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 70,
+   "canonical_id": "magnolia_bark",
+   "label_name_example": "Magnolia (Magnolia officinalis) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1742,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 71,
+   "canonical_id": "lithium",
+   "label_name_example": "Lithium",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1756,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 72,
+   "canonical_id": "glutathione",
+   "label_name_example": "Glutathione",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1770,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [
+    "INGR_REDUCED_GLUTATHIONE"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 73,
+   "canonical_id": "dmae",
+   "label_name_example": "DMAE Bitartrate",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1784,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 74,
+   "canonical_id": "celery",
+   "label_name_example": "Celery seed extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1798,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 75,
+   "canonical_id": "bee_pollen",
+   "label_name_example": "Bee Pollen",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1812,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 76,
+   "canonical_id": "bifidobacterium_lactis",
+   "label_name_example": "Bifidobacterium animalis lactis Bb-04",
+   "topic": "probiotic_species",
+   "products_held_touched": 99,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1825,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 99
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 77,
+   "canonical_id": "lactobacillus_acidophilus",
+   "label_name_example": "Lactobacillus acidophilus",
+   "topic": "probiotic_species",
+   "products_held_touched": 111,
+   "products_cleared_at_this_step": 14,
+   "cumulative_cleared": 1839,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 112
+   },
+   "existing_record_ids": [
+    "INGR_LACTOBACILLUS_ACIDOPHILUS"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 78,
+   "canonical_id": "marshmallow_root",
+   "label_name_example": "Marshmallow (Althaea officinalis) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 26,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1852,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 26
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 79,
+   "canonical_id": "juniper",
+   "label_name_example": "Juniper",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 17,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1865,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 17
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 80,
+   "canonical_id": "grapefruit_seed",
+   "label_name_example": "Grapefruit (Citrus x paradisi) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1878,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 81,
+   "canonical_id": "astragalus_root",
+   "label_name_example": "organic Astragalus",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 16,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1891,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 16
+   },
+   "existing_record_ids": [
+    "INGR_ASTRAGALUS"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 82,
+   "canonical_id": "wheatgrass_powder",
+   "label_name_example": "Wheatgrass, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1904,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 83,
+   "canonical_id": "sage",
+   "label_name_example": "Sage Leaf Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1917,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 84,
+   "canonical_id": "chicory_root",
+   "label_name_example": "Chicory extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1930,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 85,
+   "canonical_id": "winged_treebine",
+   "label_name_example": "Cissus quadrangularis Root Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1943,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 86,
+   "canonical_id": "cucumber",
+   "label_name_example": "Cucumber extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1956,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 87,
+   "canonical_id": "cordyceps",
+   "label_name_example": "Cordyceps",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1969,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [
+    "PRECLIN_CORDYCEPS"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 88,
+   "canonical_id": "camu_camu",
+   "label_name_example": "Camu Camu extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1982,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 89,
+   "canonical_id": "alfalfa",
+   "label_name_example": "Alfalfa",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 13,
+   "cumulative_cleared": 1995,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 90,
+   "canonical_id": "bifidobacterium_bifidum",
+   "label_name_example": "Bifidobacterium bifidum BB-6",
+   "topic": "probiotic_species",
+   "products_held_touched": 94,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2007,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 94
+   },
+   "existing_record_ids": [
+    "INGR_BIFIDOBACTERIUM_BIFIDUM"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 91,
+   "canonical_id": "bifidobacterium_longum",
+   "label_name_example": "Bifidobacterium longum BL-5",
+   "topic": "probiotic_species",
+   "products_held_touched": 109,
+   "products_cleared_at_this_step": 19,
+   "cumulative_cleared": 2026,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 109
+   },
+   "existing_record_ids": [
+    "INGR_BIFIDOBACTERIUM_LONGUM"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 92,
+   "canonical_id": "bifidobacterium_breve",
+   "label_name_example": "Bifidobacterium breve Bb-18",
+   "topic": "probiotic_species",
+   "products_held_touched": 73,
+   "products_cleared_at_this_step": 15,
+   "cumulative_cleared": 2041,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 73
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 93,
+   "canonical_id": "papaya",
+   "label_name_example": "Papaya extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 19,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2053,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 19
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 94,
+   "canonical_id": "acerola_cherry",
+   "label_name_example": "Acerola (Malpighia glabra) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 17,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2065,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 17
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 95,
+   "canonical_id": "green_tea",
+   "label_name_example": "Green Tea (Camellia sinensis) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 20,
+   "products_cleared_at_this_step": 16,
+   "cumulative_cleared": 2081,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 20
+   },
+   "existing_record_ids": [
+    "INGR_GREEN_TEA"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 96,
+   "canonical_id": "epicor",
+   "label_name_example": "EpiCor dried Yeast Fermentate Complex",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2093,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 97,
+   "canonical_id": "corn_silk",
+   "label_name_example": "Corn Silk",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2105,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 98,
+   "canonical_id": "oi_acetyl_l_carnitine_arginate",
+   "label_name_example": "Acetyl-L-Carnitine Arginate Dihydrochloride",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2117,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 99,
+   "canonical_id": "moringa",
+   "label_name_example": "Moringa, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2129,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 100,
+   "canonical_id": "spinach",
+   "label_name_example": "Spinach extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2141,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 101,
+   "canonical_id": "oolong_tea_leaf",
+   "label_name_example": "Oolong Tea extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2153,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 102,
+   "canonical_id": "naringin",
+   "label_name_example": "Naringin",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2165,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 103,
+   "canonical_id": "kombu",
+   "label_name_example": "Kelp extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2177,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 104,
+   "canonical_id": "dark_sweet_cherry",
+   "label_name_example": "Sweet Cherry Fruit Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2189,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 105,
+   "canonical_id": "damiana",
+   "label_name_example": "Damiana",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2201,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 106,
+   "canonical_id": "coptis_rhizome",
+   "label_name_example": "Coptis chinensis extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2213,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 107,
+   "canonical_id": "blueberry_fruit",
+   "label_name_example": "Blueberry, Powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 12,
+   "cumulative_cleared": 2225,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 108,
+   "canonical_id": "papain",
+   "label_name_example": "Papain",
+   "topic": "enzyme",
+   "products_held_touched": 33,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2236,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 33
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 109,
+   "canonical_id": "pumpkin_seed_oil",
+   "label_name_example": "Pumpkin (Cucurbita pepo) Oil",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2247,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 110,
+   "canonical_id": "motherwort_herb",
+   "label_name_example": "Motherwort Herb Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2258,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 111,
+   "canonical_id": "matcha_tea_powder",
+   "label_name_example": "Matcha",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2269,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 112,
+   "canonical_id": "yacon_root",
+   "label_name_example": "Yacon root extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2280,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 113,
+   "canonical_id": "purslane",
+   "label_name_example": "Portulaca oleracea extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2291,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 114,
+   "canonical_id": "plantain",
+   "label_name_example": "Plantain leaf extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2302,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 115,
+   "canonical_id": "mulberry_mistletoe",
+   "label_name_example": "Mulberry Mistletoe extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2313,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 116,
+   "canonical_id": "black_radish",
+   "label_name_example": "Black Radish extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2324,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 117,
+   "canonical_id": "pepsin",
+   "label_name_example": "Pepsin",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 14,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2334,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 14
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 118,
+   "canonical_id": "l_glutamic_acid",
+   "label_name_example": "L-Glutamic Acid Hydrochloride",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2345,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 119,
+   "canonical_id": "polyphenols",
+   "label_name_example": "Polyphenols",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2355,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 120,
+   "canonical_id": "grape",
+   "label_name_example": "Red Wine (Vitis vinifera) concentrate",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 28,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2366,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 28
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 121,
+   "canonical_id": "black_tea_leaf",
+   "label_name_example": "Black Tea Leaf Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 18,
+   "products_cleared_at_this_step": 18,
+   "cumulative_cleared": 2384,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 18
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 122,
+   "canonical_id": "shiitake",
+   "label_name_example": "Shiitake Mushroom Fruiting Body Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2394,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 123,
+   "canonical_id": "andrographis",
+   "label_name_example": "Andrographis extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2404,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 18
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 124,
+   "canonical_id": "bacillus_coagulans",
+   "label_name_example": "Bacillus coagulans",
+   "topic": "probiotic_species",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2414,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 125,
+   "canonical_id": "oi_guar_gum",
+   "label_name_example": "Guar Gum",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2424,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 126,
+   "canonical_id": "oat_bran",
+   "label_name_example": "Oat Bran",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 11,
+   "cumulative_cleared": 2435,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 127,
+   "canonical_id": "watercress",
+   "label_name_example": "Watercress Leaf Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2445,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 128,
+   "canonical_id": "strontium",
+   "label_name_example": "Strontium",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2455,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 129,
+   "canonical_id": "star_anise",
+   "label_name_example": "Star Anise extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2465,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 130,
+   "canonical_id": "nha_yeast_fermentate_dried",
+   "label_name_example": "dried Yeast Fermentate",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2475,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 131,
+   "canonical_id": "l_aspartic_acid",
+   "label_name_example": "L-Aspartic Acid",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2485,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 132,
+   "canonical_id": "l_alanine",
+   "label_name_example": "L-Alanine",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2495,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 133,
+   "canonical_id": "kelp_powder",
+   "label_name_example": "organic Kelp",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2505,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 134,
+   "canonical_id": "ecdysterones",
+   "label_name_example": "Ajuga turkest",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2515,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 135,
+   "canonical_id": "butcher_s_broom",
+   "label_name_example": "Butcher's Broom extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2525,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 136,
+   "canonical_id": "burdock_root",
+   "label_name_example": "Burdock Root Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2535,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 137,
+   "canonical_id": "artichoke",
+   "label_name_example": "Artichoke (Cynara scolymus) extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 10,
+   "products_cleared_at_this_step": 10,
+   "cumulative_cleared": 2545,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 10
+   },
+   "existing_record_ids": [
+    "PRECLIN_ARTICHOKE"
+   ],
+   "work": "finish or apply existing record"
+  },
+  {
+   "rank": 138,
+   "canonical_id": "nha_hemp_extract",
+   "label_name_example": "Hemp Oil Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 13,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2554,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 13
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 139,
+   "canonical_id": "sweet_orange",
+   "label_name_example": "Orange Peel Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2563,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 140,
+   "canonical_id": "pii_safflower_oil",
+   "label_name_example": "Safflower Oil",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2572,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 141,
+   "canonical_id": "gypenosides",
+   "label_name_example": "Gynostemma Leaf, Stem Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2581,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 142,
+   "canonical_id": "glucuronolactone",
+   "label_name_example": "D-Glucuronolactone",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2590,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 143,
+   "canonical_id": "cassia_seed",
+   "label_name_example": "Cassia Seed Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2599,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 144,
+   "canonical_id": "black_garlic",
+   "label_name_example": "Black Garlic Bulb Extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2608,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 145,
+   "canonical_id": "asparagus",
+   "label_name_example": "Asparagus extract",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2617,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 146,
+   "canonical_id": "argan_oil",
+   "label_name_example": "Argan Oil",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 9,
+   "products_cleared_at_this_step": 9,
+   "cumulative_cleared": 2626,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 9
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 147,
+   "canonical_id": "lactobacillus_plantarum",
+   "label_name_example": "Lactobacillus plantarum",
+   "topic": "probiotic_species",
+   "products_held_touched": 92,
+   "products_cleared_at_this_step": 8,
+   "cumulative_cleared": 2634,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 92
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 148,
+   "canonical_id": "l_histidine",
+   "label_name_example": "L-Histidine Hydrochloride",
+   "topic": "amino_acid_or_metabolite",
+   "products_held_touched": 15,
+   "products_cleared_at_this_step": 8,
+   "cumulative_cleared": 2642,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 15
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 149,
+   "canonical_id": "kola_nut",
+   "label_name_example": "Kola Nut powder",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 12,
+   "products_cleared_at_this_step": 8,
+   "cumulative_cleared": 2650,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 12
+   },
+   "existing_record_ids": [],
+   "work": "first review"
+  },
+  {
+   "rank": 150,
+   "canonical_id": "phytosterols",
+   "label_name_example": "Beta-Sitosterol",
+   "topic": "botanical_food_or_other",
+   "products_held_touched": 11,
+   "products_cleared_at_this_step": 8,
+   "cumulative_cleared": 2658,
+   "row_reason_codes": {
+    "no_reviewed_evidence_assessment": 11
+   },
+   "existing_record_ids": [
+    "INGR_PLANT_STEROLS"
+   ],
+   "work": "finish or apply existing record"
+  }
+ ]
+}
