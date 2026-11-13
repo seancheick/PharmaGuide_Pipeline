@@ -70,3 +70,17 @@ def test_capped_amino_acid_role_keeps_a_valid_readiness_receipt():
     assert payload['metadata']['primary_evidence_floor'] == FULL
     assert payload['score'] == payload['metadata']['immune_support_evidence_cap'] < FULL
     assert _current_nutrition_authority_receipt(product, payload) is True
+
+
+def test_stale_uncapped_receipt_fails_after_immune_routing():
+    """A breakdown scored before the immune route (no cap applied, score equal to
+    the floor) is not a valid receipt for the current immune-routed product."""
+    from assessment_readiness import _current_nutrition_authority_receipt
+    from test_evidence_resolver import _eaa_product
+
+    product = _eaa_product('l_lysine', 'L-Lysine', 'l-lysine base', quantity=1000)
+    product['supplement_type'] = {'type': 'single_nutrient'}
+    stale = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert stale['score'] == FULL
+    product['primary_type'] = 'immune_support'
+    assert _current_nutrition_authority_receipt(product, stale) is False
