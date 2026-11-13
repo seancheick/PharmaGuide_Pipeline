@@ -356,17 +356,13 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     # Preliminary. Enrollment/depth arithmetic cannot lift that conclusion
     # above its approved tier. Multi-ingredient aggregation is unchanged.
     preliminary_only = bool(
-        apply_primary_floor and primary_floor == PRIMARY_FLOOR_PRELIMINARY
+        apply_primary_floor and primary_floor <= PRIMARY_FLOOR_PRELIMINARY
         and len(ingredient_points) == 1 and contributing_entries
         and all(_norm_text(entry.get("effect_direction")) == "positive_weak"
+                or _floor_study_type(entry) is None
                 for _, entry in contributing_entries.values())
     )
-    exposure_only = bool(
-        apply_primary_floor and primary_floor == 0 and len(ingredient_points) == 1
-        and contributing_entries
-        and all(_floor_study_type(entry) is None for _, entry in contributing_entries.values())
-    )
-    if preliminary_only or exposure_only:
+    if preliminary_only:
         pipeline_total = min(pipeline_total, PRIMARY_FLOOR_PRELIMINARY)
         depth_bonus = 0.0
 
@@ -400,7 +396,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
-    primary_floor_decisive = bool(preliminary_only or primary_floor > pipeline_total + depth_bonus)
+    primary_floor_decisive = bool((preliminary_only and primary_floor == PRIMARY_FLOOR_PRELIMINARY)
+                                  or primary_floor > pipeline_total + depth_bonus)
     evidence_result_state = _evidence_result_state(
         product, total, listed_ids, scoped_matches, probiotic_disposition=probiotic_component_evidence,
         dose_gated=bool(sub_clinical_canonicals), owner_scoped=owner_scoped,

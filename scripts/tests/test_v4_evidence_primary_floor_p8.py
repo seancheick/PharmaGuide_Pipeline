@@ -304,8 +304,8 @@ def test_authority_floor_is_generic_opt_in_only(reviewed_product):
 # --- Public bands (Dr Pham, October 28, 2026; editorial ranges, not GRADE) ---
 
 def test_each_floor_lands_in_its_public_band():
-    """Approved floor values use the public reference directly; weak/mixed
-    directions retain their existing multipliers pending the separate decision."""
+    """Approved floor values use the public reference directly. Additive
+    multipliers remain independent from the explicit Preliminary floor."""
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
@@ -332,18 +332,20 @@ def test_reviewed_primary_floor_uses_public_ladder_values(reviewed_product, stud
     assert artifact["quality_pillars_v4"]["evidence"]["score"] == expected
 
 
+@pytest.mark.parametrize("route", ["generic_single_molecule", "immune_support"])
 @pytest.mark.parametrize("study_type,enrollment", [("rct_single", 50), ("rct_multiple", 2000), ("systematic_review_meta", 2000)])
-def test_weak_primary_evidence_uses_preliminary_ladder_value(reviewed_product, study_type, enrollment):
+def test_weak_primary_evidence_uses_preliminary_ladder_value(reviewed_product, study_type, enrollment, route):
     from scoring_v4.scored_artifact import build_scored_artifact
 
     product = reviewed_product([_ing()], [_match(study_type=study_type,
         effect_direction="positive_weak", total_enrollment=enrollment)])
-    product.update(id="weak-ladder", product_name="Ashwagandha", primary_type="generic_single_molecule")
+    product.update(id="weak-ladder", product_name="Ashwagandha", primary_type=route)
     artifact = build_scored_artifact(product)
     assert artifact["quality_pillars_v4"]["evidence"]["score"] == 5.0
 
 
-def test_single_exposure_only_evidence_cannot_exceed_preliminary(reviewed_product):
+@pytest.mark.parametrize("route", ["generic_single_molecule", "immune_support"])
+def test_single_exposure_only_evidence_cannot_exceed_preliminary(reviewed_product, route):
     import clinical_applicability as owner
     from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -352,8 +354,26 @@ def test_single_exposure_only_evidence_cannot_exceed_preliminary(reviewed_produc
     for context in source["study_contexts"]:
         for outcome in context["outcomes"]:
             outcome.update(kind="surrogate", surrogate_class="exposure")
-    product.update(id="exposure-ladder", product_name="Ashwagandha", primary_type="generic_single_molecule")
+    product.update(id="exposure-ladder", product_name="Ashwagandha", primary_type=route)
     artifact = build_scored_artifact(product)
     metadata = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
     assert metadata["primary_evidence_floor"] == 0
     assert artifact["quality_pillars_v4"]["evidence"]["score"] <= 5
+
+
+def test_weak_efficacy_plus_exposure_stays_preliminary(reviewed_product):
+    import clinical_applicability as owner
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = reviewed_product([_ing()], [
+        _match(id="TEST_WEAK", effect_direction="positive_weak"),
+        _match(id="TEST_EXPOSURE", study_type="systematic_review_meta", total_enrollment=2000),
+    ])
+    source = owner.reviewed_entries()["TEST_EXPOSURE"]
+    for context in source["study_contexts"]:
+        for outcome in context["outcomes"]:
+            outcome.update(kind="surrogate", surrogate_class="exposure")
+    product.update(id="weak-exposure-ladder", product_name="Ashwagandha",
+                   primary_type="generic_single_molecule")
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 5.0
