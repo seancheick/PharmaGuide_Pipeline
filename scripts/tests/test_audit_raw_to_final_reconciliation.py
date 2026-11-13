@@ -1010,3 +1010,20 @@ def test_dose_only_projection_requires_its_own_enriched_exposure():
     assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
     blob["ingredients"].pop()
     assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
+
+
+def test_dose_only_projection_is_not_a_standardization_display_row():
+    record = _record()
+    row = {
+        "name": "Turmeric blend",
+        "raw_source_path": "ingredientRows[0]",
+        "per_day_max": 553,
+    }
+    cleaned = {"activeIngredients": [{
+        "raw_source_path": row["raw_source_path"],
+        "notes": "Turmeric root extract standardized to 95% curcuminoids",
+    }]}
+    _check_standardization(record, {"ingredients": [row]}, cleaned)
+    assert not record.findings
+    _check_standardization(record, {"ingredients": [{**row, "quantity": 553}]}, cleaned)
+    assert [finding.code for finding in record.findings] == ["STANDARDIZATION_NOTE_DROPPED"]

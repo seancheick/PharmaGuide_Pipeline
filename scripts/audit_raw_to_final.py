@@ -592,6 +592,8 @@ def _check_v1_5_0_contract(rec: ProductRecord, blob: dict) -> None:
     because they're documented in the contract spec but the implementation
     has not landed (Phase 0 showed 0% emit across all 8169 blobs)."""
     for ing in blob.get("ingredients") or []:
+        if _is_dose_only_export_row(ing):
+            continue
         for field_name, code in V1_5_0_ACTIVE_FIELDS:
             if ing.get(field_name) is None:
                 rec.add(code,
@@ -846,6 +848,8 @@ def _check_standardization(rec: ProductRecord, blob: dict, cleaned: dict | None 
                   for row in ((cleaned or {}).get("activeIngredients") or [])
                   if isinstance(row, dict) and row.get("raw_source_path")}
     for ing in blob.get("ingredients") or []:
+        if _is_dose_only_export_row(ing):
+            continue
         label = label_rows.get(ing.get("raw_source_path")) or {}
         expected = _compute_standardization_note({
             "notes": label.get("notes"),
