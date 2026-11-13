@@ -1167,7 +1167,7 @@ def _recorded_amounts(cleaned_row: Mapping[str, Any]) -> list[tuple[Any, str]]:
 
 def _is_dose_only_export_row(row: Mapping[str, Any]) -> bool:
     return (
-        "per_day_max" in row
+        "dose_role" in row
         and "quantity" not in row
         and "normalized_amount" not in row
         and "display_dose_label" not in row
@@ -1179,21 +1179,23 @@ def _check_dose_only_export_rows(
 ) -> None:
     from build_final_db import _append_dose_only_rows
 
-    exported = [row for row in blob.get("ingredients") or [] if isinstance(row, dict)]
-    actual = [row for row in exported if _is_dose_only_export_row(row)]
-    expected = [row for row in exported if not _is_dose_only_export_row(row)]
+    exported = [(index, row) for index, row in enumerate(blob.get("ingredients") or [])
+                if isinstance(row, dict)]
+    actual = [(index, row) for index, row in exported if _is_dose_only_export_row(row)]
+    expected = [row for _, row in exported if not _is_dose_only_export_row(row)]
     ordinary_count = len(expected)
     analyzed = ((enriched or {}).get("rda_ul_data") or {}).get("analyzed_ingredients")
     _append_dose_only_rows(expected, analyzed)
     expected_by_path = {row["raw_source_path"]: row for row in expected[ordinary_count:]}
-    for row in actual:
+    for index, row in actual:
         path = row.get("raw_source_path")
-        source = expected_by_path.pop(path, None)
+        source = expected_by_path.pop(path, None) if isinstance(path, str) else None
         if row != source:
             rec.add(
                 "AMOUNT_CHANGE_WITHOUT_EVIDENCE",
                 "Dose-only export differs from the eligible enriched exposure for its row",
-                ingredient=row.get("name"), stage="blob", row_path=path,
+                ingredient=row.get("name"), stage="blob",
+                row_path=path if isinstance(path, str) and path else f"blob:ingredients[{index}]",
                 field="ingredients.per_day_min,per_day_max,converted_unit",
                 source=source, exported=row,
             )

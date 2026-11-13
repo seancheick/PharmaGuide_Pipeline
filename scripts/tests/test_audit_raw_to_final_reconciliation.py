@@ -1012,10 +1012,34 @@ def test_dose_only_projection_requires_its_own_enriched_exposure():
     assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
 
 
+@pytest.mark.parametrize("missing_field", ["per_day_max", "raw_source_path"])
+def test_incomplete_dose_projection_is_reported_without_aborting(missing_field):
+    from audit_raw_to_final import _check_dose_only_export_rows
+    from build_final_db import _append_dose_only_rows
+
+    path = "ingredientRows[0]"
+    analyzed = [{
+        "raw_source_path": path, "canonical_id": "caffeine", "ingredient": "Caffeine",
+        "dose_role": "declared_total", "per_day_min": 100, "per_day_max": 200,
+        "converted_unit": "mg",
+    }]
+    ingredients = []
+    _append_dose_only_rows(ingredients, analyzed)
+    del ingredients[0][missing_field]
+    record = _record()
+    _check_dose_only_export_rows(
+        record, {"rda_ul_data": {"analyzed_ingredients": analyzed}}, {"ingredients": ingredients}
+    )
+    expected_path = path if missing_field == "per_day_max" else "blob:ingredients[0]"
+    assert any(f.code == "AMOUNT_CHANGE_WITHOUT_EVIDENCE" and f.row_path == expected_path
+               for f in record.findings)
+
+
 def test_dose_only_projection_is_not_a_standardization_display_row():
     record = _record()
     row = {
         "name": "Turmeric blend",
+        "dose_role": "declared_total",
         "raw_source_path": "ingredientRows[0]",
         "per_day_max": 553,
     }
