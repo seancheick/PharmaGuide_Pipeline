@@ -51,3 +51,36 @@ The source reviews retain positive limited findings (BioCell OA, lion's-mane MCI
 ## Psyllium authority source — November 13, 2026
 
 Owner: INGR_PSYLLIUM_HUSK.references_structured, existing non-PMID authority-reference schema (BRAND_FORCEVAL precedent). FDA M007, posted May2,2023, retrieved/content-read by Codex and independent source_review: sections M007.10(f), M007.50(a), M007.52. PDF SHA256 ea8b654691f447fdedc5851e912c51bd066f186d75dbf35b1bd4836f57ebfa75. Official source URL is retained in the record. Recognition is for specified psyllium preparations and occasional constipation; specified granular forms are excluded and other monograph conditions apply. No general Dose, numerical credit or product compliance is inferred. The lipid context and its PMID remain unchanged; no invented PMID or nutrient-essentiality claim. Fail-first: missing authority reference. This is source retention, not20-point activation or completion of a new regulatory-authority scoring path.
+
+## Ladder calibration — November 13, 2026
+
+Accepted weak tier:5 Preliminary (Sean, explicit reply). Candidate fddc25c12 against e9896fc5e,
+using18 frozen raw labels through Clean/Enrich/Score/Blob. Durable inputs, manifest, full records and
+all-path differences are at `/Users/seancheick/pg_quality/evidence-close-20261113`.
+All18 cleaned/enriched inputs and all non-Evidence pillars unchanged; safety and score status unchanged.
+Assessment256990/328104 changes partial→complete through inherited blend completion, with the other
+unreviewed-ingredients caveat retained.256990 crosses54.9→54.3 / Needs improvement→Poor;
+293924 crosses85.6→90.0 / Very good→Excellent through nutritional authority.336897 is a mixed-purpose
+formula despite its D3+K2 name, so it retains the mixed authority floor and pending assessment.
+Psyllium remains0/pending; native probiotic and omega samples unchanged. Specifically signed glutamine
+interpretation is retained (public10.4→8.5 from reference/floor calibration, not rewritten as a new grade).
+
+Independent ladder_review found and reproduced two bugs: shared immune conversion5→5.9 and weak
+efficacy plus exposure-only support6.5. Both corrected in fddc25c12; nine independent regressions pass.
+Reviewer accepts the corrected source and full replay, not release qualification.
+Controlled identical18 enriched inputs, one warm-up and three sequential runs per checkout:
+baseline median2.908859s, candidate2.950555s (+1.43%); peak RSS194134016→193462272bytes.
+Input SHA25656f9a3626cd986320906d62e8177f368ae26f4897248390802b7968d23fef95b;
+all input objects unchanged. These bounded timings do not claim full-corpus throughput.
+
+## First review queue triage — not activation
+
+Independent source agents reviewed green tea38031409/19597519, maca20691074/25954318/36110519/36593713,
+and citrus33141449. Limited preparation-scoped conclusions are supportable, but no grade has been
+activated. Green tea's existing fat-oxidation attribution to19597519 is unsupported (that review measures
+weight loss/maintenance); its older specific source/scope acceptance hold must be reconciled before
+activation. Full38031409 reports heterogeneous preparations and low/moderate/very-low certainty by
+outcome, not the abstract's blanket low-to-high description; included-source mapping remains separate.
+Maca already has reviewed literature under maca_root, which the queue's maca identity does not reach.
+Citrus has an incomplete applicability contract; drug-grade phlebotonics do not establish crude-mixture
+benefit. No whole-family zero, preparation equivalence or clinical authorization is inferred here.
