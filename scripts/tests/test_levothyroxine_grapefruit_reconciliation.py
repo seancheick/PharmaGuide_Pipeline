@@ -116,12 +116,16 @@ def test_magnesium_interval_and_grade_agree(curated, thyroid_sub_rules, timing):
     assert thyroid_sub_rules["RULE_IQM_MAGNESIUM_HYPERTENSION"]["evidence_level"] == "probable"
 
 
-def test_magnesium_timing_rule_stays_unpublished_until_interval_is_sourced(timing):
-    """ThyroMag resolves the citation blocker; no study sets a magnesium-specific
-    interval, so the timing card is not published by this batch."""
+def test_magnesium_timing_publishes_approved_precaution_not_trial_interval(timing):
+    """D27 and Dr. Pham G3 authorize the precaution, not a trial-proven interval."""
     rule = timing["timing_thyroid_med_magnesium_separate"]
-    assert rule["review_status"] == "needs_revision"
-    assert rule["review_blockers"] == ["interval_not_supported_by_cited_source"]
+    assert rule["review_status"] == "verified"
+    assert not rule.get("review_blockers")
+    assert "precaution" in rule["mechanism"]
+    assert "did not test" in rule["mechanism"]
+    assert "not statistically significant" in rule["mechanism"]
+    assert "Dr. Pham" in rule["review_note"]
+    assert "agent" in rule["review_note"]
 
 
 def test_grapefruit_text_follows_each_statin_label(curated):

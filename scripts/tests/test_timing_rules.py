@@ -228,6 +228,30 @@ class TestTimingRuleSchema:
                 assert rule.get("ingredient2_rxcuis") == ["10582"], rule["id"]
                 assert "ingredient1_rxcuis" not in rule
 
+    def test_medication_product_exclusions_are_authored_and_preserved(self, rules):
+        from sync_flutter_reference_data import publishable_timing_rules
+
+        levo_excluded = {"1115267", "1115269", "2166148", "2166193", "2166196", "2621123", "966219", "1868004", "1602750"}
+        for rule in rules:
+            medication_ids = set(rule.get("ingredient1_rxcuis", []) + rule.get("ingredient2_rxcuis", []))
+            excluded = rule.get("excluded_member_rxcuis", [])
+            assert isinstance(excluded, list)
+            assert all(isinstance(value, str) and value.isdigit() for value in excluded)
+            assert len(excluded) == len(set(excluded))
+            assert not (medication_ids & set(excluded)), rule["id"]
+            if "10582" in medication_ids:
+                assert set(excluded) == levo_excluded
+            if "3407" in medication_ids:
+                assert {"208135", "208137", "1743560", "1175613", "104208", "204504", "1743558", "1151519"} == set(excluded)
+            if "7454" in medication_ids:
+                assert excluded == [], "nitrofurantoin must not inherit digoxin exclusions"
+            if "1191" in medication_ids:
+                assert {"103863", "198461", "198463", "198464", "198473", "370609", "1154071"} == set(excluded)
+        published = publishable_timing_rules({"_metadata": {}, "timing_rules": rules})
+        for rule in published["timing_rules"]:
+            source = next(r for r in rules if r["id"] == rule["id"])
+            assert rule.get("excluded_member_rxcuis") == source.get("excluded_member_rxcuis")
+
     def test_optional_category_requires_clinician_approval(self, rules):
         """Failing to qualify for the other categories is not an argument."""
         for r in rules:
@@ -489,19 +513,38 @@ class TestTimingDataQuality:
         duplicates = sorted({pair for pair in pairs if pairs.count(pair) > 1})
         assert duplicates == [], f"Duplicate timing pairs: {duplicates}"
 
-    def test_psyllium_med_spacing_rule_exists(self, rules):
-        rule = next(
-            (r for r in rules if r["id"] == "timing_psyllium_water_med_spacing"),
-            None,
-        )
-        assert rule is not None
-        assert rule["ingredient1"] == "psyllium"
-        # No specific second bottle exists here, so the relation must not
-        # invent one.
-        assert rule["timing_relation"]["type"] == "separate_from_medications"
-        assert rule["timing_relation"]["minimum_hours"] == 3
-        assert "8 oz" in rule["advice"]
-        assert any("medlineplus.gov" in s["url"] for s in rule["sources"])
+    def test_psyllium_spacing_is_named_medicine_only(self, rules):
+        scoped = {r["id"]: r for r in rules if r["ingredient1"] == "psyllium"}
+        expected = {
+            "timing_psyllium_water_med_spacing": {"3407"},
+            "timing_psyllium_salicylates_separate": {"1191", "36108", "215799", "52364", "9907"},
+            "timing_psyllium_nitrofurantoin_separate": {"7454"},
+        }
+        assert set(scoped) == set(expected)
+        for rule_id, medicines in expected.items():
+            rule = scoped[rule_id]
+            assert rule["review_status"] == "verified"
+            assert rule["timing_relation"] == {"type": "separate_from", "minimum_hours": 3}
+            assert set(rule["ingredient2_rxcuis"]) == medicines
+            assert "by mouth" in rule["advice"]
+            assert "8 oz" in rule["advice"]
+            assert "other medications" not in rule["advice"]
+            assert any("medlineplus.gov" in source["url"] for source in rule["sources"])
+        digoxin = scoped["timing_psyllium_water_med_spacing"]
+        assert "no change" in digoxin["mechanism"]
+        assert any("3038494" in source["url"] for source in digoxin["sources"])
+        assert "860975" not in set().union(*expected.values())  # unrelated metformin
+
+    def test_signed_timing_rejections_leave_no_runtime_bonus(self, rules):
+        rejected = json.loads(REJECTION_LEDGER.read_text())["rejected"]
+        ids = {"timing_calcium_vitamin_d_together", "timing_quercetin_vitamin_c_together"}
+        assert ids.isdisjoint({r["id"] for r in rules})
+        assert ids <= {r["id"] for r in rejected}
+
+    def test_remaining_preparation_and_relation_holds_are_preserved(self, rules):
+        for rule in rules:
+            if any(term in rule["id"] for term in ("melatonin", "bromelain", "probiotic", "soy", "egcg", "theanine", "iron_calcium", "iron_zinc", "calcium_carbonate")):
+                assert rule["review_status"] == "needs_revision", rule["id"]
 
     def test_unsupported_or_misclassified_timing_rules_do_not_ship(self, rules):
         rejected = {
@@ -622,14 +665,9 @@ class TestTimingDataQuality:
 # text. An interval held as unsupported must not ship through those routes
 # (interaction audit 2026-11-11, finding 5).
 
-# Intervals an owner decision approved for publication in pair text while the
-# timing card stays held. Each entry names the decision.
-APPROVED_HELD_INTERVALS = {
-    # D27, Sean 2026-10-01: "one interval everywhere: at least 4 hours", the
-    # levothyroxine label's interval for magnesium-containing antacids
-    # (scripts/audits/levo_grapefruit_severity_20261001/research.md).
-    "timing_thyroid_med_magnesium_separate",
-}
+# No held interval currently has an approved publication exception. D27 is
+# now verified after the 2026-11-11 clinical review, with its precaution explicit.
+APPROVED_HELD_INTERVALS = set()
 
 PUBLISHED_RULE_FIELDS = ("action", "alert_headline", "alert_body", "informational_note")
 

@@ -13,6 +13,8 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
+import pytest
+
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 RULES = json.loads((DATA / "ingredient_interaction_rules.json").read_text())[
@@ -256,7 +258,8 @@ def test_cascara_rule_cites_the_eu_monograph_and_drops_unsourced_claims():
         "do not use cascara sagrada in liver disease",
     ):
         assert stale not in copy, stale
-    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+    # Dr. Pham section 2 (2026-11-12) decided the digoxin row; the re-sourcing above was agent work.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 def test_laxative_ghost_pmids_are_not_cited_anywhere():
@@ -286,7 +289,8 @@ def test_senna_kidney_and_digoxin_rules_cite_the_eu_monographs():
         "makes digoxin more toxic",
     ):
         assert stale not in copy, stale
-    assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
+    # Dr. Pham section 2 (2026-11-12) decided the digoxin row; the re-sourcing above was agent work.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 UKTIS_CONSTIPATION = "https://uktis.org/monographs/treatment-of-constipation-in-pregnancy/"
@@ -505,7 +509,9 @@ def test_coq10_heart_rule_cites_q_symbio_for_its_heart_failure_claim():
     assert "Q-SYMBIO" in heart["mechanism"]
     assert "inconclusive" in heart["mechanism"]
     assert "ejection fraction" not in heart["mechanism"].lower()
-    assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
+    # The 2026-04-09 date was agent re-sourcing; Dr. Pham's signed Q7 decision on the warfarin sub-rules (2026-11-12)
+    # is the rule's latest clinical review.
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 EMA_SALIX = (
@@ -631,7 +637,8 @@ def test_l_theanine_rules_say_what_the_blood_pressure_and_eeg_studies_say():
     # 18296328 (EEG) and 35378276 (anxiety NMA) measure no blood pressure.
     assert antihypertensives["sources"] == [_pmid("23107346"), _pmid("17891480")]
     assert sedatives["sources"] == [_pmid("18296328"), _pmid("35378276")]
-    assert (antihypertensives["severity"], sedatives["severity"]) == ("caution", "caution")
+    assert (antihypertensives["severity"], sedatives["severity"]) == ("informational", "caution")
+    assert antihypertensives["direction"] == "neutral"  # Signed G1: no demonstrated harmful drug interaction.
     assert "caffeine" in antihypertensives["mechanism"]
     assert "without inducing drowsiness" in sedatives["mechanism"]
     # The action must not assert a driving impairment its sources contradict.
@@ -665,24 +672,38 @@ ARICEPT_LABEL = (
 )
 
 
+DONEPEZIL_LABEL = (
+    "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?"
+    "setid=76bf638e-dbde-418e-8977-1caf009990bc"
+)
+
+
 def test_huperzine_anticholinergic_rule_cites_ache_pharmacology_and_class_label():
+    """Dr. Pham Q6 (2026-11-12): avoid without prescriber approval for medicines taken for their antimuscarinic
+    effect; caution with an evidence limitation for the rest of the anticholinergic class."""
     rule = _rule("RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS")
-    anticholinergics = _sub_rule(rule, "drug_class_id", "anticholinergics")
+    subset = _sub_rule(rule, "drug_class_id", "antimuscarinics")
+    broad = _sub_rule(rule, "drug_class_id", "anticholinergics")
 
     # 19370686 is a Cochrane review of huperzine for vascular dementia.
-    assert anticholinergics["sources"] == [_pmid("25191267"), ARICEPT_LABEL]
-    assert anticholinergics["severity"] == "avoid"
-    assert "interfere with the activity of anticholinergic" in anticholinergics["mechanism"]
-    assert "toxidrome" not in anticholinergics["mechanism"]
-    # Class-level label statement, no huperzine study: not "established".
-    assert anticholinergics["evidence_level"] == "probable"
-    # The label names no example drugs and states no two-way effect.
-    for stale in ("each can blunt the other", "prescribing information for cholinesterase "
-                  "inhibitors such as donepezil states that, because of their mechanism of "
-                  "action, they have the potential to interfere with the activity of "
-                  "anticholinergic medications (for example"):
-        assert stale not in anticholinergics["mechanism"], stale
-    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+    assert subset["sources"] == [_pmid("25191267"), ARICEPT_LABEL, DONEPEZIL_LABEL]
+    assert broad["sources"][:3] == [_pmid("25191267"), ARICEPT_LABEL, DONEPEZIL_LABEL]
+    assert (subset["severity"], broad["severity"]) == ("avoid", "caution")
+    for sub in (subset, broad):
+        assert "interfere with the activity of anticholinergic" in sub["mechanism"]
+        assert "toxidrome" not in sub["mechanism"]
+        # The label names no example drugs and states no two-way effect.
+        for stale in ("each can blunt the other", "prescribing information for cholinesterase "
+                      "inhibitors such as donepezil states that, because of their mechanism of "
+                      "action, they have the potential to interfere with the activity of "
+                      "anticholinergic medications (for example"):
+            assert stale not in sub["mechanism"], stale
+    # Class-level label statement, no huperzine interaction study: Q6 calls the extension a pharmacological
+    # inference, which is the taxonomy's "theoretical" (plausibility, limited direct human evidence); for the
+    # incidental members the practical effect is not established either.
+    assert (subset["evidence_level"], broad["evidence_level"]) == ("theoretical", "theoretical")
+    assert "pharmacological inference" in subset["mechanism"]
+    assert rule["last_reviewed"] == "2026-11-12"  # Dr. Pham Q6
 
 
 EMA_RHODIOLA = (
@@ -716,14 +737,15 @@ def test_same_maoi_rule_cites_serotonergic_sources_not_an_efficacy_meta_analysis
     # 38423354 is a SAMe-for-depression efficacy meta-analysis.
     parnate = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
     nardil = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
-    assert maois["sources"] == [parnate, nardil, NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
+    emsam = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
+    assert maois["sources"] == [parnate, nardil, emsam, NCCIH_SAME, _pmid("7854515"), _pmid("8434674")]
     assert _pmid("38423354") not in maois["sources"]
-    # Dr. Pham 2026-11-11 (A3) contraindicates SAMe for tranylcypromine (exact pair DSI_TRANYLCYPROMINE_SAME).
-    # This class rule keeps its published avoid while the other MAOIs are pending (ask 1); its evidence
-    # level matches the class pair's verifier-derived tier.
+    # Dr. Pham contraindicates SAMe for tranylcypromine (2026-11-11, A3) and phenelzine (2026-11-12, Q1) through
+    # exact pairs; this class rule is the signed avoid fallback, and its evidence level matches the class pair's
+    # verifier-derived tier.
     assert (maois["severity"], maois["evidence_level"]) == ("avoid", "moderate")
     assert "clomipramine" in maois["mechanism"]
-    assert rule["last_reviewed"] == "2026-11-11"
+    assert rule["last_reviewed"] == "2026-11-12"
     assert maois["clinical_review"]["reviewer"] == "Dr. Pham"
 
 
@@ -933,7 +955,7 @@ def test_5htp_pregnancy_rules_drop_a_muscle_relaxant_bookshelf_chapter():
     assert (pregnancy["severity"], maois["severity"]) == ("avoid", "contraindicated")
     assert "Health Canada" in pregnancy["mechanism"]
     assert "linezolid" in maois["mechanism"]
-    assert rule["last_reviewed"] == "2026-04-14"  # agent re-sourcing, not a clinical review
+    assert rule["last_reviewed"] == "2026-11-12"  # Dr. Pham's 5-HTP harmonization (signed answers, section 2)
 
 
 def test_no_interaction_rule_cites_the_muscle_relaxant_chapter():
@@ -996,12 +1018,21 @@ def test_chondroitin_bleeding_rule_states_the_documented_inr_data():
 
 def test_green_tea_nadolol_rules_cite_the_primary_trial():
     rule = _rule("RULE_IQM_GREEN_TEA_HYPERTENSION")
-    for sub in (_sub_rule(rule, "condition_id", "hypertension"),
-                _sub_rule(rule, "drug_class_id", "antihypertensives")):
-        assert sub["sources"] == [_pmid("24419562"), _pmid("25312732")]
-        assert "85%" in sub["mechanism"]
-        assert "OATP1A2" in sub["mechanism"]
-    assert rule["last_reviewed"] == "2026-04-23"  # agent re-sourcing, not a clinical review
+    for rule_id in ("RULE_IQM_GREEN_TEA_HYPERTENSION", "RULE_BOTAN_MATCHA_BETA_BLOCKERS"):
+        scoped = _rule(rule_id)
+        assert not any(s["condition_id"] == "hypertension" for s in scoped["condition_rules"])
+        sub = _sub_rule(scoped, "drug_class_id", "nadolol")
+        assert _pmid("24419562") in sub["sources"]
+        assert sub["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert "85%" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
+    assert "OATP1A2" in _sub_rule(rule, "drug_class_id", "nadolol")["mechanism"]
+    nadolol = _sub_rule(rule, "drug_class_id", "nadolol")
+    assert nadolol["severity"] == "avoid"
+    assert nadolol["profile_gate"]["requires"]["drug_classes_any"] == ["nadolol"]
+    assert not {"antihypertensives", "beta_blockers"}.intersection(
+        r["drug_class_id"] for r in rule["drug_class_rules"]
+    )
+    assert rule["last_reviewed"] == "2026-04-23"  # authoring does not invent clinician review
 
 
 # Wrong-topic citations removed by the 2026-09 triage: (PMID, rule, sub-rule).
@@ -1402,3 +1433,111 @@ def test_coq10_cholesterol_copy_does_not_assume_statin_use_or_deficiency():
     assert "if you take a statin" in sub_rule["alert_body"].lower()
     assert "high cholesterol alone does not establish a CoQ10 deficiency" in sub_rule["informational_note"]
     assert sub_rule["profile_gate"]["requires"]["conditions_any"] == ["high_cholesterol"]
+
+
+VITAMIN_E_RULE = "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+
+
+def _vitamin_e_bleeding_subs() -> tuple[dict, list[dict]]:
+    rule = _rule(VITAMIN_E_RULE)
+    return rule, [
+        _sub_rule(rule, "drug_class_id", "anticoagulants"),
+        _sub_rule(rule, "condition_id", "bleeding_disorders"),
+        _sub_rule(rule, "condition_id", "surgery_scheduled"),
+    ]
+
+
+AGENT_WORDING = "Wording and sources (mechanism, action and alert text) prepared by agent, not reviewed by Dr. Pham."
+NOT_CONSUMER_TEXT = {"mechanism", "notes", "sources", "clinical_review", "review_owner"}
+
+
+def _consumer_strings(node, key=None):
+    """Every string in a rule except provenance and mechanism text, with the key that holds it."""
+    if key in NOT_CONSUMER_TEXT:
+        return
+    if isinstance(node, dict):
+        for k, v in node.items():
+            yield from _consumer_strings(v, k)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _consumer_strings(v, key)
+    elif isinstance(node, str):
+        yield key, node
+
+
+def test_vitamin_e_copy_sets_no_400_iu_boundary_and_never_calls_the_effect_mild():
+    """Dr. Pham Q2 (2026-11-12): 400 IU/day is not a boundary below which the interaction disappears, and the effect
+    is not necessarily mild. The NIH fact sheet's "probably exceeds 400 IU/day" stays in a mechanism only with that
+    qualification. Every consumer string of the rule is checked, not only the bleeding rows."""
+    rule, subs = _vitamin_e_bleeding_subs()
+    for key, text in _consumer_strings(rule):
+        assert "400" not in text and "mild" not in text.lower(), (key, text)
+    for sub in subs:
+        label = sub.get("drug_class_id") or sub["condition_id"]
+        if "400" in sub["mechanism"]:
+            assert "not an established threshold" in sub["mechanism"], label
+        for stale in ("anchored to", "≥400", "~400 IU/day and above", "mildly"):
+            assert stale not in sub["mechanism"], (label, stale)
+        review = sub["clinical_review"]
+        assert review["reviewer"] == "Dr. Pham" and AGENT_WORDING in review["notes"], label
+    anticoagulants, _, surgery = subs
+    assert "probably exceeds 400 IU/day" in anticoagulants["mechanism"]
+    # "Blood thinner" includes DOAC users; the old action named only warfarin or an antiplatelet.
+    assert "warfarin or an antiplatelet" not in anticoagulants["action"]
+    assert "blood thinner" in anticoagulants["action"]
+    assert "bleeding" in surgery["alert_body"]
+    assert "surgical team" in surgery["alert_body"]
+    assert "whether and when" in surgery["alert_body"]
+    assert "week" not in surgery["alert_body"] and "stop" not in surgery["alert_headline"].lower()
+    assert rule["last_reviewed"] == "2026-11-12"
+    assert "Q2 wording 2026-11-12 (Dr. Pham signed the policy; wording by agent)" in rule["review_owner"]
+
+
+def test_vitamin_e_numeric_suppression_stays_held():
+    """Q2: numerical suppression stays held until amount handling is demonstrated. No threshold moves, and no
+    bleeding row gains a dose gate, a minimum effective dose or dose-dependent materiality."""
+    rule, subs = _vitamin_e_bleeding_subs()
+    assert [(t["target_id"], t["comparator"], t["value"], t["unit"]) for t in rule["dose_thresholds"]] == [
+        ("pregnancy", ">", 1000, "mg"), ("lactation", ">", 1000, "mg"),
+        ("pregnancy", ">", 800, "mg"), ("lactation", ">", 800, "mg"),
+    ]
+    for sub in subs:
+        label = sub.get("drug_class_id") or sub["condition_id"]
+        assert sub["materiality"] == "presence", label
+        assert sub.get("min_effective_dose") is None, label
+        assert sub["profile_gate"]["dose"] is None, label
+
+
+@pytest.mark.parametrize("rule_id,name", [
+    ("RULE_IQM_SENNA_PREGNANCY", "senna"), ("RULE_IQM_CASCARA_SAGRADA_PREGNANCY", "cascara"),
+])
+def test_laxative_digoxin_rows_keep_avoid_unsupervised_use_with_potassium_context(rule_id, name):
+    """Dr. Pham section 2 (2026-11-12): keep "avoid unsupervised use" with potassium-loss context. The monographs
+    require medical consultation and set no dose or duration cutoff, so the copy does not narrow the advice to
+    prolonged use; the laxative itself is not said to make digoxin toxic, and the consumer is not handed clinician
+    tasks."""
+    rule = _rule(rule_id)
+    digoxin = _sub_rule(rule, "drug_class_id", "cardiac_glycosides")
+    assert digoxin["severity"] == "avoid"
+    assert digoxin["alert_headline"] == "Avoid unsupervised use with digoxin"
+    body = digoxin["alert_body"]
+    assert "potassium" in body and "without your prescriber's advice" in body
+    assert "unsupervised prolonged" not in body
+    # One wording for the same concern as aloe (batch 5b): LANOXIN 5.3 names toxicity, not a vague "risk".
+    assert "raise the risk of digoxin side effects" in body
+    assert "potassium" in digoxin["informational_note"]
+    action = digoxin["action"].lower()
+    assert "which laxative suits you" not in action  # no source for choosing a laxative
+    for clinician_task in ("osmotic agent", "monitor serum", "potassium-sparing approach", "avoid prolonged use"):
+        assert clinician_task not in action, clinician_task
+    assert f"do not use {name} without your prescriber's advice" in action
+    assert "have to consult a doctor (4.4)" in digoxin["mechanism"]
+    assert "no dose or duration that clears the combination" in digoxin["mechanism"]
+    review = digoxin["clinical_review"]
+    assert AGENT_WORDING in review["notes"] and "potassium-loss and preparation context" in review["notes"]
+    # Dr. Pham decided the digoxin row only; the rule's other rows stay attributed to their original owners.
+    assert rule["review_owner"].startswith(
+        "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row only)"
+    )
+    assert "other rows: original rule pharmaguide_clinical_team" in rule["review_owner"]
+    assert rule["last_reviewed"] == "2026-11-12"

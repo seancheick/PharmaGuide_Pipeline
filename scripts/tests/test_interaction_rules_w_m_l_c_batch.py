@@ -44,12 +44,12 @@ W_FAMILY = [
     # (label, db, canonical_id, drug_class_id, expected_severity)
     ("W1",  "ingredient_quality_map", "vitamin_k",      "vitamin_k_antagonists", "caution"),
     # Dr. Pham's review (2026-11-11, audits/clinical_review_20261111) supersedes the
-    # 2026-04 locks for W2, W3, W6 and W12: ginkgo and garlic are caution on presence
+    # 2026-04 locks for W2, W3, W4, W6 and W12: ginkgo and garlic are caution on presence
     # (the 120 mg and 600 mg floors had no source), St. John's wort is avoid for
     # warfarin, and cranberry is caution for warfarin.
     ("W2",  "ingredient_quality_map", "ginkgo",         "anticoagulants", "caution"),
     ("W3",  "ingredient_quality_map", "garlic",         "anticoagulants", "caution"),
-    ("W4",  "ingredient_quality_map", "fish_oil",       "anticoagulants", "caution"),
+    ("W4",  "ingredient_quality_map", "fish_oil",       "anticoagulants", "monitor"),
     ("W5a", "ingredient_quality_map", "turmeric",       "anticoagulants", "caution"),
     ("W5b", "ingredient_quality_map", "curcumin",       "anticoagulants", "caution"),
     ("W6",  "ingredient_quality_map", "st_johns_wort",  "anticoagulants", "avoid"),
@@ -183,22 +183,34 @@ def test_w_m_l_c_rules_carry_full_payload(rules, label, db, cid, drug_class, _):
 # ---------------------------------------------------------------------------
 
 
+def _pregnancy_owner(rule, rules):
+    if rule['id'] == 'RULE_IQM_CHROMIUM_PICOLINATE_THYROID':
+        # The form-specific thyroid split must not duplicate the unscoped
+        # chromium pregnancy/lactation assessment or invent another one.
+        assert not rule.get('pregnancy_lactation')
+        parent = next(r for r in rules if r['id'] == 'RULE_IQM_CHROMIUM_GLUCOSE')
+        assert parent['subject_ref'] == rule['subject_ref']
+        assert not parent.get('form_scope')
+        return parent['pregnancy_lactation']
+    return rule.get('pregnancy_lactation') or {}
+
+
 def test_all_rules_have_pregnancy_category(rules):
     """Every rule has a populated pregnancy_category (no empty/None)."""
     empties = [r["id"] for r in rules
-               if (r.get("pregnancy_lactation") or {}).get("pregnancy_category") in (None, "")]
+               if _pregnancy_owner(r, rules).get("pregnancy_category") in (None, "")]
     assert not empties, f"Rules with empty pregnancy_category: {empties}"
 
 
 def test_all_rules_have_lactation_category(rules):
     empties = [r["id"] for r in rules
-               if (r.get("pregnancy_lactation") or {}).get("lactation_category") in (None, "")]
+               if _pregnancy_owner(r, rules).get("lactation_category") in (None, "")]
     assert not empties, f"Rules with empty lactation_category: {empties}"
 
 
 def test_all_rules_have_evidence_level(rules):
     empties = [r["id"] for r in rules
-               if (r.get("pregnancy_lactation") or {}).get("evidence_level") in (None, "")]
+               if _pregnancy_owner(r, rules).get("evidence_level") in (None, "")]
     assert not empties, f"Rules without evidence_level: {empties}"
 
 
@@ -209,7 +221,7 @@ def test_evidence_level_is_canonical(rules):
                  "established", "probable", "theoretical"}
     bad = []
     for r in rules:
-        ev = (r.get("pregnancy_lactation") or {}).get("evidence_level")
+        ev = _pregnancy_owner(r, rules).get("evidence_level")
         if ev not in canonical:
             bad.append((r["id"], ev))
     assert not bad, f"Non-canonical evidence_level values: {bad}"
@@ -227,7 +239,7 @@ def test_banned_subjects_default_contraindicated_in_pregnancy(rules):
         sref = r.get("subject_ref") or {}
         if sref.get("db") != "banned_recalled_ingredients":
             continue
-        pc = (r.get("pregnancy_lactation") or {}).get("pregnancy_category")
+        pc = _pregnancy_owner(r, rules).get("pregnancy_category")
         if pc not in acceptable:
             bad.append((r["id"], pc))
     assert not bad, (

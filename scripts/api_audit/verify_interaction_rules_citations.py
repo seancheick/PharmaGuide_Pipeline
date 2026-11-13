@@ -135,6 +135,7 @@ TOPIC_STEMS = {
     "former_smoker": ["smok", "tobacco", "cigarett"],
     "asbestos_exposure": ["asbestos"],
     # drug classes
+    "nadolol": ["nadolol"],
     "anticoagulants": ["warfarin", "coumarin", "heparin", "apixaban", "rivaroxaban",
                        "dabigatran"] + _BLEEDING,
     "doacs": ["apixaban", "rivaroxaban", "dabigatran", "edoxaban"] + _BLEEDING,
@@ -157,9 +158,23 @@ TOPIC_STEMS = {
               "selegiline"],
     "serotonergic_medications": ["seroton", "tramadol", "triptan", "linezolid"],
     "cardiac_glycosides": ["digoxin", "digitoxin", "digitalis", "hypokal", "potassium"],
-    "anticholinergics": ["cholinerg", "acetylcholin", "muscarin", "cholinesterase"],
+    # Tokens match by prefix, so "anticholinerg"/"antimuscarin" need their own stems; scopolamine is a member of
+    # both classes (the prototype antimuscarinic).
+    "anticholinergics": ["cholinerg", "anticholinerg", "acetylcholin", "muscarin", "antimuscarin",
+                         "cholinesterase", "scopolamin"],
+    "antimuscarinics": ["cholinerg", "anticholinerg", "acetylcholin", "muscarin", "antimuscarin",
+                        "cholinesterase", "scopolamin", "oxybutynin", "overactive bladder"],
     "anticonvulsants": ["anticonvuls", "antiepilep", "seizur", "epilep", "phenytoin",
                         "valpro", "carbamazep"],
+    # Single-medicine CBD topics (Dr. Pham Q5, 2026-11-12): the medicine's own name only, so a source about
+    # another medicine of the same family cannot pass as on-topic.
+    "clobazam": ["clobazam"],
+    "valproate": ["valpro", "divalproex"],
+    "stiripentol": ["stiripentol"],
+    "everolimus": ["everolimus"],
+    "tacrolimus": ["tacrolimus"],
+    "sirolimus": ["sirolimus", "rapamycin"],
+    "digoxin": ["digoxin"],
     "thiazide_diuretics": ["thiazide", "diuret", "potassium", "hypokal"],
     "lithium": ["lithium", "diuret", "renal", "kidney"],
     "calcium_channel_blockers": ["calcium channel", "amlodipine", "nifedipine",
@@ -176,6 +191,8 @@ TOPIC_STEMS = {
     "beta_blockers": ["blocker", "adrenerg", "propranolol", "metoprolol", "atenolol"],
     "fluoroquinolones": ["fluoroquinol", "quinolone", "floxacin", "chelat", "antibiot"],
 }
+TOPIC_STEMS["cbd_other_anticonvulsants"] = TOPIC_STEMS["anticonvulsants"]
+TOPIC_STEMS["emsam_patch"] = ["emsam", "selegiline"]
 
 
 def _norm(text) -> str:

@@ -58,7 +58,8 @@ def test_aloe_latex_entry_is_high_risk_with_verified_identity():
 @pytest.mark.parametrize(
     "label",
     ["Aloe ferox", "Cape aloe", "Cape aloes", "Aloe latex", "Aloe capensis", "Bitter aloe",
-     "Aloe ferox leaf juice powder"],
+     "Aloe ferox leaf juice powder", "Aloe vera latex", "Aloe barbadensis latex",
+     "Non-decolorized aloe vera whole leaf extract"],  # known processing: anthraquinones retained (NCCIH)
 )
 def test_cape_aloe_and_aloe_latex_labels_match_exactly(enricher, label):
     hits = _matches(enricher, label, "RISK_ALOE_LATEX")
@@ -80,6 +81,7 @@ def test_cape_aloe_and_aloe_latex_labels_match_exactly(enricher, label):
         "Aloe Polymax+",
         "Aloe ferox gel",
         "Aloe ferox inner leaf gel",
+        "Decolorized aloe vera whole leaf extract",  # a substring of a latex alias; carbon-treated
     ],
 )
 def test_aloe_gel_and_unspecified_aloe_vera_do_not_match(enricher, label):
@@ -177,8 +179,8 @@ GHOST_PMID_URLS = {
 
 def test_cape_aloe_interaction_rule_follows_the_ema_monograph():
     rules = json.loads((DATA / "ingredient_interaction_rules.json").read_text())["interaction_rules"]
-    matching = [r for r in rules if r.get("subject_ref", {}).get("canonical_id") == "aloe_ferox"]
-    assert len(matching) == 1  # one rule per ingredient
+    matching = [r for r in rules if r.get("subject_ref", {}).get("canonical_id") == "RISK_ALOE_LATEX"]
+    assert len(matching) == 1  # one rule per preparation
     rule = matching[0]
     conditions = {c["condition_id"]: c for c in rule["condition_rules"]}
     drugs = {d["drug_class_id"]: d for d in rule["drug_class_rules"]}
@@ -195,6 +197,100 @@ def test_cape_aloe_interaction_rule_follows_the_ema_monograph():
         assert not GHOST_PMID_URLS & set(sub["sources"])
     assert EMA_ALOE in drugs["cardiac_glycosides"]["sources"]
     assert EMA_ALOE in preg["sources"]
+
+
+# --- Aloe latex preparation identity (Dr. Pham, signed answers 2026-11-12, section 2) ---
+# The EU monograph EMA/HMPC/625788/2015 covers the dried leaf juice (latex) of Aloe barbadensis
+# (Barbados aloes) and of Aloe ferox (Cape aloes). The rule was authored on the IQM species
+# identity aloe_ferox, so Aloe vera latex, flagged RISK_ALOE_LATEX, met no digoxin finding while
+# "Aloe ferox gel", an IQM aloe_ferox alias, met it. The rule now sits on the latex identity, whose
+# negative terms keep inner-leaf gel out; whole leaf of unknown processing stays unasserted.
+
+ALOE_LATEX_RULE = "RULE_IQM_ALOE_FEROX"
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+
+
+def _aloe_rule() -> dict:
+    rules = json.loads((DATA / "ingredient_interaction_rules.json").read_text())["interaction_rules"]
+    return next(r for r in rules if r["id"] == ALOE_LATEX_RULE)
+
+
+def test_aloe_latex_rule_is_authored_on_the_latex_preparation_identity():
+    rules = json.loads((DATA / "ingredient_interaction_rules.json").read_text())["interaction_rules"]
+    assert _aloe_rule()["subject_ref"] == {"db": "banned_recalled_ingredients", "canonical_id": "RISK_ALOE_LATEX"}
+    # No second owner on the species identity: gel and latex of A. ferox share it.
+    assert not [r["id"] for r in rules if r["subject_ref"].get("canonical_id") == "aloe_ferox"]
+
+
+def test_every_cape_aloe_identity_name_except_gel_meets_the_latex_identity(enricher):
+    """Moving the rule off the species identity must lose no latex row: every Aloe ferox name the
+    ingredient map resolves, other than a gel, is a latex match."""
+    iqm = json.loads((DATA / "ingredient_quality_map.json").read_text())["aloe_ferox"]
+    names = [name for form, entry in iqm["forms"].items() for name in [form, *(entry.get("aliases") or [])]]
+    assert names
+    for name in names:
+        assert bool(_matches(enricher, name, "RISK_ALOE_LATEX")) is ("gel" not in name.lower()), name
+
+
+@pytest.mark.parametrize(
+    "name,group,reaches",
+    [
+        ("Aloe ferox", "Cape Aloe", True),  # the label as sold (267819, Aloe Latex 140 mg)
+        ("Aloe vera latex", "Aloe", True),  # Barbados aloes: same monograph, flagged, met nothing
+        ("Aloe barbadensis latex", "Aloe", True),
+        ("Non-decolorized aloe vera whole leaf extract", "Aloe", True),  # processing known: latex retained
+        ("Decolorized aloe vera whole leaf extract", "Aloe", False),
+        # Held for Dr. Pham: a Cape aloe gel now meets no aloe rule (no corpus label names one).
+        ("Aloe ferox gel", "Cape Aloe", False),  # inner-leaf gel is not the latex
+        ("Aloe ferox inner leaf gel", "Cape Aloe", False),
+        ("Aloe vera inner leaf gel", "Aloe", False),
+        ("88% organic whole leaf Aloe vera", "Aloe", False),  # processing unknown: not asserted
+    ],
+)
+def test_aloe_digoxin_finding_follows_the_preparation(enricher, name, group, reaches):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((FIXTURES / "aloe_latex_267819_raw.json").read_text())
+    raw["ingredientRows"][0].update(name=name, ingredientGroup=group)
+    enriched, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    profile = enriched["interaction_profile"]
+    fired = {alert["rule_id"] for alert in profile["ingredient_alerts"]}
+    assert (ALOE_LATEX_RULE in fired) is reaches, (name, fired)
+    assert ("cardiac_glycosides" in profile["drug_class_summary"]) is reaches, name
+
+
+def test_aloe_digoxin_row_keeps_avoid_unsupervised_use_with_preparation_context():
+    """Section 2: keep "avoid unsupervised use" with potassium-loss and preparation context. The
+    monograph requires medical consultation and sets no dose or duration cutoff; the laxative
+    itself is not said to make digoxin toxic."""
+    rule = _aloe_rule()
+    [digoxin] = [d for d in rule["drug_class_rules"] if d["drug_class_id"] == "cardiac_glycosides"]
+    assert digoxin["severity"] == "avoid"
+    assert digoxin["alert_headline"] == "Avoid unsupervised use with digoxin"
+    body = digoxin["alert_body"]
+    assert "potassium" in body and "without your prescriber's advice" in body
+    assert "unsupervised prolonged" not in body
+    assert "this laxative" not in body  # a whole-leaf extract need not be sold as a laxative
+    action = digoxin["action"].lower()
+    assert "do not use aloe latex products without your prescriber's advice" in action
+    assert "which laxative suits you" not in action  # no source; assumes laxative use
+    assert "have to consult a doctor before taking aloes concomitantly (4.4)" in digoxin["mechanism"]
+    assert "no dose or duration that clears the combination" in digoxin["mechanism"]
+    assert "inner-leaf gel" in digoxin["mechanism"]  # preparation context
+    review = digoxin["clinical_review"]
+    assert review["reviewer"] == "Dr. Pham"
+    # Her words quoted, not paraphrased; the implementation is labelled agent work.
+    assert "should not inherit it indiscriminately" in review["notes"]
+    assert "should remain uncertain" in review["notes"]
+    assert "Agent implementation, not reviewed by Dr. Pham" in review["notes"]
+    assert "prepared by agent, not reviewed by Dr. Pham" in review["notes"]
+    # The pregnancy row now reaches Barbados aloe latex too; its text must not name Cape aloe only.
+    [pregnancy] = [c for c in rule["condition_rules"] if c["condition_id"] == "pregnancy"]
+    assert pregnancy["mechanism"].startswith("Aloe latex (Cape or Barbados aloes)")
+    assert rule["review_owner"].startswith(
+        "Dr. Pham (signed answers 2026-11-12, section 2: keep 'avoid unsupervised use' on the cardiac-glycoside row"
+    )
+    assert rule["last_reviewed"] == "2026-11-12"
 
 
 # --- Frangula bark (EU Annex III Part C; EFSA 2024 e8766) ---

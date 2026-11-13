@@ -8,7 +8,8 @@ selectable) plus 13 rule-only drug classes referenced by interaction
 rules but not surfaced as profile picks (CYP substrates, narrow families).
 
 Locked decisions:
-  - Exactly 30 drug classes (16 user_selectable + 14 rule-only)
+  - Exactly 41 drug classes (16 user_selectable + 25 rule-only; antimuscarinics added 2026-11-12, Dr. Pham Q6;
+    seven CBD medicine classes added 2026-11-12, Dr. Pham Q5)
   - Lean schema + extras: id, name, notes, examples, rx_status, user_selectable
   - v1.1.0 sheet-facing consumer fields: group_label (clean noun bucket) +
     commonly_used_for (one sentence, "commonly used" phrasing, never "treats");
@@ -43,21 +44,21 @@ def drug_classes(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.1.0"
-    assert md["total_entries"] == 30
+    assert md["total_entries"] == 41
     assert md["user_selectable_count"] == 16
-    assert md["rule_only_count"] == 14
+    assert md["rule_only_count"] == 25
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_30_drug_classes_locked(drug_classes):
-    assert len(drug_classes) == 30
+def test_exactly_41_drug_classes_locked(drug_classes):
+    assert len(drug_classes) == 41
 
 
 def test_user_selectable_split_correct(drug_classes):
     selectable = [d for d in drug_classes if d.get("user_selectable")]
     rule_only = [d for d in drug_classes if not d.get("user_selectable")]
     assert len(selectable) == 16, f"expected 16 user_selectable; got {len(selectable)}"
-    assert len(rule_only) == 14, f"expected 14 rule-only; got {len(rule_only)}"
+    assert len(rule_only) == 25, f"expected 25 rule-only; got {len(rule_only)}"
 
 
 REQUIRED_FIELDS = {
@@ -238,3 +239,15 @@ def test_every_interaction_rule_drug_class_id_in_vocab(drug_classes):
         f"drug_class_ids in source data NOT in vocab: {unknown}. "
         "Either add to vocab or fix the source data."
     )
+
+
+@pytest.mark.parametrize(
+    ("scoped_id", "parent_id"),
+    [("nadolol", "beta_blockers"), ("emsam_patch", "maois")],
+)
+def test_scoped_classes_reuse_parent_education(drug_classes, scoped_id, parent_id):
+    by_id = {entry["id"]: entry for entry in drug_classes}
+    scoped = by_id[scoped_id]
+    assert scoped["user_selectable"] is False
+    for field in ("group_label", "commonly_used_for"):
+        assert scoped[field] == by_id[parent_id][field]

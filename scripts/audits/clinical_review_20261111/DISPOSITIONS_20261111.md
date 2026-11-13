@@ -271,7 +271,251 @@ while those classes load. Agent choices, open for review: the note shows the hea
 the rule's `informational_note` (not every note has been reviewed for this use); it adds one row to the "Good to
 know" count; once any medicine resolves to a class, the medicine axis counts as answered.
 
+## Signed answers (2026-11-12): implementation
+
+Dr. Pham's signed answers (`DR_PHAM_ANSWERS_20261112.md` Part A) and Sean's findings (Part B, label-sourced rows
+only) are implemented one batch per PR. "Agent review" marks a label-sourced identity, membership or scope fix
+made under the 2026-11-06 delegation and independently checked; it is not a clinician review.
+
+### Batch 1: serotonergic harmonization (`apply_answers_b1_serotonergic.py`)
+
+| Row | Outcome |
+|---|---|
+| Q1 SAMe + tranylcypromine | Kept: exact pair `DSI_TRANYLCYPROMINE_SAME` Contraindicated (PARNATE names SAM-e) |
+| Q1 SAMe + phenelzine | New exact pair `DSI_PHENELZINE_SAME` (RxCUI 8123) Contraindicated through NARDIL's serotonergic-agent category; the record says the label does not name SAMe and that applying the category is the clinical interpretation (evidence tier probable) |
+| Q1 SAMe + confirmed EMSAM | Implemented in #468. The existing medication class map identifies verified EMSAM brand and transdermal product RxCUIs, and the pair and profile records carry the signed contraindication. Oral and ingredient-only selegiline keep the signed MAOI fallback. |
+| Q1 SAMe + oral selegiline, other or unidentified MAOI | Class pair `DSI_MAOI_SAME` Contraindicated → Major, matching `RULE_IQM_SAME`/maois (avoid). Both carry Q1's consumer text ("Do not add SAMe while taking an MAOI without your prescriber's approval. Do not stop or switch your prescribed medicine to use SAMe.") and state the class inference. The Contraindicated/avoid split is closed |
+| 5-HTP + SSRIs/SNRIs | `DSI_SSRI_5HTP` Major → Contraindicated, matching the profile rule; Health Canada 5-HTP monograph (dated 2024-08-28; contraindication: antidepressants) cited with jurisdiction and scope. Pair widened from SSRIs to SSRIs and SNRIs, the rule's audience. Self-managed washout text removed from the SSRI/SNRI and MAOI sub-rules; `DSI_MAOI_5HTP` gains the monograph and PARNATE (hydroxytryptophan), drops "universally contraindicated … consensus", and its management now says do not take 5-HTP with an MAOI, matching its severity and the rule (it said "without the prescriber reviewing it"); oral selegiline's contraindication is recorded as a class inference |
+| 5-HTP + other serotonergic medicines | Unchanged (avoid). Held question: tricyclics are antidepressants under the monograph's contraindication (see the hold list) |
+| SJW + SSRIs/SNRIs | Pair `DSI_SSRI_SJW` Contraindicated → Major and rule contraindicated → avoid, changed together; widened to SSRIs and SNRIs. ZOLOFT, EFFEXOR XR, PRISTIQ, FETZIMA and SAVELLA list St. John's wort as a serotonergic risk with monitoring as management; none contraindicates it, so no exact contraindication was found. Urgent-help text kept; no washout interval. The FDA citalopram QT page left the pair's sources (it does not concern St. John's wort) |
+| SJW + rasagiline, safinamide (Part B 3D) | New exact pairs `DSI_RASAGILINE_SJW` (134748; label section 4) and `DSI_SAFINAMIDE_SJW` (1922448; XADAGO 4 and 7.3), Contraindicated; agent review. Neither joins `class:maois`, so no other MAOI rule reaches them. Exact pairs reach both the Stack and the product page (`personalized_warnings_provider` runs the pair checker) |
+
+Cross-repo note: the app's bundle release-gate fixture (`test/release_gate/quick_check_catalog_interaction_test.dart`,
+sertraline row) passes `drugClasses: ['class:ssris']` by hand. Production resolves sertraline to both
+`class:ssris` and `class:antidepressants_ssri_snri` from `drug_class_map` (`MedicationIdentityHydrator`
+re-hydrates stored stacks), but that fixture needs `class:antidepressants_ssri_snri` added before it runs against a
+database built from this batch.
+
+### Batch 2: anticoagulants (`apply_answers_b2_anticoagulants.py`)
+
+| Row | Outcome |
+|---|---|
+| Q7 injected direct thrombin inhibitors | New class `class:injectable_anticoagulants` (argatroban, bivalirudin, desirudin, lepirudin, plus the heparins and fondaparinux below); gate id added to the taxonomy (5.7.0, gate vocabulary only). The six warfarin-addressed fallback sub-rules (St. John's wort, glucosamine, cranberry, CoQ10, both ginger records) exclude it. These medicines stay anticoagulants and keep the general bleeding findings; they get no warfarin, INR or oral-inducer text and no St. John's wort finding |
+| Part B 3D heparin-group membership | heparin 5224, enoxaparin 67108, dalteparin 67109, tinzaparin 69646, fondaparinux 321208 (RxNav ingredient RxCUIs, ATC B01AB/B01AX) join `class:anticoagulants` and the injected class. The `class:anticoagulants` pairs (CBD, vinpocetine, horse chestnut, turmeric, ginseng, NSAIDs) now reach them; their warfarin sentences are addressed to warfarin users (the ginseng and CBD pair management was rewritten). Heparin's ingredient also covers topical and eye products, so such users are treated as injected users (over-warns) |
+| St. John's wort + warfarin, acenocoumarol, phenprocoumon (Q7, section 2) | New exact Major pairs `DSI_ACENOCOUMAROL_SJW` (UK Sinthrome SmPC 4.5: may diminish the effect) and `DSI_PHENPROCOUMON_SJW` (German Marcumar Fachinformation 4.5: weakened effect; closer checks at start and after stopping). The VKA sub-rule and the fallback (one text) address "warfarin or another warfarin-type blood thinner", cite both labels, and state that other VKAs (dicumarol, fluindione, phenindione, tioclomarol) are a precautionary class inference, as Q7 allows |
+| St. John's wort + DOACs (section 2) | `DSI_DOAC_SJW` evidence notes give each label's own wording: ELIQUIS and rivaroxaban name St. John's wort; PRADAXA says P-gp inducers should generally be avoided; SAVAYSA names rifampin only; Lixiana (UK) says caution including St. John's wort; betrixaban's label is no longer on DailyMed and was not re-read. No INR text |
+| St. John's wort + edoxaban (section 2) | New exact pair `DSI_EDOXABAN_SJW`, Major: avoid recorded as PharmaGuide precautionary policy because the UK label says caution. The DOAC sub-rule mechanism says the same |
+| Glucosamine + warfarin (Q3) | Caution kept. `DSI_WAR_GLUCOSAMINE` management is Q3's text, then "This includes glucosamine-chondroitin products" and the existing bleeding-report sentence. The VKA and fallback sub-rules carry Q3's action ("warfarin or another warfarin-type blood thinner"), a body saying not to start without the anticoagulation clinician's agreement, and no interval. Not called a contraindication |
+| Glucosamine + acenocoumarol, phenprocoumon (Q7) | New exact Moderate pairs from the Sinthrome and Marcumar labels (raised INR or stronger effect; close monitoring when glucosamine starts or stops); the sub-rules cite both and state other VKAs as inference |
+| CoQ10, cranberry, ginger (both records) (Q7) | Evidence stays warfarin-specific; the VKA extension is stated as an inference in mechanism and action, identically in both ginger records |
+| INR copy pass (section 2; Part B 3D) | 19 whole-class anticoagulant bodies: "ask about INR or bleeding checks" becomes "ask about bleeding checks". 14 rules' actions or bodies (ginseng, omega-3, fish oil, chamomile, cat's claw, devil's claw, chondroitin, black seed oil, DHA, ALCAR, quercetin, CBD, vitamin D, flaxseed) and two class-pair managements (`DSI_ANTICOAG_GINSENG`, `DSI_ANTICOAG_CBD`) now address each warfarin instruction to warfarin users. A test walks every sub-rule and pair that reaches apixaban, rivaroxaban, dabigatran, edoxaban and the nine injected medicines and finds no INR sentence unqualified to warfarin and no "your warfarin". With the rows above, 30 rules changed; `last_reviewed` moves only on the six rules carrying Dr. Pham's decisions, since the copy pass is agent wording |
+| VKA plus another anticoagulant (section 2) | Test: warfarin + enoxaparin, warfarin + apixaban, acenocoumarol + enoxaparin and warfarin + apixaban + enoxaparin keep the VKA finding, and the DOAC St. John's wort finding where a DOAC is present |
+| Independent review of batch 2 | Fixed: taxonomy `total_entries` (87 to 88); vitamin D and flaxseed actions said "your warfarin prescriber" to every anticoagulant user; "a similar blood thinner" in the VKA and fallback copy became the vocabulary's "warfarin-type blood thinner" ("warfarin-type medicine" in the ginger records, whose copy never names other blood thinners), so a DOAC user who picked only "Blood thinners" does not read the INR instruction as theirs; the glucosamine-chondroitin mention restored; `last_reviewed` as above. Not a defect: edoxaban users do not get two St. John's wort cards, because the app hides a class pair when an exact pair matches the same medicine and supplement (`stack_interaction_checker.dart::checkMedicationInteractions`). Known limit, as for DOACs: a "Blood thinners" picker selection next to an entered injected anticoagulant reads as that medicine, so the warfarin fallback stays silent (gold case `gold_warfarin_only_fallback_skips_an_injected_anticoagulant_user`) |
+
+Noted for batch 8 (not changed here): chamomile's ">4 cups/day" and the generic "has mild antiplatelet or
+anticoagulant activity" opening of several whole-class bodies (for example vitamin D, row G1) are unsourced wording.
+Whole-class copy that DOAC users already saw and injected users now see too: the dong quai avoid action addresses
+only warfarin or antiplatelet users; the turmeric and curcumin headlines say "with warfarin". Held for Dr. Pham:
+the ginseng whole-class finding rests only on warfarin evidence (mixed INR data); scope it to warfarin-type
+medicines as Q7 did for CoQ10, cranberry and ginger, or keep it for every anticoagulant?
+App follow-ups: re-copy `profile_gate_test_cases.json` (pin `1392f960`) into the app fixture and its sync test, and
+sync the bundled `clinical_risk_taxonomy.json` (5.7.0) so the app's gate validator knows `injectable_anticoagulants`.
+
+### Batch 3: anticholinergic scope (`apply_answers_b3_anticholinergic.py`)
+
+| Row | Outcome |
+|---|---|
+| Q6 rule subset | New rule class `class:antimuscarinics`: the 22 members of `class:anticholinergics` taken for their antimuscarinic effect (bladder antimuscarinics G04BD, antiparkinson anticholinergics N04AA/N04AC01, scopolamine A04AD01, antispasmodics A03AA07/A03AB02/A03BA03; ATC read on RxNav 2026-11-12; `atc_codes` reuses the parent's exact codes for single members). The ten tricyclics and diphenhydramine stay in `class:anticholinergics` only; that identity class is unchanged. Gate id added to the taxonomy (minor version bump, gate vocabulary only); rule-only vocabulary entry reuses the approved anticholinergics `group_label` and `commonly_used_for` verbatim, so no new consumer copy |
+| Q6 huperzine A + antimuscarinic treatment | New sub-rule: avoid, "do not combine ... unless your prescriber approves", evidence theoretical (main had probable; Q6 calls the extension of the donepezil label statement to huperzine A a pharmacological inference with no direct huperzine interaction trial, the taxonomy's "limited direct human evidence"); sources PMID 25191267, ARICEPT and donepezil 76bf638e (7.1) |
+| Q6 huperzine A + tricyclics, diphenhydramine | The anticholinergics sub-rule becomes caution, evidence theoretical, excluding `antimuscarinics`. Text asks the user to check with a prescriber or pharmacist and give the medicine, dose and route; states the practical effect is not established. Headline "Check first if you take an anticholinergic medicine"; the body carries both branches (see "medicine unknown") |
+| Q4 doxepin, topical products | Doxepin keeps its class membership with qualified wording: SILENOR lists anticholinergic effects among those seen above 6 mg (10.1) yet contraindicates 3-6 mg use in untreated narrow-angle glaucoma or severe urinary retention (4.3), so 6 mg is cited as not an interaction cutoff (the class notes' "only above 6 mg" is corrected), and ZONALON cream's label (systemic absorption, a probable systemic anticholinergic toxicity case) is cited so topical doxepin is not exempt. Topical diphenhydramine no longer inherits the strongest (avoid) finding. No dose or form gate is added |
+| Q4 medicine unknown | A profile with only the "Anticholinergic medication" picker class reaches the broader sub-rules (huperzine caution, alpha-GPC informational). The app shows `alert_headline` and `alert_body`, so both carry both branches: neutral headlines, and bodies that tell someone on a medicine like oxybutynin not to combine without prescriber approval (huperzine) or to tell the prescriber (alpha-GPC), and otherwise to ask first. Whether that profile should get the subset's severity is held for Dr. Pham |
+| Q6 alpha-GPC + antimuscarinic treatment | New sub-rule: caution, evidence limited, no treatment-failure claim. Cites PMID 2071257 (32 healthy volunteers; alpha-GPC reduced scopolamine-induced attention and memory impairment), stated as not showing clinical ineffectiveness, and PMID 36950691 |
+| Q6 alpha-GPC + incidental anticholinergics | The anticholinergics sub-rule becomes informational, direction neutral, evidence theoretical, excluding `antimuscarinics`: no loss of benefit is asserted from class membership. The text tells someone on a medicine like oxybutynin to tell the prescriber |
+| Q6 "cancel each other out" | Absent from every rule and curated pair; a test keeps it and any loss-of-efficacy claim out of both rules |
+| Independent review (2026-11-12) | Fresh-context healthcare review: NEEDS FIXES, all applied. Picker-only visible copy assumed a tricyclic or diphenhydramine (fixed above, tested on headline and body); huperzine subset grading (theoretical); hedged wording ("usually not the reason they are taken", "no study was found"); attribution; exact ATC codes; SILENOR "only above 6 mg" overstated the label |
+| Citation verifier | `verify_interaction_rules_citations.py` gains topic stems for `antimuscarinics` (and `anticholinergic`, `antimuscarinic`, `scopolamine` prefixes for both classes; tokens match by prefix). Strict run on the changed rules: 6 on-topic, 0 suspects |
+
+Both rules' `last_reviewed` is 2026-11-12 and each new or changed sub-rule records Dr. Pham's Q4/Q6 decision in
+`clinical_review`, noting that the consumer wording, membership and evidence grading are agent work not reviewed by
+Dr. Pham; `review_owner` names Dr. Pham for severity and scope and the agent for wording and labels read. This lifts the release blocker recorded under ask 4 below. Known limits: membership stays by
+ingredient, so transdermal scopolamine, oxybutynin gel and inhaled or topical glycopyrronium reach the antimuscarinic
+avoid; each is still used for its antimuscarinic effect. Whole-profile excludes mean oxybutynin plus a tricyclic shows
+only the avoid finding. Held for Dr. Pham: (1) a subset-specific `commonly_used_for` sentence for `antimuscarinics` (the shared sentence
+mentions allergies and sleep problems, which fit the broad class); (2) picker-only severity: a profile with only the
+picker class gets caution (huperzine) and informational (alpha-GPC), with the avoid instruction in the visible text,
+not the subset's avoid and caution; (3) transdermal, topical and inhaled antimuscarinic products (scopolamine patch,
+oxybutynin gel, inhaled glycopyrronium) reach the avoid finding by ingredient. Follow-ups: the app's bundled taxonomy
+and its vocabulary drift test (30/14 to 31/15) need the new class (runtime passes unknown ids through); tiotropium,
+ipratropium, umeclidinium, aclidinium, atropine, methscopolamine and propantheline are in neither class (membership
+work); the lowered severity for the incidental members needs its release-gate alert or attestation on the final
+candidate (not prepared by this lane).
+
+### Batch 9: release-gate expressibility for drug-class rules (`rule_change_gate.py`)
+
+| Row | Outcome |
+|---|---|
+| Section 4 gate (Part B, confirmed in Part D) | `_profile_rules` passed `alertable=True` for every `drug_class_rules` entry, while condition and pregnancy/lactation rules use `_alert_can_express`. Drug-class sub-rules now use the same check: a gate with a dose, a product-form exclude or a nutrient-form exclude needs a product in hand, so an alert cannot carry it and a reviewed attestation covers the change. A profile-only drug-class gate stays alertable (an attestation alone still does not cover a new hard rule) |
+
+Fail-first tests in `test_rule_change_gate.py` (dose, product form, nutrient form; plus the expressible control).
+Current data: one drug-class sub-rule has such a gate (`RULE_IQM_NIACIN_DIABETES` / statins, a niacinamide
+nutrient-form exclude, caution), below the hard tier, so no release-gate outcome changes today. Engineering change;
+no clinical content.
+
+### Batch 4: CBD named-medicine split, F7 (`apply_answers_b4_cbd.py`)
+
+Sources read 2026-11-12: EPIDIOLEX label (setid 8bf27097, effective 2026-05-29; 5.1, 7.2, 7.4, 12.3) and PMID 39601108
+(abstract: open-label, fixed-sequence crossover, interim analysis; 12 healthy adults; cannabidiol titrated to 5 mg/kg
+twice daily for 14 days; tacrolimus 5 mg single oral dose; Cmax 4.2-fold, AUC 3.1-fold).
+
+| Row | Outcome |
+|---|---|
+| Q5 clobazam | New sub-rule (rule class `clobazam`): caution, established. Raised N-desmethylclobazam (active metabolite) about 3-fold with no effect on clobazam; may add to sleepiness and sedation |
+| Q5 valproate | New sub-rule (`valproate`): caution, established. Liver-enzyme rises more common (most ALT elevations with valproate); states that cannabidiol did not raise valproate exposure (no change in healthy subjects, 17%/21% decreases in patients, not clinically relevant) |
+| Q5 stiripentol | New class `class:stiripentol` (RxCUI 2054968, N03AX) and sub-rule: caution, established. AUC +55% healthy, +30% patients; monitor for its adverse reactions |
+| Q5 everolimus | New class `class:everolimus` (141704, L04AH) and sub-rule: caution, established. About 2.5-fold Cmax and AUC (12.5 mg/kg twice daily); the specialist manages levels and dosing |
+| Q5 tacrolimus | New class `class:tacrolimus` (42316, L04AD) and sub-rule: caution, established (graded like everolimus: a measured human PK effect, with the label naming tacrolimus). The body gives the dose context ("prescription-level CBD doses"); headline "May raise levels of tacrolimus taken by mouth" |
+| Q5 oral sirolimus, digoxin | New classes `class:sirolimus` (35302, L04AH; not the eye-preparation S01XA) and `class:digoxin` (3407, C01AA), sub-rules caution, theoretical: the label's potential interaction for oral P-gp substrates, stated as not measured with that medicine; headlines and bodies say "taken by mouth". The digoxin sub-rule also requires the "Digoxin / Heart rhythm medication" picker class (`cardiac_glycosides`), so an unknown medicine keeps a conditional message (Q4); the class cannot tell the picker from another cardiac glycoside, so digitoxin users see the digoxin card too |
+| Q5 immunosuppressants | The whole-class sub-rule is removed: only the named medicines get a CBD finding. Cyclosporine, azathioprine, mycophenolate and biologic users lose the finding they had. A profile with only the "Immunosuppressants" picker class also loses it (held, H1) |
+| Q5 mycophenolate (review list) | No finding. Label 12.3: one 1500 mg dose of mycophenolate mofetil with EPIDIOLEX 7.5 mg/kg twice daily raised mycophenolic-acid Cmax 16% and AUC 35%; 9% and 58% predicted at steady state. Label 7.2: cannabidiol inhibits UGT1A9; consider dosage reduction of UGT1A9 substrates where small changes may cause serious reactions. Mycophenolate mofetil (RxCUI 68149) is in no rule class today |
+| Q5 other seizure medicines | The anticonvulsants sub-rule becomes a qualified review message (caution, theoretical; excludes stiripentol): the label reports dedicated studies only with clobazam, valproate and stiripentol and no specific effect on others; "talk to the doctor who prescribes it" (the class also covers nerve pain, migraine and mood) |
+| Q5 seizure condition | Keeps its guidance with an accurate claim: EPIDIOLEX's three approved indications, OTC products vary, the named findings appear separately; "do not use an over-the-counter CBD product in place of prescribed seizure treatment" |
+| Q5 dose instructions | No action tells the user to change a prescription dose; each says "Do not change your ... dose yourself" |
+| Vocabulary | Seven rule-only entries (clobazam, valproate, stiripentol, everolimus, tacrolimus, sirolimus, digoxin) reuse their parent class's approved `group_label` and `commonly_used_for` verbatim, so the 2026-08-08 sign-off still covers every string. Dr. Pham's Q5 sentences need adapting to the contract (H5) |
+| Citation verifier | Topic stems for the seven single-medicine classes are the medicine's own name only. Strict run on the changed rule: 4 on-topic, 0 suspects |
+| Independent review (2026-11-12) | Fresh-context healthcare review: NEEDS FIXES. Applied: tacrolimus body dose context; route-qualified headlines; label-limited general seizure-medicine text without the dangling scope sentence; "the doctor who prescribes it"; tacrolimus graded like everolimus; attribution of severity and evidence grading to the agent and of `review_owner` to the Q5 sub-rules only; vocabulary reuse instead of unreviewed strings; sirolimus ATC class; name-only topic stems; digoxin picker; the alprazolam test narrowed to seizure findings; "made liver-enzyme rises more common". Not applied, held: the picker-only immunosuppressant card (H1) |
+
+`last_reviewed` is 2026-11-12. `review_owner` names Dr. Pham for the Q5 findings and scope only and says the
+anticoagulant, sedative and pregnancy sub-rules are unchanged; each new or changed sub-rule's `clinical_review` notes
+that consumer wording, membership, severity and evidence grading are agent work not reviewed by Dr. Pham.
+
+Held for Dr. Pham:
+
+- **H1, immunosuppressant picker.** A profile with only the "Immunosuppressants" picker class (its examples start
+  with tacrolimus) now gets no CBD finding, nor do entered cyclosporine (oral, CYP3A4 and P-gp substrate, narrow
+  margin; the label's "e.g." list is not exhaustive), azathioprine or mycophenolate. A conditional card ("if your
+  medicine is tacrolimus, everolimus or sirolimus taken by mouth ...") was not added: the profile cannot tell the
+  picker from an entered medicine, so it would reach all 90 class members, mostly biologics, the scope Q5 rejected.
+  Should picker-only users get it anyway, and should cyclosporine get the qualified P-gp finding?
+- **H2, general seizure-medicine card.** It is caution with direction harmful yet claims no effect. Monitor or
+  informational instead, and evidence `insufficient` rather than `theoretical`?
+- **H3, label signals outside the Q5 table.** Clobazam also raised the incidence of transaminase elevations, less
+  than valproate (ALT above 3 times ULN: 4% with clobazam without valproate vs 3% with neither; 5.1); postmarketing
+  high ammonia with valproate or clobazam (5.1). Add to their findings?
+- **H4, prescription cannabidiol users.** EPIDIOLEX is in `class:anticonvulsants`, so its users get the general card;
+  their concern is adding OTC cannabidiol to a dose-related liver risk (5.1). A specific finding?
+- **H5, vocabulary sentences.** Q5's suggested copy breaks the vocabulary contract ("Commonly used ...", one sentence,
+  no "treat"). Drafts for confirmation: clobazam "Commonly used together with other seizure medicines for certain
+  types of seizures."; valproate (group label "Valproate medicines") "Commonly used, depending on the product
+  (valproic acid, sodium valproate or divalproex), for seizures, bipolar mania or migraine prevention."; stiripentol
+  "Commonly used together with clobazam for seizures in Dravet syndrome."; everolimus "Commonly used to prevent organ
+  transplant rejection and for certain tumors, including in tuberous sclerosis complex."; sirolimus "Commonly used to
+  prevent kidney transplant rejection and for a rare lung condition (LAM)."; tacrolimus "Commonly used to prevent
+  organ transplant rejection; a skin form is used for eczema." The current reused sentences are the parents' (for
+  example, everolimus and sirolimus inherit "manage autoimmune conditions").
+- **Digoxin severity.** Caution for a potential, unmeasured interaction is an agent choice.
+
+Known limits: membership is by ingredient, so topical tacrolimus and sirolimus users reach their findings; the
+headline and body say "taken by mouth". The stiripentol exclude applies to the whole profile, so stiripentol plus
+levetiracetam shows only the stiripentol card. Follow-ups: alprazolam and other benzodiazepines outside
+`class:sedatives` get no CBD sedation finding although label 7.4 names other CNS depressants (predates Q5); the app's
+bundled taxonomy and vocabulary drift test need the new classes (38/22 entries with batch 3), the removal of the immunosuppressant
+sub-rule and the new class map must ship in the same interaction-DB build.
+
+### Batch 4 source correction: sirolimus observational measurements (Codex, 2026-11-12)
+
+The original batch 4 sirolimus mechanism, body and note said the interaction was not measured.
+Live NCBI EFetch content verification of [PMID 31924480](https://pubmed.ncbi.nlm.nih.gov/31924480/)
+finds a retrospective TSC series of 25 patients, including seven taking sirolimus, with median
+sirolimus trough increase 5.1 ng/mL after cannabidiol. This is observational evidence, not a
+controlled sirolimus interaction trial or a universal effect size for OTC/topical products.
+
+Corrected only the sirolimus source/copy and evidence attribution. `probable` follows the existing
+taxonomy's partial-human-support definition. Caution, action, headline, drug matching, gates,
+direction and all other medicines are unchanged; digoxin remains a theoretical label precaution.
+The existing b4 apply script produces the correction, with a regression separating sirolimus
+from the unchanged digoxin control. Agent source review and wording, not reviewed by Dr. Pham;
+all named clinical holds remain held.
+
+Validation class: behavioral clinical evidence/copy. Fail-first named regression reproduced a
+missing-source failure before the data edit. `data_batch check --since d4d8203fc`: exactly
+`interaction_rules/RULE_BANNED_CBD_INTERACTIONS`, zero problems. Safety-copy check passed; Python
+correctness found zero new findings. Strict rule citation verifier: five on-topic, zero suspects,
+PASS. General citation verifier: zero evaluated matches/mismatches; this is not independent
+content proof, which comes from the explicit EFetch source check above. The two-file owner/consumer
+slice passed 111 cases and exposed one copy-clarity failure (the body must explicitly name sirolimus
+levels). The final body fixes that wording; the failing node and both changed source-measurement
+nodes then passed (3/3), and safety-copy validation passed again. Full-registry comparison against
+`d4d8203fc` confirms parity outside six sirolimus fields: evidence level, mechanism, alert body,
+informational note, sources and clinical-review notes. Independent review, combined local and
+exact-candidate CI remain integration requirements; no release qualification or device check is claimed.
+
+### Batch 5a: vitamin E wording (Q2), senna and cascara with digoxin (`apply_answers_b5a_vitamin_e_laxatives.py`)
+
+Sources read 2026-11-12: NIH ODS vitamin E fact sheet, "Anticoagulant and antiplatelet medications" (in-app browser;
+"unknown but probably exceed 400 IU/day"); PMID 21051774 abstract (E-utilities; pooled RR 1.22 for hemorrhagic
+stroke; no 400 IU/day anchor); EU herbal monographs for senna leaf and pod and cascara bark, 4.4 and 4.5, verbatim in
+`audits/interaction_rules/laxative_resourcing_2026_09/research.md`; LANOXIN 5.3 (assess serum electrolytes
+periodically), quoted in `audits/interaction_audit_20261111/additions_receipts_a.md`.
+
+| Row | Outcome |
+|---|---|
+| Q2 vitamin E + blood thinners | Mechanism quotes the ODS passage and adds that 400 IU/day is not an established threshold below which the interaction disappears; the "(≥400 IU/day)" onset claim goes. Body: "The amount that matters is not known"; "mildly thin the blood" goes. The action says "a blood thinner" (the old "warfarin or an antiplatelet" left out DOAC users) and asks the user to tell the prescriber how much they take. The note says vitamin E "can have" an antiplatelet effect (was stated as fact) |
+| Q2 vitamin E + bleeding disorders, surgery | "Anchored to ~400 IU/day", "about 400 IU/day or more" and "(~400 IU/day and above)" go. The surgery row's headline, body and action (including "about 1-2 weeks beforehand") predate this review and are not changed; its review note says so |
+| Q2 numerical suppression | Held: the four pregnancy and lactation dose thresholds (1000 and 800 mg) are unchanged, and all three bleeding rows stay presence-gated with no minimum effective dose; a test pins them |
+| Section 2 senna, cascara + digoxin | Severity stays avoid. Headline "Avoid unsupervised use with digoxin" (was "Can increase digoxin toxicity"). The body says "do not use this laxative without your prescriber's advice" (the old "avoid unsupervised prolonged use" narrowed the advice to prolonged use, which the monographs do not). The action drops the clinician tasks (choose an osmotic agent or potassium-sparing approach, monitor serum levels) for "do not use ... without your prescriber's advice"; "they may check your potassium" follows LANOXIN 5.3. The mechanism quotes 4.5 (hypokalaemia from long-term laxative abuse) and 4.4 (have to consult a doctor) and says the monographs set no dose or duration cutoff. Aloe is batch 5b. After the 5b review, for one wording across the three laxatives: the body says "raise the risk of digoxin side effects" (was "increase digoxin risk"; LANOXIN 5.3: hypokalemia may predispose to digoxin toxicity), and the action's "Ask your prescriber which laxative suits you" goes (no source) |
+| Independent review | Healthcare-reviewer agent on the diff, requirement and sources only: NEEDS FIXES (attribution limited to "consumer wording" while mechanisms carry agent text; the hold test covered one row). Applied: the attribution says mechanism, action and alert text are agent work; the hold test covers all three rows; the 400/"mild" test checks every consumer string of the rule; the Schurks meta-regression sentence goes (the abstract reports little heterogeneity to explain, so it shows no dose-response either way); the bleeding body names "vitamin E use"; the laxative rule owner names the cardiac-glycoside row only |
+
+Each changed sub-rule's `clinical_review` names Dr. Pham's decision and says the mechanism, action and alert text are
+agent work not reviewed by Dr. Pham. Vitamin E keeps its `review_owner` with "Q2 wording 2026-11-12 (Dr. Pham signed
+the policy; wording by agent)" appended; senna and cascara name Dr. Pham for the cardiac-glycoside row only, the agent
+for the wording and the original owner for the other rows. Rule `last_reviewed` and the two changed vitamin E
+condition rows are 2026-11-12.
+
+Held for Dr. Pham: Q2's presentation policy (a less prominent note for ordinary exposure) needs amount handling that
+distinguishes alpha-tocopherol mass from IU and form, which is not built; nothing is suppressed meanwhile. The
+vitamin E surgery row's "Stop" headline and "about 1-2 weeks beforehand" window have no source in the rule; they
+need a source or her decision.
+
+### Batch 5b: aloe preparation identity for the digoxin warning (`apply_answers_b5b_aloe_preparation.py`)
+
+Sources read 2026-11-12: EU herbal monograph EMA/HMPC/625788/2015 on Aloe barbadensis and Aloe ferox, folii succus
+siccatus (scope: dried juice of leaves, Barbados aloes and Cape aloes; 3: oral use; 4.4: patients taking cardiac
+glycosides "have to consult a doctor before taking aloes concomitantly"; 4.5: hypokalaemia from long-term laxative
+abuse potentiates cardiac glycosides); NCCIH "Aloe Vera" (gel from the inner leaf, latex from the outer layer, whole
+crushed leaf has both; overuse of aloe latex may increase digoxin adverse effects); LiverTox "Aloe Vera" (NBK548634,
+oral aloe vera from gel or leaf-rind latex, likelihood B); LANOXIN 5.3.
+
+| Row | Outcome |
+|---|---|
+| Section 2 preparation mapping | `RULE_IQM_ALOE_FEROX` moves from the IQM species identity `aloe_ferox` to the latex preparation identity `banned_recalled_ingredients/RISK_ALOE_LATEX`; the rule id is kept. Before, "Aloe vera latex" (flagged `RISK_ALOE_LATEX`) met no finding and "Aloe ferox gel" (an `aloe_ferox` alias) met all of them. Now latex of either species and non-decolorized whole-leaf extract (anthraquinones retained) reach it; gel, inner-leaf gel, decolorized whole leaf and "whole leaf" of unknown processing do not. Every non-gel `aloe_ferox` name already matched the latex identity (a test holds this), so no Cape aloe latex row is lost. No aliasing of Aloe vera to Aloe ferox |
+| `RISK_ALOE_LATEX` aliases | Adds "aloe barbadensis latex" (A. barbadensis is A. vera, whose latex was already an alias; the monograph names Barbados aloes), with a change-log entry |
+| Section 2 aloe + digoxin | Severity stays avoid; headline "Avoid unsupervised use with digoxin" (was "Can raise digoxin toxicity risk"). Body: "Prolonged or excessive use of aloe latex can lower potassium and raise the risk of digoxin side effects ... do not use this product without your prescriber's advice" (was "avoid unsupervised prolonged use"; "this product", not "this laxative", because a whole-leaf extract need not be sold as a laxative). Action: "do not use aloe latex products without your prescriber's advice. They may check your potassium" (LANOXIN 5.3). The mechanism quotes NCCIH (latex overuse and cardiac glycosides) and monograph 4.4 and 4.5, says the monograph sets no dose or duration that clears the combination, and gives NCCIH's latex/gel distinction |
+| Pregnancy row text | Its mechanism named "Cape aloe latex" only; it now reaches Barbados aloe latex, so it says "Aloe latex (Cape or Barbados aloes)". Severity and alert text unchanged |
+| Other rows | Antiarrhythmic, thiazide diuretic, kidney and liver rows are unchanged; they now reach the same preparations as the digoxin row, within the monograph's scope (both species) |
+| Topical-only products | Not excluded by a product form, deliberately: the monograph's form is oral, the latex identity names oral laxative preparations and no corpus product is topical. A `product_forms_any: ["topical_only"]` exclude would change no product and would make each hard row unexpressible by alerts, so review-class at the release gate (`rule_change_gate.py::_alert_can_express`) |
+| Replay | 50 frozen products (49 with an aloe row, 1 control) through Clean, Enrich and Score at `origin/main` and at the candidate: 4 changed (267819, 273379, 333705, 337239, the only Cape aloe labels in 15,414 raw labels), enriched copy, sources and `last_reviewed` only; no scored record changed; per-product aloe rule ids and latex flags identical before and after; the 45 aloe vera products keep `RULE_INGREDIENT_ALOE_VERA` only. 267819's detail blob (`build_detail_blob` on the candidate records) carries the new digoxin warning; no device run |
+| Independent review | Healthcare-reviewer agent on the diff, requirement and sources only: NEEDS FIXES, no blocker. Applied: the review note quotes her three preparation bullets verbatim and labels the implementation as agent work; tests cover decolorized (no) and non-decolorized (yes) whole-leaf extract; "this laxative", "increase digoxin risk", "Ask your prescriber which laxative suits you" and the "(latex)" gloss go; the pregnancy text names both species; the change-log entry calls the subject move an agent implementation and no longer bumps the entry's review date. Checked and unchanged: an Aloe vera latex row meets only this rule (no duplicate pregnancy card); `review_owner` is read only as a required string |
+
+The digoxin row's `clinical_review` names Dr. Pham's decision, quotes her preparation bullets, and says the
+implementation, mechanism, action and alert text are agent work not reviewed by Dr. Pham. The rule's `review_owner`
+names Dr. Pham for the cardiac-glycoside row, the agent for the wording and the latex-identity subject, and the
+original owner for the other rows; `last_reviewed` is 2026-11-12.
+
+Held for Dr. Pham: a label row named "Aloe ferox gel" met this whole latex rule before (pregnancy contraindicated,
+digoxin avoid and the rest) and now meets no aloe rule; a test pins it as held. No raw label in the corpus names a
+Cape aloe gel. Oral Aloe vera gel meets `RULE_INGREDIENT_ALOE_VERA` (pregnancy and lactation avoid), and NCCIH says
+oral aloe in gel, latex or whole-leaf form may be unsafe in pregnancy; whether a non-vera aloe gel gets that finding
+is her call. For Sean: whole leaf of unknown processing shows no latex finding, because there is no "uncertain
+preparation" display state; adding one is a new display meaning. Found in passing: "Decolorized aloe vera whole leaf
+extract" resolves to no aloe identity at all (before and after this batch), so it meets no aloe rule; an identity
+follow-up.
+
 ## Questions for Dr. Pham
+
+**Answered 2026-11-12.** Dr. Pham signed answers to all seven questions and the held serious-warning decisions:
+`DR_PHAM_ANSWERS_20261112.md` Part A. They govern where they differ from this file. The questions below stay as
+history.
 
 1. **SAMe with MAOIs other than tranylcypromine.** The current labels for phenelzine (NARDIL), isocarboxazid
    (MARPLAN) and selegiline (EMSAM, ZELAPAR, capsules) do not name SAMe (read 2026-11-11). NARDIL contraindicates
@@ -317,3 +561,113 @@ know" count; once any medicine resolves to a class, the medicine axis counts as 
    Also: argatroban, bivalirudin, desirudin and lepirudin are identified but reach the unidentified blood-thinner
    fallback and its warfarin-addressed text. Should these four injected direct thrombin inhibitors get a class of
    their own that the fallback excludes? (Betrixaban now reads as a DOAC: its label and ATC code place it there.)
+
+## Codex remaining interaction batches (2026-11-12)
+
+Authority: Sean's handoff and instruction to fix all verified defects encountered; existing F1/F3/G1/G3
+clinical decisions remain governing. New wording/research below is agent work, not clinician review.
+Sean explicitly approved the optional `excluded_member_rxcuis` timing field and companion app fix in
+chat on 2026-11-12. The field extends the existing timing owner; it does not establish a new interval,
+severity, relation type or clinical policy. Other named clinical holds remain held.
+
+Owner: curated pair registry, drug_classes, medication_depletions, timing_rules/rejected and ingredient
+interaction rules; evidence: matrix interaction_rules/interaction_db plus existing apply scripts and
+consumer readers. Will NOT create: an alternative scorer, registry or clinical decision owner.
+
+- Open-PR chores: #459/#461/#462/#464 descriptions now include Validation and Remaining release work.
+  #465 exact f676212cf and #466 exact b3ab4424c passed all eight fast shards and merge readiness;
+  no CI defect required a code change on those heads. Later rebases need their own qualification.
+- Batch 6a/6b: source implementation and focused checks are in `BATCH6_RESEARCH_20261112.md`.
+  Isotretinoin/vitamin A and separate beta-carotene records; formulation-specific calcium/magnesium
+  bisphosphonate guidance; zoledronic acid and verified IV ibandronate product exclusions; hidden
+  SINEMET B6 source record and no-blanket-B6 regression. Brand lookup is not consumer hydration proof.
+- Batch 7: `batch7_timing_research.md` owns per-entry source/identity results. Approved magnesium
+  precaution and three scoped psyllium records; two rejected together claims. Consumer route bug
+  is being fixed under Sean's explicit field approval; not release-qualified yet.
+- Batch 8: signed source corrections are in progress. Kidney care-team caution, neutral theanine and
+  zinc information, and conditional warfarin/vitamin-D-deficiency-treatment copy have focused proof.
+  The vitamin D gate remains the existing VKA group with explicitly conditional warfarin wording;
+  this is not a claim of exact-warfarin targeting. No unknown amount enables a downgrade.
+- Additional confirmed bug: CBD/sirolimus was incorrectly described as never measured. A seven-patient
+  sirolimus subgroup in PMID 31924480 supplies observational evidence. Narrow correction prepared on
+  `codex/cbd-sirolimus-source` (78a0a7c24, PR #467), keeping caution/management/matching unchanged.
+
+Validation class: behavioral clinical data and consumer contract. Fail-first and per-entry source
+checks are recorded in receipts. Completed owner/consumer slice: 786 passed. Local checkpoint:
+564 passed, 24 declared live-stack opt-in skips; skip guard passed. Strict changed-rule citations
+PASS; safety-copy validator OK with zero warnings. Parent reviewed all source decisions and diffs;
+research agents independently checked route IDs and chromium form applicability.
+
+Frozen raw-label replay covers 17 products (14 original plus fish oil1024, B-complex219244 and
+complex green-tea27350). Every cleaned and scored record is identical before/after; warning copy,
+severity, source and scope changes are intentional. All17 enriched records carry taxonomy metadata
+changes; 16 detail blobs change and aloe control267819 retains its blob. Chromium chloride69497,
+histidinate219950 and brown-rice-chelate219244 lose the picolinate thyroid finding; picolinate3234
+retains it. Omega products1024 and complex27350, niacinamide219244 and B6-containing labels cover
+the remaining changed owners. Full paths and frozen manifests are under
+`/Users/seancheick/pg_quality/interaction-remaining-20261112`; source fingerprints accompany snapshots.
+No shared scoring runtime changed; no score/amount/role delta was observed.
+
+App route exclusions, decimal RxNorm ranking and omega presentation have focused regressions.
+The full app checkpoint found stale vocabulary/schema test expectations and a Git LFS pointer in
+the worktree; expectations now match the authored contract and the existing catalog was downloaded.
+All affected failure files pass. Full app `make check` passed: 5,632 passed, two declared skips,
+analyzer clean. A further 47 taxonomy/display checks passed after the integration reconciliation.
+Paired app PR: seancheick/Pharmaguide.ai#234.
+
+Reconciled with origin/main dd4a441b7, preserving the injected-anticoagulant category and the
+EPA/DHA theoretical evidence. Rebased owner slice: 729 passed; local: 564 passed, 24 declared
+opt-in skips, skip guard passed. Strict citations and safety copy pass. All 17 frozen comparisons
+were repeated against dd4a441b7: cleaned/scored records unchanged, 16 intentional blob changes.
+Qualification CI is tracked on pipeline PR468 and app PR234; merge only after the exact candidate
+passes. CBD source correction PR467 is rebased at 689102aea; its earlier source candidate passed
+CI and local checks, and its current candidate has a fresh qualification run.
+PR468's first completed CI shard caught an obsolete Wave8 assertion requiring green tea to target
+all beta-blockers. Reproduced the failing node, then pinned nadolol/avoid and explicitly prohibited
+both broader classes. The Wave8 and Batch8 owner files pass together; no production behavior changed.
+The completed run also found missing review attribution on the chromium split and the absent existing
+background classification on the lowered omega pair. Both were fixed at their authoring script/data
+owner. Pregnancy/lactation remains owned once by the unscoped chromium record; the coverage tests
+now resolve that explicit sibling owner instead of requiring a duplicate assessment. Source-grounded
+count, vitamin-D scope/direction and omega severity assertions were updated without weakening dose
+or publication guards. All ten affected files passed together: 172 tests. The app PR234 and CBD PR467
+source candidates passed their complete CI runs; pipeline PR468 is undergoing its corrected checkpoint.
+Integration, rebuilt catalog/source-reference parity and release remain separate. No corpus build,
+release or main push authorized.
+
+### Remaining clinical decisions and recommendations
+
+The consolidated source-supported recommendations are in `HELD_RESEARCH_20261112.md`; Batch 6b adds
+exact-regimen levodopa/B6, IV-calcium-only digoxin evidence, nitrates/PDE5 with amino acids, and charcoal.
+The INBRIJA example in the old handoff is corrected: its indicated use accompanies carbidopa/levodopa,
+so the inhaler's single ingredient does not prove absence of a decarboxylase inhibitor in the regimen.
+Do not call these agent recommendations Dr. Pham approvals or silently activate held warnings.
+
+Product recommendation: do not add a new together/non-precise timing relation solely to clear three
+held rows. Iron/calcium, iron/zinc and theanine/caffeine retain their specific source/contract holds;
+no bonus or invented interval. Likewise, do not infer latex content from unknown aloe processing or
+create a new preparation verdict merely to remove uncertainty. A future uncertainty display requires
+an explicit meaning and consumer contract; existing preparation evidence stays honest meanwhile.
+
+
+## Signed engineering follow-up
+
+Owner: the existing curated pairs, ingredient interaction rules and medication class map.
+Consumer owners are the Flutter MedicationClassBridge, warning composer and Stack pair checker.
+Evidence: the RxNorm EMSAM relationships, product properties, DailyMed EMSAM §7.1,
+signed Part A Q1/Q2/Q5 and Sean's two relayed clinical follow-up notes.
+Will NOT create: a new profile-gate field, exposure threshold or separate registry.
+
+| Item | Source and consumer disposition |
+|---|---|
+| Q1 EMSAM | Confirmed patch identities reach the signed contraindication through exact pairs and a product-specific profile class. Oral and ingredient-only controls keep the MAOI fallback. The Stack consumer collapses identical authored pair rows when the selected and generic RxCUIs identify the same medication. |
+| Q5 mixed CBD regimens | The existing class map represents the unassessed remainder. The scoped finding fires alongside a named finding, and the existing unspecified-class fallback fires once on its own. This preserves the existing grade while H2 remains held. |
+| Q2 vitamin E | Removed the fixed surgery interval. Surgical-team management, existing caution and the quantitative hold are retained. Flutter's tested UL and activity totals are distinct; those tests alone do not establish eligibility to reduce interaction prominence for ordinary exposure. |
+| H1–H5 and other open items | Explicit activation, severity, wording and amount-handling holds in the relayed notes remain in force. The named oral-digoxin caution remains covered by Q5. #469 merged the sirolimus correction. Duplicate #470 was closed. |
+
+#468 reconciles main through #465 and is paired with app #234. Focused verification:
+883 pipeline tests plus the 240-test gate slice, 155 Flutter tests and 34 warning
+composer tests. Citation and safety-copy checks passed. Seventeen frozen labels
+showed unchanged cleaned and scored records. The three changed detail blobs reflect
+the vitamin E wording reconciliation. The pipeline and app PRs carry CI status.
+The final interaction database, installed-app and chatbot acceptance remain release work.

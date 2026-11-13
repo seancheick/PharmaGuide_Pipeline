@@ -4,7 +4,7 @@
     "purpose": "timing_optimization_rejections",
     "schema_version": "1.0.0",
     "rationale": "Runtime omission must not erase clinical history. Without this ledger the same unsupported rule gets rediscovered and reintroduced later, with the same citation, by someone acting in good faith.",
-    "total_entries": 13
+    "total_entries": 15
   },
   "rejected": [
     {
@@ -369,6 +369,56 @@
           "type": "with_food"
         },
         "mechanism": "Unabsorbed magnesium salts are osmotically active in the gut and can cause diarrhea, especially in poorly-absorbed forms (oxide, citrate). Taking magnesium with a meal slows transit and eases this without meaningfully reducing absorption."
+      }
+    },
+    {
+      "id": "timing_calcium_vitamin_d_together",
+      "prior_claim": "Take calcium and vitamin D together — vitamin D is required for active calcium absorption in the small intestine.",
+      "rejection_reason": "Dr. Pham G3 (2026-11-11) rejects necessary simultaneous dosing: vitamin D adequacy supports calcium handling, but PMID 21118827 establishes intake requirements, not a same-time absorption window or timing score bonus.",
+      "source_reviewed": [
+        "https://pubmed.ncbi.nlm.nih.gov/21118827/"
+      ],
+      "reviewer": "Decision: Dr. Pham, DR_PHAM_REVIEW_20261111.md G3. Source recheck and implementation: Codex agent, not clinician review.",
+      "reviewed_on": "2026-11-12",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "calcium",
+        "ingredient2": "vitamin d",
+        "ingredient1_tags": [
+          "calcium"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Vitamin D is essential for efficient calcium absorption. The 2011 IOM Dietary Reference Intakes report confirmed that adequate vitamin D status is required to meet calcium requirements. Taking them together ensures both are bioavailable during the absorption window."
+      }
+    },
+    {
+      "id": "timing_quercetin_vitamin_c_together",
+      "prior_claim": "Take quercetin and vitamin C together — vitamin C enhances quercetin absorption and both have complementary antioxidant activity.",
+      "rejection_reason": "Dr. Pham G3 (2026-11-11) rejects this absorption/timing claim: the LPI flavonoid reference does not establish that simultaneous vitamin C improves quercetin absorption. No timing score bonus is justified.",
+      "source_reviewed": [
+        "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/flavonoids#quercetin"
+      ],
+      "reviewer": "Decision: Dr. Pham, DR_PHAM_REVIEW_20261111.md G3. Source recheck and implementation: Codex agent, not clinician review.",
+      "reviewed_on": "2026-11-12",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "quercetin",
+        "ingredient2": "vitamin c",
+        "ingredient1_tags": [
+          "quercetin"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Ascorbic acid regenerates oxidized quercetin (quercetin semiquinone) back to the active reduced form, extending its antioxidant half-life; vitamin C also improves quercetin solubility in the GI lumen and may upregulate cellular uptake."
       }
     }
   ]

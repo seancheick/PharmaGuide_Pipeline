@@ -3,8 +3,8 @@
     "description": "Medication-nutrient effects — true depletions, functional antagonism, monitoring notes, condition-related effects, and supplement interactions",
     "purpose": "depletion_checker",
     "schema_version": "5.3.0",
-    "last_updated": "2026-07-30",
-    "total_entries": 80,
+    "last_updated": "2026-11-12",
+    "total_entries": 81,
     "data_sources": [
       "NIH Office of Dietary Supplements",
       "Drug-Induced Nutrient Depletion Handbook (Pelton et al.)",
@@ -3487,6 +3487,42 @@
       "b1_clinical_approval_status": "pending_delta_review",
       "b1_clinical_approver": null,
       "b1_clinical_approved_at": null
+    },
+    {
+      "id": "DEP_CARBIDOPA_LEVODOPA_B6",
+      "drug_ref": {
+        "type": "drug",
+        "id": "103990",
+        "display_name": "Carbidopa / levodopa (SINEMET)"
+      },
+      "depleted_nutrient": {
+        "standard_name": "Vitamin B6",
+        "canonical_id": "vitamin_b6_pyridoxine"
+      },
+      "depletion_type": "depletion",
+      "severity": "moderate",
+      "mechanism": "The SINEMET label reports that treatment may contribute to reduced vitamin B6 levels; higher carbidopa/levodopa doses may increase the risk of deficiency.",
+      "clinical_impact": "Postmarketing seizures associated with vitamin B6 deficiency have been reported. The label does not quantify incidence or establish an onset interval.",
+      "recommendation": "SINEMET treatment may be initiated and continued while supplementing vitamin B6. The prescriber evaluates levels and supplements if needed; this record is not a warning to avoid B6.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "The label directs evaluation of vitamin B6 prior to initiation, periodically during treatment and as clinically indicated, with supplementation to sufficient levels when low.",
+      "sources": [
+        {
+          "source_type": "fda",
+          "label": "SINEMET prescribing information: Vitamin B6 Deficiency and Seizures; Management of Vitamin B6 Levels; pharmacokinetics",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b17b028-964a-473c-823d-81423535bd66"
+        }
+      ],
+      "alert_headline": "Vitamin B6 review record held",
+      "alert_body": "Vitamin B6 deficiency may develop during SINEMET treatment. This source record remains withheld pending review.",
+      "acknowledgement_note": "No supplementation adequacy determination has been approved for this record.",
+      "monitoring_tip_short": "Discuss vitamin B6 monitoring with the prescriber.",
+      "food_sources_short": "No food-source recommendation is published from this held record.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-11-12",
+      "reviewer": "openai_codex_agent_source_review",
+      "citation_review_note": "Agent read the SINEMET label effective 2026-08-01 and verified RxNorm MIN 103990 (carbidopa / levodopa). Source content is verified, but consumer wording, severity, evidence grading and combination-product matching remain held; no Dr. Pham or B1 approval is claimed. The app compares selected, generic and ingredient RxCUIs; do not substitute levodopa 6375, which would extend this combination-label finding to levodopa alone. Publication remains blocked by citation_review_status until the exact combination identity is qualified."
     }
   ]
 }

@@ -113,6 +113,6 @@ def test_corpus_status_counts():
         e.get("citation_review_status", "unverified") for e in _entries().values()
     )
     assert set(c) <= {"verified", "needs_revision", "rejected", "unverified"}
-    assert sum(c.values()) == len(_entries()) == 80
+    assert sum(c.values()) == len(_entries()) == 81
     assert c["verified"] >= 19
     assert c["rejected"] >= 1

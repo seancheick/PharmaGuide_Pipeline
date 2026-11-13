@@ -210,7 +210,7 @@ def _profile_rules(rule: Mapping[str, Any], members: Mapping[str, List[str]]) ->
     for sub in rule.get("drug_class_rules") or []:
         yield _sub_rule(
             f"{rule_id}#drug_class:{sub.get('drug_class_id')}",
-            canonical_id, sub, sub.get("severity"), alertable=True, members=members,
+            canonical_id, sub, sub.get("severity"), alertable=_alert_can_express(sub), members=members,
         )
     for sub in rule.get("condition_rules") or []:
         yield _sub_rule(
