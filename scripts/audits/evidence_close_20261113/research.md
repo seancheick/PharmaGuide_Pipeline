@@ -20,7 +20,7 @@ Receipts: one context per PMID in `source_finish_contexts.py`; applied by `apply
 
 ## Method and checks
 
-- No PMC full text exists for any of the 13 (PubMed ID converter, 2026-11-13). Each decision was read
+- No PMC full-text copy was found for any of the 13 (PubMed ID converter, 2026-11-13). Each decision was read
   from the live PubMed abstract and states only abstract facts; claims from the record's earlier
   2026-11-08 inulin review are labelled as such.
 - Independent check: a fresh-context Claude agent re-fetched all 13 abstracts. It confirmed every
@@ -39,3 +39,11 @@ Receipts: one context per PMID in `source_finish_contexts.py`; applied by `apply
   needs a credit tier on the Evidence ladder or a decision to finish the record as reference-only (zero).
 - Out of scope, held on purpose by a signed parent `scoring_eligible: false`: BRAND_THERACURMIN,
   PRECLIN_PQQ, INGR_LACTOFERRIN, INGR_COLLAGEN_PEPTIDES.
+
+## Independent correction review — November 13, 2026
+
+Codex source_review retrieved all13 new abstracts through live NCBI EFetch and verified the recorded quantitative findings. PMIDs38140277 and40276537 were additionally checked: acute randomized crossover trials, not reviews. Access wording states only that no PMC copy was found, not universal unavailability. Obsolete inulin/lion's-mane prerequisites were corrected while preserving unread Methods and applicability limitations.
+
+Exactly seven records changed; all structured clinical fields, eligibility, directions and holds are unchanged. Both original and correction-only apply paths reproduce the registry in an independent in-memory check. Three fail-first regressions reproduced the defects; the source-finish file passes28 tests. Independent four-file correction diff SHA256:c54eaa0c76476052da4ee4b7d19d9c7edc58cd821be3f139816c92e2034d8e67. This closes factual corrections, not ingredient-tier consolidation or product release.
+
+The source reviews retain positive limited findings (BioCell OA, lion's-mane MCI, inulin bowel function, astaxanthin exercise, black-seed diabetes/BP and sea-buckthorn dry-eye/lipids). Source-level no-credit decisions are not seven whole-ingredient zeros. Specific parent holds remain untouched.

@@ -39,8 +39,50 @@ def replace_once(text, old, new, where):
     return text.replace(old, new)
 
 
+
+def correct_review_notes(blob):
+    """Correct access/source descriptions without changing clinical dispositions."""
+    rows = next(v for v in blob.values() if isinstance(v, list))
+    by_id = {row["id"]: row for row in rows}
+    for draft in CONTEXTS:
+        row = by_id[draft["components"][0]]
+        ctx = next(c for c in row["study_contexts"] if c["context_id"] == draft["context_id"])
+        ctx["limitations"] = [draft["limitations"][-1] if value.startswith(
+            "Full text is not open access (no PMC copy)") else value for value in ctx["limitations"]]
+    inulin = by_id["INGR_INULIN"]
+    inulin["notes"] = replace_once(inulin["notes"],
+        "No source completion, preparation equivalence, microbiome-surrogate clinical benefit or Dose benchmark is inferred.",
+        "The November 8 supplement-access update did not itself complete the source review. The separate November 13 "
+        "abstract-based no-credit decision is recorded above; preparation equivalence, microbiome-surrogate clinical "
+        "benefit and a general Dose benchmark are not inferred.", "inulin source-completion history")
+    ctx = next(c for c in inulin["study_contexts"] if c["context_id"] == "ingr_inulin_38309832_scoped_source")
+    old = "Separate PMID 35833477 full Methods/source review remains on hold; parent mixed effect direction, Dose, safety and independent review holds remain unchanged."
+    assert old in ctx["limitations"]
+    ctx["limitations"] = ["Separate PMID 35833477 has a finished abstract-based no-credit source decision dated November 13, 2026; "
+        "its full Methods update-search reconciliation remains unread. Parent mixed effect direction, Dose, safety and "
+        "independent applicability holds remain unchanged." if value == old else value for value in ctx["limitations"]]
+    lion = by_id["INGR_LION_MANE"]
+    lion["notable_studies"] = replace_once(lion["notable_studies"],
+        "The classic mild-cognitive-impairment trial is Mori et al. (2009, PMID 18844328). More recent review literature includes PMID 38140277 and PMID 40276537, both concluding that the human signal is encouraging but still based on small, heterogeneous studies.",
+        "Mori et al. (2009, PMID 18844328) reports a small randomized trial in mild cognitive impairment. PMID 38140277 "
+        "and PMID 40276537 are acute randomized crossover trials, not reviews: the former reports improvements on selected "
+        "cognitive tasks after 1 g Nordic-grown lion's mane; the latter reports no significant global cognition or mood benefit "
+        "after 3 g of a 10:1 fruiting-body extract, with an individual pegboard-test improvement. These different preparations, "
+        "populations and exposure durations are not interchangeable.", "lion's mane source types")
+    ctx = next(c for c in lion["study_contexts"] if c["context_id"] == "ingr_lion_mane_38140277")
+    old = "Not scoring eligible while the record's principal source (18844328) is unverified; mixed acute findings alone do not carry the record's focus claim."
+    assert old in ctx["limitations"]
+    ctx["limitations"] = ["PMID 18844328 now has a finished abstract-based no-credit source decision (2026-11-13). This acute "
+        "context remains scoring-ineligible: mixed task-specific findings do not establish a general or chronic cognitive "
+        "benefit, and no preparation/population equivalence is inferred." if value == old else value for value in ctx["limitations"]]
+
+
 def main():
     blob = data_batch.load(PATH)
+    if sys.argv[1:] == ["--correct-review-notes"]:
+        correct_review_notes(blob)
+        print(data_batch.save(PATH, blob))
+        return
     rows = next(v for v in blob.values() if isinstance(v, list))
     by_id = {row["id"]: row for row in rows}
     for ctx in CONTEXTS:
@@ -57,6 +99,7 @@ def main():
         raise SystemExit("inulin trial limitation not found")
     black = by_id["INGR_BLACK_SEED_OIL"]
     black["notes"] = replace_once(black["notes"], BLACK_SEED_OLD, BLACK_SEED_NEW, "black seed notes")
+    correct_review_notes(blob)
     print(data_batch.save(PATH, blob))
 
 

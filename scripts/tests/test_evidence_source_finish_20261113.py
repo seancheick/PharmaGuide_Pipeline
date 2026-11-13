@@ -1,7 +1,7 @@
 """Unread declared sources get one finished, no-credit decision each.
 
 Seven records were held only because declared PMIDs had no source context.
-None of the 13 papers has open full text, so each closes as a scoped
+No PMC full-text copy was found for the 13 papers; each closes as a scoped
 ``rejected_source`` decision from its PubMed abstract: no credit, no Dose
 transfer, no invented arms. Credit tiers belong to the Evidence ladder, not
 here. Four records with a signed parent eligibility hold stay held.
@@ -69,3 +69,24 @@ def test_black_seed_notes_no_longer_claim_consistent_evidence(records):
     notes = records["INGR_BLACK_SEED_OIL"]["notes"]
     assert "strong evidence" not in notes
     assert "consistent glycemic and blood pressure endpoints" not in notes
+
+
+def test_source_access_claims_do_not_equate_pmc_absence_with_paywall(records):
+    for record_id, pmids in FINISHED.items():
+        for context in records[record_id]["study_contexts"]:
+            if context.get("source_pmids") in [[pmid] for pmid in pmids]:
+                assert not any("Full text is not open access (no PMC copy)" in value for value in context["limitations"])
+                assert any("No PMC full-text copy was found" in value for value in context["limitations"])
+
+
+def test_inulin_finished_source_does_not_retain_unqualified_no_completion_note(records):
+    assert "No source completion," not in records["INGR_INULIN"]["notes"]
+
+
+def test_finished_sources_do_not_retain_obsolete_prerequisites(records):
+    inulin = records["INGR_INULIN"]
+    lion = records["INGR_LION_MANE"]
+    assert "full Methods/source review remains on hold" not in json.dumps(inulin)
+    assert "principal source (18844328) is unverified" not in json.dumps(lion)
+    assert "More recent review literature includes PMID 38140277" not in lion["notable_studies"]
+    assert "acute randomized crossover trials" in lion["notable_studies"]

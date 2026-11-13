@@ -1,13 +1,13 @@
 """Thirteen no-credit source decisions, one per unread declared PMID (2026-11-13).
 
-Each paper was read from its PubMed abstract (no PMC full text exists for any).
+Each paper was read from its PubMed abstract (no PMC full-text copy was found for any).
 A decision closes source review for that PMID only: no credit, no Dose
 transfer, no invented arms. Applied by ``apply_source_finish.py``.
 """
 
 REVIEWER = ("Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician "
             "review; independent abstract re-read by a fresh-context Claude agent")
-NO_FULL_TEXT = "Full text is not open access (no PMC copy); decision made from the PubMed abstract."
+NO_FULL_TEXT = "No PMC full-text copy was found in this review; decision made from the PubMed abstract. Publisher or other repository access was not established."
 
 
 def context(record_id, pmid, slug, notes, limitations):
