@@ -84,11 +84,21 @@ def test_the_floor_never_outranks_the_direction_that_anchors_it():
         "only positive_strong may anchor at the full base")
 
 
-def test_the_authority_floor_is_a_separate_owner():
+def test_the_authority_floor_is_a_separate_owner(monkeypatch):
     """Nutrition adequacy and clinical efficacy are different claims. The
     primary-mass floor must not duplicate or overwrite the authority floor."""
-    assert ge.NUTRITION_AUTHORITY_FLOOR != ge.PRIMARY_FLOOR_MODERATE
-    assert ge.NUTRITION_AUTHORITY_FLOOR != ge.PRIMARY_FLOOR_STRONG
+    assert ge.NUTRITION_AUTHORITY_FLOOR == 10.0
+    # Equal magnitudes do not make clinical efficacy and nutrition one owner.
+    assert ge.PRIMARY_FLOOR_MODERATE == 10.0
+    from test_nutrition_authority_full_credit import _score
+    from test_v4_generic_evidence_p133 import _ingredient
+    monkeypatch.setattr(ge, "PRIMARY_FLOOR_MODERATE", 3.0)
+    payload = _score(
+        _ingredient(name="Magnesium", canonical_id="magnesium", quantity=300, unit="mg"),
+        _ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=300, unit="mg"),
+    )
+    assert payload["score"] == ge.NUTRITION_AUTHORITY_FLOOR
+    assert payload["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
 # ── direction_ceiling, locked 2026-09-18 ─────────────────────────────────────
@@ -113,8 +123,9 @@ def test_non_strong_directions_are_capped_at_the_moderate_base(monkeypatch):
     from scoring_v4.modules.generic_evidence import score_evidence
 
     for direction in ("positive_weak", "mixed"):
-        expected = round(ge.PRIMARY_FLOOR_MODERATE
-                         * ge.EFFECT_DIRECTION_MULTIPLIERS[direction], 4)
+        expected = (ge.PRIMARY_FLOOR_PRELIMINARY if direction == "positive_weak"
+                    else round(ge.PRIMARY_FLOOR_MODERATE
+                               * ge.EFFECT_DIRECTION_MULTIPLIERS[direction], 4))
         got = _floor_for(direction, score_evidence, monkeypatch)
         assert got == expected, f"{direction}: {got} != {expected}"
         assert got < ge.PRIMARY_FLOOR_STRONG

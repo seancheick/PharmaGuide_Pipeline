@@ -26,7 +26,8 @@ EXPECTED = {
     "generic": {
         "cap_total": 20.0, "cap_per_ingredient": 7.0,
         "enrollment_default_multiplier": 1.2,
-        "primary_floor_strong": 14.0, "primary_floor_moderate": 11.0,
+        "primary_floor_strong": 15.0, "primary_floor_moderate": 10.0,
+        "primary_floor_preliminary": 5.0,
         "nutrition_authority_floor": 10.0,
         # ONE owner for what a direction is worth; generic_evidence reads this rather than
         # hard-coding it, and its primary-floor path reads the same map. null = 0.0 since

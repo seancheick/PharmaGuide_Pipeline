@@ -125,7 +125,7 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     # Evidence is online at P1.3.3. Magnesium has nutrition-authority evidence
     # even without a product-specific clinical match; amount stays in Dose.
     evidence = breakdown["dimensions"]["evidence"]
-    assert evidence["score"] == 10.0
+    assert evidence["score"] == 20.0  # full for an all-essential purpose (2026-11-13)
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_authority"
     assert evidence["metadata"]["nutrition_authority_floor_applied"] is True
     assert "clinical_evidence_pipeline" in evidence["components"]

@@ -250,12 +250,12 @@ def _evidence(fixture):
 
 # fixture, restricted floor canonical, ordinary pipeline points measured before the change
 RESTRICTED = [
-    ("evidence_floor_223084_raw.json", "creatine ethyl ester", 2.4),   # muscle creatine content
-    ("evidence_floor_312552_raw.json", "reduced l glutathione", 1.92),  # blood glutathione
-    ("evidence_floor_312864_raw.json", "betaine hcl", 3.4),             # gastric pH
-    ("evidence_floor_277963_raw.json", "nattokinase", 1.44),            # fibrinolysis markers
-    ("evidence_floor_19483_raw.json", "calcium caseinate", 7.48),       # acute muscle protein synthesis
-    ("evidence_floor_330411_raw.json", "bilberry", 4.0),                # HFC-1 ciliary accommodation marker
+    ("evidence_floor_223084_raw.json", "creatine ethyl ester", 2.16),   # muscle creatine content
+    ("evidence_floor_312552_raw.json", "reduced l glutathione", 1.728),  # blood glutathione
+    ("evidence_floor_312864_raw.json", "betaine hcl", 3.06),             # gastric pH
+    ("evidence_floor_277963_raw.json", "nattokinase", 1.296),            # fibrinolysis markers
+    ("evidence_floor_19483_raw.json", "calcium caseinate", 6.732),       # acute muscle protein synthesis
+    ("evidence_floor_330411_raw.json", "bilberry", 3.6),                # HFC-1 ciliary accommodation marker
 ]
 
 
@@ -263,15 +263,17 @@ RESTRICTED = [
 def test_exposure_only_finding_no_longer_anchors_the_floor(fixture, canonical, ordinary):
     artifact, pillar, receipt, metadata = _evidence(fixture)
     assert metadata.get("primary_evidence_floor_canonical") != canonical
-    # Ordinary Evidence credit and the completed review are unchanged.
+    # Source eligibility and completion stay unchanged; receipt uses the new20-point reference.
     assert receipt["clinical_evidence_pipeline"] == ordinary
     assert artifact["quality_assessment_status"] == "complete"
     assert pillar["evidence_result_state"] == "evaluated_applicable"
 
 
 @pytest.mark.parametrize("fixture,canonical,floor", [
-    ("evidence_floor_330065_raw.json", "potassium", 14.0),   # accepted surrogate: blood pressure
-    ("evidence_review_315089_raw.json", "tesnor", 9.35),     # mixed: patient-important AMS context
+    # Potassium is also an essential nutrient, so its established role (full,20,
+    # since 2026-11-13) is now the decisive floor above the accepted surrogate's15.
+    ("evidence_floor_330065_raw.json", "potassium", 20.0),   # accepted surrogate: blood pressure
+    ("evidence_review_315089_raw.json", "tesnor", 5.0),     # mixed: patient-important AMS context
 ])
 def test_accepted_or_functional_findings_keep_their_floor(fixture, canonical, floor):
     _, _, _, metadata = _evidence(fixture)

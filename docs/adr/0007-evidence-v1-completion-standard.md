@@ -24,7 +24,7 @@
 
    | Conclusion shown to the user | Points |
    |---|---|
-   | Established nutritional role | existing authority floor |
+   | Established nutritional role | full Evidence reference when every purpose owner has the role; otherwise the 10-point floor (Sean, November 13, 2026) |
    | Human research supports a benefit | existing grade (`positive_strong` / `positive_weak`) |
    | Limited or mixed research | existing reduced grade, may be 0 |
    | No qualifying support found in our review | 0 |

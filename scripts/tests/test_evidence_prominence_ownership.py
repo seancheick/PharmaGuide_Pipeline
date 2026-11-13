@@ -114,7 +114,7 @@ def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
     accepted = {m.get("id"): m for m in product["evidence_data"]["clinical_matches"]}
     assert accepted["INGR_SELENIUM"]["applicability_assessment"]["supported_outcomes"] == ["hashimoto_thyroiditis"]
     assert evidence["metadata"]["primary_evidence_floor_canonical"] == "selenium"
-    assert evidence["components"]["primary_evidence_floor"] == 14.0
+    assert evidence["components"]["primary_evidence_floor"] == 15.0
 
 
 # --- the primary floor --------------------------------------------------------
@@ -132,7 +132,7 @@ def test_heavier_material_active_keeps_its_own_reviewed_evidence():
     payload = _scored(product)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["l_theanine", "melatonin"]
-    assert payload["metadata"]["primary_evidence_floor"] == 14.0
+    assert payload["metadata"]["primary_evidence_floor"] == 15.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "l theanine"
 
 
@@ -156,7 +156,8 @@ def test_evidence_strength_not_relative_mass_selects_between_declared_purposes()
     # Held Vitamin D and unreviewed calcium trial matches cannot supply
     # clinical credit. The independently established nutrient authority remains.
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "calcium"
-    assert payload["metadata"]["primary_evidence_floor"] == 10.0
+    # Both declared purposes are essential nutrients: full credit (2026-11-13).
+    assert payload["metadata"]["primary_evidence_floor"] == 20.0
     assert payload["metadata"]["nutrition_authority_canonical"] == "calcium"
     assert payload["components"]["clinical_evidence_pipeline"] == 0
 
@@ -171,7 +172,7 @@ def test_a_declared_purpose_keeps_evidence_credit_independent_of_amount():
                         matched_source_row_refs=["ingredientRows[0]", "ingredientRows[1]"])],
     )
 
-    assert _scored(product)["metadata"]["primary_evidence_floor"] == 14.0
+    assert _scored(product)["metadata"]["primary_evidence_floor"] == 15.0
 
 
 def test_real_the_stand_in_keeps_reading_the_purposes_own_identity_rows():
@@ -195,7 +196,7 @@ def test_clinical_dose_is_not_an_evidence_gate_for_a_declared_purpose():
 
     payload = _scored(product)
 
-    assert payload["metadata"]["primary_evidence_floor"] == 14.0
+    assert payload["metadata"]["primary_evidence_floor"] == 15.0
     assert "SUB_CLINICAL_DOSE_DETECTED" not in payload["metadata"]["flags"]
 
 
@@ -370,7 +371,13 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
     product = _enrich(fixture)
     evidence = _evidence(product)
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
-    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
+    if member == "creatine_monohydrate":
+        # Ravage's independently identified, undosed L-leucine has a
+        # nutritional role. This is not a creatine dose or clinical floor.
+        assert evidence["metadata"]["nutrition_authority_canonical"] == "l_leucine"
+        assert evidence["metadata"]["primary_evidence_floor"] == 10.0
+    else:
+        assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     if member == "psyllium":
         from clinical_applicability import assess_clinical_source_review, reviewed_entries
         assert assess_clinical_source_review(reviewed_entries()["INGR_PSYLLIUM_HUSK"])["is_complete"]
@@ -389,9 +396,9 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
 @pytest.mark.parametrize("fixture,floor_canonical,floor", [
     # Removing amount from Evidence lets the stronger applicable Sensoril
     # record win over the co-active Relora record.
-    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 11.0),
+    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 10.0),
     # "UC-II Proprietary Cartilage Blend 401 mg"
-    ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 14.0),
+    ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 15.0),
 ])
 def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, floor_canonical, floor):
     """A blend heading's printed total is not a member's dose, but when the
@@ -531,7 +538,8 @@ def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
     independent of which physical row is heaviest."""
     evidence = _evidence(_enrich("prominence_authority_compound_row_306193_raw.json"))
     assert "vitamin_c" in evidence["metadata"]["evidence_owner_canonicals"]
-    assert evidence["components"]["primary_evidence_floor"] == 10.0
+    # Calcium and vitamin C are both essential: full credit (2026-11-13).
+    assert evidence["components"]["primary_evidence_floor"] == 20.0
     assert evidence["metadata"]["nutrition_authority_canonical"] == "calcium"
 
 
@@ -616,7 +624,7 @@ def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_fl
     match = next(m for m in product["evidence_data"]["clinical_matches"] if m["id"] == "BRAND_SENSORIL")
     assert match["matched_source_row_refs"] == ["ingredientRows[1]"]
     # The currently qualified single RCT supplies the moderate floor.
-    assert evidence["metadata"]["primary_evidence_floor"] == 11.0
+    assert evidence["metadata"]["primary_evidence_floor"] == 10.0
 
 
 def test_real_nested_enzyme_member_has_one_physical_source_link():
@@ -640,7 +648,7 @@ def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
                if row.get("reason") == "identity_bearing_blend_header_mass"]
     assert headers, "A named preparation must retain its own blend-level amount"
     assert not any(is_lent_blend_mass(row) for row in headers)
-    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 11.0
+    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 10.0
 
 
 @pytest.mark.parametrize("peptide_quantity,peptide_unit", [(2, "g"), (2000, "mg")])
@@ -658,7 +666,7 @@ def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(
     )
     result = _evidence(product)
     assert result["metadata"]["flags"] == []
-    assert result["metadata"]["primary_evidence_floor"] == 14.0
+    assert result["metadata"]["primary_evidence_floor"] == 15.0
     from scoring_v4.modules.generic_helpers import dose_reference_scope
 
     # Production scores the collagen profile on its archetype reference (21).

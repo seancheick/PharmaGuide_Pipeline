@@ -99,11 +99,11 @@ def reviewed_product(monkeypatch):
     return make
 
 
-def test_mass_primary_strong_floors_to_14(reviewed_product):
+def test_mass_primary_strong_floors_to_15(reviewed_product):
     p = reviewed_product([_ing()], [_match(study_type="rct_multiple")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["score"] >= PRIMARY_FLOOR_STRONG == 14.0
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["score"] >= PRIMARY_FLOOR_STRONG == 15.0
+    assert out["metadata"]["primary_evidence_floor"] == 15.0
     assert out["metadata"]["primary_evidence_floor_canonical"] == "ashwagandha"
 
 
@@ -118,13 +118,14 @@ def test_floor_not_applied_without_opt_in(reviewed_product):
 def test_trace_strong_ingredient_does_not_floor(reviewed_product):
     # selenium (trace, 0.05 mg) has a strong match; magnesium (primary, 1000 mg)
     # does not. The trace ingredient must NOT anchor the CLINICAL floor (14).
-    # P5: magnesium (mass-dominant essential) earns the nutrition-authority floor
-    # (10); the selenium trace match still does not push it to the clinical tier.
+    # P5: magnesium (the essential purpose owner) earns the nutrition-authority
+    # floor (full since 2026-11-13); the trace selenium match does not anchor it.
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Selenium", "selenium", 50, "mcg")]
     matches = [_match(ingredient="Selenium", standard_name="Selenium", study_type="rct_multiple")]
     out = score_evidence(reviewed_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["primary_evidence_floor"] == 20.0
+    assert out["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
     assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
@@ -138,16 +139,16 @@ def test_weak_effect_floors_below_strong_effect(reviewed_product):
     p = reviewed_product([_ing()], [_match(study_type="rct_multiple", effect_direction="positive_weak")])
     out = score_evidence(p, apply_primary_floor=True)
 
-    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
+    ceiling = 5.0  # Sean, November 13: Preliminary, not a multiplied floor.
     assert out["metadata"]["primary_evidence_floor"] == ceiling
     assert ceiling < PRIMARY_FLOOR_STRONG
 
 
-def test_moderate_study_floors_to_11(reviewed_product):
+def test_moderate_study_floors_to_10(reviewed_product):
     p = reviewed_product([_ing()], [_match(study_type="rct_single")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_MODERATE == 11.0
-    assert out["score"] >= 11.0
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_MODERATE == 10.0
+    assert out["score"] >= 10.0
 
 
 def test_negative_effect_does_not_floor(reviewed_product):
@@ -167,21 +168,21 @@ def test_weak_study_type_does_not_floor(reviewed_product):
 # so one or two small manufacturer-supplied trials reached 20/20. No registry
 # records a reviewed certainty for a whole evidence body, and a trial count or
 # design is not that judgement. So no automatic floor goes above the strong
-# base (14 raw = 15.6/20) until a clinician determination exists.
+# base (15/20) without a recorded source-supported determination under the accepted review policy.
 
 def test_branded_record_is_strong_not_exceptional(reviewed_product):
     """BRAND_ASTAREAL/KSM-66 shape: a branded multi-RCT record floors at the
-    ordinary strong base, 14 (15.6/20), not 18 (20/20)."""
+    ordinary supported base, 15/20, not 20/20."""
     p = reviewed_product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_STRONG == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_STRONG == 15.0
 
 
 def test_single_branded_rct_is_moderate(reviewed_product):
-    """One branded trial is a moderate floor (11 = 12.2/20), never 17 (18.9/20)."""
+    """One branded trial is a limited floor (10/20), never 17 (18.9/20)."""
     p = reviewed_product([_ing()], [_match(study_type="rct_single", evidence_level="branded-rct")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_MODERATE == 11.0
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_MODERATE == 10.0
 
 
 def test_brand_id_prefix_no_longer_elevates(reviewed_product):
@@ -191,7 +192,7 @@ def test_brand_id_prefix_no_longer_elevates(reviewed_product):
                 study_type="rct_multiple", evidence_level="product-human")],
     )
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == 15.0
 
 
 def test_no_trial_count_or_design_reaches_the_exceptional_tier(reviewed_product):
@@ -210,7 +211,7 @@ def test_no_trial_count_or_design_reaches_the_exceptional_tier(reviewed_product)
         match = _match(study_type=study_type, evidence_level="branded-rct", total_enrollment=5000,
                        primary_outcome="Reduce Stress/Anxiety", study_contexts=contexts)
         p = reviewed_product([_ing()], [match])
-        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 15.0
 
 
 def test_weak_effect_floors_at_the_moderate_ceiling(reviewed_product):
@@ -219,7 +220,7 @@ def test_weak_effect_floors_at_the_moderate_ceiling(reviewed_product):
     p = reviewed_product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct",
                                    effect_direction="positive_weak")])
     out = score_evidence(p, apply_primary_floor=True)
-    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
+    ceiling = 5.0  # Sean, November 13: Preliminary, not a multiplied floor.
     assert out["metadata"]["primary_evidence_floor"] == ceiling
 
 
@@ -231,7 +232,7 @@ def test_retired_ingredient_allowlist_no_longer_elevates(reviewed_product):
                          canonical_id="psyllium", study_type="rct_multiple",
                          evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == 15.0
     assert out["metadata"]["primary_evidence_floor_canonical"] == "psyllium"
 
 
@@ -239,20 +240,21 @@ def test_studied_amount_does_not_gate_evidence_floor(reviewed_product):
     p = reviewed_product([_ing(quantity=50)],
                  [_match(study_type="rct_multiple", evidence_level="branded-rct", min_clinical_dose=300.0)])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == 15.0
 
 
 def test_branded_trace_ingredient_does_not_floatreviewed_product(reviewed_product):
     """A branded strong match on a TRACE co-ingredient (not mass-dominant) must
     not float the product to a clinical floor. P5: magnesium (the
-    mass-dominant essential) earns the nutrition-authority floor 10 — the trace
-    branded ashwagandha does NOT lift it to 18."""
+    mass-dominant essential) earns the nutrition-authority floor (full since
+    2026-11-13) on its own role; the trace branded ashwagandha anchors nothing."""
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Sensoril Ashwagandha", "ashwagandha", 50, "mg")]
     matches = [_match(ingredient="Sensoril Ashwagandha", standard_name="Sensoril Ashwagandha",
                       study_type="rct_multiple", evidence_level="branded-rct")]
     out = score_evidence(reviewed_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["primary_evidence_floor"] == 20.0
+    assert out["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
     assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
@@ -280,13 +282,14 @@ def test_non_essential_gets_no_authority_floor(reviewed_product):
 
 def test_authority_floor_never_lowers_stronger_floor(reviewed_product):
     """Authority is a floor, never a cap: an essential nutrient with a strong
-    clinical record keeps that higher floor (vitamin D strong = 14 > authority 10)."""
+    clinical record keeps the higher floor. Since 2026-11-13 the established role
+    (full, 18) exceeds the strong clinical floor (14), so the maximum is 18."""
     p = reviewed_product([_ing("Vitamin D", "vitamin_d", 25, "mcg")],
                  [_match(ingredient="Vitamin D", standard_name="Vitamin D",
                          canonical_id="vitamin_d", study_type="rct_multiple",
                          evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
+    assert out["metadata"]["primary_evidence_floor"] == 20.0
 
 
 def test_authority_floor_is_generic_opt_in_only(reviewed_product):
@@ -301,10 +304,8 @@ def test_authority_floor_is_generic_opt_in_only(reviewed_product):
 # --- Public bands (Dr Pham, October 28, 2026; editorial ranges, not GRADE) ---
 
 def test_each_floor_lands_in_its_public_band():
-    """On the 18-point generic reference, each automatic floor's public /20 value
-    sits inside its band: strong 15-18, moderate 11-14,
-    essential-nutrient nutrition 10-12 (between limited and moderate) and
-    limited 6-10 for weak or mixed directions."""
+    """Approved floor values use the public reference directly. Additive
+    multipliers remain independent from the explicit Preliminary floor."""
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
@@ -314,8 +315,65 @@ def test_each_floor_lands_in_its_public_band():
                                 20.0, "generic_single_molecule", config())["score"]
 
     # No automatic floor reaches the exceptional band (19-20).
-    assert 15 <= public(PRIMARY_FLOOR_STRONG) <= 18
-    assert 11 <= public(PRIMARY_FLOOR_MODERATE) <= 14
-    assert 10 <= public(NUTRITION_AUTHORITY_FLOOR) <= 12
+    assert public(PRIMARY_FLOOR_STRONG) == 15
+    assert public(PRIMARY_FLOOR_MODERATE) == 10
+    assert public(NUTRITION_AUTHORITY_FLOOR) == 10
     for direction in ("positive_weak", "mixed"):
         assert 6 <= public(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS[direction]) <= 11
+
+
+@pytest.mark.parametrize("study_type,expected", [("rct_multiple", 15.0), ("rct_single", 10.0)])
+def test_reviewed_primary_floor_uses_public_ladder_values(reviewed_product, study_type, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = reviewed_product([_ing()], [_match(study_type=study_type)])
+    product.update(id="ladder-calibration", product_name="Ashwagandha", primary_type="generic_single_molecule")
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == expected
+
+
+@pytest.mark.parametrize("route", ["generic_single_molecule", "immune_support"])
+@pytest.mark.parametrize("study_type,enrollment", [("rct_single", 50), ("rct_multiple", 2000), ("systematic_review_meta", 2000)])
+def test_weak_primary_evidence_uses_preliminary_ladder_value(reviewed_product, study_type, enrollment, route):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = reviewed_product([_ing()], [_match(study_type=study_type,
+        effect_direction="positive_weak", total_enrollment=enrollment)])
+    product.update(id="weak-ladder", product_name="Ashwagandha", primary_type=route)
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 5.0
+
+
+@pytest.mark.parametrize("route", ["generic_single_molecule", "immune_support"])
+def test_single_exposure_only_evidence_cannot_exceed_preliminary(reviewed_product, route):
+    import clinical_applicability as owner
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = reviewed_product([_ing()], [_match(study_type="systematic_review_meta", total_enrollment=2000)])
+    source = owner.reviewed_entries()[product["evidence_data"]["clinical_matches"][0]["id"]]
+    for context in source["study_contexts"]:
+        for outcome in context["outcomes"]:
+            outcome.update(kind="surrogate", surrogate_class="exposure")
+    product.update(id="exposure-ladder", product_name="Ashwagandha", primary_type=route)
+    artifact = build_scored_artifact(product)
+    metadata = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
+    assert metadata["primary_evidence_floor"] == 0
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] <= 5
+
+
+def test_weak_efficacy_plus_exposure_stays_preliminary(reviewed_product):
+    import clinical_applicability as owner
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = reviewed_product([_ing()], [
+        _match(id="TEST_WEAK", effect_direction="positive_weak"),
+        _match(id="TEST_EXPOSURE", study_type="systematic_review_meta", total_enrollment=2000),
+    ])
+    source = owner.reviewed_entries()["TEST_EXPOSURE"]
+    for context in source["study_contexts"]:
+        for outcome in context["outcomes"]:
+            outcome.update(kind="surrogate", surrogate_class="exposure")
+    product.update(id="weak-exposure-ladder", product_name="Ashwagandha",
+                   primary_type="generic_single_molecule")
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 5.0

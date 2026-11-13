@@ -5429,3 +5429,53 @@ evidence: `clinical_review_20261111/DISPOSITIONS_20261111.md`, batch 5b. Open it
   Whether oral non-vera aloe gel gets the aloe vera pregnancy/lactation finding is her call.
 - Sean: whole leaf of unknown processing shows no latex finding; showing it as "uncertain" needs a new display state.
 - Identity follow-up: "Decolorized aloe vera whole leaf extract" resolves to no aloe identity, so it meets no aloe rule.
+
+## November 13 — Close Evidence takeover (in progress)
+
+Owner: `scoring_v4/modules/generic_evidence.py::score_evidence`, config Evidence magnitudes and
+references, `clinical_applicability.py::assess_clinical_source_review`,
+`evidence_resolver.py::_resolve_evidence_for_row`. Evidence: current owner/caller inspection and
+PR474–476 combined in `codex/evidence-close`; no main publication. Will NOT create: a second
+scorer, registry, public status, or fabricated source approval. Class: behavioral scoring/data.
+
+Source-access corrections473ec4bf7 and scoped noncredit FDA psyllium reference31c818692 independently
+reviewed;29 source-finish tests pass. Ladder ce48d0f67 plus reviewed corrections fddc25c12 implement
+Sean's explicit weak5 choice.321 owner checks and126 regressions passed; correction slice75passed,
+independent nine-case review passed. Two review findings reproduced first and fixed: immune reference
+inflated5to5.9; weak efficacy plus exposure bypassed5at6.5. Native omega/probiotic and category caps
+remain separate. App cbb20fe6 changes the finished-zero label,65widget checks and focused analyzer pass.
+
+Durable18-label raw freeze and full Clean/Enrich/Score/Blob receipts:
+`/Users/seancheick/pg_quality/evidence-close-20261113`. Baseline e9896fc5e. Final source candidate
+fddc25c12. Final18label comparison independently accepted: all Clean/Enrich/non-Evidence pillars unchanged; two inherited blend completions explained. Warm scoring median2.908859→2.950555s (+1.43%), RSS194134016→193462272bytes, frozen inputs unchanged. No corpus run or release qualification.
+Top150 is the first batch of every held ingredient, per corrected PR475 handoff, not a launch cutoff.
+ADR0008 records accepted scale and separately proposed gate;99% remains active. Positive literature
+activation needs per-record contexts, not a global boolean. Same-use relaxation has no observed
+unfinished-context case after476 and is not implemented. Source review found green-tea wording and
+an older specific acceptance hold; source/scope qualification remains open. No new clinical grade
+has been applied to that record.
+
+Next: complete measurements, source qualification and review queue, source-backed canary updates,
+local/exact-candidate CI, authorized integration; then one fingerprint-selected rebuild and release
+acceptance. Existing source counts and release estimates remain stale until that rebuild.
+
+November13 qualification update: final raw33canaries pass after10 source-explained expectation
+updates. Local corpus564passed/24declaredopt-in skips; skipguardpassed. Missing worktree artifact
+links caused earlier rejected checkpoints; those are not counted as passes. Green-tea hold/source
+correction2a3a1d985 independently reviewed,124affected+15projectiontests pass;6fullraw replays retain
+all scores/pillars/assessment/safety/blob output with internal holdreason corrections only.
+Initial PR477 CI8ba6c1bc completed with30 failures in five shards: obsolete ladder/reference pins,
+syntheticfull-credit input18, and missing newconfig-version history. Relevant correction slices
+208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate
+requires a fresh exact-head CI checkpoint. App PR236cbb20fe6 CI pending. No main/release action.
+
+
+PR477 post-green review: two authority-row bugs reproduced and corrected (hidden qualified blend
+member omitted; same-canonical L/DL preparation full-credit transfer). Existing mixed10 preserved;
+full20 now checks each purpose row.401 owner tests and11 receipt/count/isolation guards pass.
+Independent review accepted corrected source including fallback mutation isolation.18fullraw
+comparisons preserve every public export/score/status/safety value; only Ravage's nondecisive
+nutritional-floor metadata changes. Final timing2.873768s lies within baseline observations;
+RSS192004096 vs repeatedbaseline202522624. Fresh local/CI checkpoint pending. Sean approved merging
+477/236 and continuing. App236 is mergedb85aa7a8; pipeline477 remains open for qualification.
+Valerian commits preserved separately on codex/evidence-valerian/f64572527; no release/rebuild.

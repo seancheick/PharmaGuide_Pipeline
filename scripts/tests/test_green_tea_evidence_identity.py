@@ -32,6 +32,7 @@ def _approved_scope_source(monkeypatch, entry):
     pmids = (entry.get("applicability") or {}).get("source_pmids") or ["28661438"]
     source = _approved_test_source(entry, name=entry.get("standard_name", "Green Tea Extract"),
         pmid=pmids[0], outcome="Body weight change")
+    source["scoring_eligible"] = True  # Synthetic approval only; production hold remains.
     # Included identities are synthetic mechanics provenance, not a claim
     # about the actual green-tea review's included trials.
     source["study_contexts"][0].update(condition="modest_weight_change", evidence_role="meta_analysis",
@@ -129,7 +130,7 @@ def test_spelled_out_egcg_reaches_the_existing_catechin_evidence(enricher, label
     assert not any(m["id"] == "INGR_GREEN_TEA" for m in resolved_clinical_matches(product)[0])
     rejected = next(m for m in product["evidence_data"]["rejected_clinical_matches"] if m["id"] == "INGR_GREEN_TEA")
     assert rejected["status"] == "unresolved"
-    assert rejected["reason_code"] == "invalid_applicability_contract"
+    assert rejected["reason_code"] == "clinical_sources_ineligible"
     assert rejected["matched_source_row_refs"] == ["ingredientRows[1]"]
     assert product["activeIngredients"][0]["quantity"] == 300.0
 
@@ -165,7 +166,7 @@ def test_original_extract_rows_reach_existing_evidence(
     assert not any(row["id"] == "INGR_GREEN_TEA" for row in matches)
     rejected = next(row for row in enriched["evidence_data"]["rejected_clinical_matches"] if row["id"] == "INGR_GREEN_TEA")
     assert rejected["status"] == "unresolved"
-    assert rejected["reason_code"] == "invalid_applicability_contract"
+    assert rejected["reason_code"] == "clinical_sources_ineligible"
     assert rejected["matched_source_row_refs"] == [source_ref]
     active = enriched["activeIngredients"][0]
     assert active["canonical_id"] == "green_tea"

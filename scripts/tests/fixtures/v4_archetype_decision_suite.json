@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-    "review_status": "Reviewed synthetic archetype decision set, reconciled 2026-10-18 with Sean-approved Dose V4.1 reference decisions. 2026-10-28 held-source closure (Dr. Pham rulings): immune_support__ideal loses INGR_QUERCETIN recovery (blood-pressure evidence, immune claims excluded; fourth/fifth ruling sets) and sports_pre_workout__failure loses INGR_BETA_ALANINE (500 mg is below the studied 2.4 g/day repeated-use regimen; fourth ruling set). Historical reviews remain in git. Nutritional contribution plateaus before one final UL ceiling; prenatal coverage includes choline in its fixed critical budget. Unsupported general botanical, fiber, CFU, BCAA and citrulline curves take completed neutral. Magnesium fixtures retain only legacy percent summaries without a qualified applicable target and therefore take neutral. Sports creatine/beta-alanine use approved contribution targets. Ideal protein explicitly declares synthetic Nutrition Facts protein 27 g; the opaque failure retains its missing actual-protein capture hold. Only Dose, its normalization reference, total and derived tier expectations changed; existing route, score status, safety status and all other pillar expectations are retained. No synthetic fact is a manufacturer claim or clinical source. October 27 completeness correction: protein ideal confidence is moderate because standalone isoleucine/valine applicability remains unresolved; the historical owner name cannot complete those assessments. Synthetic score100, all pillar points, amounts and safety stay unchanged."
+    "review_status": "Reviewed synthetic archetype decision set, reconciled 2026-10-18 with Sean-approved Dose V4.1 reference decisions. 2026-10-28 held-source closure (Dr. Pham rulings): immune_support__ideal loses INGR_QUERCETIN recovery (blood-pressure evidence, immune claims excluded; fourth/fifth ruling sets) and sports_pre_workout__failure loses INGR_BETA_ALANINE (500 mg is below the studied 2.4 g/day repeated-use regimen; fourth ruling set). Historical reviews remain in git. Nutritional contribution plateaus before one final UL ceiling; prenatal coverage includes choline in its fixed critical budget. Unsupported general botanical, fiber, CFU, BCAA and citrulline curves take completed neutral. Magnesium fixtures retain only legacy percent summaries without a qualified applicable target and therefore take neutral. Sports creatine/beta-alanine use approved contribution targets. Ideal protein explicitly declares synthetic Nutrition Facts protein 27 g; the opaque failure retains its missing actual-protein capture hold. Only Dose, its normalization reference, total and derived tier expectations changed; existing route, score status, safety status and all other pillar expectations are retained. No synthetic fact is a manufacturer claim or clinical source. October 27 completeness correction: protein ideal confidence is moderate because standalone isoleucine/valine applicability remains unresolved; the historical owner name cannot complete those assessments. Synthetic score100, all pillar points, amounts and safety stay unchanged. November 13, 2026 (Sean): an established nutritional role earns the full Evidence reference when every purpose owner is an essential nutrient. Both magnesium fixtures move Evidence raw 10 to 18 (pillar 11.1 to 20.0), total +8.9 and the ideal tier Very good to Excellent; nothing else changed. November 13 ladder calibration: shared generic/sports/immune/fiber reference20; strong15, moderate10, weak5. Only Evidence raw/reference/pillar and resulting total expectations change; native routes, safety, score status, confidence and all other pillars unchanged. Per-case deltas independently bounded against existing contracts."
   },
   "fixtures": [
     {
@@ -123,18 +123,18 @@
         "archetype": "generic_single_molecule",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 81.2,
-        "quality_tier": "Very good",
+        "quality_score_v4_100": 90.1,
+        "quality_tier": "Excellent",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 22.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 18.7,
           "dose": 11.4,
-          "evidence": 11.1,
+          "evidence": 20.0,
           "transparency": 15.0,
           "verification": 15.0,
           "safety_hygiene": 10.0
@@ -142,7 +142,7 @@
         "raw_dimensions": {
           "formulation": 14.0,
           "dose": 12.54,
-          "evidence": 10.0,
+          "evidence": 20.0,
           "transparency": 10.0
         }
       }
@@ -249,18 +249,18 @@
         "archetype": "generic_single_molecule",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 54.8,
+        "quality_score_v4_100": 63.7,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 22.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 5.3,
           "dose": 11.4,
-          "evidence": 11.1,
+          "evidence": 20.0,
           "transparency": 15.0,
           "verification": 6.0,
           "safety_hygiene": 6.0
@@ -268,7 +268,7 @@
         "raw_dimensions": {
           "formulation": 4.0,
           "dose": 12.54,
-          "evidence": 10.0,
+          "evidence": 20.0,
           "transparency": 10.0
         }
       }
@@ -556,18 +556,18 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 87.6,
+        "quality_score_v4_100": 85.8,
         "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 22.0,
-          "evidence": 17.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 19.0,
           "dose": 16.8,
-          "evidence": 11.8,
+          "evidence": 10.0,
           "transparency": 15.0,
           "verification": 15.0,
           "safety_hygiene": 10.0
@@ -625,18 +625,18 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 49.7,
+        "quality_score_v4_100": 47.9,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 22.0,
-          "evidence": 17.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 10.9,
           "dose": 0.0,
-          "evidence": 11.8,
+          "evidence": 10.0,
           "transparency": 15.0,
           "verification": 6.0,
           "safety_hygiene": 6.0
@@ -698,7 +698,7 @@
         "normalization_references": {
           "formulation": 12.0,
           "dose": 22.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 20.0,
@@ -766,7 +766,7 @@
         "normalization_references": {
           "formulation": 12.0,
           "dose": 22.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 11.7,
@@ -1312,7 +1312,7 @@
         "normalization_references": {
           "formulation": 12.0,
           "dose": 21.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 20.0,
@@ -1368,7 +1368,7 @@
         "normalization_references": {
           "formulation": 12.0,
           "dose": 21.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 12.0,
@@ -1418,7 +1418,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 20.0,
@@ -1467,7 +1467,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 11.4,
@@ -1526,7 +1526,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 18.9,
@@ -1571,18 +1571,18 @@
         "archetype": "sports_pre_workout",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 58.0,
+        "quality_score_v4_100": 57.4,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 8.9,
           "dose": 2.5,
-          "evidence": 15.6,
+          "evidence": 15.0,
           "transparency": 15.0,
           "verification": 6.0,
           "safety_hygiene": 10.0
@@ -1590,7 +1590,7 @@
         "raw_dimensions": {
           "formulation": 6.6758,
           "dose": 2.5,
-          "evidence": 14.0,
+          "evidence": 15.0,
           "transparency": 10.0
         }
       }
@@ -1646,7 +1646,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 20.0,
@@ -1699,7 +1699,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 0.0,
@@ -1757,7 +1757,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 19.5,
@@ -1810,7 +1810,7 @@
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 18.0
+          "evidence": 20.0
         },
         "pillars": {
           "formulation": 9.0,

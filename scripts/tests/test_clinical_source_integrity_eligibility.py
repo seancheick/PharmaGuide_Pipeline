@@ -1793,7 +1793,11 @@ def test_inulin_source_completion_preserves_preparation_and_unread_source_holds(
     assert 'Orafti GR' in contexts['27492975']['identity']['preparation']
     assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
     assert len(contexts['38309832']['included_study_pmids']) == 47
-    assert not assess_clinical_source_review(record)['is_complete']
+    # 35833477 closed as a no-credit source decision on 2026-11-13; source
+    # review is complete, and no context grants credit.
+    assert contexts['35833477']['review_status'] == 'rejected_source'
+    assert contexts['35833477']['scoring_eligible'] is False
+    assert assess_clinical_source_review(record)['is_complete']
 
 
 def test_inulin_fernandes_pointer_keeps_actual_doi_and_unresolved_cohort():

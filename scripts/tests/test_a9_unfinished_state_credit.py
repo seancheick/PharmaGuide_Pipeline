@@ -13,8 +13,9 @@ import pytest
 from build_final_db import build_decision_highlights, generate_share_metadata
 
 FIXTURES = Path(__file__).parent / "fixtures"
-# 293417 (elderberry) finished on 2026-11-11; 256990 keeps chamomile and lemon balm unread.
-PARTIAL_LABEL = "a9_completion_256990_raw.json"
+# 293417 (elderberry) finished on 2026-11-11; 256990 (Centrum Sleep) finished on 2026-11-13
+# when unamounted blend members stopped holding. 1055 keeps credit with an owner review open.
+PARTIAL_LABEL = "a9_completion_1055_raw.json"
 COMPLETE_LABEL = "form_association_12012_raw.json"
 
 
@@ -62,7 +63,7 @@ def test_open_evidence_review_does_not_present_as_assessed(partial_full_evidence
     assert scored["quality_assessment_status"] == "partial"
     assert "evidence_assessment_incomplete" in release["blockers"]
     # The retained credit is left alone; only the claim that review ended moves.
-    assert evidence["score"] == 15.6
+    assert evidence["score"] == 15.0
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "still open" in evidence["reason"]
     assert "Established nutritional authority" not in evidence["reason"]
@@ -81,7 +82,7 @@ def test_marking_evidence_open_leaves_the_retained_credit_receipt(partial_full_e
     evidence = scored["quality_pillars_v4"]["evidence"]
     entries = evidence["receipt"]["entries"]
     assert abs(sum(entry["points"] for entry in entries) - evidence["score"]) < 0.001
-    assert evidence["evidence_result_state"] == "clinical_review_not_covered"
+    assert evidence["evidence_result_state"] == "evaluated_applicable"
 
 
 # --- Safety screen: an unread panel is not "no known concern" ---------------

@@ -3,9 +3,13 @@
 A finished review that found little is complete and low-evidence. A review never
 performed stays recorded as unreviewed. It holds the product only when its row
 could change the Evidence answer: the route's nutrient panel, a claim-named or
-materially dosed owner, a member of such a blend, or the ingredient the title names. It
+materially dosed owner, or the ingredient the title names. It
 also holds while Dose rests on an amount the label hides. Other supporting rows don't
 hold, and this is never a reason to relabel them as reviewed (Sean, November 3, 2026).
+
+A member of a blend, with no amount of its own, no longer holds the product by
+inheriting the blend's weight (Sean, November 13, 2026). When the blend is the whole
+label, nothing else answers for it, so its members still hold.
 
 A hidden amount on a finished label holds it when a safety check needs that amount or
 when one blend hides the split between different ingredients. Not disclosing is
@@ -30,17 +34,18 @@ COMPLETES = [
     pytest.param("a9_completion_252445_raw.json", False, id="finished_review_outside_scope"),
     pytest.param("raw_bamboo_252349.json", False, id="finished_authority_no_credit"),
     pytest.param("a9_finished_authority_no_credit_216405_raw.json", False, id="finished_authority_silica"),
+    # Blend members with no amount of their own stay unreviewed and no longer hold.
+    pytest.param("a9_completion_180213_raw.json", True, id="multi_herbal_blend_members"),
+    pytest.param("a9_completion_256991_raw.json", True, id="multi_food_blend_members"),
+    pytest.param("a9_completion_256990_raw.json", True, id="member_of_a_heavy_blend"),
 ]
 HELD = [
-    pytest.param("a9_completion_180213_raw.json", EVIDENCE, id="multi_required_botanical_reviews"),
-    pytest.param("a9_completion_256991_raw.json", EVIDENCE, id="multi_required_food_reviews"),
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
     pytest.param("a9_completion_12853_raw.json", EVIDENCE, id="title_owner_valerian"),
     pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
     pytest.param("a9_completion_322514_raw.json", EVIDENCE, id="enzyme_owner_behind_product_row"),
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),
-    pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="named_blend_member"),
-    pytest.param("a9_completion_256990_raw.json", EVIDENCE, id="member_of_a_heavy_blend"),
+    pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="blend_is_the_whole_label"),
     pytest.param("a9_completion_312441_raw.json", [*EVIDENCE, "hidden_amount_quality_open"], id="sports_whole_product_blend"),
     pytest.param("a9_evidence_identity_gap_307560_raw.json", EVIDENCE, id="evidence_identity_gap"),
     pytest.param("a9_omega_identity_gap_252496_raw.json", ["omega_evidence_assessment_incomplete"], id="omega"),
@@ -174,11 +179,12 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
     evidence = scored["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
     assert any("WHEY" in str(entry) for entry in evidence["recovered_matches"])
 
-    # 256990 is the control: unread members of its heavy blend keep it held, though
-    # magnesium already earned credit.
-    held = build_scored_artifact(_enrich(pipeline, "a9_completion_256990_raw.json"))
-    assert held["quality_assessment_status"] == "partial"
-    assert {"chamomile", "lemon_balm"} <= {row["canonical_id"] for row in _unreviewed_rows(held)}
+    # 256990: the unread members of its 150 mg herbal blend no longer hold it, and
+    # finishing the product never relabels them as reviewed.
+    finished = build_scored_artifact(_enrich(pipeline, "a9_completion_256990_raw.json"))
+    assert finished["quality_assessment_status"] == "complete"
+    assert {"chamomile", "lemon_balm"} <= {row["canonical_id"] for row in _unreviewed_rows(finished)}
+    assert "weren't individually reviewed" in finished["quality_pillars_v4"]["evidence"]["reason"]
 
 
 @pytest.mark.parametrize("label, open_row", [
@@ -349,13 +355,18 @@ def test_a_finished_label_stays_complete(pipeline):
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == []
 
 
-@pytest.mark.parametrize("label, open_row, hidden", [
-    ("a9_hidden_amount_2219_raw.json", "l_phenylalanine", "creatine"),
+@pytest.mark.parametrize("label, open_row, hidden, still_required", [
+    # Ravage is blends apart from minor nutrients: no row qualifies on its own,
+    # so every owner, blend members included, still answers for the label.
+    ("a9_hidden_amount_2219_raw.json", "l_phenylalanine", "creatine", True),
     # These are source/amount mechanics controls, independent of current review progress.
-    ("a9_hidden_amount_2221_raw.json", "guanidinoacetate", "creatine"),
-    ("a9_hidden_amount_25712_raw.json", "l_isoleucine", "bcaa"),
+    # Re-Built Mass has its own material actives (leucine, betaine, quercetin), so an
+    # unamounted member of its creatine complex no longer holds it (Sean, 2026-11-13).
+    ("a9_hidden_amount_2221_raw.json", "guanidinoacetate", "creatine", False),
+    ("a9_hidden_amount_25712_raw.json", "l_isoleucine", "bcaa", False),
 ])
-def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, label, open_row, hidden, monkeypatch):
+def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, label, open_row, hidden,
+                                                                   still_required, monkeypatch):
     import assessment_readiness
     from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -392,10 +403,8 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
     # Removing one amount-dependent reason must not close another required
-    # review. The two creatine labels still require the injected source review;
-    # the BCAA label can finish while retaining its nonblocking unread rows.
+    # review. A label that finishes keeps its nonblocking unread rows recorded.
     assert open_row in {row["canonical_id"] for row in _unreviewed_rows(unheld)}
-    still_required = hidden == "creatine"
     assert ("evidence_assessment_incomplete" in _release_blockers(unheld)) is still_required
     assert unheld["quality_assessment_status"] == ("partial" if still_required else "complete")
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
@@ -539,9 +548,12 @@ def test_a_panel_label_holds_on_an_unread_ingredient_it_is_about(pipeline, label
     assert "evidence_assessment_incomplete" in scored["assessment_readiness"]["release_assessment"]["blockers"]
 
 
-@pytest.mark.parametrize("label", ["a9_review_pending_312894_raw.json", "a9_review_pending_2505_raw.json"])
-def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label):
-    from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
+@pytest.mark.parametrize("label, retained_credit", [
+    ("a9_review_pending_312894_raw.json", 10.0),
+    ("a9_review_pending_2505_raw.json", 0.0),
+])
+def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label, retained_credit):
+    from scoring_v4.quality_score import _EVIDENCE_OPEN_REVIEW_REASON, _EVIDENCE_ZERO_REASON
     from scoring_v4.scored_artifact import build_scored_artifact
 
     # Dropping the open row from scope can't turn an unfinished review into a finding.
@@ -549,7 +561,12 @@ def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label)
     evidence = scored["quality_pillars_v4"]["evidence"]
     assert scored["quality_assessment_status"] == "partial"
     assert evidence["display_state"] == "not_yet_reviewed"
-    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
+    assert evidence["score"] == retained_credit
+    assert evidence["reason"] == (
+        _EVIDENCE_OPEN_REVIEW_REASON if retained_credit
+        else _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
+    )
+    assert "evidence_assessment_incomplete" in _release_blockers(scored)
 
 
 def test_an_unfinished_label_says_its_review_is_pending(pipeline):

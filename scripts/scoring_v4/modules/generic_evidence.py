@@ -117,6 +117,7 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
 # Amount adequacy is owned independently by Dose.
 PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, applicable preparation
+PRIMARY_FLOOR_PRELIMINARY = _EM["primary_floor_preliminary"]
 PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, applicable preparation
 # No automatic exceptional tier (Dr Pham framework, October 28, 2026). The
 # near-perfect floor (18 raw = 20/20 on the 18-point references) once followed a
@@ -133,8 +134,10 @@ _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # established DRI (RDA/AI) has evidence of *necessity* even without a
 # product-specific RCT — "no RCT in our data" must not mean "no evidence of
 # usefulness" for a nutrient the body provably requires (copper at evidence 0 was
-# the failure). The floor is 10 — deliberately BELOW the 14 strong clinical
-# floor (established necessity < RCT-proven effect).
+# the failure). A product whose every purpose-owning ingredient has that role
+# earns the generic Evidence reference, as essential-nutrient panels reach their
+# ceiling (Sean, 2026-11-13). A mixed formula keeps the configured floor, so a
+# vitamin never lifts another ingredient's Evidence by its presence.
 # Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
@@ -324,9 +327,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # clinical outcomes. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a strong clinical 14 stays 14).
         auth_canon = _purpose_essential_canonical(product)
+        authority_floor = nutrition_authority_floor_value(product, auth_canon)
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
-                and primary_floor < NUTRITION_AUTHORITY_FLOOR):
-            primary_floor = NUTRITION_AUTHORITY_FLOOR
+                and primary_floor < authority_floor):
+            primary_floor = authority_floor
             nutrition_authority_canonical = auth_canon
             if not floor_canonical:
                 floor_canonical = auth_canon
@@ -347,6 +351,20 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 primary_floor = authority_floor
                 floor_canonical = nutrition_authority_canonical = "omega_3"
                 omega_authority = resolved_omega
+
+    # A single ingredient supported only by weak applicable findings is
+    # Preliminary. Enrollment/depth arithmetic cannot lift that conclusion
+    # above its approved tier. Multi-ingredient aggregation is unchanged.
+    preliminary_only = bool(
+        apply_primary_floor and primary_floor <= PRIMARY_FLOOR_PRELIMINARY
+        and len(ingredient_points) == 1 and contributing_entries
+        and all(_norm_text(entry.get("effect_direction")) == "positive_weak"
+                or _floor_study_type(entry) is None
+                for _, entry in contributing_entries.values())
+    )
+    if preliminary_only:
+        pipeline_total = min(pipeline_total, PRIMARY_FLOOR_PRELIMINARY)
+        depth_bonus = 0.0
 
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
     immune_cap = immune_support_evidence_cap(product)
@@ -378,7 +396,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
-    primary_floor_decisive = bool(primary_floor > pipeline_total + depth_bonus)
+    primary_floor_decisive = bool((preliminary_only and primary_floor == PRIMARY_FLOOR_PRELIMINARY)
+                                  or primary_floor > pipeline_total + depth_bonus)
     evidence_result_state = _evidence_result_state(
         product, total, listed_ids, scoped_matches, probiotic_disposition=probiotic_component_evidence,
         dose_gated=bool(sub_clinical_canonicals), owner_scoped=owner_scoped,
@@ -1649,28 +1668,60 @@ def _purpose_essential_canonical(
     excess are independent Dose/Safety judgments and do not decide Evidence.
     """
     if owner_canonicals is None:
-        from evidence_resolver import evidence_prominent_row_keys
-        owner_canonicals = {canonical for _, canonical in evidence_prominent_row_keys(product)}
-        if not owner_canonicals:
-            # Preserve the existing single-subject fallback; multiple active
-            # identities never get a heaviest-mass authority anchor.
-            subjects = {str(row.get("canonical_id") or "").strip().lower()
-                        for row in _competing_active_rows(product) if isinstance(row, dict)
-                        and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
-            if len(subjects) == 1:
-                owner_canonicals = subjects
+        owner_canonicals = _purpose_owner_canonicals(product)
+    candidates = _authority_canonicals(product) & owner_canonicals
+    return sorted(candidates)[0] if candidates else None
+
+
+def _purpose_owner_rows(product: Dict[str, Any]) -> list:
+    """Purpose subjects retain source-row identity, including undosed members."""
+    def derive():
+        from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
+
+        prominent = evidence_prominent_row_keys(product)
+        if prominent:
+            return [row for row in get_evidence_subject_rows(product)
+                    if isinstance(row, dict) and evidence_row_key(row) in prominent]
+        # Preserve the existing single-subject fallback. A blend total is not a
+        # source row, and several identities never acquire an anchor by mass.
+        rows = [row for row in _competing_active_rows(product)
+                if isinstance(row, dict) and not is_lent_blend_mass(row)
+                and str(row.get("canonical_id") or "").strip()]
+        subjects = {str(row["canonical_id"]).strip().lower() for row in rows}
+        return rows if len(subjects) == 1 else []
+
+    return scoped_product_view(
+        product, ("nutrition_authority_purpose_rows",), lambda: deepcopy(derive()), deepcopy,
+    )
+
+
+def _purpose_owner_canonicals(product: Dict[str, Any]) -> set:
+    return {str(row.get("canonical_id") or "").strip().lower()
+            for row in _purpose_owner_rows(product)}
+
+
+def _authority_canonicals(product: Dict[str, Any]) -> set:
+    """Active canonicals whose row has a source-qualified nutritional role."""
     from evidence_resolver import nutrition_authority_for_row
 
-    candidates = set()
-    for row in _competing_active_rows(product):
-        if not isinstance(row, dict):
-            continue
-        canonical = str(row.get("canonical_id") or "").strip().lower()
-        if owner_canonicals is not None and canonical not in owner_canonicals:
-            continue
-        if nutrition_authority_for_row(row):
-            candidates.add(canonical)
-    return sorted(candidates)[0] if candidates else None
+    return {str(row.get("canonical_id") or "").strip().lower()
+            for row in _competing_active_rows(product, get_evidence_subject_rows(product))
+            if nutrition_authority_for_row(row)}
+
+
+def nutrition_authority_floor_value(product: Dict[str, Any], canonical: Optional[str]) -> float:
+    """Full generic reference when every purpose owner has a nutritional role.
+
+    Otherwise the configured floor. Amount adequacy stays a Dose judgment.
+    """
+    from evidence_resolver import nutrition_authority_for_row
+
+    rows = _purpose_owner_rows(product)
+    owners = {str(row.get("canonical_id") or "").strip().lower() for row in rows}
+    if canonical in owners and rows and all(nutrition_authority_for_row(row) for row in rows):
+        from scoring_v4.quality_score_config import config
+        return float(config()["evidence_subscale"]["archetype_reference"]["generic_single_molecule"])
+    return NUTRITION_AUTHORITY_FLOOR
 
 
 def nutrition_authority_references(product: Dict[str, Any], canonical: Optional[str]) -> list:
@@ -1679,7 +1730,7 @@ def nutrition_authority_references(product: Dict[str, Any], canonical: Optional[
 
     if canonical != _purpose_essential_canonical(product):
         return []
-    for row in _competing_active_rows(product):
+    for row in _competing_active_rows(product, get_evidence_subject_rows(product)):
         if row.get("canonical_id") == canonical:
             facts = nutrition_authority_for_row(row)
             if facts:
@@ -1831,6 +1882,11 @@ def _primary_mass_floor(
         # this loop already read from EFFECT_DIRECTION_MULTIPLIERS.
         if effect != "positive_strong":
             candidate = min(candidate, round(PRIMARY_FLOOR_MODERATE * effect_multiplier, 4))
+        # Sean's five-step ladder (2026-11-13): a genuinely weak applicable
+        # clinical finding uses Preliminary directly. Keep additive/native
+        # direction multipliers and specifically signed context interpretations.
+        if base > 0 and effect == "positive_weak":
+            candidate = PRIMARY_FLOOR_PRELIMINARY
         if candidate > floor:
             floor, floor_canon = candidate, canonical
             if receipt is not None:

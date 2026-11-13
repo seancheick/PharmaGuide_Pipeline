@@ -301,9 +301,15 @@ def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched)
     assert turmeric.reason_code == "clinical_source_label_unresolved"
     assert not turmeric.blocking_reasons
     assert turmeric.points_eligible is False
-    assert not resolution.is_assessment_complete
-    evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] == "not_yet_reviewed"
+    # Cinnamon and cardamom are unamounted blend members with no row weight of
+    # their own: they stay unreviewed and disclosed but no longer hold the
+    # product (Sean, 2026-11-13).
+    assert resolution.is_assessment_complete
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_assessment_status"] == "complete"
+    evidence = artifact["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "assessed"
+    assert "weren't individually reviewed" in evidence["reason"]
 
 
 def _assert_empty_automated_source_is_unfinished(canonical):
@@ -325,14 +331,21 @@ def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
         _assert_empty_automated_source_is_unfinished(canonical)
     product = enriched["282638"]
     resolution = resolve_product_evidence(product, owner_scoped=True)
-    assert not resolution.is_assessment_complete
+    # The members' open reviews stay recorded; as unamounted blend members they
+    # no longer hold Evidence subjects (Sean, 2026-11-13).
+    assert resolution.is_assessment_complete
     pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
                if row.disposition == "literature_resolution_required"]
     assert pending == [("alfalfa", ["literature_verification_pending"]),
                        ("tart_cherry", ["clinical_source_label_unresolved"]),
                        ("cabbage_extract", ["literature_verification_pending"])]
-    evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] == "not_yet_reviewed"
+    # The product still holds: its Dose rests on the blends' hidden amounts,
+    # a separate readiness rule that this change leaves in place.
+    artifact = build_scored_artifact(product)
+    blockers = artifact["assessment_readiness"]["release_assessment"]["blockers"]
+    assert artifact["quality_assessment_status"] == "partial"
+    assert {"evidence_assessment_incomplete", "hidden_amount_quality_open"} <= set(blockers)
+    assert artifact["quality_pillars_v4"]["evidence"]["display_state"] == "not_yet_reviewed"
 
 
 def test_flaxseed_blend_uses_independent_verified_sources_without_clearing_history(enriched):

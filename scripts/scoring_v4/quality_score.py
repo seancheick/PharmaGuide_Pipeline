@@ -1159,8 +1159,8 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware evidence fit against reviewed engine/purpose ceilings.
 
-    Generic evidence tops out at 18 by construction; category engines may have
-    different limits (for example, omega explicitly supports 15 + 5 = 20).
+    Generic/sports/fiber references use the public 20-point ladder. Native category
+    engines retain their independently reviewed references.
     References must come from those contracts, never the current corpus maximum.
     A weak-evidence product remains low because normalization is proportional.
     """
@@ -1176,7 +1176,16 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # comes from generic_evidence, which applies the floor — this does not
     # recompute it.
     if metadata.get("primary_evidence_floor_decisive"):
-        reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
+        floor = metadata.get("primary_evidence_floor")
+        magnitudes = cfg["evidence_magnitudes"]["generic"]
+        if floor == magnitudes["primary_floor_strong"]:
+            reason = "Supported by applicable human research on the primary ingredient, with remaining limitations."
+        elif floor == magnitudes["primary_floor_moderate"]:
+            reason = "Limited applicable human research supports the primary ingredient; substantial uncertainty remains."
+        elif floor == magnitudes["primary_floor_preliminary"]:
+            reason = "Preliminary human findings support the primary ingredient; evidence remains weak."
+        else:
+            reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
     facts: List[Dict[str, Any]] = []
     if "evidence_family_certainty" in (dim.get("components") or {}):
         parts = dim["components"]
@@ -1223,6 +1232,11 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         # nutrition authority set the Evidence result, say so. A zero keeps its
         # own sentence: authority cannot be credited with points never awarded.
         reason = _EVIDENCE_ZERO_REASON["evaluated_authority"]
+        if (metadata.get("nutrition_authority_floor_applied")
+                and metadata.get("primary_evidence_floor_decisive")
+                and metadata.get("nutrition_authority_canonical") != "omega_3"):
+            reason = ("Established nutritional role for the assessed ingredients; this does not establish "
+                      "a separate supplemental treatment benefit.")
     if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
         # Credit already earned cannot finish the assessment while other
         # research on the label is still under review.

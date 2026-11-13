@@ -158,10 +158,12 @@ def test_context_free_ideal_matches_cannot_manufacture_clinical_floors() -> None
     b_complex = validation.evaluate_fixture(suite.by_id("b_complex__ideal")).actual
 
     engine_ceiling = ge.CAP_PER_INGREDIENT * sum(ge.TOP_N_WEIGHTS) + max(v for _, v in ge.DEPTH_BONUS_BANDS)
-    assert engine_ceiling == generic["normalization_references"]["evidence"] == 18.0
-    assert generic["raw_dimensions"]["evidence"] == 10.0
-    assert generic["raw_dimensions"]["evidence"] < ge.PRIMARY_FLOOR_STRONG == 14.0
-    assert generic["pillars"]["evidence"] == 11.1
+    assert engine_ceiling == 18.0
+    assert generic["normalization_references"]["evidence"] == 20.0
+    # Magnesium's established nutritional role alone sets the full reference
+    # (2026-11-13); a context-free clinical source adds nothing above it.
+    assert generic["raw_dimensions"]["evidence"] == 20.0
+    assert generic["pillars"]["evidence"] == 20.0
     # Complete B panels earn the native 20-point authority score; no
     # denominator compression is needed to manufacture attainability.
     assert b_complex["raw_dimensions"]["evidence"] == 20.0

@@ -2093,10 +2093,11 @@ def evidence_required_canonicals(
     Credit still belongs to every owner.  Completion asks only about an owner the
     label is about, read on materiality alone: named in the title or
     heavy against the rest of the label.  A route's list of recognized actives
-    does not make a minor row the subject.  A member of a named or heavy blend
-    still counts: it inherits the blend's tier, so its review can move the
-    Evidence answer.  When no owner qualifies, every owner stays, because nothing
-    else answers for a label with no evident subject.
+    does not make a minor row the subject.  A blend member counts only on its
+    own row's role: inheriting a heavy blend's weight no longer makes its open
+    review hold the product (Sean, 2026-11-13).  When no owner qualifies, every
+    owner stays, because nothing else answers for a label with no evident
+    subject, such as a label that is only a blend.
     """
     from scoring_input_contract import MATERIAL_ROLES, classify_ingredient_roles
 
@@ -2104,23 +2105,14 @@ def evidence_required_canonicals(
     owners = evidence_owner_canonicals(prod_dict, module=module)
     rows, _, others, _ = _evidence_subject_roles(prod_dict, module)
     roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True, evidence=True)
-    material_blends = {
-        str(row.get("raw_source_path") or "")
-        for row, role in zip(others, roles[len(rows):])
-        if role.get("role") in MATERIAL_ROLES and row.get("raw_source_path")
-    }
     required = {
         canonical
         for row, role in zip(rows, roles)
         if (canonical := str(row.get("canonical_id") or "").strip().lower()) in owners
-        and (role.get("role") in MATERIAL_ROLES or any(
-            str(row.get("raw_source_path") or "").startswith((blend + ".nestedRows[", blend + ".forms["))
-            or str(row.get("parent_source_path") or "") == blend
-            for blend in material_blends
-        ))
+        and role.get("role") in MATERIAL_ROLES
     }
     # A named, source-verified amino aggregate can link separately printed
-    # rows. They inherit its review scope just as nested blend members do.
+    # rows. They inherit its review scope (a composition, not a blend member).
     # The projection supplies lineage only, so no points or amount transfer.
     for row, role in zip(rows, roles):
         if (row.get("canonical_source_db") != "verified_label_child_aggregate"
