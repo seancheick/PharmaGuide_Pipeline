@@ -97,7 +97,7 @@ def test_a_hyphenated_vitamin_name_in_the_title_names_the_vitamin(products):
     assert evidence["ingredient_points"] == {"ginger": 3.6}
     assert evidence["primary_evidence_floor_canonical"] == "vitamin_b12_cobalamin"
     assert evidence["nutrition_authority_canonical"] == "vitamin_b12_cobalamin"
-    assert scored['quality_pillars_v4']['evidence']['score'] == 11.1
+    assert scored['quality_pillars_v4']['evidence']['score'] == 10.0
 
 
 def test_a_generic_plant_part_word_does_not_name_a_species(products):

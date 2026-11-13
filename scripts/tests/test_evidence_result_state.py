@@ -75,7 +75,7 @@ def test_authority_owner_remains_headline_when_secondary_research_does_not_apply
 
     # The same nutrition-authority floor sets both scores; the secondary
     # applicability detail cannot change either the number or its headline.
-    assert evidence["score"] == authority_only["score"] == 18.0  # full role credit since 2026-11-13
+    assert evidence["score"] == authority_only["score"] == 20.0  # full role credit since 2026-11-13
     assert evidence["metadata"]["primary_evidence_floor_decisive"] is True
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_authority"
 
@@ -96,7 +96,8 @@ def test_authority_owner_remains_headline_when_secondary_research_does_not_apply
     pillar = _pillar_evidence(evidence, 20, "generic_single_molecule", _config())
     assert pillar["score"] == 20.0  # full role credit since 2026-11-13
     assert pillar["reason"] == (
-        "Evidence credit reflects the nutritional reference assessment for these ingredients."
+        "Established nutritional role for the assessed ingredients; this does not establish "
+        "a separate supplemental treatment benefit."
     )
 
 

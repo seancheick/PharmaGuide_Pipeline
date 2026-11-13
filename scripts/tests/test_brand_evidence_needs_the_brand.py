@@ -241,13 +241,13 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
             # Its separate printed tartrate row now has its own reviewed source.
             assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
                               'l_carnitine': 2.295}
-            assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
+            assert artifact['quality_pillars_v4']['evidence']['score'] == 15.0
         else:
             # The separate, source-qualified nutritional-role floor may beat
             # the clinical path; it never assigns the blend's trial to leucine.
             from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
             meta = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
-            assert artifact['quality_pillars_v4']['evidence']['score'] == 11.1
+            assert artifact['quality_pillars_v4']['evidence']['score'] == 10.0
             assert points == {'branched_chain_amino_acids': 4.59}
             assert meta['primary_evidence_floor'] == NUTRITION_AUTHORITY_FLOOR == 10
             assert meta['selected_nutrition_authority'] == 'l_isoleucine'
@@ -440,7 +440,7 @@ def test_real_complete_bcaa_material_inherits_its_primary_members_evidence_purpo
     assert ('ingredientRows[7]', 'branched_chain_amino_acids') in evidence_prominent_row_keys(product)
     artifact = build_scored_artifact(product)
     evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
-    assert evidence['primary_evidence_floor'] == 14.0
+    assert evidence['primary_evidence_floor'] == 15.0
     assert evidence['primary_evidence_floor_canonical'] == 'caffeine'
     assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
                                             'l_carnitine': 2.295}
@@ -448,7 +448,7 @@ def test_real_complete_bcaa_material_inherits_its_primary_members_evidence_purpo
     assert [row['id'] for row in receipts] == ['INGR_CAFFEINE']
     assert receipts[0]['source_review']['is_complete'] is True
     assert receipts[0]['scope_qualification_complete'] is True
-    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.0
     dose = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']
     assert len(dose['dose_contributions']) == 1
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4

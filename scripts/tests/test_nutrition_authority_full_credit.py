@@ -23,7 +23,7 @@ def test_single_essential_nutrient_earns_full_evidence():
     payload = _score(_ingredient(name="Vitamin D3", standard_name="Vitamin D",
                                  canonical_id="vitamin_d", quantity=25, unit="mcg"))
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_d"
-    assert payload["components"]["primary_evidence_floor"] == FULL == 18.0
+    assert payload["components"]["primary_evidence_floor"] == FULL == 20.0
     assert payload["score"] == FULL
 
 
@@ -57,7 +57,7 @@ def test_full_floor_converts_to_full_pillar():
 
 def test_capped_amino_acid_role_keeps_a_valid_readiness_receipt():
     """An immune-routed L-lysine label: the immune Evidence cap (17) sits below
-    the full role value (18). The receipt must read the capped score, not demand
+    the full role value (20). The receipt must read the capped score, not demand
     score == floor, or a finished product is marked unready."""
     from assessment_readiness import _current_nutrition_authority_receipt
     from test_evidence_resolver import _eaa_product
@@ -84,3 +84,12 @@ def test_stale_uncapped_receipt_fails_after_immune_routing():
     assert stale['score'] == FULL
     product['primary_type'] = 'immune_support'
     assert _current_nutrition_authority_receipt(product, stale) is False
+
+
+def test_full_nutrition_floor_explains_its_established_role():
+    from scoring_v4.quality_score import _pillar_evidence
+
+    payload = _score(_ingredient(name="Vitamin D3", standard_name="Vitamin D",
+                                 canonical_id="vitamin_d", quantity=25, unit="mcg"))
+    pillar = _pillar_evidence(payload, 20.0, "generic_single_molecule", config())
+    assert pillar["reason"].startswith("Established nutritional role")

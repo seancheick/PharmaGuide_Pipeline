@@ -213,8 +213,8 @@ def test_title_owner_and_material_owner_keep_their_separate_evidence(monkeypatch
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["l_leucine", "melatonin"]
     assert payload["metadata"]["ingredient_points"] == {"melatonin": 2.16, "l_leucine": 6.48}
-    assert payload["score"] == 14.0
-    assert payload["components"]["primary_evidence_floor"] == 14.0
+    assert payload["score"] == 15.0
+    assert payload["components"]["primary_evidence_floor"] == 15.0
 
 
 def test_owner_gap_does_not_fall_back_to_adjunct_evidence() -> None:
@@ -675,8 +675,8 @@ def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_mat
 
     # The synthetic strong generic-human source reaches the existing 14 floor;
     # this is not a clinical conclusion about the held production record.
-    assert payload["score"] == 14.0
-    assert payload["components"]["primary_evidence_floor"] == 14.0
+    assert payload["score"] == 15.0
+    assert payload["components"]["primary_evidence_floor"] == 15.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "collagen peptides"
     assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
 
@@ -715,7 +715,7 @@ def test_token_collagen_addon_does_not_recover_primary_collagen_evidence() -> No
     # nutritional role earns full Evidence on its OWN necessity (2026-11-13) — never
     # via the trace collagen. The collagen-recovery guard is unaffected.
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
-    assert payload["score"] == 18.0
+    assert payload["score"] == 20.0
 
 
 def test_gelatin_does_not_recover_hydrolyzed_collagen_peptides_evidence() -> None:
@@ -802,9 +802,9 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
 
     assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]
     assert payload["metadata"]["matched_entries"] == 1
-    assert payload["components"]["primary_evidence_floor"] == 11.0
+    assert payload["components"]["primary_evidence_floor"] == 10.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "relora"
-    assert payload["score"] == 11.0
+    assert payload["score"] == 10.0
 
 
 def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() -> None:
@@ -948,7 +948,7 @@ def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
 
     assert payload["metadata"]["recovered_matches"] == []
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
-    assert payload["score"] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert payload["score"] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
 
 
 def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
@@ -976,7 +976,7 @@ def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
     payload = score_evidence(product, apply_primary_floor=True)
 
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_b9_folate"
-    assert payload["score"] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert payload["score"] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
 
 
 def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> None:
@@ -996,7 +996,7 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 20.0
     assert iu_payload["components"] == mcg_payload["components"]
     assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin_d"
     assert iu_payload["metadata"]["recovered_matches"] == []
@@ -1022,8 +1022,8 @@ def test_vitamin_d_iu_without_clinical_match_gets_no_evidence_sentinel() -> None
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
-    assert payload["components"]["primary_evidence_floor"] == 18.0
+    assert payload["score"] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert payload["components"]["primary_evidence_floor"] == 20.0
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_d"
     assert payload["metadata"]["recovered_matches"] == []
 
@@ -1040,7 +1040,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 20.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -1048,7 +1048,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 20.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
@@ -1064,10 +1064,10 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 20.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 20.0
 
 
 def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel(monkeypatch) -> None:
@@ -1108,8 +1108,8 @@ def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel(monkeypatch) -
 
     # The established nutritional role (full, 2026-11-13) now exceeds the strong
     # clinical floor (14); the floor takes the maximum, so authority decides.
-    assert payload["score"] == 18.0
-    assert payload["components"]["primary_evidence_floor"] == 18.0
+    assert payload["score"] == 20.0
+    assert payload["components"]["primary_evidence_floor"] == 20.0
     assert payload["metadata"]["selected_nutrition_authority"] == "vitamin_a"
     assert payload["metadata"]["flags"] == []
 
@@ -1185,8 +1185,8 @@ def test_shadow_wires_evidence_dimension() -> None:
     # default product's mass-primary magnesium has a systematic_review_meta
     # positive match (strong floor 14), and its established nutritional role
     # earns the full reference since 2026-11-13, which the floor maximum keeps.
-    assert evidence["score"] == 18.0
-    assert evidence["metadata"]["primary_evidence_floor"] == 18.0
+    assert evidence["score"] == 20.0
+    assert evidence["metadata"]["primary_evidence_floor"] == 20.0
     assert evidence["max"] == 20.0
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
@@ -1433,7 +1433,7 @@ def test_title_nutrient_keeps_authority_floor_beside_heavier_adjunct():
     assert payload['metadata']['nutrition_authority_canonical'] in {'vitamin_b9_folate', 'calcium'}
     assert {'vitamin_b9_folate', 'calcium'} <= set(payload['metadata']['evidence_owner_canonicals'])
     # Both purpose owners are essential nutrients, so the role earns full credit.
-    assert payload['components']['primary_evidence_floor'] == 18.0
+    assert payload['components']['primary_evidence_floor'] == 20.0
 
 
 def test_stress_gut_marketing_does_not_promote_secondary_evidence_owners():
@@ -1576,7 +1576,7 @@ def test_recovered_collagen_receipt_uses_the_canonical_review_owner(monkeypatch)
         return {"is_complete": False, "errors": ["fixture_required_review_missing"], "context_ids": []}
     monkeypatch.setattr(clinical_applicability, "assess_clinical_source_review", source_review)
     payload = score_evidence(product, apply_primary_floor=True)
-    assert payload["score"] == 14.0
+    assert payload["score"] == 15.0
     assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
     receipts = payload["metadata"]["contributing_record_assessments"]
     assert [r["id"] for r in receipts] == ["INGR_COLLAGEN_PEPTIDES"]
@@ -1599,7 +1599,7 @@ def test_vitamin_c_nutritional_credit_is_independent_of_marketing(claim):
     product["statements"] = [{"notes": claim}] if claim else []
     evidence = score_evidence(product, apply_primary_floor=True)
     assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
-    assert evidence["score"] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert evidence["score"] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
 
 
 @pytest.mark.parametrize('module', ['generic', 'sports', 'fiber_digestive', 'multi_or_prenatal', 'b_complex', 'omega', 'probiotic'])
@@ -1618,7 +1618,7 @@ def test_eaa_floor_uses_existing_magnitude_and_actual_role_reference():
     from test_evidence_resolver import _eaa_product
     from scoring_v4.modules.generic_evidence import score_evidence
     result = score_evidence(_eaa_product(), apply_primary_floor=True, owner_scoped=True)
-    assert result['score'] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert result['score'] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
     assert result['metadata']['selected_nutrition_authority'] == 'l_leucine'
     assert result['metadata']['source_references'][0]['doi'] == '10.17226/10490'
     assert result['metadata']['contributing_record_assessments'] == []
@@ -1675,7 +1675,7 @@ def test_eaa_nutritional_credit_does_not_create_performance_trial_receipts():
     product = _eaa_product()
     product['product_name'] = 'L-Leucine Muscle Strength and Growth'
     result = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
-    assert result['score'] == 18.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
+    assert result['score'] == 20.0  # Full credit for an all-essential purpose since 2026-11-13 (Sean).
     assert result['metadata']['contributing_record_assessments'] == []
     assert result['metadata']['evidence_result_state'] == 'evaluated_authority'
     assert result['metadata']['source_references'][0]['supports_claims'] == ['established_nutritional_role']

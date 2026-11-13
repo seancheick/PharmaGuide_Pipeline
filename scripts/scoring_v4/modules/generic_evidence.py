@@ -117,6 +117,7 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
 # Amount adequacy is owned independently by Dose.
 PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, applicable preparation
+PRIMARY_FLOOR_PRELIMINARY = _EM["primary_floor_preliminary"]
 PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, applicable preparation
 # No automatic exceptional tier (Dr Pham framework, October 28, 2026). The
 # near-perfect floor (18 raw = 20/20 on the 18-point references) once followed a
@@ -351,6 +352,24 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 floor_canonical = nutrition_authority_canonical = "omega_3"
                 omega_authority = resolved_omega
 
+    # A single ingredient supported only by weak applicable findings is
+    # Preliminary. Enrollment/depth arithmetic cannot lift that conclusion
+    # above its approved tier. Multi-ingredient aggregation is unchanged.
+    preliminary_only = bool(
+        apply_primary_floor and primary_floor == PRIMARY_FLOOR_PRELIMINARY
+        and len(ingredient_points) == 1 and contributing_entries
+        and all(_norm_text(entry.get("effect_direction")) == "positive_weak"
+                for _, entry in contributing_entries.values())
+    )
+    exposure_only = bool(
+        apply_primary_floor and primary_floor == 0 and len(ingredient_points) == 1
+        and contributing_entries
+        and all(_floor_study_type(entry) is None for _, entry in contributing_entries.values())
+    )
+    if preliminary_only or exposure_only:
+        pipeline_total = min(pipeline_total, PRIMARY_FLOOR_PRELIMINARY)
+        depth_bonus = 0.0
+
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
     immune_cap = immune_support_evidence_cap(product)
     immune_cap_applied = immune_cap is not None and total > immune_cap
@@ -381,7 +400,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
     probiotic_component_evidence = assess_probiotic_component_disposition(product)
-    primary_floor_decisive = bool(primary_floor > pipeline_total + depth_bonus)
+    primary_floor_decisive = bool(preliminary_only or primary_floor > pipeline_total + depth_bonus)
     evidence_result_state = _evidence_result_state(
         product, total, listed_ids, scoped_matches, probiotic_disposition=probiotic_component_evidence,
         dose_gated=bool(sub_clinical_canonicals), owner_scoped=owner_scoped,
@@ -1856,6 +1875,11 @@ def _primary_mass_floor(
         # this loop already read from EFFECT_DIRECTION_MULTIPLIERS.
         if effect != "positive_strong":
             candidate = min(candidate, round(PRIMARY_FLOOR_MODERATE * effect_multiplier, 4))
+        # Sean's five-step ladder (2026-11-13): a genuinely weak applicable
+        # clinical finding uses Preliminary directly. Keep additive/native
+        # direction multipliers and specifically signed context interpretations.
+        if base > 0 and effect == "positive_weak":
+            candidate = PRIMARY_FLOOR_PRELIMINARY
         if candidate > floor:
             floor, floor_canon = candidate, canonical
             if receipt is not None:
