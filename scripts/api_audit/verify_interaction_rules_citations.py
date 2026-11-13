@@ -135,6 +135,7 @@ TOPIC_STEMS = {
     "former_smoker": ["smok", "tobacco", "cigarett"],
     "asbestos_exposure": ["asbestos"],
     # drug classes
+    "nadolol": ["nadolol"],
     "anticoagulants": ["warfarin", "coumarin", "heparin", "apixaban", "rivaroxaban",
                        "dabigatran"] + _BLEEDING,
     "doacs": ["apixaban", "rivaroxaban", "dabigatran", "edoxaban"] + _BLEEDING,
@@ -190,6 +191,8 @@ TOPIC_STEMS = {
     "beta_blockers": ["blocker", "adrenerg", "propranolol", "metoprolol", "atenolol"],
     "fluoroquinolones": ["fluoroquinol", "quinolone", "floxacin", "chelat", "antibiot"],
 }
+TOPIC_STEMS["cbd_other_anticonvulsants"] = TOPIC_STEMS["anticonvulsants"]
+TOPIC_STEMS["emsam_patch"] = ["emsam", "selegiline"]
 
 
 def _norm(text) -> str:

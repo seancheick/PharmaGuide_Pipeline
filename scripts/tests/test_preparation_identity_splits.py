@@ -174,7 +174,8 @@ def test_matcha_is_whole_leaf_not_green_tea_extract(pipeline, name, forms):
     hits = _hits(enriched, name)
     assert ("RULE_IQM_GREEN_TEA_HYPERTENSION", "liver_disease") not in hits
     # Brewed green tea and EGCG lower nadolol exposure; whole leaf keeps that warning.
-    assert ("RULE_BOTAN_MATCHA_BETA_BLOCKERS", "beta_blockers") in hits
+    assert ("RULE_BOTAN_MATCHA_BETA_BLOCKERS", "nadolol") in hits
+    assert ("RULE_BOTAN_MATCHA_BETA_BLOCKERS", "beta_blockers") not in hits
 
 
 def test_green_tea_extract_keeps_the_liver_warning(pipeline):

@@ -248,3 +248,10 @@ def test_pairwise_schema_rejects_invented_forms_and_unscoped_exceptions(target):
         bad = deepcopy(PAIRS['DSI_MAOI_TYRAMINE'])
         bad['medication_exceptions'] = [{'ingredient_rxcuis': ['9639']}]
     assert validate_schema(bad), target
+
+
+def test_fish_oil_vitamin_e_copy_has_no_unsupported_amount_boundary():
+    pair = PAIRS['DSI_FISHOIL_VITE']
+    assert '180 mg' not in pair['mechanism']
+    assert '400 IU' not in pair['mechanism']
+    assert 'cutoff' not in pair['management']

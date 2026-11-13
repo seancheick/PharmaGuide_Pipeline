@@ -7,7 +7,7 @@ in DISPOSITIONS_20261111.md.
   NIH fact sheet says the amount needed for clinically significant interactions is unknown but probably exceeds
   400 IU/day; that is not a boundary below which the interaction disappears. The Schurks 2010 abstract gives no
   400 IU/day anchor, so the "anchored to ~400 IU/day" sentence goes too. Numerical suppression stays held: dose
-  thresholds, materiality and dose gates are unchanged. The surgery row's alert text and action are not changed here.
+  thresholds, materiality and dose gates are unchanged. Surgery copy refers users to their surgical team.
 - Senna and cascara with digoxin (section 2): keep "avoid unsupervised use" with potassium-loss context. The headline
   no longer says the laxative itself increases digoxin toxicity, the body no longer narrows the advice to prolonged
   use, and the actions no longer hand the consumer clinician tasks (choose an osmotic agent, monitor serum levels).
@@ -88,10 +88,9 @@ VITAMIN_E_SURGERY = {
         "perioperative bleeding risk at high supplemental doses; the amount that matters is not established."
     ),
     "last_reviewed": TODAY,
-    "clinical_review": review(
-        Q2_NOTE + " Only the mechanism changed in this row; its alert text and action predate this review and were "
-        "not reviewed by Dr. Pham."
-    ),
+    "alert_headline": "Review vitamin E before surgery",
+    "alert_body": "High-dose vitamin E may increase bleeding risk. Tell your surgical team about vitamin E supplements and ask whether and when to stop them.",
+    "clinical_review": review(Q2_NOTE + " Follow-up: use clinician-directed surgery advice without a fixed interval."),
 }
 
 

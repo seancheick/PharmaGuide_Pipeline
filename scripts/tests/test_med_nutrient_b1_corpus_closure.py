@@ -4,6 +4,8 @@ from pathlib import Path
 DATA=Path(__file__).resolve().parent.parent/'data'/'medication_depletions.json'
 def test_b1_every_record_has_final_publication_status():
  entries=json.loads(DATA.read_text())['depletions']
- assert len(entries)==80
+ assert len(entries)==81
  assert {e.get('citation_review_status') for e in entries} <= {'verified','needs_revision','rejected'}
  assert all(e.get('citation_review_status') in {'verified','needs_revision','rejected'} for e in entries)
+
+ assert next(e for e in entries if e['id']=='DEP_CARBIDOPA_LEVODOPA_B6')['citation_review_status']=='needs_revision'

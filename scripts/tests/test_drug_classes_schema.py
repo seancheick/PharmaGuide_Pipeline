@@ -93,6 +93,9 @@ EXPECTED_CLASSES = {
     "class:hypoglycemics_lower_risk",
     "class:hypoglycemics_unknown",
     "class:clobazam",
+    "class:emsam_patch",
+    "class:cbd_other_anticonvulsants",
+    "class:nadolol",  # Signed G1: exact green-tea interaction, not all beta-blockers.
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -321,7 +324,6 @@ _CORRECTED_DRUG_RXCUIS = {
     ("class:bisphosphonates", "alendronate"): "46041",
     ("class:bisphosphonates", "ibandronate"): "115264",
     ("class:bisphosphonates", "risedronate"): "73056",
-    ("class:bisphosphonates", "zoledronic acid"): "77655",
     ("class:antiplatelet_agents", "prasugrel"): "613391",
     ("class:antiplatelet_agents", "ticagrelor"): "1116632",
     ("class:proton_pump_inhibitors", "lansoprazole"): "17128",

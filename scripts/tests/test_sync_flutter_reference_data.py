@@ -90,7 +90,7 @@ def test_sync_clinical_taxonomy_uses_pipeline_file_as_only_source(
 
     assert destination.read_bytes() == source.read_bytes()
     assert result["destination"] == destination
-    assert result["schema_version"] == "5.9.0"
+    assert result["schema_version"] == "5.11.0"
     assert result["conditions"] == 18
     assert result["profile_flags"] == 10
 

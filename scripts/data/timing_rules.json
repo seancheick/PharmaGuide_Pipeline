@@ -2,15 +2,15 @@
   "_metadata": {
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
-    "schema_version": "6.0.0",
-    "last_updated": "2026-10-01",
+    "schema_version": "6.1.0",
+    "last_updated": "2026-11-12",
     "total_entries": 20,
     "clinical_review_version": "timing-section-2-adversarial",
     "runtime_policy": "verified_only",
     "status_counts": {
-      "verified": 7,
-      "needs_revision": 13,
-      "rejected": 13
+      "verified": 11,
+      "needs_revision": 9,
+      "rejected": 15
     }
   },
   "timing_rules": [
@@ -93,39 +93,6 @@
       "reviewed_on": "2026-08-01",
       "review_blockers": [
         "interval_not_supported_by_cited_source"
-      ]
-    },
-    {
-      "id": "timing_calcium_vitamin_d_together",
-      "ingredient1": "calcium",
-      "ingredient1_tags": [
-        "calcium"
-      ],
-      "ingredient2": "vitamin d",
-      "timing_relation": {
-        "type": "with_food"
-      },
-      "category": "optional",
-      "applies_to": "standalone",
-      "actionability": "informational",
-      "source_authority": "clinical_study",
-      "review_status": "needs_revision",
-      "advice": "Take calcium and vitamin D together — vitamin D is required for active calcium absorption in the small intestine.",
-      "mechanism": "Vitamin D is essential for efficient calcium absorption. The 2011 IOM Dietary Reference Intakes report confirmed that adequate vitamin D status is required to meet calcium requirements. Taking them together ensures both are bioavailable during the absorption window.",
-      "score_impact": 1,
-      "evidence_level": "established",
-      "sources": [
-        {
-          "source_type": "pubmed",
-          "label": "Ross AC, Manson JE, Abrams SA et al. — The 2011 IOM report on dietary reference intakes for calcium and vitamin D. J Clin Endocrinol Metab. 2011",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/21118827/"
-        }
-      ],
-      "_relation_is_migration_placeholder": true,
-      "review_note": "The cited source (PMID 21118827) is the IOM dietary reference intake report for calcium and vitamin D. It establishes daily intake requirements; it says nothing about swallowing the two together. knowledge/timing-rules-research.md reaches the same conclusion: 'STRONG but STATUS, not same-pill timing'. Pending clinician decision to remove or re-author as adequacy guidance.",
-      "reviewed_on": "2026-08-01",
-      "review_blockers": [
-        "awaiting_clinician_decision"
       ]
     },
     {
@@ -268,31 +235,55 @@
       "ingredient1_tags": [
         "psyllium"
       ],
-      "ingredient2": "medications",
+      "ingredient2": "digoxin",
       "timing_relation": {
-        "type": "separate_from_medications",
+        "type": "separate_from",
         "minimum_hours": 3
       },
       "category": "important_separation",
       "applies_to": "standalone",
       "actionability": "recommended",
       "source_authority": "reference",
-      "review_status": "needs_revision",
-      "advice": "Mix psyllium with at least 8 oz of liquid, and take other medications at least 3 hours away.",
-      "mechanism": "Bulk-forming psyllium absorbs water and swells in the gut. Taking it dry or with too little fluid can cause choking, and the gel can delay absorption of some oral medications.",
+      "review_status": "verified",
+      "advice": "Keep digoxin taken by mouth at least 3 hours apart from psyllium. Take psyllium with at least 8 oz of liquid; mix powder or granules with liquid just before use. Follow your product's directions for other medicines.",
+      "mechanism": "MedlinePlus gives a three-hour precaution for psyllium with digoxin, salicylates or nitrofurantoin; it does not set this interval for every medicine. Psyllium absorbs liquid and swells; adequate liquid is a separate administration instruction. A small four-week study in older inpatients found no change in steady-state digoxin levels with ispaghula; this study did not establish reduced absorption or validate the interval.",
       "score_impact": -1,
       "evidence_level": "established",
       "sources": [
         {
           "source_type": "reference",
-          "label": "MedlinePlus — Psyllium",
+          "label": "MedlinePlus — Psyllium: liquid instructions and named three-hour medication precaution",
           "url": "https://medlineplus.gov/druginfo/meds/a601104.html"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Nordstrom et al. — Ispaghula and digoxin in geriatric inpatients (1987); negative study",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3038494/"
         }
       ],
-      "review_note": "MedlinePlus supports spacing psyllium from medicines, and the relation is now honestly modelled as separate_from_medications with no invented second bottle. Held pending clinician sign-off on applying a blanket 3-hour window to every medication rather than per-drug.",
-      "reviewed_on": "2026-08-01",
-      "review_blockers": [
-        "awaiting_clinician_decision"
+      "review_note": "Dr. Pham G3/F10 (2026-11-11) authorizes the named three-hour guidance, not a universal medication interval. MedlinePlus and RxNorm identities rechecked by agent 2026-11-12. Wording prepared by agent, not reviewed by Dr. Pham. Product-label spacing is not generalized across brands. Water guidance is retained as advice, with no separate timing bonus. The authored excluded_member_rxcuis list excludes the content-verified nonoral product identities current on 2026-11-12; unknown routes retain the oral-qualified instruction. It is not an exhaustive future/retired-concept guarantee.",
+      "reviewed_on": "2026-11-12",
+      "review_blockers": [],
+      "ingredient2_rxcuis": [
+        "3407"
+      ],
+      "canaries": {
+        "positive": [
+          "17778"
+        ],
+        "negative": [
+          "17550"
+        ]
+      },
+      "excluded_member_rxcuis": [
+        "104208",
+        "1151519",
+        "1175613",
+        "1743558",
+        "1743560",
+        "204504",
+        "208135",
+        "208137"
       ]
     },
     {
@@ -393,7 +384,18 @@
         "negative": [
           "180249"
         ]
-      }
+      },
+      "excluded_member_rxcuis": [
+        "1115267",
+        "1115269",
+        "1602750",
+        "1868004",
+        "2166148",
+        "2166193",
+        "2166196",
+        "2621123",
+        "966219"
+      ]
     },
     {
       "id": "timing_thyroid_med_magnesium_separate",
@@ -413,9 +415,9 @@
       "applies_to": "any",
       "actionability": "recommended",
       "source_authority": "clinical_study",
-      "review_status": "needs_revision",
+      "review_status": "verified",
       "advice": "Keep magnesium supplements at least 4 hours away from levothyroxine unless the prescriber gives different instructions.",
-      "mechanism": "Magnesium can reduce levothyroxine absorption: in a 2025 crossover trial, magnesium aspartate taken with levothyroxine lowered absorption by 12% and magnesium citrate by 7%. Levothyroxine labeling names magnesium-containing antacids among agents to keep 4 hours away.",
+      "mechanism": "In 15 healthy adults, simultaneous magnesium aspartate reduced thyroxine exposure by 12%; the 7% reduction with magnesium citrate was not statistically significant. The trial did not test separated dosing. Four hours is the adopted D27 precaution extrapolated from levothyroxine label guidance for antacids, not a trial-proven magnesium interval.",
       "score_impact": -2,
       "evidence_level": "probable",
       "sources": [
@@ -431,14 +433,31 @@
         },
         {
           "source_type": "fda",
-          "label": "DailyMed — Levothyroxine sodium tablets prescribing information: antacids (aluminum and magnesium hydroxides) reduce absorption",
-          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=3e77de84-6f59-40ac-a1a4-7bfe30387823"
+          "label": "SYNTHROID label sections 7.1 and 17: magnesium-containing antacids; four-hour antacid instruction",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
         }
       ],
-      "review_note": "2026-08-01: the levothyroxine labels never name magnesium as a supplement; only magnesium-hydroxide antacids (section 7.1, no interval; section 17 places antacids inside the 4-hour instruction). 2026-10-01 (agent review, D27): citation blocker resolved by the ThyroMag trial (PMID 41221788; magnesium aspartate -12% thyroxine AUC, citrate -7% not significant), which supports separating but tests no interval. The 4-hour interval still rests on the antacid label instruction, so the rule stays unpublished until an interval source or a clinician decision exists.",
-      "reviewed_on": "2026-10-01",
-      "review_blockers": [
-        "interval_not_supported_by_cited_source"
+      "review_note": "Sean D27 (2026-10-01) adopted at least 4 hours consistently; Dr. Pham (2026-11-11, sections C and G3) recommended publishing on that precautionary basis. Agent source recheck 2026-11-12: ThyroMag PMID 41221788, case series PMID 10193669, SYNTHROID sections 7.1 and 17. Wording prepared by agent, not reviewed by Dr. Pham. The trial tested dissolved magnesium citrate/aspartate coadministration, not four-hour separation or every formulation.",
+      "reviewed_on": "2026-11-12",
+      "review_blockers": [],
+      "canaries": {
+        "positive": [
+          "1055"
+        ],
+        "negative": [
+          "17550"
+        ]
+      },
+      "excluded_member_rxcuis": [
+        "1115267",
+        "1115269",
+        "1602750",
+        "1868004",
+        "2166148",
+        "2166193",
+        "2166196",
+        "2621123",
+        "966219"
       ]
     },
     {
@@ -474,39 +493,6 @@
           "209443"
         ]
       }
-    },
-    {
-      "id": "timing_quercetin_vitamin_c_together",
-      "ingredient1": "quercetin",
-      "ingredient1_tags": [
-        "quercetin"
-      ],
-      "ingredient2": "vitamin c",
-      "timing_relation": {
-        "type": "with_food"
-      },
-      "category": "optional",
-      "applies_to": "standalone",
-      "actionability": "informational",
-      "source_authority": "reference",
-      "review_status": "needs_revision",
-      "advice": "Take quercetin and vitamin C together — vitamin C enhances quercetin absorption and both have complementary antioxidant activity.",
-      "mechanism": "Ascorbic acid regenerates oxidized quercetin (quercetin semiquinone) back to the active reduced form, extending its antioxidant half-life; vitamin C also improves quercetin solubility in the GI lumen and may upregulate cellular uptake.",
-      "score_impact": 1,
-      "evidence_level": "probable",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "Linus Pauling Institute — Flavonoids: Quercetin",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/flavonoids#quercetin"
-        }
-      ],
-      "_relation_is_migration_placeholder": true,
-      "review_note": "The cited Linus Pauling Institute flavonoid page does not establish that vitamin C enhances quercetin absorption. Mechanism-only co-administration advice. Pending clinician decision.",
-      "reviewed_on": "2026-08-01",
-      "review_blockers": [
-        "awaiting_clinician_decision"
-      ]
     },
     {
       "id": "timing_bromelain_timing_by_purpose",
@@ -653,7 +639,18 @@
         "negative": [
           "180249"
         ]
-      }
+      },
+      "excluded_member_rxcuis": [
+        "1115267",
+        "1115269",
+        "1602750",
+        "1868004",
+        "2166148",
+        "2166193",
+        "2166196",
+        "2621123",
+        "966219"
+      ]
     },
     {
       "id": "timing_calcium_carbonate_with_food",
@@ -728,6 +725,17 @@
       "review_blockers": [
         "interval_not_supported_by_cited_source",
         "canonical_identity_unresolved"
+      ],
+      "excluded_member_rxcuis": [
+        "1115267",
+        "1115269",
+        "1602750",
+        "1868004",
+        "2166148",
+        "2166193",
+        "2166196",
+        "2621123",
+        "966219"
       ]
     },
     {
@@ -766,6 +774,103 @@
       },
       "reviewed_on": "2026-08-01",
       "supersedes": "timing_iron_empty_stomach"
+    },
+    {
+      "id": "timing_psyllium_salicylates_separate",
+      "ingredient1": "psyllium",
+      "ingredient1_tags": [
+        "psyllium"
+      ],
+      "ingredient2": "salicylates",
+      "timing_relation": {
+        "type": "separate_from",
+        "minimum_hours": 3
+      },
+      "category": "important_separation",
+      "applies_to": "standalone",
+      "actionability": "recommended",
+      "source_authority": "reference",
+      "review_status": "verified",
+      "advice": "Keep salicylates taken by mouth at least 3 hours apart from psyllium. Take psyllium with at least 8 oz of liquid; mix powder or granules with liquid just before use. Follow your product's directions for other medicines.",
+      "mechanism": "MedlinePlus gives a three-hour precaution for psyllium with digoxin, salicylates or nitrofurantoin; it does not set this interval for every medicine. Psyllium absorbs liquid and swells; adequate liquid is a separate administration instruction.",
+      "score_impact": -1,
+      "evidence_level": "established",
+      "sources": [
+        {
+          "source_type": "reference",
+          "label": "MedlinePlus — Psyllium: liquid instructions and named three-hour medication precaution",
+          "url": "https://medlineplus.gov/druginfo/meds/a601104.html"
+        }
+      ],
+      "review_note": "Dr. Pham G3/F10 (2026-11-11) authorizes the named three-hour guidance, not a universal medication interval. MedlinePlus and RxNorm identities rechecked by agent 2026-11-12. Wording prepared by agent, not reviewed by Dr. Pham. Product-label spacing is not generalized across brands. Water guidance is retained as advice, with no separate timing bonus. The authored excluded_member_rxcuis list excludes the content-verified nonoral product identities current on 2026-11-12; unknown routes retain the oral-qualified instruction. It is not an exhaustive future/retired-concept guarantee.",
+      "reviewed_on": "2026-11-12",
+      "review_blockers": [],
+      "ingredient2_rxcuis": [
+        "1191",
+        "36108",
+        "215799",
+        "52364",
+        "9907"
+      ],
+      "canaries": {
+        "positive": [
+          "17778"
+        ],
+        "negative": [
+          "17550"
+        ]
+      },
+      "excluded_member_rxcuis": [
+        "103863",
+        "1154071",
+        "198461",
+        "198463",
+        "198464",
+        "198473",
+        "370609"
+      ]
+    },
+    {
+      "id": "timing_psyllium_nitrofurantoin_separate",
+      "ingredient1": "psyllium",
+      "ingredient1_tags": [
+        "psyllium"
+      ],
+      "ingredient2": "nitrofurantoin",
+      "timing_relation": {
+        "type": "separate_from",
+        "minimum_hours": 3
+      },
+      "category": "important_separation",
+      "applies_to": "standalone",
+      "actionability": "recommended",
+      "source_authority": "reference",
+      "review_status": "verified",
+      "advice": "Keep nitrofurantoin taken by mouth at least 3 hours apart from psyllium. Take psyllium with at least 8 oz of liquid; mix powder or granules with liquid just before use. Follow your product's directions for other medicines.",
+      "mechanism": "MedlinePlus gives a three-hour precaution for psyllium with digoxin, salicylates or nitrofurantoin; it does not set this interval for every medicine. Psyllium absorbs liquid and swells; adequate liquid is a separate administration instruction.",
+      "score_impact": -1,
+      "evidence_level": "established",
+      "sources": [
+        {
+          "source_type": "reference",
+          "label": "MedlinePlus — Psyllium: liquid instructions and named three-hour medication precaution",
+          "url": "https://medlineplus.gov/druginfo/meds/a601104.html"
+        }
+      ],
+      "review_note": "Dr. Pham G3/F10 (2026-11-11) authorizes the named three-hour guidance, not a universal medication interval. MedlinePlus and RxNorm identities rechecked by agent 2026-11-12. Wording prepared by agent, not reviewed by Dr. Pham. Product-label spacing is not generalized across brands. Water guidance is retained as advice, with no separate timing bonus. The authored excluded_member_rxcuis list excludes the content-verified nonoral product identities current on 2026-11-12; unknown routes retain the oral-qualified instruction. It is not an exhaustive future/retired-concept guarantee.",
+      "reviewed_on": "2026-11-12",
+      "review_blockers": [],
+      "ingredient2_rxcuis": [
+        "7454"
+      ],
+      "canaries": {
+        "positive": [
+          "17778"
+        ],
+        "negative": [
+          "17550"
+        ]
+      }
     }
   ]
 }
