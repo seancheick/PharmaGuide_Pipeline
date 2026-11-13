@@ -5466,7 +5466,7 @@ correction2a3a1d985 independently reviewed,124affected+15projectiontests pass;6f
 all scores/pillars/assessment/safety/blob output with internal holdreason corrections only.
 Initial PR477 CI8ba6c1bc completed with30 failures in five shards: obsolete ladder/reference pins,
 syntheticfull-credit input18, and missing newconfig-version history. Relevant correction slices
-208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate3a1d85543 passed all eight pipeline shards and Merge readiness in run43500088624. App PR236cbb20fe6 passed run43497335461. Both remain unmerged; main-integration approval requested in the active chat. No rebuild or release action.
+208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate3a1d85543 passed all eight pipeline shards and Merge readiness in run43500088624. App PR236cbb20fe6 passed run43497335461. Sean approved both merges and continuing. App236 is mergedb85aa7a8. Pipeline477 now qualifies review-fixf5e95e8f0; no rebuild or release action.
 
 
 Valerian follow-up9a5b0edd3/ae13ffd25: chemical/root identity correction plus existing completed-zero
@@ -5477,7 +5477,17 @@ holds with root warnings preserved, and one unchanged control. Initial +144% mat
 reproduced and fixed by bounded immutable static variant reuse; final0.451s vsbaseline0.456s and
 lower RSS,0artifact differences from the optimization. Detailed fail-first and focused-test receipts
 in research.md. Final local564pass/24declared opt-ins,146.73s,skipguardpass. This follow-up is committed
-locally only and still needs exact CI. Remote PR477 remains the qualified3a1 candidate awaiting
+locally only and still needs exact CI. Remote PR477 now qualifies review-fixf5e95e8f0 under supplied
 main-integration permission; no corpus rebuild or release. Black cohosh/chlorella source-copy
 corrections remain verified but unapplied; every-held review queue, signed holds and release-gate
 decision remain open.
+
+PR477 post-green review: two authority-row bugs reproduced and corrected (hidden qualified blend
+member omitted; same-canonical L/DL preparation full-credit transfer). Existing mixed10 preserved;
+full20 now checks each purpose row.401 owner tests and11 receipt/count/isolation guards pass.
+Independent review accepted corrected source including fallback mutation isolation.18fullraw
+comparisons preserve every public export/score/status/safety value; only Ravage's nondecisive
+nutritional-floor metadata changes. Final timing2.873768s lies within baseline observations;
+RSS192004096 vs repeatedbaseline202522624. Fresh local564passed/24declared opt-ins and skipguard passed in151.91s; CI43523089618 pending. Sean approved merging
+477/236 and continuing. App236 is mergedb85aa7a8; pipeline477 remains open for qualification.
+Valerian commits preserved separately on codex/evidence-valerian/f64572527; no release/rebuild.

@@ -8,11 +8,85 @@ a vitamin never lifts another ingredient's Evidence by its presence.
 """
 from __future__ import annotations
 
+import pytest
+
 from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR, score_evidence
 from scoring_v4.quality_score_config import config
 from test_v4_generic_evidence_p133 import _ingredient, _product
 
 FULL = config()["evidence_subscale"]["archetype_reference"]["generic_single_molecule"]
+
+
+@pytest.mark.parametrize('fallback', [False, True])
+def test_authority_purpose_rows_derive_once_per_scope_and_isolate_mutations(monkeypatch, fallback):
+    import evidence_resolver
+    from scoring_input_contract import scoring_input_scope
+    from scoring_v4.modules.generic_evidence import _purpose_owner_rows
+    from test_evidence_resolver import _eaa_product
+
+    product = _eaa_product()
+    calls = []
+    original = evidence_resolver.evidence_prominent_row_keys
+
+    def counted(*args, **kwargs):
+        calls.append(1)
+        return set() if fallback else original(*args, **kwargs)
+
+    monkeypatch.setattr(evidence_resolver, 'evidence_prominent_row_keys', counted)
+    with scoring_input_scope(product):
+        rows = _purpose_owner_rows(product)
+        rows[0]['name'] = 'Changed only in caller'
+        assert _purpose_owner_rows(product)[0]['name'] == 'L-Leucine'
+    assert len(calls) == 1
+    assert product['activeIngredients'][0]['name'] == 'L-Leucine'
+
+
+def test_full_authority_cannot_transfer_between_same_canonical_preparations():
+    from copy import deepcopy
+    from test_evidence_resolver import _eaa_product
+    from evidence_resolver import evidence_prominent_row_keys
+    from scoring_v4.modules.generic_evidence import nutrition_authority_floor_value
+
+    product = _eaa_product()
+    row = deepcopy(product['activeIngredients'][0])
+    row.update(name='DL-Leucine', raw_source_text='DL-Leucine', raw_source_path='ingredientRows[1]')
+    for rows in [product['activeIngredients'], product['ingredient_quality_data']['ingredients'],
+                 product['ingredient_quality_data']['ingredients_scorable']]:
+        rows.append(row)
+    assert ('ingredientRows[1]', 'l_leucine') in evidence_prominent_row_keys(product)
+    assert nutrition_authority_floor_value(product, 'l_leucine') == NUTRITION_AUTHORITY_FLOOR
+    from assessment_readiness import _current_nutrition_authority_receipt
+    payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert payload['score'] == NUTRITION_AUTHORITY_FLOOR
+    assert payload['metadata']['nutrition_authority_canonical'] == 'l_leucine'
+    assert _current_nutrition_authority_receipt(product, payload)
+    product['activeIngredients'][0]['raw_source_text'] = 'DL-Leucine'
+    assert not _current_nutrition_authority_receipt(product, payload)
+
+
+def test_undosed_nutritional_blend_members_keep_full_role_authority():
+    from test_evidence_prominence_ownership import _row
+    from scoring_v4.modules.generic_evidence import nutrition_authority_floor_value
+
+    product = _product(product_name='Zinc Blend', ingredients=[
+        _row('Zinc Blend', 'zinc_blend', 300, path='ingredientRows[0]',
+             is_proprietary_blend=True, cleaner_row_role='blend_header_total'),
+        _row('Zinc', 'zinc', None, unit=None, path='ingredientRows[0].nestedRows[0]',
+             cleaner_row_role='nested_display_only', score_eligible_by_cleaner=False,
+             isNestedIngredient=True, parentBlend='Zinc Blend'),
+        _row('Magnesium', 'magnesium', 100, path='ingredientRows[1]'),
+    ], matches=[])
+    product['product_name'] = 'Zinc Blend + Magnesium'
+    product['ingredient_quality_data']['ingredients_scorable'] = [
+        product['ingredient_quality_data']['ingredients'][-1]]
+    assert nutrition_authority_floor_value(product, 'zinc') == FULL
+    from assessment_readiness import _current_nutrition_authority_receipt
+    from scoring_v4.modules.generic_evidence import nutrition_authority_references
+    payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert payload['score'] == FULL
+    canonical = payload['metadata']['nutrition_authority_canonical']
+    assert nutrition_authority_references(product, canonical)
+    assert _current_nutrition_authority_receipt(product, payload)
 
 
 def _score(*rows):

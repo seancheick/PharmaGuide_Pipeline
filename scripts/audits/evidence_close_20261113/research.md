@@ -187,3 +187,38 @@ One warmup plus three uncontended runs: baseline median0.455770s; initial correc
 27d1a9db98da890dc5e4ffe6dcf11b49810bfba27373e37aa605913697855b81; fresh input copies per run.
 This bounded measurement does not claim corpus-wide speed. Final local qualification passes564 tests/24 declared opt-in skips in146.73s; skip guard passes.
 These follow-up changes are not covered by the already-green PR477 SHA3a1d85543.
+
+
+## PR477 authority-row review corrections — November 13, 2026
+
+Two CodeRabbit findings independently reproduced after the initial green3a1d85543 checkpoint.
+Owner: generic_evidence nutritional authority helpers, existing Evidence subject rows and prominent
+source-row keys. Will NOT create a new clinical policy, public field or scorer. Class: behavioral.
+An undosed Zinc blend member absent from ingredients_scorable was omitted despite a qualified
+nutritional role. Separately, DL-Leucine could inherit full20 from L-Leucine through canonical-set
+collapse. Both new regressions failed before correction. Eligibility and receipts now use the
+Evidence subject collection with existing structural exclusions; full20 requires every purpose
+row to qualify individually. Existing canonical-scoped mixed10 remains, including273823's
+separately disclosed600mg Magnesium. No amount or preparation is borrowed for clinical credit.
+
+401 owner/consumer tests pass;11 focused authority/receipt/derivation/isolation guards pass.
+Independent review found a first-return fallback mutation alias; fail-first regression reproduced
+it and established deep-copy semantics corrected it. Both prominent and fallback views derive
+once per existing scoring scope; returned mutations do not affect input or later readers.
+
+18 frozen raw labels through Clean/Enrich/Score/Blob against3a1d85543: public exports, totals,
+pillars, completion and safety unchanged; Clean/Enrich unchanged. Only2219/Ravage internal metadata
+now records the nondecisive10-point L-leucine nutritional floor, below its existing11.205 evidence.
+Its obsolete zero-floor assertion is corrected while creatine-dose/source guards remain.
+Final copy-isolation replay adds zero differences across all18 full records.
+
+Same frozen18 enriched inputs and one warmup/three sequential timed runs: initial baseline median
+2.987419s/RSS173637632; repeated baseline2.830703s/RSS202522624; final candidate2.873768s/RSS192004096.
+Report observed variability, not a universal speed claim; no sustained regression observed. Input
+hash56f9a3626cd986320906d62e8177f368ae26f4897248390802b7968d23fef95b unchanged. Independent final review
+accepts source and bounded measurements. Fresh local and exact-head CI checkpoint pending.
+
+Sean authorized PR477/236 integration and continuing work. App236 merged asb85aa7a8 and fetched
+main contains qualifiedcbb20fe6. Pipeline merge waits for these corrected checks and review-thread
+resolution. Valerian follow-up stays separately preserved at codex/evidence-valerian/f64572527.
+No rebuild, catalog publication, installed-app delivery or release is claimed.
