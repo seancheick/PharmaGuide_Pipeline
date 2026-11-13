@@ -2601,3 +2601,17 @@ qualified final candidate or a reconciliation of the frozen cohort.
 - [ ] On the final integrated source, use stage fingerprints to select
   one required refresh, run the gated nonpublishing export, and record
   census plus six partial score/tier checks against that same build.
+
+The four turmeric findings were false positives on daily-exposure-only
+rows. The same audited row classifier now limits standardization copy
+checks to full ingredient rows. The four retained blobs pass, and the
+full 78-test reconciliation file passes including the existing
+whole-row standardization control. No export values changed.
+
+Exact QA Core reconciliation: 15,413 of the 15,447 frozen IDs, with no
+extra IDs. The audit's 15,431 is the inspected count before the 18
+explicit exclusions, consisting of 14 sweeteners, two culinary oils
+and two excipient/non-consumer labels. The other 16 missing IDs are
+submission labels present in the main checkout. Exact IDs and reasons
+are retained in qa-core-frozen-id-reconciliation.json. The frozen
+publication cohort still requires those IDs.

@@ -846,6 +846,9 @@ def _check_standardization(rec: ProductRecord, blob: dict, cleaned: dict | None 
                   for row in ((cleaned or {}).get("activeIngredients") or [])
                   if isinstance(row, dict) and row.get("raw_source_path")}
     for ing in blob.get("ingredients") or []:
+        # The daily-exposure projection carries no ingredient display copy.
+        if _is_dose_only_export_row(ing):
+            continue
         label = label_rows.get(ing.get("raw_source_path")) or {}
         expected = _compute_standardization_note({
             "notes": label.get("notes"),
