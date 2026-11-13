@@ -54,6 +54,11 @@ def test_each_source_is_a_scoped_no_credit_decision(records, record_id, pmid):
     assert context["dose"]["source_provenance"]["pmid"] == pmid
     assert context["dose"]["source_provenance"]["source_url"].endswith(f"/{pmid}/")
     assert context["limitations"]
+    text = " ".join(context["limitations"])
+    # No PMC copy proves only that; a source decision is not an ingredient verdict.
+    assert "not open access" not in text
+    assert "No PubMed Central full text was found" in text
+    assert "not a finding that the ingredient lacks support" in text
     # Every record stays noncredit: no context becomes scoring-eligible.
     assert all(c.get("scoring_eligible") is False for c in record["study_contexts"])
 

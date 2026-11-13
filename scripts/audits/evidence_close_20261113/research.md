@@ -20,7 +20,7 @@ Receipts: one context per PMID in `source_finish_contexts.py`; applied by `apply
 
 ## Method and checks
 
-- No PMC full text exists for any of the 13 (PubMed ID converter, 2026-11-13). Each decision was read
+- No PubMed Central full text was found for any of the 13 (PubMed ID converter, 2026-11-13); that does not show the full text is unavailable elsewhere. Each decision was read
   from the live PubMed abstract and states only abstract facts; claims from the record's earlier
   2026-11-08 inulin review are labelled as such.
 - Independent check: a fresh-context Claude agent re-fetched all 13 abstracts. It confirmed every
@@ -30,12 +30,20 @@ Receipts: one context per PMID in `source_finish_contexts.py`; applied by `apply
   applied; a final self-review also changed "cognition is null" to "not significant".
 - Agent review, not clinician review (review delegation, AGENTS.md, Sean 2026-11-06).
 
+## Scope of these decisions
+
+Each is a source-level disposition: the paper grants no credit on its own. Reported findings,
+positive and null (for example BioCell's osteoarthritis result and astaxanthin's exercise results),
+are preserved for the ingredient's single conclusion on the Evidence ladder. None is a finding that
+the ingredient lacks support, and none of these records will be finished as a zero to release
+products (Sean, 2026-11-13).
+
 ## Effect
 
 - `assess_clinical_source_review` is now complete for all seven records.
 - Products: 0 status or score changes in a 309-product main-vs-branch replay (249 held + 60 controls).
   The resolver treats an all-noncredit record as a hold unless it is reference-only
   (`evidence_resolver.py` noncontributing_complete, the 2026-10-28 register). Releasing these products
-  needs a credit tier on the Evidence ladder or a decision to finish the record as reference-only (zero).
+  needs the ingredient's tier on the Evidence ladder (plan steps 2-3), not a zero.
 - Out of scope, held on purpose by a signed parent `scoring_eligible: false`: BRAND_THERACURMIN,
   PRECLIN_PQQ, INGR_LACTOFERRIN, INGR_COLLAGEN_PEPTIDES.

@@ -7,7 +7,11 @@ transfer, no invented arms. Applied by ``apply_source_finish.py``.
 
 REVIEWER = ("Claude agent review (claude-opus-5-5) of the PubMed abstract; agent review, not clinician "
             "review; independent abstract re-read by a fresh-context Claude agent")
-NO_FULL_TEXT = "Full text is not open access (no PMC copy); decision made from the PubMed abstract."
+NO_FULL_TEXT = ("No PubMed Central full text was found (PubMed ID converter, 2026-11-13); the decision rests on the "
+                "PubMed abstract and does not establish that full text is unavailable elsewhere.")
+SOURCE_SCOPE = ("Source-level disposition only: this paper grants no credit on its own. Its reported findings, positive "
+                "and null, are preserved for the ingredient's single conclusion on the Evidence ladder; this is not a "
+                "finding that the ingredient lacks support.")
 
 
 def context(record_id, pmid, slug, notes, limitations):
@@ -28,7 +32,7 @@ def context(record_id, pmid, slug, notes, limitations):
             "location": "PubMed abstract.",
             "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
         }},
-        "limitations": [*limitations, NO_FULL_TEXT],
+        "limitations": [*limitations, NO_FULL_TEXT, SOURCE_SCOPE],
     }
 
 
