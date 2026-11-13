@@ -32,7 +32,9 @@ def test_isotretinoin_vitamin_a_and_beta_carotene_have_distinct_source_scope():
     assert "precaution" in beta["mechanism"].lower()
     assert "provitamin" in beta["mechanism"].lower()
     assert "not" in beta["mechanism"].lower() and "retinol" in beta["mechanism"].lower()
-    assert "confirmation" in beta["evidence_notes"].lower()
+    review_notes = beta["evidence_notes"].lower()
+    assert "signed follow-up" in review_notes
+    assert "pending" not in review_notes
     assert not any(r["agent1_id"] == "6064" and r.get("agent2_canonical_id") in {
         "lutein", "lycopene", "zeaxanthin", "astaxanthin"
     } for r in pairs.values())
