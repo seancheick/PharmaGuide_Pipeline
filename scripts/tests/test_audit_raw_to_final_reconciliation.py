@@ -988,3 +988,25 @@ def test_analysis_participation_join_reconciles_complementary_blend_rows_first(r
     assert _line_codes(raw, cleaned, enriched, blob) == []
     blob['display_ingredients'][0]['quantity'] = 999
     assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in _line_codes(raw, cleaned, enriched, blob)
+
+
+def test_dose_only_projection_requires_its_own_enriched_exposure():
+    from build_final_db import _append_dose_only_rows
+
+    raw, cleaned, enriched, blob = _line_fixture()
+    row = blob["ingredients"].pop(0)
+    enriched["rda_ul_data"] = {"analyzed_ingredients": [{
+        "raw_source_path": row["raw_source_path"],
+        "canonical_id": row["canonical_id"],
+        "ingredient": raw["ingredientRows"][0]["name"],
+        "dose_role": "declared_total",
+        "per_day_min": 500,
+        "per_day_max": 1000,
+        "converted_unit": "mg",
+    }]}
+    _append_dose_only_rows(blob["ingredients"], enriched["rda_ul_data"]["analyzed_ingredients"])
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+    blob["ingredients"][-1]["per_day_max"] = 1500
+    assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
+    blob["ingredients"].pop()
+    assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
