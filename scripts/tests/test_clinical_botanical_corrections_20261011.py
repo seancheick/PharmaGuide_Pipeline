@@ -312,7 +312,7 @@ def test_real_clean_ksm_identity_retains_standardization_despite_generic_candida
     assert row['identity_disposition'] == 'clean' and row['match_ambiguity_candidates']
     assert bp._standardization_tier_credit(product, row) == bp.STANDARDIZATION_TIER_FULL
     artifact = build_scored_artifact(product)
-    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.0
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
 
 

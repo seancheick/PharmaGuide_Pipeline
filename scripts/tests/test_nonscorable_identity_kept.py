@@ -231,7 +231,7 @@ def test_wasabi_label_keeps_its_plant(enrich):
     (297685, "evidence", 16.7),
     # Restored Apple/coffeeberry flavor rows do not become title Evidence owners.
     # Source-qualified cranberry hold removes unsupported Evidence; kept flavor rows stay excluded.
-    (40089, "evidence", 11.1),
+    (40089, "evidence", 10.0),
     # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
     (204521, "evidence", 10.0),
     # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
@@ -309,7 +309,7 @@ def _scoring_inputs(artifact):
     # the vitamins are the Dose panel (60.7 and [12.54] on main).
     # Grape remains unreviewed but, as an unamounted blend member, no longer holds the product
     # (Sean, 2026-11-13); cranberry qualification hold lowers Evidence without changing roles or Dose.
-    (40089, {"score": 63.9, "status": "complete",
+    (40089, {"score": 62.8, "status": "complete",
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
              "dose_credits": [12.83, 15.12, 17.46]}),

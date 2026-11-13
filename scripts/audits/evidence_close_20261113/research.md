@@ -94,3 +94,14 @@ source review passes; exact one-record data_batch check passes;124 affected test
 preparation-matching fixtures explicitly supply synthetic eligibility; real-record tests retain the
 hold and exact source-row guards. The earlier pending patch retains47 included-study PMIDs plus12
 bibliography-only citations; this batch neither deletes nor newly certifies those mappings.
+
+Green-tea six-label replay (2a3a1d985) independently reviewed: all inputs, Clean, exported blobs,
+totals, pillars, completion states and safety unchanged. Only internal hold reasons change from
+invalid applicability/no reviewed assessment to clinical_sources_ineligible. Scoped existing strict
+citation verifier: four PMID claims pass, no mismatch, drift, ghost suspect or missing identifier.
+
+Raw33canary pass identified10 stale expectations: five strong-floor totals -0.6, Boswellia moderate
+-2.2, exposure-only creatine ethyl ester -0.2, and three unchanged-score blend completions. Current
+owner probes identify KSM-66/CoQ10/beta-alanine15, Boswellia10, CEE2.2; no other frozen field changes.
+Only those10 expectations are refreshed through the existing raw-input freeze tool, with causes in
+the existing manifest changelog. Complete recheck remains the qualification result.

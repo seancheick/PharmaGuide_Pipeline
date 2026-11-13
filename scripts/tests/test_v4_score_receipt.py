@@ -226,11 +226,11 @@ def test_evidence_floor_and_cap_are_typed_bounds():
     bd = _meru_breakdown()
     bd["dimensions"]["evidence"] = _dim(
         17.0, 20.0, {"clinical_evidence_pipeline": 9.7956, "depth_bonus": 0.0,
-                     "primary_evidence_floor": 18.0, "immune_support_evidence_cap": 17.0}, {},
+                     "primary_evidence_floor": 20.0, "immune_support_evidence_cap": 17.0}, {},
         {"evidence_result_state": "evaluated_applicable"})
     bd["dimensions"]["formulation"]["metadata"]["immune_support"] = {"profile_applied": True}
     out = _assemble(bd)
-    assert out["quality_pillars_v4"]["evidence"]["score"] == 20.0
+    assert out["quality_pillars_v4"]["evidence"]["score"] == 17.0
     assert _entry(out, "evidence", "primary_evidence_floor")["kind"] == "floor"
     assert _entry(out, "evidence", "immune_support_evidence_cap")["kind"] == "cap"
     _assert_reconciles(out)

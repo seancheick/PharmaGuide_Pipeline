@@ -63,7 +63,7 @@ def test_open_evidence_review_does_not_present_as_assessed(partial_full_evidence
     assert scored["quality_assessment_status"] == "partial"
     assert "evidence_assessment_incomplete" in release["blockers"]
     # The retained credit is left alone; only the claim that review ended moves.
-    assert evidence["score"] == 15.6
+    assert evidence["score"] == 15.0
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "still open" in evidence["reason"]
     assert "Established nutritional authority" not in evidence["reason"]

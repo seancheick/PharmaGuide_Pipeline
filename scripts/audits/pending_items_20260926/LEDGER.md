@@ -5458,3 +5458,13 @@ has been applied to that record.
 Next: complete measurements, source qualification and review queue, source-backed canary updates,
 local/exact-candidate CI, authorized integration; then one fingerprint-selected rebuild and release
 acceptance. Existing source counts and release estimates remain stale until that rebuild.
+
+November13 qualification update: final raw33canaries pass after10 source-explained expectation
+updates. Local corpus564passed/24declaredopt-in skips; skipguardpassed. Missing worktree artifact
+links caused earlier rejected checkpoints; those are not counted as passes. Green-tea hold/source
+correction2a3a1d985 independently reviewed,124affected+15projectiontests pass;6fullraw replays retain
+all scores/pillars/assessment/safety/blob output with internal holdreason corrections only.
+Initial PR477 CI8ba6c1bc completed with30 failures in five shards: obsolete ladder/reference pins,
+syntheticfull-credit input18, and missing newconfig-version history. Relevant correction slices
+208+59+36passed; pending-review/safety/identity/other-pillar guards retained. Corrected candidate
+requires a fresh exact-head CI checkpoint. App PR236cbb20fe6 CI pending. No main/release action.
