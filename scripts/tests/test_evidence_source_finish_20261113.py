@@ -90,3 +90,15 @@ def test_finished_sources_do_not_retain_obsolete_prerequisites(records):
     assert "principal source (18844328) is unverified" not in json.dumps(lion)
     assert "More recent review literature includes PMID 38140277" not in lion["notable_studies"]
     assert "acute randomized crossover trials" in lion["notable_studies"]
+
+
+def test_psyllium_retains_scoped_fda_regularity_reference_without_borrowing_lipid_pmid(records):
+    record = records["INGR_PSYLLIUM_HUSK"]
+    references = [r for r in record["references_structured"] if "Monograph M007" in r.get("title", "")]
+    assert len(references) == 1
+    reference = references[0]
+    assert reference["url"].startswith("https://www.accessdata.fda.gov/")
+    assert reference["scoring_eligible"] is False
+    assert not reference.get("pmid")
+    assert "granular" in reference["notes"]
+    assert any(c["context_id"] == "ingr_psyllium_30239559_lipid_marker_review" for c in record["study_contexts"])

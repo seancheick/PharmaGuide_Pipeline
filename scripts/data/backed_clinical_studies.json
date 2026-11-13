@@ -39399,7 +39399,7 @@
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Qualified retained-source findings concern LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B. These lipid-marker results do not establish cardiovascular event prevention, bowel regularity or glycemic treatment from this source set. The older 18985059 review remains unqualified bibliography; see source-specific limitations.",
+      "notes": "Qualified retained-source findings concern LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B. These lipid-marker results do not establish cardiovascular event prevention, bowel regularity or glycemic treatment from this source set. The older 18985059 review remains unqualified bibliography; see source-specific limitations. Separately, FDA OTC Monograph M007 recognizes psyllium-husk preparations for relief of occasional constipation under its specified conditions. This authority source is distinct from the lipid-marker review. Preparation, dosage-form, fluid-use and other monograph conditions require their own applicability evaluation; no blanket product compliance, universal regimen or safety clearance is inferred.",
       "notable_studies": "PMID 30239559 reports positive pooled lipid-marker effects with moderate GRADE certainty for LDL/non-HDL and high certainty for apoB. Mixed adult and pediatric populations, heterogeneous preparations, background therapies and source discrepancies remain explicit. No minimum effective amount or universal regimen was established.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-11-10",
@@ -39475,6 +39475,17 @@
           "verification_source": "pubmed_eutils",
           "scoring_eligible": false,
           "notes": "Full primary Methods and included-study membership remain unread after publisher and repository access attempts. Retained as bibliography only; not a rejected or negative study. No independent clinical credit or summed trial count until source qualification. The independently reviewed 30239559 lipid synthesis alone contributes."
+        },
+        {
+          "authority": "U.S. Food and Drug Administration",
+          "title": "OTC Monograph M007: Laxative Drug Products for Over-the-Counter Human Use",
+          "citation": "Posted May 2, 2023; sections M007.10(f), M007.50(a), M007.52",
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf",
+          "published_date": "2023-05-02",
+          "evidence_grade": "reference",
+          "scoring_eligible": false,
+          "supports_claims": [],
+          "notes": "Content verified November 13, 2026 by Codex agent review and independent source_review check. Regulatory recognition of psyllium husk for occasional constipation is separate from the retained lipid synthesis. The monograph excludes specified granular dosage forms; fluid-use and other conditions require separate applicability evaluation. Source retained for authority review; no numerical credit, generic Dose benchmark or product-level monograph compliance is inferred."
         }
       ],
       "effect_direction": "positive_strong",
