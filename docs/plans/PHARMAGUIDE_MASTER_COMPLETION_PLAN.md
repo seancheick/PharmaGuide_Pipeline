@@ -2571,3 +2571,33 @@ PR 453 merged as d1a4d5343. PR 455's manual exact-head run passed but
 GitHub still required the pull-request Merge readiness check. Align
 PR 455 with main through interaction PR 449 (7764cd2e3) and qualify
 the resulting PR head before export.
+
+PR 455 merged at d82cbdeed. Exact head a124e7ac2 passed all eight hosted
+test groups and Merge readiness in run 43209667556. The integrated
+nonpublishing rebuild started from d82cbdeed. The full census and gated
+candidate export are pending. The simulator pass is bound to this
+candidate and all six retained partial IDs. Existing replay results
+are not installed-app acceptance or a new global count.
+
+### November 13 — combined label-to-export qualification
+
+The prior export stopped on 44 findings across two audit checks: 35
+printed amount and nine normalized Dose comparisons. PR 472 owns the
+shared dose-only projection audit. Its artifact rerun covered 15,431
+products and reported zero blockers. This was a QA artifact, not a
+qualified final candidate or a reconciliation of the frozen cohort.
+
+- [ ] Qualify PR 472 and use its source-owned daily exposure checks as
+  the baseline. Preserve independent printed-amount and unit checks.
+- [ ] Trace the four remaining standardization findings together:
+  204669, 204681, 239682 and 274457 share a turmeric blend. Compare
+  component-level label notes with the exported blend and child
+  records. Preserve component scope; 95% for one extract cannot be
+  displayed as 95% for the whole blend. Measure any correction across
+  all source matches and verify an explicitly standardized whole-row
+  control before integration.
+- [ ] Reconcile the 15,431-product QA artifact with the frozen 15,447
+  IDs by manifest and exact ID set. Keep independent source holds.
+- [ ] On the final integrated source, use stage fingerprints to select
+  one required refresh, run the gated nonpublishing export, and record
+  census plus six partial score/tier checks against that same build.
