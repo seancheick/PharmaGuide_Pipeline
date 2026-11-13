@@ -988,3 +988,66 @@ def test_analysis_participation_join_reconciles_complementary_blend_rows_first(r
     assert _line_codes(raw, cleaned, enriched, blob) == []
     blob['display_ingredients'][0]['quantity'] = 999
     assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in _line_codes(raw, cleaned, enriched, blob)
+
+
+def test_dose_only_projection_requires_its_own_enriched_exposure():
+    from build_final_db import _append_dose_only_rows
+
+    raw, cleaned, enriched, blob = _line_fixture()
+    row = blob["ingredients"].pop(0)
+    enriched["rda_ul_data"] = {"analyzed_ingredients": [{
+        "raw_source_path": row["raw_source_path"],
+        "canonical_id": row["canonical_id"],
+        "ingredient": raw["ingredientRows"][0]["name"],
+        "dose_role": "declared_total",
+        "per_day_min": 500,
+        "per_day_max": 1000,
+        "converted_unit": "mg",
+    }]}
+    _append_dose_only_rows(blob["ingredients"], enriched["rda_ul_data"]["analyzed_ingredients"])
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+    blob["ingredients"][-1]["per_day_max"] = 1500
+    assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
+    blob["ingredients"].pop()
+    assert "AMOUNT_CHANGE_WITHOUT_EVIDENCE" in _line_codes(raw, cleaned, enriched, blob)
+
+
+@pytest.mark.parametrize("missing_field", ["per_day_max", "raw_source_path"])
+def test_incomplete_dose_projection_is_reported_without_aborting(missing_field):
+    from audit_raw_to_final import _check_dose_only_export_rows
+    from build_final_db import _append_dose_only_rows
+
+    path = "ingredientRows[0]"
+    analyzed = [{
+        "raw_source_path": path, "canonical_id": "caffeine", "ingredient": "Caffeine",
+        "dose_role": "declared_total", "per_day_min": 100, "per_day_max": 200,
+        "converted_unit": "mg",
+    }]
+    ingredients = []
+    _append_dose_only_rows(ingredients, analyzed)
+    del ingredients[0][missing_field]
+    record = _record()
+    _check_dose_only_export_rows(
+        record, {"rda_ul_data": {"analyzed_ingredients": analyzed}}, {"ingredients": ingredients}
+    )
+    expected_path = path if missing_field == "per_day_max" else "blob:ingredients[0]"
+    assert any(f.code == "AMOUNT_CHANGE_WITHOUT_EVIDENCE" and f.row_path == expected_path
+               for f in record.findings)
+
+
+def test_dose_only_projection_is_not_a_standardization_display_row():
+    record = _record()
+    row = {
+        "name": "Turmeric blend",
+        "dose_role": "declared_total",
+        "raw_source_path": "ingredientRows[0]",
+        "per_day_max": 553,
+    }
+    cleaned = {"activeIngredients": [{
+        "raw_source_path": row["raw_source_path"],
+        "notes": "Turmeric root extract standardized to 95% curcuminoids",
+    }]}
+    _check_standardization(record, {"ingredients": [row]}, cleaned)
+    assert not record.findings
+    _check_standardization(record, {"ingredients": [{**row, "quantity": 553}]}, cleaned)
+    assert [finding.code for finding in record.findings] == ["STANDARDIZATION_NOTE_DROPPED"]

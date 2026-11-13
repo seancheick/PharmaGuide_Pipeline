@@ -592,6 +592,8 @@ def _check_v1_5_0_contract(rec: ProductRecord, blob: dict) -> None:
     because they're documented in the contract spec but the implementation
     has not landed (Phase 0 showed 0% emit across all 8169 blobs)."""
     for ing in blob.get("ingredients") or []:
+        if _is_dose_only_export_row(ing):
+            continue
         for field_name, code in V1_5_0_ACTIVE_FIELDS:
             if ing.get(field_name) is None:
                 rec.add(code,
@@ -846,6 +848,8 @@ def _check_standardization(rec: ProductRecord, blob: dict, cleaned: dict | None 
                   for row in ((cleaned or {}).get("activeIngredients") or [])
                   if isinstance(row, dict) and row.get("raw_source_path")}
     for ing in blob.get("ingredients") or []:
+        if _is_dose_only_export_row(ing):
+            continue
         label = label_rows.get(ing.get("raw_source_path")) or {}
         expected = _compute_standardization_note({
             "notes": label.get("notes"),
@@ -1161,6 +1165,50 @@ def _recorded_amounts(cleaned_row: Mapping[str, Any]) -> list[tuple[Any, str]]:
     return out
 
 
+def _is_dose_only_export_row(row: Mapping[str, Any]) -> bool:
+    return (
+        "dose_role" in row
+        and "quantity" not in row
+        and "normalized_amount" not in row
+        and "display_dose_label" not in row
+    )
+
+
+def _check_dose_only_export_rows(
+    rec: ProductRecord, enriched: Mapping[str, Any] | None, blob: Mapping[str, Any],
+) -> None:
+    from build_final_db import _append_dose_only_rows
+
+    exported = [(index, row) for index, row in enumerate(blob.get("ingredients") or [])
+                if isinstance(row, dict)]
+    actual = [(index, row) for index, row in exported if _is_dose_only_export_row(row)]
+    expected = [row for _, row in exported if not _is_dose_only_export_row(row)]
+    ordinary_count = len(expected)
+    analyzed = ((enriched or {}).get("rda_ul_data") or {}).get("analyzed_ingredients")
+    _append_dose_only_rows(expected, analyzed)
+    expected_by_path = {row["raw_source_path"]: row for row in expected[ordinary_count:]}
+    for index, row in actual:
+        path = row.get("raw_source_path")
+        source = expected_by_path.pop(path, None) if isinstance(path, str) else None
+        if row != source:
+            rec.add(
+                "AMOUNT_CHANGE_WITHOUT_EVIDENCE",
+                "Dose-only export differs from the eligible enriched exposure for its row",
+                ingredient=row.get("name"), stage="blob",
+                row_path=path if isinstance(path, str) and path else f"blob:ingredients[{index}]",
+                field="ingredients.per_day_min,per_day_max,converted_unit",
+                source=source, exported=row,
+            )
+    for path, source in expected_by_path.items():
+        rec.add(
+            "AMOUNT_CHANGE_WITHOUT_EVIDENCE",
+            "Eligible enriched exposure is missing from the export",
+            ingredient=source.get("name"), stage="blob", row_path=path,
+            field="ingredients.per_day_min,per_day_max,converted_unit",
+            source=source, exported=None,
+        )
+
+
 def _check_line_integrity(
     rec: ProductRecord,
     raw: Mapping[str, Any],
@@ -1198,6 +1246,7 @@ def _check_line_integrity(
                         source=raws[ref].get("name"), exported=entry.get("source_label"))
 
     _check_export_identity(rec, enriched, blob)
+    _check_dose_only_export_rows(rec, enriched, blob)
 
     from build_final_db import _unresolved_export_paths
     unresolved_paths = _unresolved_export_paths(enriched or {})
@@ -1210,7 +1259,7 @@ def _check_line_integrity(
     }
     for row in blob.get("ingredients") or []:
         path = row.get("raw_source_path") if isinstance(row, dict) else None
-        if path not in raws:
+        if path not in raws or _is_dose_only_export_row(row):
             continue
         printed = [q for q in raws[path].get("quantity") or [] if isinstance(q, dict)]
         first = printed[0] if printed else {}
@@ -1356,7 +1405,7 @@ def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any
             index_by_path.setdefault(row["raw_source_path"], index)
     for row in blob.get("ingredients") or []:
         path = row.get("raw_source_path") if isinstance(row, dict) else None
-        if path not in index_by_path:
+        if path not in index_by_path or _is_dose_only_export_row(row):
             continue
         entry = own.get(f"activeIngredients[{index_by_path[path]}]")
         if entry is None:
