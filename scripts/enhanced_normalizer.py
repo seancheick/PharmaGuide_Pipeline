@@ -8480,7 +8480,11 @@ class EnhancedDSLDNormalizer:
                 "negative_match_terms", []
             )
             if negative_match_terms_veto(
-                [name, ing.get("notes") or ""] + (
+                [name, (
+                    f"{name} {ing.get('notes') or ''}"
+                    if canonical_source_db == "ingredient_quality_map"
+                    else ing.get("notes") or ""
+                )] + (
                     [botanical_details.get("plantPart", "")]
                     if canonical_source_db == "other_ingredients" else []
                 ) + (

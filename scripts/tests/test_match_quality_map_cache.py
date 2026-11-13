@@ -52,6 +52,52 @@ def test_wrapper_impl_and_cache_exist(enricher):
     assert isinstance(getattr(enricher, "_match_quality_cache", None), dict)
 
 
+def test_authored_identity_veto_is_cached_once(enricher, qmap, monkeypatch):
+    enricher._match_quality_cache.clear()
+    calls = []
+    original = enricher._match_quality_map_impl
+
+    def counted(*args, **kwargs):
+        calls.append(1)
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(enricher, '_match_quality_map_impl', counted)
+    for _ in range(3):
+        assert enricher._match_quality_map(
+            'Valerenic Acid', 'Valerian', qmap, cleaner_canonical_id='valerian',
+        ) is None
+    assert len(calls) == 1
+
+
+def test_unresolved_identity_reuses_static_recognition_variants(enricher, monkeypatch):
+    import normalization
+
+    calls = []
+    original = normalization.preprocess_text
+
+    def counted(value):
+        calls.append(value)
+        return original(value)
+
+    monkeypatch.setattr(normalization, 'preprocess_text', counted)
+    assert enricher._is_recognized_non_scorable('Valerenic Acid', 'Valerenic Acid') is None
+    calls.clear()
+    assert enricher._is_recognized_non_scorable('Valerenic Acid', 'Valerenic Acid') is None
+    # The row's fast-path preprocessing remains live. Static registry aliases
+    # must not be expanded again on every unresolved ingredient occurrence.
+    assert len(calls) <= 2
+
+
+def test_cached_name_variants_do_not_cache_material_exclusions(enricher):
+    variants = enricher._nonscorable_name_variants('Sodium Alginate')
+    assert isinstance(variants, tuple)
+    for notes, recognized in [('carrier', True), ('alginic acid', False), ('carrier', True)]:
+        result = enricher._is_recognized_non_scorable(
+            'Sodium Alginate', 'Sodium Alginate', source_context={'notes': notes},
+        )
+        assert (result is not None) is recognized
+
+
 # --- the cache is actually used --------------------------------------------
 
 def test_second_identical_call_hits_cache(enricher, qmap):
