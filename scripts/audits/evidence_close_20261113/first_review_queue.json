@@ -4,7 +4,7 @@
   "scope": "material Evidence owners held as not_yet_evaluated; excludes blend members, which stop holding after 346492e46 only while some owner qualifies on its own row; when no owner qualifies (for example, a label that is only a blend with no title-named member), evidence_required_canonicals falls back to every owner, members included, and those members are not ranked here, omega (held on purpose for undisclosed EPA/DHA), and engineering classes C2 (shadow literature) and C3 (unfinished record contexts)",
   "products_held_by_this_class": 3569,
   "cleared_by_top_150": 2658,
-  "decision": "Sean 2026-11-13: review the top 150 for beta; the remainder ships with Evidence pending",
+  "decision": "Sean 2026-11-13: every held ingredient gets its review; the top 150 here are the first batch, not the end. Unreviewed ingredients stay pending, never zero, and no record is finished as a zero to release products.",
   "existing_record_ids_note": "Pointer to verify, not proof: matched by record id (INGR_<canonical or stem>), aliases, ingredient or matched_canonical_ids. A match means a record exists, not that it applies to these labels (example: l_carnitine labels that do not print the salt). A record filed under another name can still be missed; search before starting a first review.",
   "rubric": "one credited conclusion per ingredient on the five-step ladder; agent review, content-verified, independent second check (ADR-0007 rule 6)"
  },
