@@ -5503,3 +5503,63 @@ no rebuild/release. Psyllium3raw probe finds no wiring defect; rank26–50triage
 not completed clinical review. Details/receipts in existing evidence-close research.
 
 Follow-up46bc015e6 localcheckpoint:564pass/24declaredopt-ins,152.69s,skipguardpass. PR478openedagainstmain; exactCIpending, nointegration/releaseclaim.
+
+November13 Close Evidence continuation: pipeline477 merged20aafa9bf and app236 mergedb85aa7a8
+under supplied authorization. PR478/ec2a36d16 all8CI+readiness green43528681544; PR479/bdbbc4e5f
+all8CI+readiness green43530197799,local564pass24declaredopt-ins,18raw full/blob zerochanges.
+Both await requested main-integration approval; no release or installed-app claim.
+
+Current bounded inulin authority batch extends existing source interpretation to the verified
+EFSA/OraftiGR context, retaining parentmixed,all4oldcontexts,Dose/safety and other-preparation holds.
+Fail-first guideline/source/copy/conflicting-conclusion guards; independentreview;1336owner tests
+pass.19rawreplay keepsallscores/completion/safety;onlyconfiglineage and Synergy1diagnostic reasons
+change. NoexactGRretail label found; no currentproductreleaseclaim. Boundedperf2.7864s→2.8346s/RSS
+215891968→217432064. Local/CI pending; research.md contains preciseowners/receipts/limits.
+
+Next review artifacts (unapplied): L-proline fulltext qualified but exploratory-exposure/primary-null
+interpretation awaitsSean; maca gelatinized preparation has reusableNov7sources andnewrootproposal;
+generic citrus no blanketzeroconclusion because21720653 positiveproprietaryblendcompositionunread;
+prebiotics split into BimunoB-GOS/PreticXXOS/BioEcoliansalpha-GOS units. These are not completedqueuecounts.
+Every-heldreview requirement and99%gate/rebuild/releaseacceptance remain open.
+
+Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.
+
+PR480 qualification follow-up: initial9019d3f39 CI43532973661 exposed a PMID-only integrity
+validator, missing explicit authority age metadata, stale config version and several tests assuming
+all inulin sources remain ineligible. The shared source-identity owner now validates DOI rules;
+matched/foreign/pending/held DOI regressions fail first then pass. The authority target is explicitly
+general population (EFSA3951 section5), recorded as mixed; no adult-only restriction invented.
+Config1.32.1 preserves historical1.32.0 fingerprint. Source-specific noncredit and real preparation/
+blend no-credit guards remain. Focused61+39 pass; exact follow-up CI pending. No integration/release.
+
+Citation blockers corrected independently: INGR_RICE_PROTEIN23782948 title whitespace now matches
+live NIH text; BacoMind DOI10.3923/jpt.2008.425.434 acknowledged in existing entry-scoped ghost
+review after two agents read official publisher Bacopa identity. No added clinical credit or general
+alias. Two regressions failed before fixes;8citation-owner tests pass. Strict21-claim Bacopa/rice
+check:20OK,1reviewed heuristic suspect,0title/missing-ID failures. This is scoped, not whole-gate
+clearance. Receipts under evidence-close-20261113/citation-fixes; final batchCI still required.
+
+Bimuno source batch: namedmaterial Preliminary5 with3boundedsourcecontexts, no genericprebiotic
+transfer/Dosegate.29raw comparisons:219289partial→complete score82.4/Evidence16unchanged;
+294036/240067remainpartial with explicitpendingdiagnostics; allscores/safety/identity/amounts preserved.
+1968ownerpass+2correctedstatepins pass;6strictcitationclaims pass.18inputperf2.8368→2.8963s,
+RSS215941120→210190336,inputsunchanged. Localrunning;CIpending. Macaactivation deferred with
+validsourceproposal retained. Global exclusionguard d9426a470 was rejected by broadcontrols and
+reverted28e47ec20: ADR0007 explicitly permits documented namednontransferzero. No policychange.
+
+Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.
+
+
+Bimuno CI43536465267 identified two valid regressions for275464, not stale test pins.
+Owner: INGR_BIMUNO_GOS::applicability (parent and two reviewed source contexts); actual label
+Acacia Fiber4g/Acacia senegal and IQM acacia-fiber identity establish distinct material from B-GOS.
+Independent source_review verified the material exclusion; official identity reference:
+https://eur-lex.europa.eu/legal-content/en/TXT/?uri=CELEX%3A32026R0196 (E414 specification).
+Explicit acacia fiber/acacia gum/gum arabic/Acacia senegal nontransfer uses the existing excluded-form
+owner and ADR0007 finite zero. Required Bimuno term and its source findings remain unchanged.
+Fail-first2fail/1pass; unchanged real-label tests plus Bimuno controls8pass; four alias edgecases
+and named/generic controls10pass. Exact one-entry data_batch check passed. Two frozen fullraw/blob
+replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia review correctlyfinishes;
+219289 remainscomplete82.4. Safety/warnings/amounts/identity/Dose unchanged; only reviewed-state and
+clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
+Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.

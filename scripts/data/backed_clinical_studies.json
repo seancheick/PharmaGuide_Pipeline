@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
     "last_updated": "2026-11-13",
-    "total_entries": 224,
+    "total_entries": 225,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
@@ -22632,9 +22632,9 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established. November 8, 2026: two additional bounded source-content reviews completed by Codex research agent and independently checked by Codex /root. PMID 27492975 preserves a positive primary finding for exact Orafti GR Inulin, with null secondary findings and increased gas; exact preparation transfer remains unestablished. PMID 38309832 preserves small positive lipid/weight findings and null outcomes without numerical meta-analysis transfer. PMID 35833477 full Methods remains unread; on November 13, 2026 it closed as a no-credit source decision (agent review of the abstract and recovered supplements), so no credit or general Dose benchmark follows from it. November 8 source-access update, reviewed by Codex /root/creapure_source_review and independently checked by Codex /root: four official PMID 35833477 supplements are recovered and publisher-checksum verified (publisher supplement record https://api.figshare.com/v2/articles/20310018, linked to the original paper). The secondary-outcome extraction retains mixed/null and adverse gastrointestinal findings and identifies some baseline-only comparisons; this is not independent qualification of its primary trials. The supplied MEDLINE strategy is dated January 27, 2020, while the abstract reports searches through January 2021; the main Methods update-search reconciliation remains unread. The November 8 supplement-access update did not itself complete the source review. The separate November 13 abstract-based no-credit decision is recorded above; preparation equivalence, microbiome-surrogate clinical benefit and a general Dose benchmark are not inferred.",
+      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established. November 8, 2026: two additional bounded source-content reviews completed by Codex research agent and independently checked by Codex /root. PMID 27492975 preserves a positive primary finding for exact Orafti GR Inulin, with null secondary findings and increased gas; transfer to unspecified retail preparations remains unestablished. PMID 38309832 preserves small positive lipid/weight findings and null outcomes without numerical meta-analysis transfer. PMID 35833477 full Methods remains unread; on November 13, 2026 it closed as a no-credit source decision (agent review of the abstract and recovered supplements), so no credit or general Dose benchmark follows from it. November 8 source-access update, reviewed by Codex /root/creapure_source_review and independently checked by Codex /root: four official PMID 35833477 supplements are recovered and publisher-checksum verified (publisher supplement record https://api.figshare.com/v2/articles/20310018, linked to the original paper). The secondary-outcome extraction retains mixed/null and adverse gastrointestinal findings and identifies some baseline-only comparisons; this is not independent qualification of its primary trials. The supplied MEDLINE strategy is dated January 27, 2020, while the abstract reports searches through January 2021; the main Methods update-search reconciliation remains unread. The November 8 supplement-access update did not itself complete the source review. The separate November 13 abstract-based no-credit decision is recorded above; preparation equivalence, microbiome-surrogate clinical benefit and a general Dose benchmark are not inferred. November 13 authority review: exact Orafti GR native chicory material is now source-qualified against EFSA opinion 3951 for normal bowel function through stool frequency. Generic inulin/FOS or other preparations do not inherit this conclusion. The source condition is 12 g daily, retained as source information rather than an Evidence amount gate or general Dose benchmark. Existing mixed trial findings, increased gas and safety assessments remain. Frutafit HD study PMID 41233756 is considered as separate same-use evidence, not exact-material replication. Agent review independently checked; not clinician review.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-13",
       "notable_studies": "PMID 35833477: chicory-derived inulin-type fructans increase Bifidobacterium (surrogate), with bowel-function benefits in healthy subjects; gastrointestinal-disorder bifidogenic subgroup was not significant. PMID 34555168: healthy-adult ITF review; 11 of 20 stool-frequency studies positive and nine null, mixed calcium-related findings (absorption, balance and serum concentrations are distinct outcomes); effects depend on preparation/chain length. PMID 38309832: 55 RCTs/2518 participants, small LDL/triglyceride/body-weight changes with low to very low certainty and little to no significant effect on other risk factors. These review totals are not unique trial-enrollment or published-replication counts for this entry.",
       "references_structured": [
         {
@@ -22753,6 +22753,22 @@
           "title": "Effect of consumption of chicory inulin on bowel function in healthy subjects with constipation: a randomized, double-blind, placebo-controlled trial.",
           "scoring_eligible": false,
           "supports_claims": []
+        },
+        {
+          "type": "guideline",
+          "authority": "EFSA NDA Panel",
+          "doi": "10.2903/j.efsa.2015.3951",
+          "title": "Scientific Opinion on the substantiation of a health claim related to “native chicory inulin” and maintenance of normal defecation by increasing stool frequency pursuant to Article 13.5 of Regulation (EC) No 1924/2006",
+          "citation": "EFSA Journal 2015;13(1):3951",
+          "url": "https://doi.org/10.2903/j.efsa.2015.3951",
+          "publication_types": [
+            "Scientific Opinion"
+          ],
+          "evidence_grade": "guideline",
+          "supports_claims": [
+            "normal_bowel_function_stool_frequency"
+          ],
+          "verification_source": "Primary publisher PDF content; DOI/publisher identity and official EU regulation cross-check on 2026-11-13"
         }
       ],
       "external_ids": {
@@ -22785,7 +22801,12 @@
           "34555168",
           "38309832"
         ],
-        "reviewed_at": "2026-10-04"
+        "reviewed_at": "2026-10-04",
+        "source_references": [
+          {
+            "doi": "10.2903/j.efsa.2015.3951"
+          }
+        ]
       },
       "study_contexts": [
         {
@@ -23214,6 +23235,106 @@
             "Two authors list BENEO-Institute affiliations. From this record's earlier 2026-11-08 agent review, not the abstract: the four recovered publisher supplements retain mixed, null and adverse gastrointestinal secondary findings, and the main-text update-search reconciliation is unread.",
             "Bifidobacterium abundance is a surrogate, not a clinical benefit. Pooled preparations and ages do not establish equivalence for any one product's inulin or FOS.",
             "No PMC full-text copy was found in this review; decision made from the PubMed abstract. Publisher or other repository access was not established."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_inulin_efsa_3951_orafti_gr_bowel_function",
+          "components": [
+            "INGR_INULIN"
+          ],
+          "source_references": [
+            {
+              "doi": "10.2903/j.efsa.2015.3951",
+              "url": "https://doi.org/10.2903/j.efsa.2015.3951"
+            }
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Native chicory inulin, Orafti GR",
+            "preparation": "Orafti GR native chicory inulin; material bridge identifies mean DP 10. This scope does not identify other Orafti preparations as equivalent."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "guideline",
+          "component_registration_status": "fully_registered",
+          "condition": "bowel_function",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "efsa_3951_authority_assessment",
+          "clinical_review": {
+            "reviewer": "Codex /root; independent source and preparation checks by Codex /root/ladder_review and /root/literature_receipts. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "EFSA full publisher opinion sections 1–5 and conclusions independently read; exact Orafti GR native-chicory material bridge checked against primary Methods. Known positive/null same-use evidence and gas findings retained. Applies the accepted authority rubric; no general preparation equivalence or safety clearance."
+          },
+          "population": {
+            "description": "General population within the authority bowel-function assessment; not a disease-treatment claim.",
+            "age_group": "mixed"
+          },
+          "study_design": "EFSA scientific authority assessment of human intervention evidence; not an additional trial or meta-analysis.",
+          "outcomes": [
+            {
+              "name": "Authority conclusion supporting normal defecation through increased stool frequency, without inducing diarrhoea.",
+              "hierarchy": "guideline",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              12
+            ],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "dosage_forms": [
+              "oral powder in sachets",
+              "oral bakery products",
+              "oral breakfast cereals",
+              "oral chocolate drinks"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "12 g/day is the authority condition of use, not a newly assigned trial arm or an Evidence eligibility threshold.",
+            "normalization": {
+              "basis": "12 g/day is the authority condition of use, not a single assigned trial arm. Delivery forms describe the assessed evidence set, not an equivalence determination for every finished product. Dose remains owned by the existing Dose policy."
+            },
+            "source_provenance": {
+              "doi": "10.2903/j.efsa.2015.3951",
+              "source_url": "https://doi.org/10.2903/j.efsa.2015.3951",
+              "location": "EFSA Journal 2015;13(1):3951: section 3, printed pages 7–8 (oral delivery forms across assessed human studies); section 5, printed page 8 (12 g daily condition)."
+            },
+            "administration_frequency": "Daily total intake; the authority condition does not prescribe a number of administrations per day."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "orafti gr"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "General population; exact reviewed Orafti GR native chicory preparation only.",
+            "source_references": [
+              {
+                "doi": "10.2903/j.efsa.2015.3951",
+                "url": "https://doi.org/10.2903/j.efsa.2015.3951"
+              }
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "limitations": [
+            "Authority evidence applies to chemically defined native chicory material; generic inulin, FOS, oligofructose, raw chicory and undisclosed preparations do not inherit this exact preparation decision.",
+            "EFSA notes heterogeneous studies, predominantly secondary stool-frequency endpoints and incomplete between-group reporting. Low-dose 5–8 g/day studies were null; retain this in interpretation without creating an Evidence dose gate.",
+            "Existing PMID 27492975 remains the exact-material trial: positive frequency, null secondary benefits and increased gas must all remain. It is not counted as a fresh replication of an overlapping authority evidence family.",
+            "PMID 41233756 uses Frutafit HD, not Orafti GR; retain as separate same-use evidence, not exact-material replication or preparation equivalence.",
+            "No safety clearance is inferred from the authority efficacy opinion. Preserve all existing safety assessments, parent mixed effect direction and explicit clinical holds."
           ]
         }
       ]
@@ -54454,7 +54575,7 @@
           "authority": "NCBI PubMed",
           "pmid": "23782948",
           "doi": "10.1186/1475-2891-12-86",
-          "title": "The effects of 8 weeks of whey or rice protein supplementation on body composition and exercise performance.",
+          "title": "The effects of 8 weeks of whey or rice protein supplementation on body composition and exercise performance.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/23782948/",
           "evidence_grade": "journal_article",
           "retracted": false,
@@ -54561,6 +54682,343 @@
         "owner": "scripts/data/backed_clinical_studies.json::INGR_RICE_PROTEIN",
         "review_date": "2026-11-10",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      }
+    },
+    {
+      "id": "INGR_BIMUNO_GOS",
+      "canonical_id": "prebiotics",
+      "standard_name": "Bimuno B-GOS",
+      "aliases": [
+        "BiMuno B-Galactooligosaccharides",
+        "Bimuno galactooligosaccharides"
+      ],
+      "study_type": "rct_single",
+      "effect_direction": "positive_weak",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "30109908",
+        "26218845",
+        "19053980"
+      ],
+      "effect_direction_confidence": "low",
+      "last_updated": "2026-11-13",
+      "published_studies_count": 3,
+      "health_goals_supported": [],
+      "key_endpoints": [
+        "Short-term gastrointestinal symptom scores with named Bimuno B-GOS; stool, quality-of-life and mood nulls retained"
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "30109908",
+          "doi": "10.1111/nmo.13440",
+          "title": "Effect of a prebiotic galactooligosaccharide mixture (B-GOS®) on gastrointestinal symptoms in adults selected from a general population who suffer with bloating, abdominal pain, or flatulence.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30109908/",
+          "scoring_eligible": true,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "26218845",
+          "doi": "10.1017/s0007114515001889",
+          "title": "Influence of galacto-oligosaccharide mixture (B-GOS) on gut microbiota, immune parameters and metabonomics in elderly persons.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26218845/",
+          "scoring_eligible": false,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "19053980",
+          "doi": "10.1111/j.1365-2036.2008.03911.x",
+          "title": "Clinical trial: the effects of a trans-galactooligosaccharide prebiotic on faecal microbiota and symptoms in irritable bowel syndrome.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19053980/",
+          "scoring_eligible": false,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_30109908_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "30109908"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Bimuno B-GOS galactooligosaccharide mixture supplied by Clasado",
+            "preparation": "Named Bimuno B-GOS oral ingredient; do not extend to generic GOS, alpha-gluco-oligosaccharides, FOS, XOS or other brands."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "gastrointestinal_symptoms",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_30109908",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Saved primary full text read for 30109908 and26218845; live Europe PMC identity/abstract verified for all three sources. Routine application of accepted rubric; independent root check completed against the saved primary Methods, Results and funding disclosures. No claim of record-specific user or physician approval."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "bimuno"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "Adults studied with named Bimuno B-GOS; observed population limitations retained.",
+            "source_pmids": [
+              "30109908"
+            ],
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "acacia fiber",
+              "acacia gum",
+              "gum arabic",
+              "acacia senegal"
+            ]
+          },
+          "population": {
+            "sample_size": 83,
+            "description": "91 randomized;83completed/per-protocol. Adults18–65 with frequent moderate/severe bloating, flatulence or abdominal pain; screened high probability of functional bowel disorder but without diagnosed GI disease. Pregnant women were excluded. Lactating women were excluded. Specified illness and medication exclusions also applied.",
+            "age_group": "adult"
+          },
+          "study_design": "Single-centre randomized double-blind placebo crossover;2week periods,2week washout; maltodextrin comparator. Main symptom outcomes named in Methods/power calculation, but no explicit primary hierarchy or prospective registry identifier located.",
+          "outcomes": [
+            {
+              "name": "Bloating, flatulence and abdominal pain scores lower versus placebo at weeks1and2; urgency lower at week2.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Stool frequency/consistency, quality of life and mood did not improve.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              2.75
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 14,
+            "administration_frequency": "Daily, approximately the same time.",
+            "dosage_forms": [
+              "oral powder sachet mixed with water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "2.75g Bimuno powder/day, explicitly providing1.37g active GOS; usual diet and fluid intake maintained.",
+            "normalization": {
+              "basis": "Values retain assigned preparation mass. ActiveGOS is separately stated, not substituted; no Evidence minimum-dose gate or new Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "30109908",
+              "source_url": "https://doi.org/10.1111/nmo.13440",
+              "location": "Full author article Methods2.1–2.4, Figure1, Results3.3–3.4 and Table1."
+            }
+          },
+          "limitations": [
+            "Short two-week periods, selected symptomatic adults and per-protocol analysis83of91; long-term/general-population benefit is unestablished.",
+            "Methods and power calculation identify symptom efficacy, but formal primary endpoint hierarchy and prospective registration were not established; do not invent either.",
+            "Clasado grant and investigator employment disclosed; no independent-team replication established.",
+            "Symptoms improved, but stool/QOL/mood nulls remain; no broad digestive, immune-protection or disease-treatment conclusion.",
+            "Named label219289 explicitly identifies BiMuno B-Galactooligosaccharides. Capsule versus powder and mass differences do not themselves establish chemical nonequivalence and must not gate Evidence. Retail active fraction remains unknown for Dose."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_26218845_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "26218845"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Bimuno B-GOS galactooligosaccharide mixture supplied by Clasado",
+            "preparation": "Named Bimuno B-GOS oral ingredient; do not extend to generic GOS, alpha-gluco-oligosaccharides, FOS, XOS or other brands."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "healthy_elderly_microbiota",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_26218845",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Saved primary full text read for 30109908 and26218845; live Europe PMC identity/abstract verified for all three sources. Routine application of accepted rubric; independent root check completed against the saved primary Methods, Results and funding disclosures. No claim of record-specific user or physician approval."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "bimuno"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "Adults studied with named Bimuno B-GOS; observed population limitations retained.",
+            "source_pmids": [
+              "26218845"
+            ],
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "acacia fiber",
+              "acacia gum",
+              "gum arabic",
+              "acacia senegal"
+            ]
+          },
+          "population": {
+            "sample_size": 40,
+            "description": "Healthy adults65–80; excluded intestinal disorders.",
+            "age_group": "adult"
+          },
+          "study_design": "Randomized double-blind maltodextrin-controlled crossover,10week periods and4week washout. Source reports NCT01303484; registry timing not independently reviewed in this pass.",
+          "outcomes": [
+            {
+              "name": "Bifidobacteria/bacteroides and some immune biomarkers changed; no clinical infection-prevention outcome.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "Bowel function and mood showed no significant intervention effects.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Faecal calprotectin and secretory IgA unchanged.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "C-reactive protein increased; not an anti-inflammatory benefit.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "negative",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              5.5
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 70,
+            "administration_frequency": "Daily, approximately the same time.",
+            "dosage_forms": [
+              "oral powder sachet mixed with water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "5.5g Bimuno B-GOS powder/day; Table1 footnote48%GOS, calculated2.64gactive/day.",
+            "normalization": {
+              "basis": "Values retain assigned preparation mass. ActiveGOS is separately stated, not substituted; no Evidence minimum-dose gate or new Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "26218845",
+              "source_url": "https://doi.org/10.1017/S0007114515001889",
+              "location": "Full publisher article Methods, Table1 footnote, bowel-habit Results and inflammatory-marker Results."
+            }
+          },
+          "limitations": [
+            "Completed no-efficacy-credit source assessment: microbial/immune biomarkers do not establish clinically important protection or symptom benefit.",
+            "Healthy older cohort is not a replication of symptom relief in younger symptomatic adults.",
+            "Clasado supported and participated in design/writing; overlapping investigators.",
+            "Retain increasedCRP and null bowel/mood/calprotectin/sIgA; no blanket anti-inflammatory or safety conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_19053980_abstract_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "19053980"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live authoritative abstract and DOI identity reviewed2026-11-13; primary fulltext request403. Completed source-level no-credit decision, not a claim the study is negative. Positive IBS signal remains in narrative; no unread composition/comparator/multiplicity details promoted."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "19053980",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/19053980/",
+              "location": "Live EuropePMC authoritative MED abstract and publisher fulltext access attempt."
+            }
+          },
+          "limitations": [
+            "44RomeIIIBS completers; abstract reports3.5/7gprebiotic arms and7gplacebo with symptom findings. Original preparation/comparator tables not read; no numeric contribution or inferred activeGOSdose.",
+            "2018 primary explicitly relates prior IBS study to B-GOS; not treated as independent-team replication or as fullmethod verification.",
+            "This source-access limitation does not invalidate the separately fully reviewed2018 ingredient finding."
+          ]
+        }
+      ],
+      "notes": "Preliminary named Bimuno B-GOS evidence from a short randomized crossover trial in symptomatic adults. Per-protocol analysis, uncertain prospective outcome hierarchy and sponsor-linked investigators limit confidence. Other reviewed sources are not independent efficacy replications. No generic GOS, alpha-gluco-oligosaccharide, XOS, FOS, pediatric or finished synbiotic formula transfer; no new Dose benchmark or safety clearance. Acacia fiber (acacia gum/gum arabic) is a distinct polysaccharide material: the named Bimuno trials do not transfer to it; this preparation exclusion finishes at zero under ADR-0007.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "bimuno"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Adults with frequent moderate/severe gastrointestinal symptoms; no pediatric population transfer.",
+        "source_pmids": [
+          "30109908"
+        ],
+        "reviewed_at": "2026-11-13",
+        "excluded_form_terms": [
+          "acacia fiber",
+          "acacia gum",
+          "gum arabic",
+          "acacia senegal"
+        ]
       }
     }
   ]

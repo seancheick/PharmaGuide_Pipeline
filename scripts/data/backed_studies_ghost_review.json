@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-08",
-    "total_entries": 9
+    "last_updated": "2026-11-13",
+    "total_entries": 10
   },
   "reviewed": [
     {
@@ -78,6 +78,14 @@
       "rationale": "False lexical ghost for an included-publication pointer, not an isolated-chicory efficacy citation. Live primary metadata explicitly identifies fructooligosaccharides (FOS) delivered in freeze-dried yacon: 7.4 g/day for 9 weeks in 72 elderly participants. Exact DOI 10.1007/s00394-013-0648-x and source reference 79 bind this paper to the bibliography of PMID 38309832. INGR_INULIN retains it only in included_study_pmids of its completed noncredit 38309832 context. The food matrix, older population and mixed reported findings do not establish isolated inulin, chicory, retail-preparation or numerical efficacy equivalence. This acknowledgment preserves bibliography identity only; no scoring eligibility, effect grade, Dose benchmark or source-review hold changes.",
       "reviewed_by": "Codex /root; independently checked by Codex /root/grouped_correctness_check; agent source-identity review, not clinician review",
       "reviewed_at": "2026-11-08"
+    },
+    {
+      "pmid": "doi:10.3923/jpt.2008.425.434",
+      "entry_id": "INGR_BACOPA",
+      "live_title": "Efficacy and Tolerability of BacoMind®on Memory Improvement in Elderly Participants - A Double Blind Placebo Controlled Study",
+      "rationale": "False positive of the word-overlap heuristic. Live Crossref identifies the BacoMind memory trial by Barbhaiya et al. (2008), and the official publisher abstract at https://scialert.net/abstract/?doi=jpt.2008.425.434 explicitly identifies BacoMind as an enriched phytochemical composition from Bacopa monnieri. The DOI is cited only as an unindexed publication in the existing synthesis inventory. This acknowledgment verifies citation identity and topic, not independent numerical qualification, retail preparation equivalence, a Dose benchmark or additional clinical credit. The identifier is a DOI, not a PMID.",
+      "reviewed_by": "Codex /root/source_review; independently checked against the official publisher abstract by Codex /root; agent citation-identity review, not clinician review",
+      "reviewed_at": "2026-11-13"
     }
   ]
 }

@@ -1783,7 +1783,10 @@ def test_trial_family_dedup_keeps_independent_sources_and_identity_scopes(monkey
 def test_inulin_source_completion_preserves_preparation_and_unread_source_holds():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     record = reviewed_entries()['INGR_INULIN']
-    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts'] if c.get('source_pmids')}
+    authority = next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline')
+    assert authority['source_references'][0]['doi'] == '10.2903/j.efsa.2015.3951'
+    assert authority['scoring_eligible'] is True
     for pmid in ('27492975', '38309832'):
         assert contexts[pmid]['review_status'] == 'clinician_approved'
         assert contexts[pmid]['scoring_eligible'] is False
@@ -1794,7 +1797,7 @@ def test_inulin_source_completion_preserves_preparation_and_unread_source_holds(
     assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
     assert len(contexts['38309832']['included_study_pmids']) == 47
     # 35833477 closed as a no-credit source decision on 2026-11-13; source
-    # review is complete, and no context grants credit.
+    # review is complete; the new, separate exact-preparation authority supplies credit.
     assert contexts['35833477']['review_status'] == 'rejected_source'
     assert contexts['35833477']['scoring_eligible'] is False
     assert assess_clinical_source_review(record)['is_complete']
@@ -3145,3 +3148,272 @@ def test_nac_oxidative_stress_sentence_stays_within_its_exercise_source(completi
     notes = completion_source_records['INGR_NAC']['notes']
     assert 'measurably lowers oxidative-stress markers' not in notes
     assert 'after exercise' in notes and '39632267' in notes and '9230243' in notes
+
+
+@pytest.fixture
+def non_pubmed_source_record(monkeypatch):
+    import clinical_applicability as ca
+    from clinical_applicability import reviewed_entries
+    record = copy.deepcopy(reviewed_entries()["INGR_PSYLLIUM_HUSK"])
+    context = next(c for c in record["study_contexts"] if c.get("scoring_eligible") is True)
+    context.pop("source_pmids")
+    context["source_references"] = [{"doi": "10.1000/source-review-test"}]
+    context.pop("applicability", None)
+    context["dose"]["source_provenance"].pop("pmid", None)
+    context["dose"]["source_provenance"]["doi"] = "10.1000/source-review-test"
+    context["dose"]["source_provenance"]["source_url"] = "https://doi.org/10.1000/source-review-test"
+    record["study_contexts"] = [context]
+    record["published_studies"] = []
+    record["references_structured"] = [{"doi": "10.1000/source-review-test", "scoring_eligible": True}]
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {record["id"]: record})
+    return record
+
+
+def test_reviewed_doi_context_joins_declared_source_without_fake_pmid(non_pubmed_source_record):
+    from clinical_applicability import assess_clinical_source_review
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert er.clinical_record_sources_eligible(record, context=context)
+    assert assess_clinical_source_review(record)["is_complete"]
+    assert "source_pmids" not in context
+
+
+@pytest.mark.parametrize("hold", ["retracted", "expression_of_concern", "scoring_eligible"])
+def test_doi_context_cannot_bypass_a_held_pmid_alias(non_pubmed_source_record, hold):
+    record = non_pubmed_source_record
+    reference = record["references_structured"][0]
+    reference["pmid"] = "12345678"
+    reference[hold] = False if hold == "scoring_eligible" else True
+    record["references_structured"].append({"pmid": "87654321", "scoring_eligible": True})
+    assert not er.clinical_record_sources_eligible(record, context=record["study_contexts"][0])
+
+
+def test_doi_context_provenance_must_name_its_own_source(non_pubmed_source_record):
+    context = non_pubmed_source_record["study_contexts"][0]
+    context["dose"]["source_provenance"]["doi"] = "10.1000/unrelated"
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+@pytest.mark.parametrize("reference", [{}, {"doi": "not a DOI"}, {"url": "javascript:alert(1)"}])
+def test_context_source_reference_must_be_valid(non_pubmed_source_record, reference):
+    context = non_pubmed_source_record["study_contexts"][0]
+    context["source_references"] = [reference]
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+def test_doi_context_applicability_and_receipt_preserve_selected_source(non_pubmed_source_record):
+    from clinical_applicability import filter_clinical_matches
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    context["applicability"] = {**record["applicability"], "source_references": context["source_references"]}
+    context["applicability"].pop("source_pmids", None)
+    record["applicability"] = copy.deepcopy(context["applicability"])
+    row = {"name": "Psyllium husk powder", "raw_source_text": "Psyllium husk powder",
+           "canonical_id": "psyllium", "mapped": True, "quantity": 5, "unit": "g",
+           "raw_source_path": "ingredientRows[0]"}
+    product = {"fullName": "Psyllium husk", "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    match = {**record, "ingredient": row["name"], "matched_canonical_ids": ["psyllium"],
+             "matched_source_row_refs": [row["raw_source_path"]]}
+    matches, rejected = filter_clinical_matches(product, [match], assess_amount=False,
+                                                require_claim_alignment=False)
+    assert matches, rejected
+    assert matches[0]["references_structured"] == record["references_structured"]
+    assert matches[0]["applicability_assessment"]["status"] == "applicable"
+
+
+def test_official_url_context_requires_declared_bound_reference(non_pubmed_source_record):
+    from clinical_applicability import assess_clinical_source_review
+    record = non_pubmed_source_record
+    context = record["study_contexts"][0]
+    url = "https://www.fda.gov/example-reviewed-authority-document"
+    context["source_references"] = [{"url": url}]
+    context["dose"]["source_provenance"].pop("doi")
+    context["dose"]["source_provenance"]["source_url"] = url
+    record["references_structured"] = [{"url": url, "scoring_eligible": True}]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert er.clinical_record_sources_eligible(record, context=context)
+    assert assess_clinical_source_review(record)["is_complete"]
+    record["references_structured"][0]["url"] += "/unrelated"
+    assert not er.clinical_record_sources_eligible(record, context=context)
+
+
+def test_selected_doi_references_do_not_lend_mutable_canonical_facts(non_pubmed_source_record):
+    from clinical_evidence_schema import selected_source_references
+    record = non_pubmed_source_record
+    record["references_structured"][0]["supports_claims"] = ["reviewed"]
+    refs = selected_source_references(record, [record["study_contexts"][0]["context_id"]])
+    refs[0]["supports_claims"].append("invented")
+    assert record["references_structured"][0]["supports_claims"] == ["reviewed"]
+
+
+def test_doi_url_alias_keeps_transitive_source_hold(non_pubmed_source_record):
+    record = non_pubmed_source_record
+    record['references_structured'] = [
+        {'doi': '10.1000/source-review-test', 'pmid': '12345678'},
+        {'pmid': '12345678', 'url': 'https://example.org/reviewed-paper'},
+        {'url': 'https://example.org/reviewed-paper', 'retracted': True},
+    ]
+    context = record['study_contexts'][0]
+    context['source_references'] = [{'url': 'https://doi.org/10.1000/SOURCE-REVIEW-TEST'}]
+    assert not er.clinical_record_sources_eligible(record, context=context)
+
+
+def test_selected_doi_receipt_excludes_unrelated_bibliography(non_pubmed_source_record):
+    from clinical_evidence_schema import selected_source_references
+    record = non_pubmed_source_record
+    record['references_structured'].append({'doi': '10.1000/unrelated', 'title': 'Not selected'})
+    selected = selected_source_references(record, [record['study_contexts'][0]['context_id']])
+    assert selected == [record['references_structured'][0]]
+
+
+@pytest.mark.parametrize('sources', [None, [], {}, '10.1000/source-review-test', [None]])
+def test_non_pubmed_source_pointer_rejects_empty_or_wrong_shape(non_pubmed_source_record, sources):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['source_references'] = sources
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+@pytest.mark.parametrize('extra', [{'pmid': '999999'}, {'source_url': 'javascript:invalid'}])
+def test_doi_provenance_cannot_hide_foreign_identifier_or_invalid_locator(non_pubmed_source_record, extra):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['dose']['source_provenance'].update(extra)
+    assert validate_ingredient_context(context, require_complete_review=True)
+
+
+def test_doi_provenance_allows_publisher_locator(non_pubmed_source_record):
+    context = non_pubmed_source_record['study_contexts'][0]
+    context['dose']['source_provenance']['source_url'] = 'https://publisher.example/article/full.pdf'
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+
+
+def test_reviewed_guideline_floor_interpretation_is_bound_to_doi_context(non_pubmed_source_record, monkeypatch):
+    from scoring_v4.modules import generic_evidence as ge
+    record = non_pubmed_source_record
+    context = record['study_contexts'][0]
+    context['evidence_role'] = 'guideline'
+    policy = {'record_id': record['id'], 'context_id': context['context_id'],
+              'source_references': context['source_references'],
+              'observed_effect_direction': record['effect_direction'], 'floor_key': 'cap_total'}
+    monkeypatch.setitem(ge._EM, 'context_effect_direction_interpretations', [policy])
+    entry = {**record, 'matched_source_row_refs': ['ingredientRows[0]'],
+             'applicability_assessment': {'status': 'applicable',
+                 'population_applicability': {'state': 'eligible', 'context_ids': [context['context_id']]}}}
+    assert ge._effect_direction_assessment(entry).get('floor') == 20
+    record['references_structured'][0]['scoring_eligible'] = False
+    assert ge._effect_direction_assessment(entry).get('floor') is None
+
+
+@pytest.mark.parametrize('amount', [100, 12000])
+def test_exact_orafti_gr_gets_reviewed_authority_without_evidence_amount_gate(amount):
+    record, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', amount)
+    product['physicalState'] = {'name': 'Powder'}
+    result = build_scored_artifact(product)
+    evidence = result['quality_pillars_v4']['evidence']
+    assert evidence['score'] == 20
+    assert evidence['reason'].startswith('Established support from a reviewed authority')
+    assert record['effect_direction'] == 'mixed'
+    receipts = result['_v4_module_breakdown']['dimensions']['evidence']['metadata']['contributing_record_assessments']
+    assert [ref.get('doi') for receipt in receipts for ref in receipt['source_references']] == ['10.2903/j.efsa.2015.3951']
+
+
+@pytest.mark.parametrize('label', ['Inulin', 'Fructooligosaccharides', 'Orafti P95', 'Orafti HPX', 'Chicory root fiber'])
+def test_other_fructan_preparations_do_not_borrow_orafti_gr_authority(label):
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', label, 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] < 20
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('hold', ['record', 'source', 'pending_review', 'non_authority'])
+def test_inulin_authority_keeps_record_source_and_review_guards(monkeypatch, hold):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_INULIN']
+    context = next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline')
+    if hold == 'record':
+        record['scoring_eligible'] = False
+    elif hold == 'source':
+        next(r for r in record['references_structured'] if r.get('doi') == '10.2903/j.efsa.2015.3951')['retracted'] = True
+    elif hold == 'pending_review':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    else:
+        context['evidence_role'] = 'direct_rct'
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] < 20
+
+
+def test_inulin_authority_does_not_ignore_conflicting_same_source_conclusion(monkeypatch):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_INULIN']
+    conflicting = copy.deepcopy(next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline'))
+    conflicting['context_id'] += '_conflicting_review'
+    conflicting['outcomes'][0]['direction'] = 'null'
+    record['study_contexts'].append(conflicting)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] < 20
+
+
+@pytest.mark.parametrize('amount', [100, 900, 2750])
+def test_named_bimuno_review_is_preliminary_without_amount_gate(amount):
+    record, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', 'BiMuno B-Galactooligosaccharides', amount)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 5
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert record['effect_direction'] == 'positive_weak'
+    source = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30109908'])
+    assert source['population']['sample_size'] == 83
+    assert source['dose']['values'] == [2.75]
+    assert all(o['hierarchy'] == 'not_reported' for o in source['outcomes'])
+    assert any(o['direction'] == 'null' for o in source['outcomes'])
+
+
+@pytest.mark.parametrize('label', ['Galactooligosaccharides', 'PreticX Xylooligosaccharides', 'BioEcolians Alpha Gluco Oligosaccharides'])
+def test_bimuno_review_does_not_finish_other_prebiotic_materials(label):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', label, 900)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('label', ['Acacia Fiber', 'Acacia Gum', 'Gum Arabic', 'Acacia senegal'])
+def test_acacia_material_has_finished_nontransfer_from_named_bimuno(label):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', label, 4000)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('target', ['Pregnant Women', 'Breastfeeding Women'])
+def test_bimuno_source_exclusions_block_explicit_population_targets(target):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', 'BiMuno B-Galactooligosaccharides', 900)
+    product['targetGroups'] = [target]
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('hold', ['scoring_eligible', 'retracted', 'expression_of_concern'])
+@pytest.mark.parametrize('url', ['https://doi.org/10.1000/conflicting-source', 'https://[invalid'])
+def test_conflicting_reference_cannot_erase_explicit_pmid_hold(monkeypatch, hold, url):
+    import clinical_applicability as ca
+    from clinical_evidence_schema import reference_source_ids
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    record['published_studies'] = ['30108163']
+    reference = {'pmid': '30108163', 'doi': '10.1136/gutjnl-2017-315136', 'url': url,
+                 hold: False if hold == 'scoring_eligible' else True}
+    record['references_structured'] = [reference]
+    # Conflicting metadata remains unusable as affirmative identity evidence.
+    assert reference_source_ids(reference) == frozenset()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    assert not er.clinical_record_sources_eligible(record, context=context, source_pmids=['30108163'])
+    _, product = _joint_row_product('INGR_L_GLUTAMINE', 'l_glutamine', 'L-Glutamine', 5000)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0

@@ -53,10 +53,12 @@ def test_declared_inulin_preparation_preserves_botanical_source(pipeline):
     assert not any(x.get('id') == 'INGR_INULIN' for x in matches)
     rejected = next(x for x in enriched['evidence_data']['rejected_clinical_matches']
                     if x['id'] == 'INGR_INULIN')
-    assert rejected['reason_code'] == 'clinical_sources_ineligible'
-    assert rejected['matched_source_row_refs'] == [active['raw_source_path']]
-    # Physical inulin identity cannot override its explicitly unqualified context.
+    assert rejected['reason_code'] == 'clinical_source_label_unresolved'
+    assert rejected['status'] == 'unresolved'
+    assert rejected['ingredient'] == active['raw_source_text']
+    # Physical inulin identity cannot establish the qualified Orafti GR preparation.
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0.0
+    assert artifact['quality_pillars_v4']['evidence']['display_state'] == 'not_yet_reviewed'
 
 @pytest.mark.parametrize('forms', [[], [dict(name='Inulin', category='fiber', percent=20)],
                                    [dict(name='Inulin', category='fiber'),dict(name='Pectin', category='fiber')]])

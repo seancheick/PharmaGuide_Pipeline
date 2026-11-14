@@ -37,12 +37,12 @@ def test_inulin_sample_size_is_not_unverified_registry_discovery():
 
 def test_inulin_references_bound_preparation_population_and_null_outcomes():
     e = entry()
-    refs = {r['pmid']: set(r['supports_claims']) for r in e['references_structured']}
+    refs = {r['pmid']: set(r['supports_claims']) for r in e['references_structured'] if r.get('pmid')}
     assert {'chicory_itf_bifidobacterium_surrogate', 'healthy_subject_bowel_function', 'not_gi_disorder_bifidogenic_benefit'} <= refs['35833477']
     assert {'healthy_adult_itf_review', 'mixed_laxation_and_calcium_results', 'preparation_and_chain_length_limitations'} <= refs['34555168']
     assert {'low_or_very_low_certainty_cardiometabolic_risk_factors', 'not_cardiovascular_event_reduction'} <= refs['38309832']
     assert refs['27492975'] == set()
-    assert next(r for r in e['references_structured'] if r['pmid'] == '27492975')['scoring_eligible'] is False
+    assert next(r for r in e['references_structured'] if r.get('pmid') == '27492975')['scoring_eligible'] is False
     assert 'General Mills' in e['notes']
     assert 'calcium absorption ↑' not in e['key_endpoints']
     assert 'absorption, balance and serum concentrations are distinct outcomes' in e['notable_studies']

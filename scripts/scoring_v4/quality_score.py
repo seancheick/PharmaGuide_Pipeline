@@ -1178,7 +1178,12 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     if metadata.get("primary_evidence_floor_decisive"):
         floor = metadata.get("primary_evidence_floor")
         magnitudes = cfg["evidence_magnitudes"]["generic"]
-        if floor == magnitudes["primary_floor_strong"]:
+        authority_sources = [source for receipt in metadata.get("contributing_record_assessments") or []
+                             for source in receipt.get("source_references") or []
+                             if isinstance(source, dict) and source.get("type") == "guideline"]
+        if floor == magnitudes["cap_total"] and authority_sources:
+            reason = "Established support from a reviewed authority for this ingredient preparation and use."
+        elif floor == magnitudes["primary_floor_strong"]:
             reason = "Supported by applicable human research on the primary ingredient, with remaining limitations."
         elif floor == magnitudes["primary_floor_moderate"]:
             reason = "Limited applicable human research supports the primary ingredient; substantial uncertainty remains."

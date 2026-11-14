@@ -180,8 +180,12 @@ def test_reviewed_human_research_is_not_reported_as_absent(canonical):
 @pytest.mark.parametrize("name,form", [("XOS", "xylooligosaccharides"), ("GOS", "galactooligosaccharides")])
 def test_prebiotic_family_cannot_inherit_inulin_trial_applicability(name, form):
     result = er.resolve_evidence_for_canonical("prebiotics", name=name, matched_form=form)
-    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    # Neither inulin research nor the separately reviewed named Bimuno material
+    # establishes applicability to an unspecified GOS/XOS preparation.
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert result.points_eligible is False
+    assert "clinical_source_row_unresolved" in result.blocking_reasons
+    assert er.compose_product_resolution_state([result])[1] is False
 
 
 def test_clinical_aggregates_keep_verified_direction_and_no_fabricated_counts():
@@ -1208,7 +1212,7 @@ def test_literal_inulin_fos_uses_existing_reviewed_family_scope():
     assert 'backed_clinical_studies' in result.matched_owners
     assert result.applicability_status == 'applicability_unestablished'
     assert result.points_eligible is False
-    assert 'clinical_sources_ineligible' in result.blocking_reasons
+    assert 'clinical_source_label_unresolved' in result.blocking_reasons
     row['raw_source_text'] = 'XOS'
     assert er.resolve_evidence_for_row(row, product).points_eligible is False
 
@@ -1251,8 +1255,8 @@ def test_declared_chicory_root_fiber_retains_reviewed_inulin_family_not_raw_root
     product={'activeIngredients':[row],'ingredient_quality_data':{'ingredients_scorable':[row]}}
     resolved = er.resolve_evidence_for_row(row,product)
     assert 'backed_clinical_studies' in resolved.matched_owners
-    assert resolved.points_eligible is False  # existing clinical context is held
-    assert 'clinical_sources_ineligible' in resolved.blocking_reasons
+    assert resolved.points_eligible is False  # unspecified preparation cannot establish exact Orafti GR applicability
+    assert 'clinical_source_label_unresolved' in resolved.blocking_reasons
     row['raw_source_text']='Chicory root powder';row['name']='Chicory root powder'
     assert er.resolve_evidence_for_row(row,product).points_eligible is False
 

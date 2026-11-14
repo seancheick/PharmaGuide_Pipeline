@@ -54,8 +54,11 @@ def test_each_source_is_a_scoped_no_credit_decision(records, record_id, pmid):
     assert context["dose"]["source_provenance"]["pmid"] == pmid
     assert context["dose"]["source_provenance"]["source_url"].endswith(f"/{pmid}/")
     assert context["limitations"]
-    # Every record stays noncredit: no context becomes scoring-eligible.
-    assert all(c.get("scoring_eligible") is False for c in record["study_contexts"])
+    # The rejected source cannot acquire credit through another context.
+    # Independently reviewed sources retain their own eligibility decisions.
+    from clinical_evidence_schema import context_source_ids
+    assert all(c.get("scoring_eligible") is False for c in record["study_contexts"]
+               if pmid in context_source_ids(c))
 
 
 @pytest.mark.parametrize("record_id", HELD_BY_PARENT)

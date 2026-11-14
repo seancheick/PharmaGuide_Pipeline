@@ -298,3 +298,167 @@ recompute only after integrated final rebuild. L-phenylalanine authority and
 horsetail preparation-specific record reconciliation remain investigation candidates.
 
 Combined follow-up checkpoint46bc015e6: `scripts/test.sh local` passes564tests,24declaredopt-ins in152.69s; skipguardpasses. PR478qualifies this source; exactCIpending.
+
+
+## DOI and official-document source references (2026-11-13)
+
+Sean approved extending existing review records to DOI-only papers and official authority documents.
+Owner: `clinical_evidence_schema` source identity/provenance, `clinical_applicability` review and
+preparation matching, `evidence_resolver` eligibility, and existing `references_structured` citation
+projection. Evidence: source-pointer caller search and independent source-review seam audit.
+Will NOT create: a registry, fake PMID, automatic authority tier, new Dose gate or parallel scorer.
+
+`source_references` contains compact `doi`/`url` pointers; PMID pointers retain their meaning.
+Aliases join only through the parent's explicitly declared references. Retraction, concern and
+source eligibility holds follow aliases. Selected contexts project only their declared citations,
+with independent copies; native recorded contexts retain their source pointers without credit.
+Typed provenance identifiers must all be context-bound; a valid publisher URL may locate full text.
+Independent review caught a foreign-PMID/invalid-locator loophole; regression tests failed first,
+then passed after fixing the shared validator. No clinical records or numerical grades changed.
+
+Validation: 1,252 named owner/consumer tests passed in 28.94s; Python correctness reports no new
+findings. On 18 identical frozen enriched products, complete scored artifacts differ only by scoring
+timestamps; no scores, safety, completion, warnings or citations changed. Warm median 2.8859s before
+and 2.8641s after; peak RSS 197,918,720 vs 222,691,328 bytes. Both runs preserve inputs exactly.
+The small single-process memory difference is recorded, not evidence of a sustained regression.
+Receipts: `/Users/seancheick/pg_quality/evidence-close-20261113/source-refs-*` and `nonpubmed-*`.
+Combined local and exact-branch CI qualification remain pending. This source-format batch alone does
+not finish inulin or proline: exact preparation, guideline/exposure scoring and source-bound wording
+still need their separate reviewed activation. The current PMID-only signed glutamine interpretation
+is unchanged; native numerical DOI attribution is not activated by this batch.
+
+### Source-reference qualification completed
+
+PR479 head bdbbc4e5f90d370cb8304b6adef4177671a6fcbb passed all eight shards and Merge readiness
+in run43530197799. Local checks:564 passed,24 declared opt-in skips,skip guard passed. Full raw
+Clean→Enrich→Score→detail-blob comparison:18 products,zero changed records/paths. PR478 also passed
+all eight shards/merge readiness on ec2a36d16 in43528681544. Main-integration approval requested for
+both; neither has been released. PR477 and app236 are already merged under supplied approval.
+
+## Exact Orafti GR authority review and wiring
+
+Owner: existing INGR_INULIN study_contexts/applicability, clinical_applicability::qualifying_purpose_outcomes,
+generic_evidence::_effect_direction_assessment/_primary_mass_floor and quality_score::_pillar_evidence.
+Evidence: caller/config search, reviewed context selection, actual primary source and same-input probes.
+Will NOT create: a registry, essential-nutrient classification, general inulin equivalence, new numerical
+magnitude, Dose benchmark, ingredient amount gate or parallel source-selection rule.
+
+EFSA DOI10.2903/j.efsa.2015.3951 full publisher opinion and live Crossref identity/title independently
+read by root and research agents. Primary material Methods identify Orafti GR as native chicory with
+mean DP10; the source does not establish equivalence to P95/HPX/Synergy1/FOS. Retained existing four
+source contexts and parent mixed finding. The authority condition12g/day stays a source fact; Dose
+remains separate. Known mixed findings and gas from27492975 remain;41233756 is separate FrutafitHD
+same-use evidence, not exact-GR replication. The authority's unpublished2012 study may overlap the
+later27492975 report, so this is authority credit, not added trial-count credit. No safety clearance.
+
+The schema already recognized guideline hierarchy but purpose selection ignored it. A fail-first
+regression now qualifies that hierarchy only in a guideline context. Existing source interpretation
+joins DOI aliases and may select an existing magnitude through floor_key; exact context, canonical
+source, source-row and review/hold qualification remain required. Only the explicit reviewed INGR_INULIN
+context selects cap_total20; a guideline or brand name alone never supplies20. Multiplier-only signed
+glutamine behavior stays unchanged. Public copy identifies the authority basis.
+
+Independent review reproduced a conflicting same-source/use null context being ignored. Its regression
+failed with20, then passed after the recorded-tier owner checked the existing qualifying-outcome view
+for conflicting completed source conclusions. Independent follow-up ran8 controls successfully.
+Focused guards cover record/source holds,pending review,non-authority role,unrelated preparations and
+100mg versus12g Evidence equality. Complete current owner/consumer slice:1336passed28.23s.
+Data_batch proves only backed_clinical_studies/INGR_INULIN changed.
+
+No exact Orafti GR label was found in the current brand corpus search. Actual Jarrow307711 prints
+Orafti Synergy1 and stays held; no current product is claimed released by this scoped review.
+Full19raw replay preserves all scores,completion,safety,warnings and amounts. Expected differences:
+config lineage fingerprints;307711 diagnostic source/preparation reason and rejected-match metadata.
+Its quality remains59.4 and Evidence incomplete. Same18enriched inputs: warmmedian2.7864s→2.8346s,
+RSS215891968→217432064,inputs unchanged. Receipt files:inulin-before/after,comparison,perf andtests under
+/Users/seancheick/pg_quality/evidence-close-20261113. Combined local and exact-candidate CI pending.
+
+The PubMed-wide citation CLI does not cover backed_clinical_studies; its unsupported-file response
+is not a passed verification. The new DOI's live metadata and complete source content were checked
+separately. Existing PubMed source facts/identifiers are retained; no API result was auto-applied.
+
+Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.
+
+## Named Bimuno B-GOS review and citation repairs (November 13, 2026)
+
+Owner: existing backed_clinical_studies::INGR_BIMUNO_GOS, clinical_applicability source/preparation
+selection and generic_evidence positive_weak magnitude. Evidence: IQM/prebiotics owner searches,
+primary Methods/Results and actual raw219289 label. Will NOT create: generic-prebiotic equivalence,
+a new canonical, numerical scale, Dose benchmark, amount gate or safety conclusion.
+
+Full primary30109908 explicitly identifies Clasado Bimuno B-GOS.91randomized,83per-protocol,
+two-week crossover periods and two-week washout;2.75gpreparation/1.37gactiveGOS. Bloating,
+flatulence/abdominal-pain between-group scores improve; urgency atweek2; stool/QOL/mood nulls.
+No formal primary hierarchy is invented. Short duration, completer analysis, uncertain prospective
+ranking and commercial/investigator overlap support Preliminary5 under the accepted rubric.
+26218845 (40olderadults,10weekperiods) preserves biomarkers, increasedCRP and clinicalnulls;
+19053980 is a finished abstract-only noncredit source decision preserving positive IBS findings.
+Neither is counted as independent clinical replication. Root and two research agents independently
+checked source identity, preparation, outcomes and limitations. All6scanned citations pass scoped
+strictverification; this is not wholecatalogcitationclearance.
+
+29raw Clean→Enrich→Score→blob comparison against33bef8568: actual219289 prints BiMuno900mg and
+changes partial→complete with score82.4/Evidence16 unchanged (existing probiotic route). Synthetic
+namedmaterial100/900/2750mg cases earn5; genericGOS/XOS/alphaGOS remain unresolved.294036/240067
+remainpartial with unchanged15/16Evidence; pending-state diagnostics become explicit. All29scores,
+safety/warnings, physical identity, amounts and nonEvidencepillars unchanged.18identicalenriched
+performance2.836825→2.896323s median, RSS215941120→210190336; inputhashunchanged. Sourceowner slice
+1968pass with2stale syntheticprebioticstatepins; those2nowpass, retaining nopoints and incomplete
+source-row protections. Pythoncorrectness0new10existing. Local/CI qualification pending.
+
+Two originalcitationblockers corrected separately: rice23782948 titleNBSP→space and BacoMind
+DOI10.3923/jpt.2008.425.434 entry-scoped reviewedghost acknowledgment after officialpublisher
+identitycheck.8tests and21claimstrictscope pass; no efficacy or clinicaleligibility change.
+
+Maca is NOT activated in this batch. Its verifiedgelatinizedsource proposal is retained externally.
+A proposed global exclusion-completion change failed21valid existing-zero controls and contradicted
+ADR0007's namednontransfer rule; it was reverted completely. Existing finishedzero policy remains.
+Maca's old maca_root literature identity and explicitly unfinished applicability inventory require
+bounded owner reconciliation before its proposed context can safely activate. No generic/color/female
+zero or benefit is inferred from that unresolved work. Receipts: evidence-close-20261113/maca-review,
+prebiotics-review,bgos-before/after comparisons (baseline=maca-bgos-before),bgos-owners/local/citations.
+
+Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.
+
+
+Bimuno CI43536465267 identified two valid regressions for275464, not stale test pins.
+Owner: INGR_BIMUNO_GOS::applicability (parent and two reviewed source contexts); actual label
+Acacia Fiber4g/Acacia senegal and IQM acacia-fiber identity establish distinct material from B-GOS.
+Independent source_review verified the material exclusion; official identity reference:
+https://eur-lex.europa.eu/legal-content/en/TXT/?uri=CELEX%3A32026R0196 (E414 specification).
+Explicit acacia fiber/acacia gum/gum arabic/Acacia senegal nontransfer uses the existing excluded-form
+owner and ADR0007 finite zero. Required Bimuno term and its source findings remain unchanged.
+Fail-first2fail/1pass; unchanged real-label tests plus Bimuno controls8pass; four alias edgecases
+and named/generic controls10pass. Exact one-entry data_batch check passed. Two frozen fullraw/blob
+replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia review correctlyfinishes;
+219289 remainscomplete82.4. Safety/warnings/amounts/identity/Dose unchanged; only reviewed-state and
+clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
+Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.
+
+### PR 481 integration review corrections (November 13, 2026)
+
+Two independently reproduced review findings were corrected before approved integration.
+Owner: `evidence_resolver.py::_held_clinical_source_ids`; evidence: `rg -n
+'_held_clinical_source_ids|reference_source_ids' scripts/evidence_resolver.py
+scripts/clinical_evidence_schema.py`. Will NOT create a second identifier parser or
+relax affirmative source identity. A held reference with a valid PMID and conflicting
+DOI/URL metadata previously lost its hold, even when the PMID remained in the declared
+inventory. Six failing regressions cover eligibility, retraction and concern holds with
+conflicting and malformed URLs. Each independently declared pointer now uses the existing
+parser for holds; inconsistent composite references still cannot establish positive identity.
+
+Owner: existing Bimuno context population and `clinical_applicability.py::assess_context_population`.
+The retained primary Methods exclude pregnancy and lactation. The compressed wording
+`Pregnancy/lactation ... exclusions` failed the lactation parser, granting 5 points on an
+explicit breastfeeding target. Separate source-faithful exclusion sentences fix that case;
+pregnancy and ordinary adult controls remain enforced. This is Evidence population scope,
+not a new personal-safety decision. Only `INGR_BIMUNO_GOS` changed in the curated file.
+
+Independent source/code review accepted both corrections. The three affected owner files
+pass 1,022 tests. Exact before/after raw replay of 29 frozen real labels has zero differences
+across cleaned, enriched, scored and detail-blob records. Counterfactual breastfeeding and
+conflicting-reference cases exercise the repaired paths. Same-input 18-product timing is
+2.975 to 2.966 seconds; inputs remained unchanged. Durable receipts:
+`/Users/seancheick/pg_quality/evidence-close-20261113/bgos-review-fixes-*`.
+
+The combined local checkpoint passed 564 tests with 24 declared opt-ins; the skip guard passed. Python correctness reported zero new findings.

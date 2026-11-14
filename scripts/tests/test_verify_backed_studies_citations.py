@@ -128,3 +128,22 @@ def test_topic_gate_reads_the_whole_abstract_without_waiving_wrong_topics(tmp_pa
             return {'12345': {'title': title, 'abstract': abstract, 'mesh_terms': []}}
         monkeypatch.setattr(owner, 'fetch_articles', fetch)
         assert owner.main() == expected
+
+
+def test_rice_protein_title_matches_verified_pubmed_text() -> None:
+    payload = json.loads((ROOT / 'scripts/data/backed_clinical_studies.json').read_text())
+    entry = next(e for e in payload['backed_clinical_studies'] if e['id'] == 'INGR_RICE_PROTEIN')
+    ref = next(r for r in entry['references_structured'] if str(r.get('pmid')) == '23782948')
+    assert ref['title'] == (
+        'The effects of 8 weeks of whey or rice protein supplementation on body '
+        'composition and exercise performance.'
+    )
+
+
+def test_bacomind_doi_topic_review_is_scoped_to_bacopa() -> None:
+    from verify_backed_studies_citations import _acknowledged_ghosts
+
+    reviewed = _acknowledged_ghosts()
+    citation = 'doi:10.3923/jpt.2008.425.434'
+    assert f'{citation}:INGR_BACOPA' in reviewed
+    assert f'{citation}:INGR_RICE_PROTEIN' not in reviewed

@@ -22,7 +22,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
-from clinical_evidence_schema import REFERENCE_CLASSIFICATION_FIELDS
+from clinical_evidence_schema import (
+    REFERENCE_CLASSIFICATION_FIELDS, context_source_errors, context_source_ids, expand_source_ids,
+)
 from evidence_resolver import clinical_record_sources_eligible
 
 from scoring_reference_resolver import (
@@ -685,10 +687,13 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
                 rule["observed_effect_direction"] for rule in interpretations
                 if rule["record_id"] == e.get("id") and any(
                     context.get("context_id") == rule["context_id"]
-                    and set(context.get("source_pmids") or []) == set(rule["source_pmids"])
+                    and not context_source_errors(rule)
+                    and expand_source_ids(e, context_source_ids(context))
+                    == expand_source_ids(e, context_source_ids(rule))
                     and context_review_finished(context)
                     and clinical_record_sources_eligible(
-                        e, context=context, source_pmids=rule["source_pmids"])
+                        e, context=context, source_pmids=rule.get("source_pmids"),
+                        source_references=rule.get("source_references"))
                     for context in e.get("study_contexts") or []
                 )
             }

@@ -41,6 +41,13 @@ EXPECTED = {
             "observed_effect_direction": "positive_moderate",
             "multiplier_key": "positive_weak",
             "approved_by": "Sean", "approved_at": "2026-11-06",
+        }, {
+            "record_id": "INGR_INULIN",
+            "context_id": "ingr_inulin_efsa_3951_orafti_gr_bowel_function",
+            "source_references": [{"doi": "10.2903/j.efsa.2015.3951"}],
+            "observed_effect_direction": "mixed", "floor_key": "cap_total",
+            "approved_by": "Codex source review with independent check, applying Sean’s accepted authority rubric",
+            "approved_at": "2026-11-13",
         }],
         "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
         "top_n_weights": [1.0, 0.7, 0.5, 0.3],
