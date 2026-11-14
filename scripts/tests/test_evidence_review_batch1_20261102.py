@@ -202,7 +202,8 @@ def test_fiber_review_stays_out_of_the_data():
     """Applied, it would finish 59635, 241707 and 276704 through a fiber row nobody signed."""
     resolution = _resolve_label_row("fiber", "Dietary Fiber")
     assert resolution.disposition == "literature_resolution_required"
-    assert resolution.reason_code == "unverified_generated_record_cannot_complete_evidence"
+    assert resolution.reason_code == "clinical_source_label_unresolved"
+    assert not resolution.points_eligible
 
 
 @pytest.mark.parametrize("cid, name, reason", [

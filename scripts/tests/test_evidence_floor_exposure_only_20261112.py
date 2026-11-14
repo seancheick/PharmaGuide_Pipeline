@@ -61,6 +61,7 @@ CLASSIFIED = {
 # A review that makes a context surrogate-only (for example a mixed context losing its
 # functional row) must classify it or add it here.
 ACCEPTED = {
+    ("INGR_GLUCOMANNAN", "glucomannan_efsa_1258_cholesterol"),  # EFSA recognized normal cholesterol maintenance
     ("BRAND_QUATREFOLIC", "quatrefolic_nonqualifying_merck_folate_rct_23698160"),  # homocysteine in hyperhomocysteinemia
     ("INGR_BACOPA", "ingr_bacopa_24252493_bounded_adult_extract_review"),  # cognitive task
     ("INGR_BERBERINE_HCL", "ingr_berberine_hcl_34956436_scoped_source"),  # HbA1c in type 2 diabetes

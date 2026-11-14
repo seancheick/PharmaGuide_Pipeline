@@ -5597,3 +5597,10 @@ in144.17s; skip guard passed.32 frozen raw records replayed: gelatinized204624/2
 identity, Dose and other pillars unchanged.18 identical enriched performance median2.761951→2.813728s,
 RSS217759744→218120192; inputhash unchanged. Receipts: next-review/scoped-reviews-*.
 CI pending. Separate Bimuno/acacia regression found in481 remains under repair; no integration/release.
+
+
+PR482 CI43539098167 completed: onlythree stale testexpectations in shards3/5. EFSA1258 is an
+accepted cholesterol surrogate (not exposure-only), unspecifiedfiber remainsheld by missinglabel
+preparation, and configdriftguard now explicitly pins the reviewedglucomannan rule. No runtime/
+clinicalfacts changed in this correction; no broad guard removed.106 affectedtests pass. Prior
+combinedlocal564pass24declaredoptins145.69s and37/32source receipts retained; exactCIrerunpending.
