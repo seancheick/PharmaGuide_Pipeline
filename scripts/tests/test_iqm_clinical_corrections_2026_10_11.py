@@ -251,3 +251,11 @@ def test_elderberry_form_does_not_treat_urinary_recovery_as_absolute_absorption(
     for key in ("value", "range_low", "range_high"):
         assert row["absorption_structured"][key] is None
     assert "not established" in row["absorption"].lower()
+
+
+def test_olive_leaf_does_not_inherit_the_olive_oil_health_claim():
+    row = _data()['olive_leaf']['forms']['olive leaf extract standardized']
+    assert 'EFSA-approved health claim' not in row['notes']
+    assert 'olive oil' in row['notes']
+    assert 'does not establish' in row['notes']
+    assert 'leaf extract' in row['notes']

@@ -565,3 +565,22 @@ Receipts, source texts, raw captures, complete path comparisons and performance 
 `/Users/seancheick/pg_quality/evidence-close-20261113/next-review/chamomile/`.
 
 Final inherited-fix replay equals the independently reviewed47-label candidate with zero complete-record/blob differences. Local checkpoint:564passed,24declaredopt-ins,143.82seconds;skipguardpassed. Python correctness:0new,10existing. Exact data_batch scope:INGR_CHAMOMILE only.
+
+### Olive-leaf authority-copy correction (November 13, 2026)
+
+Owner: `ingredient_quality_map.json::olive_leaf.forms[olive leaf extract standardized].notes`;
+evidence: `rg -n 'EFSA-approved health claim|olive oil' scripts/data/ingredient_quality_map.json`.
+Will NOT create a clinical authority rule, change form ratings or modify the approved consumer note.
+Root and literature_receipts independently checked the official EFSA2033 identity and the
+EU432/2012 olive-oil claim text. The regulation specifies qualifying olive oil; the former
+leaf note incorrectly implied a leaf-extract authority claim. Replaced only that sentence with
+an explicit oil-versus-leaf limitation. Source: https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?from=EN&uri=CELEX%3A32012R0432
+and https://www.efsa.europa.eu/en/efsajournal/pub/2033 . The direct consolidated HTML page
+returned a robot challenge; the official indexed/PDF claim text was available. This is a factual
+attribution correction, not a new clinical recommendation or comprehensive legal-compliance review.
+
+The new regression failed on the original sentence.47 affected IQM/source-note tests pass.
+Exact data_batch scope is olive_leaf only. Four raw label replays (216776,212273,278237,185288)
+show only the intended standardized-leaf notes in216776 changing, apart from known generated
+timestamps; complete score/status/safety/identity/amount records are unchanged. Receipts:
+`next-review/plant-batch/olive-copy-*` under the durable Evidence-close receipt directory.
