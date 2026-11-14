@@ -3542,3 +3542,37 @@ def test_conflicting_reference_cannot_erase_explicit_pmid_hold(monkeypatch, hold
     assert not er.clinical_record_sources_eligible(record, context=context, source_pmids=['30108163'])
     _, product = _joint_row_product('INGR_L_GLUTAMINE', 'l_glutamine', 'L-Glutamine', 5000)
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('amount', [100, 220, 1100])
+def test_oral_chamomile_extract_has_reviewed_preliminary_credit(amount):
+    record, product = _joint_row_product('INGR_CHAMOMILE', 'chamomile', 'German Chamomile Extract', amount)
+    product['targetGroups'] = ['Adult (18 - 50 Years)']
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 5
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    context = next(c for c in record['study_contexts'] if c.get('source_pmids') == ['19593179'])
+    assert context['dose']['dose_basis'] == 'not_applicable'
+    assert context['dose']['values'] == [220, 440, 660, 880, 1100]
+    assert context['population']['age_group'] == 'adult'
+
+
+@pytest.mark.parametrize('label', ['Chamomile Flower Powder', 'Roman Chamomile Extract',
+    'Chamomile Essential Oil Extract', 'Isolated Apigenin from Chamomile Extract'])
+def test_chamomile_oral_extract_cannot_credit_other_preparations(label):
+    _, product = _joint_row_product('INGR_CHAMOMILE', 'chamomile', label, 500)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_chamomile_adult_gad_review_cannot_credit_kids():
+    _, product = _joint_row_product('INGR_CHAMOMILE', 'chamomile', 'Chamomile Extract', 500)
+    product['targetGroups'] = ['Children 4 to 8 Years']
+    product['fullName'] = 'Kids Chamomile Extract'
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_chamomile_trial_nonpregnant_population_does_not_credit_prenatal_target():
+    _, product = _joint_row_product('INGR_CHAMOMILE', 'chamomile', 'Chamomile Extract', 500)
+    product['targetGroups'] = ['Pregnant Women']
+    product['fullName'] = 'Prenatal Chamomile Extract'
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0

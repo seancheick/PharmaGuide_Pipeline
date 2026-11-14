@@ -5643,3 +5643,14 @@ corrections;31psyllium source-ID claims passed earlier same-run check. Python0ne
 Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
 or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
 
+
+## November 13 — scoped chamomile source review, qualification pending integration
+
+INGR_CHAMOMILE now has six attributable source dispositions, including recovered full39106912,
+with weak adult oral-extract19593179 credit at5. Source-specific mixed/null findings and all
+preparation/population exclusions are retained. No generic powder/oil/infant credit and no
+new Dose benchmark. Root and independent agent source/applicability checks completed.
+47 raw labels:4complete,4score movers; overlap is explained in evidence_close_20261113/research.md.
+No Safety/identity/amount/Dose/other-pillar movement.531source/config tests plus prenatalcontrol,
+564local tests,24declaredopt-ins,strictscopedcitationcheck passed. RequiredCI and integration
+remain separate. This bounded replay is not a fresh full-catalog census or a release.

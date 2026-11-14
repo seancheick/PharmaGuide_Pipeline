@@ -43062,20 +43062,23 @@
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
-        "RCT",
-        "systematic_review",
-        "meta-analysis"
+        "39106912",
+        "19593179",
+        "27912875",
+        "21939549",
+        "31006899",
+        "39545336"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "Sleep outcomes varying by measure (PMID: 39106912)"
+        "Preliminary acute oral-extract GAD symptom finding (PMID:19593179); secondary comparisons not significant.",
+        "Mixed sleep outcomes with high heterogeneity and risk of bias (PMID:39106912); controlled insomnia findings null (PMID:21939549).",
+        "Relapse-prevention primary endpoint not significant despite positive secondary anxiety symptoms (PMID:27912875)."
       ],
-      "health_goals_supported": [
-        "Sleep Quality"
-      ],
-      "notes": "Systematic-review-level evidence supports chamomile for selected sleep and anxiety outcomes, with moderate heterogeneity by population and preparation. Retained-source scope and limitations: sleep outcomes vary by measure; retained synthesis does not establish anxiety efficacy or universal improvement in sleep duration/efficiency (PMID: 39106912)",
-      "last_updated": "2026-10-28",
-      "notable_studies": "A 2024 systematic review/meta-analysis reported sleep-related improvements in several clinical contexts, with heterogeneity across populations and preparations (PMID: 39106912).",
+      "health_goals_supported": [],
+      "notes": "Routine agent Preliminary5 source determination for oral German chamomile extract, independently checked by root and source_review. Full retained2024sleep source recovered and reviewed. No brand, marker-percentage or amount Evidence gate. Existing distinct oil-material holds remain unchanged.",
+      "last_updated": "2026-11-13",
+      "notable_studies": "Acute GAD19593179 primary positive; relapse27912875 primary null; sleep39106912 heterogeneous positivePSQI with controlled21939549null retained.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -43105,19 +43108,64 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "PubMed via live Europe PMC MED",
+          "pmid": "19593179",
+          "doi": "10.1097/jcp.0b013e3181ac935c",
+          "title": "A randomized, double-blind, placebo-controlled trial of oral Matricaria recutita (chamomile) extract therapy for generalized anxiety disorder.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19593179/",
+          "scoring_eligible": true
+        },
+        {
+          "type": "pubmed",
+          "authority": "PubMed via live Europe PMC MED",
+          "pmid": "27912875",
+          "doi": "10.1016/j.phymed.2016.10.012",
+          "title": "Long-term chamomile (Matricaria chamomilla L.) treatment for generalized anxiety disorder: A randomized clinical trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27912875/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "PubMed via live Europe PMC MED",
+          "pmid": "21939549",
+          "doi": "10.1186/1472-6882-11-78",
+          "title": "Preliminary examination of the efficacy and safety of a standardized chamomile extract for chronic primary insomnia: a randomized placebo-controlled pilot study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21939549/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "PubMed via live Europe PMC MED",
+          "pmid": "31006899",
+          "doi": "10.1002/ptr.6349",
+          "title": "Therapeutic efficacy and safety of chamomile for state anxiety, generalized anxiety disorder, insomnia, and sleep quality: A systematic review and meta-analysis of randomized trials and quasi-randomized trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31006899/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "PubMed via live Europe PMC MED",
+          "pmid": "39545336",
+          "doi": "10.1177/00912174241301279",
+          "title": "Effects of chamomile oil inhalation on sleep quality in young adults with insomnia: A randomized controlled trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39545336/",
+          "scoring_eligible": false
         }
       ],
       "external_ids": {
         "unii": "FGL3685T2X"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Sleep Quality",
-      "total_enrollment": 248,
-      "registry_completed_trials_count": 29,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction": "mixed",
+      "primary_outcome": "Generalized anxiety symptoms; source-specific weak positive",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Weak acute oral-extract GAD signal; sleep and relapse findings mixed/null. No universal efficacy or inhaled-oil transfer.",
       "endpoint_relevance_tags": [
+        "anxiety",
         "sleep"
       ],
       "reference_semantics": {
@@ -43136,6 +43184,296 @@
         "owner": "scripts/data/backed_clinical_studies.json::INGR_CHAMOMILE",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_19593179_oral_gad",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "19593179"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Oral German chamomile extract",
+            "preparation": "Matricaria recutita extract,220mg capsules standardized to1.2%apigenin; marker content is a study descriptor, not a new label gate."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "anxiety",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "amsterdam_2009_chamomile_gad",
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Primary PMC Methods and indexed results content verified; oral extract primary HAM-A improvement is preliminary. Later relapse primary null and sleep nulls retained. Routine Preliminary5 proposed under accepted rubric; Independent root and source_review checks completed."
+          },
+          "population": {
+            "description": "Adults with mild-to-moderate generalized anxiety disorder.61enrolled;57had baseline and at least one post-baseline measurement. Abstract reports57randomized:28chamomile and29placebo.",
+            "age_group": "adult",
+            "sample_size": 57
+          },
+          "study_design": "Randomized double-blind placebo-controlled parallel trial; primary HAM-A trajectory; response-guided dose escalation.",
+          "outcomes": [
+            {
+              "name": "Change over time in total HAM-A score favored oral chamomile over placebo, p=0.047.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              220,
+              440,
+              660,
+              880,
+              1100
+            ],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "Daily capsules, response-guided escalation from1 to5capsules; reductions allowed for tolerability.",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Week1:one220mg capsule daily; week2:two daily. If total HAM-A reduction is50%or less versus baseline, increase tothree daily inweek3,four daily inweek4,andfive daily inweeks5–8. Dose reductions allowed at any time for tolerability. Values describe titration steps, not separate randomized arms.",
+            "normalization": {
+              "basis": "Source-verified within-patient response-guided titration, not independent randomized daily-dose arms:220mg per capsule times1–5capsules produces220,440,660,880,1100mg/day. Eight weeks equals56days. No new Dose or Evidence threshold."
+            },
+            "source_provenance": {
+              "pmid": "19593179",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3600416/",
+              "location": "Materials; Treatment Procedures; primary outcome results."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_groups": [
+              [
+                "chamomile",
+                "matricaria recutita",
+                "matricaria chamomilla",
+                "german chamomile"
+              ],
+              [
+                "extract"
+              ]
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "anxiety"
+            ],
+            "studied_population": "Adults with mild-to-moderate generalized anxiety disorder; no generic-stress or safety extrapolation.",
+            "source_pmids": [
+              "19593179"
+            ],
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "roman chamomile",
+              "chamaemelum nobile",
+              "anthemis nobilis",
+              "essential oil",
+              "chamomile oil",
+              "leaf oil",
+              "isolated apigenin"
+            ]
+          },
+          "limitations": [
+            "Small acute-GAD trial with marginal primary significance,p=0.047. Secondary between-group outcomes were not statistically significant; directional changes do not establish positive secondary outcomes or robust replication.",
+            "One participant in each group discontinued for adverse events; no universal safety conclusion.",
+            "Later relapse-prevention27912875 primary endpoint null despite positive secondary GAD symptom outcome. Open-label lead-in and companion reports are not independent placebo-controlled replications.",
+            "Sleep review39106912 positive PSQI but extreme heterogeneity and9/10high-risk trials; best-controlled insomnia21939549 primary andPSQI comparisons null.",
+            "No brand,apigenin%,dose gate. Scope oral German chamomile extract; do not transfer to inhaled/ingested essential oil,isolatedapigenin,Roman chamomile,unknownleaf oil,or combinations.",
+            "Existing neutral Dose reference semantics and oil-specific applicability holds remain untouched."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_39106912_source_review",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "39106912"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Finished no-additional-credit source disposition; not article invalidity or an all-negative conclusion. FULL primary publisher-layout review recovered; historical source-access blocker resolved, not an authorization bypass.10trials772adults; Table2 lists oralcapsules,syrup,tea,jelly,drops, not inhaled oil. Five-studyPSQI pool in elderly,postmenopause,insomnia improvesWMD−1.88CI−3.46to−0.31,I²88.4%;9/10highrisk. Sleepduration,efficiency,daytimefunction not improved. No pooled count treated as replication or sole uniform efficacy claim."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39106912",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39106912/",
+              "location": "Full primary content"
+            }
+          },
+          "limitations": [
+            "FULL primary publisher-layout review recovered; historical source-access blocker resolved, not an authorization bypass.10trials772adults; Table2 lists oralcapsules,syrup,tea,jelly,drops, not inhaled oil. Five-studyPSQI pool in elderly,postmenopause,insomnia improvesWMD−1.88CI−3.46to−0.31,I²88.4%;9/10highrisk. Sleepduration,efficiency,daytimefunction not improved. No pooled count treated as replication or sole uniform efficacy claim."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_27912875_source_review",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "27912875"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Finished no-additional-credit source disposition; not article invalidity or an all-negative conclusion. Primary abstract/Methods overview verified; full detailed Methods access inconsistent.179openlabel entrants,93respondersrandomized46/47; relapse primaryHR0.52CI0.20–1.33,p=.16null; secondaryGAD symptomspositive. No prevention claim or independent credit from lead-in/companion analyses."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "27912875",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/27912875/",
+              "location": "Primary indexed abstract and available primary PMC overview; access limits stated"
+            }
+          },
+          "limitations": [
+            "Primary abstract/Methods overview verified; full detailed Methods access inconsistent.179openlabel entrants,93respondersrandomized46/47; relapse primaryHR0.52CI0.20–1.33,p=.16null; secondaryGAD symptomspositive. No prevention claim or independent credit from lead-in/companion analyses."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_21939549_source_review",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "21939549"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Finished no-additional-credit source disposition; not article invalidity or an all-negative conclusion. FULL primary XML Methods/Results read.34adults17/17,270mgoralextracttwicedaily28days. Primary sleepefficiency andtotalsleeptime null; PSQI/ISI anddiary measures also null. Moderate nonsignificant effect sizes do not establish positive endpoints."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "21939549",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21939549/",
+              "location": "Full primary content"
+            }
+          },
+          "limitations": [
+            "FULL primary XML Methods/Results read.34adults17/17,270mgoralextracttwicedaily28days. Primary sleepefficiency andtotalsleeptime null; PSQI/ISI anddiary measures also null. Moderate nonsignificant effect sizes do not establish positive endpoints."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_31006899_source_review",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "31006899"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Finished no-additional-credit source disposition; not article invalidity or an all-negative conclusion. Live indexed abstract verified; fullMethods not recovered. GAD/sleepquality signals positive, stateanxiety andinsomnia comparisons null.2024fullreview notes earlier combination pooling; no standalone additivecredit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "31006899",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31006899/",
+              "location": "Primary indexed abstract and available primary PMC overview; access limits stated"
+            }
+          },
+          "limitations": [
+            "Live indexed abstract verified; fullMethods not recovered. GAD/sleepquality signals positive, stateanxiety andinsomnia comparisons null.2024fullreview notes earlier combination pooling; no standalone additivecredit."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "chamomile_39545336_source_review",
+          "components": [
+            "INGR_CHAMOMILE"
+          ],
+          "source_pmids": [
+            "39545336"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Finished no-additional-credit source disposition; not article invalidity or an all-negative conclusion. Live primary abstract verified; inhaledoil80participants40/40,15daysvsnormalroutine. PositivePSQI/ISI but noactivecontrol. Differentroute/material: nooralextractcredit or oral essential-oil equivalence. Preserve separate essential-oil owner and prior correction37123948/40535870 review."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39545336",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39545336/",
+              "location": "Primary indexed abstract and available primary PMC overview; access limits stated"
+            }
+          },
+          "limitations": [
+            "Live primary abstract verified; inhaledoil80participants40/40,15daysvsnormalroutine. PositivePSQI/ISI but noactivecontrol. Differentroute/material: nooralextractcredit or oral essential-oil equivalence. Preserve separate essential-oil owner and prior correction37123948/40535870 review."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_groups": [
+          [
+            "chamomile",
+            "matricaria recutita",
+            "matricaria chamomilla",
+            "german chamomile"
+          ],
+          [
+            "extract"
+          ]
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "anxiety"
+        ],
+        "studied_population": "Adults with mild-to-moderate generalized anxiety disorder; no generic-stress or safety extrapolation.",
+        "source_pmids": [
+          "19593179"
+        ],
+        "reviewed_at": "2026-11-13",
+        "excluded_form_terms": [
+          "roman chamomile",
+          "chamaemelum nobile",
+          "anthemis nobilis",
+          "essential oil",
+          "chamomile oil",
+          "leaf oil",
+          "isolated apigenin"
+        ]
       },
       "verification_provenance": {
         "reference_citations": {
@@ -43157,8 +43495,7 @@
             }
           ]
         }
-      },
-      "study_contexts": []
+      }
     },
     {
       "id": "INGR_BEETROOT",

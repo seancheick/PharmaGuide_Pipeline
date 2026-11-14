@@ -69,6 +69,13 @@ EXPECTED = {
             "observed_effect_direction": "positive_strong", "floor_key": "cap_total",
             "approved_by": "Codex per-source review with independent content and applicability check; accepted Evidence rubric, agent review not clinician review",
             "approved_at": "2026-11-13",
+        }, {
+            "record_id": "INGR_CHAMOMILE",
+            "context_id": "chamomile_19593179_oral_gad",
+            "source_pmids": ["19593179"],
+            "observed_effect_direction": "mixed", "floor_key": "primary_floor_preliminary",
+            "approved_by": "Codex research agent /root/ladder_review; independently checked by root against full indexed PMC19593179 and full39106912 including Table2, and by source_review; agent review, not clinician review",
+            "approved_at": "2026-11-13",
         }],
         "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
         "top_n_weights": [1.0, 0.7, 0.5, 0.3],
