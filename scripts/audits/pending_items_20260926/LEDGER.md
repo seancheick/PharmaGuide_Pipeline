@@ -5563,3 +5563,11 @@ replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia re
 219289 remainscomplete82.4. Safety/warnings/amounts/identity/Dose unchanged; only reviewed-state and
 clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
 Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.
+Bounded existing-review preservation: a nonapplicable partial native review must not erase an
+already-recorded unfinished literature applicability assessment. Existing source identity/schema/
+completion helpers determine whether finished native contexts cover that inventory; documented
+general/reference conclusions and applicable contexts keep existing finite completion. This does
+not reopen from maintenance citations. Fail-first scope/provenance/registered-owner regressions;
+63focused and independent62controls pass, with held/preparation/reference cases preserved. Shared
+literature fact projection retains unresolved source IDs under the existing clinical owner. No
+new owner/status/field. Final combined raw/performance/local/CI qualification pending.
