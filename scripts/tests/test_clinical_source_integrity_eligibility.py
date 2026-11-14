@@ -3389,3 +3389,23 @@ def test_acacia_material_has_finished_nontransfer_from_named_bimuno(label):
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('hold', ['scoring_eligible', 'retracted', 'expression_of_concern'])
+@pytest.mark.parametrize('url', ['https://doi.org/10.1000/conflicting-source', 'https://[invalid'])
+def test_conflicting_reference_cannot_erase_explicit_pmid_hold(monkeypatch, hold, url):
+    import clinical_applicability as ca
+    from clinical_evidence_schema import reference_source_ids
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    record['published_studies'] = ['30108163']
+    reference = {'pmid': '30108163', 'doi': '10.1136/gutjnl-2017-315136', 'url': url,
+                 hold: False if hold == 'scoring_eligible' else True}
+    record['references_structured'] = [reference]
+    # Conflicting metadata remains unusable as affirmative identity evidence.
+    assert reference_source_ids(reference) == frozenset()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    assert not er.clinical_record_sources_eligible(record, context=context, source_pmids=['30108163'])
+    _, product = _joint_row_product('INGR_L_GLUTAMINE', 'l_glutamine', 'L-Glutamine', 5000)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
