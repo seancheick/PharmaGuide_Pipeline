@@ -31,6 +31,7 @@ import argparse
 import traceback
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
+from functools import lru_cache
 from typing import Callable, Dict, List, Any, Optional, Tuple
 from pathlib import Path
 
@@ -7129,6 +7130,91 @@ class SupplementEnricherV3:
 
         return False
 
+    @staticmethod
+    @lru_cache(maxsize=16384)
+    def _nonscorable_name_variants(value: str) -> Tuple[str, ...]:
+        """Immutable name expansions; row-specific validation is never cached."""
+        base = norm_module.normalize_text(value)
+        pre = norm_module.preprocess_text(value)
+        variants = {base, norm_module.normalize_text(pre)}
+        # Strip parenthetical groups for identity matching.
+        variants.add(norm_module.normalize_text(re.sub(r"\([^)]*\)", " ", value)))
+        # Strip leading dosage wrappers occasionally leaked into name fields.
+        variants.add(
+            norm_module.normalize_text(
+                re.sub(
+                    r"^\s*\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b\s*",
+                    "",
+                    re.sub(r"[{}\[\]]", " ", value),
+                    flags=re.IGNORECASE,
+                )
+            )
+        )
+        # Strip inline quantity tokens (e.g., "... 24 mg hydroethanolic extract").
+        variants.add(
+            norm_module.normalize_text(
+                re.sub(
+                    r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b",
+                    " ",
+                    re.sub(r"[{}\[\]]", " ", value),
+                    flags=re.IGNORECASE,
+                )
+            )
+        )
+        # Strip percentage + "whole" prefix commonly found in fruit extracts.
+        variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', base).strip())
+        variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', norm_module.normalize_text(pre)).strip())
+        # Strip benign qualifiers for identity-only recognition.
+        variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', base).strip())
+        variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', norm_module.normalize_text(pre)).strip())
+        # Iterative compound-prefix strip — handles DSLD label prefix combos
+        # like "88% organic whole leaf Aloe vera" or "100% raw whole bark
+        # Cinnamon" that chain percentage + sourcing-qualifier + preparation
+        # in one string. Applies the strip rules in a loop so order doesn't
+        # matter and partial matches don't block subsequent strips. Scope:
+        # tier-3 recognition only (this _variants() runs inside
+        # _is_recognized_non_scorable). The existing one-pass strips above
+        # remain so this is purely additive — adds one more candidate per
+        # base/pre form, never removes existing ones. Safe from false-
+        # positive identity loss because the un-stripped variants are
+        # still tried first against the lookup index. Added 2026-05-14.
+        def _iter_strip_compound_prefix(text: str) -> str:
+            prev = None
+            while prev != text:
+                prev = text
+                text = re.sub(r'^\s*\d+(?:\.\d+)?%\s+', '', text)
+                text = re.sub(
+                    r'^(?:certified\s+organic|fair[-\s]?trade|organic|natural|raw|pure)\s+',
+                    '',
+                    text,
+                    flags=re.IGNORECASE,
+                )
+                text = re.sub(r'^(?:whole|raw)\s+', '', text, flags=re.IGNORECASE)
+            return re.sub(r'\s+', ' ', text).strip()
+        variants.add(_iter_strip_compound_prefix(base))
+        variants.add(_iter_strip_compound_prefix(norm_module.normalize_text(pre)))
+        # Strip common processing qualifiers that should not block identity matching.
+        for v in list(variants):
+            stripped = re.sub(
+                r'\b(cold[-\s]?pressed|extra virgin|unrefined|certified organic|virgin)\b',
+                '',
+                v,
+                flags=re.IGNORECASE
+            ).strip()
+            variants.add(re.sub(r'\s+', ' ', stripped).strip())
+        # Reorder comma suffix qualifiers: "pumpkin seed oil, cold-pressed" -> "cold-pressed pumpkin seed oil"
+        for v in list(variants):
+            if ',' not in v:
+                continue
+            parts = [p.strip() for p in v.split(',') if p and p.strip()]
+            if len(parts) >= 2:
+                variants.add(' '.join(parts[1:] + parts[:1]))
+        # Strip common botanical plant-part suffixes for identity-only recognition.
+        for v in list(variants):
+            variants.add(re.sub(r'\b(root|leaf|fruit|seed|flower|bark)\b', '', v).strip())
+        return tuple(v for v in variants if v)
+
+
     def _is_recognized_non_scorable(
         self, ing_name: str, std_name: str, raw_row: Optional[Dict] = None,
         *, source_context: Optional[Dict] = None,
@@ -7221,86 +7307,7 @@ class SupplementEnricherV3:
                 return validated_recognition(self._nonscorable_index[ing_no_parens])
         # ── END FAST PATH — fall through to full variant scan if no hit ──
 
-        def _variants(value: str) -> List[str]:
-            base = self._normalize_text(value)
-            pre = norm_module.preprocess_text(value)
-            variants = {base, self._normalize_text(pre)}
-            # Strip parenthetical groups for identity matching.
-            variants.add(self._normalize_text(re.sub(r"\([^)]*\)", " ", value)))
-            # Strip leading dosage wrappers occasionally leaked into name fields.
-            variants.add(
-                self._normalize_text(
-                    re.sub(
-                        r"^\s*\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b\s*",
-                        "",
-                        re.sub(r"[{}\[\]]", " ", value),
-                        flags=re.IGNORECASE,
-                    )
-                )
-            )
-            # Strip inline quantity tokens (e.g., "... 24 mg hydroethanolic extract").
-            variants.add(
-                self._normalize_text(
-                    re.sub(
-                        r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b",
-                        " ",
-                        re.sub(r"[{}\[\]]", " ", value),
-                        flags=re.IGNORECASE,
-                    )
-                )
-            )
-            # Strip percentage + "whole" prefix commonly found in fruit extracts.
-            variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', base).strip())
-            variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', self._normalize_text(pre)).strip())
-            # Strip benign qualifiers for identity-only recognition.
-            variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', base).strip())
-            variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', self._normalize_text(pre)).strip())
-            # Iterative compound-prefix strip — handles DSLD label prefix combos
-            # like "88% organic whole leaf Aloe vera" or "100% raw whole bark
-            # Cinnamon" that chain percentage + sourcing-qualifier + preparation
-            # in one string. Applies the strip rules in a loop so order doesn't
-            # matter and partial matches don't block subsequent strips. Scope:
-            # tier-3 recognition only (this _variants() runs inside
-            # _is_recognized_non_scorable). The existing one-pass strips above
-            # remain so this is purely additive — adds one more candidate per
-            # base/pre form, never removes existing ones. Safe from false-
-            # positive identity loss because the un-stripped variants are
-            # still tried first against the lookup index. Added 2026-05-14.
-            def _iter_strip_compound_prefix(text: str) -> str:
-                prev = None
-                while prev != text:
-                    prev = text
-                    text = re.sub(r'^\s*\d+(?:\.\d+)?%\s+', '', text)
-                    text = re.sub(
-                        r'^(?:certified\s+organic|fair[-\s]?trade|organic|natural|raw|pure)\s+',
-                        '',
-                        text,
-                        flags=re.IGNORECASE,
-                    )
-                    text = re.sub(r'^(?:whole|raw)\s+', '', text, flags=re.IGNORECASE)
-                return re.sub(r'\s+', ' ', text).strip()
-            variants.add(_iter_strip_compound_prefix(base))
-            variants.add(_iter_strip_compound_prefix(self._normalize_text(pre)))
-            # Strip common processing qualifiers that should not block identity matching.
-            for v in list(variants):
-                stripped = re.sub(
-                    r'\b(cold[-\s]?pressed|extra virgin|unrefined|certified organic|virgin)\b',
-                    '',
-                    v,
-                    flags=re.IGNORECASE
-                ).strip()
-                variants.add(re.sub(r'\s+', ' ', stripped).strip())
-            # Reorder comma suffix qualifiers: "pumpkin seed oil, cold-pressed" -> "cold-pressed pumpkin seed oil"
-            for v in list(variants):
-                if ',' not in v:
-                    continue
-                parts = [p.strip() for p in v.split(',') if p and p.strip()]
-                if len(parts) >= 2:
-                    variants.add(' '.join(parts[1:] + parts[:1]))
-            # Strip common botanical plant-part suffixes for identity-only recognition.
-            for v in list(variants):
-                variants.add(re.sub(r'\b(root|leaf|fruit|seed|flower|bark)\b', '', v).strip())
-            return [v for v in variants if v]
+        _variants = self._nonscorable_name_variants
 
         # Guard: don't include std_name in candidates when it's a known excipient/category
         # descriptor. DSLD sometimes assigns standardName="natural colors" to botanical
@@ -9330,7 +9337,7 @@ class SupplementEnricherV3:
             )
             parent = (match or {}).get("canonical_id")
             if negative_match_terms_veto(
-                [ing_name, row_notes],
+                [ing_name, f"{ing_name} {row_notes}"],
                 ((quality_map.get(parent) or {}).get("match_rules") or {}).get("negative_match_terms", []),
             ):
                 return None
@@ -9804,6 +9811,17 @@ class SupplementEnricherV3:
 
         Logs structured warnings when multiple candidates exist in the winning tier.
         """
+        # A stored cleaner identity cannot override an authored material
+        # exclusion. Parent-local form clues are evaluated separately from
+        # the ingredient's identity and may legitimately name constituents.
+        if not _form_extraction_attempt and negative_match_terms_veto(
+            [ing_name, raw_source_text],
+            ((quality_map.get(cleaner_canonical_id) or {}).get("match_rules") or {}).get(
+                "negative_match_terms", []
+            ),
+        ):
+            return None
+
         def _try_branded_token_fallback() -> Optional[Dict]:
             """Last-resort fallback before returning FORM_UNMAPPED."""
             if _form_extraction_attempt:
@@ -11878,7 +11896,7 @@ class SupplementEnricherV3:
         if parent_mass_mg is None or not markers:
             return 0.0
 
-        percentages: List[float] = []
+        children = []
         nested = ingredient.get("nestedIngredients")
         for child in nested if isinstance(nested, list) else []:
             if not isinstance(child, dict):
@@ -11893,21 +11911,13 @@ class SupplementEnricherV3:
                     "ingredientGroup",
                 )
             )
-            if not self._has_marker_word_match(markers, child_text):
-                continue
             child_quantity = self._to_float_safe(child.get("quantity"))
             child_mass_mg = _normalize_parent_blend_mg(
                 child_quantity,
                 child.get("unit"),
             )
-            if child_mass_mg is None:
-                continue
-            percentage = (child_mass_mg / parent_mass_mg) * 100.0
-            # A tiny allowance covers display rounding, not contradictory data.
-            if 0 < percentage <= 100.5:
-                percentages.append(min(percentage, 100.0))
-
-        return round(max(percentages), 4) if percentages else 0.0
+            children.append((child_text, child_mass_mg))
+        return norm_module.disclosed_marker_percentage(parent_mass_mg, children, markers)
 
     def _has_marker_word_match(self, markers: List[str], text: str) -> bool:
         """
@@ -11924,20 +11934,7 @@ class SupplementEnricherV3:
         Returns:
             True if any marker is found as a word boundary match
         """
-        if not text or not markers:
-            return False
-
-        text_lower = text.lower()
-
-        for marker in markers:
-            marker_lower = marker.lower()
-            # Use word boundary regex to ensure we match whole words
-            # \b matches word boundaries (start/end of word)
-            pattern = rf'\b{re.escape(marker_lower)}\b'
-            if re.search(pattern, text_lower):
-                return True
-
-        return False
+        return norm_module.has_marker_word_match(markers, text)
 
     # -------------------------------------------------------------------------
     # Solution B — Product-name fallback synthesizer

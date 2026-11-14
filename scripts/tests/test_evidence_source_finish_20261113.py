@@ -113,3 +113,35 @@ def test_green_tea_preserves_specific_signed_hold_and_source_scope(records):
     assert set(record["health_goals_supported"]) == {"Weight Management"}
     assert record["effect_direction"] == "positive_weak"
     assert record["study_contexts"] == []
+
+
+@pytest.mark.parametrize('record_id,direction', [
+    ('INGR_BLACK_COHOSH', 'mixed'), ('INGR_CHLORELLA', 'positive_strong'),
+])
+def test_named_botanical_holds_do_not_claim_longevity_or_new_credit(records, record_id, direction):
+    record = records[record_id]
+    assert record['scoring_eligible'] is False
+    assert record['effect_direction'] == direction
+    assert record['study_contexts'] == []
+    assert record['health_goals_supported'] == []
+    assert record['primary_outcome'] is None
+    assert 'Dr. Pham' in record['notes']
+
+
+def test_black_cohosh_copy_preserves_trial_design_and_null_primary_result(records):
+    record = records['INGR_BLACK_COHOSH']
+    assert 'Safety profile is consistently favorable' not in record['notes']
+    assert 'Typical dose is 40mg/day' not in record['notes']
+    assert 'Uncontrolled' in record['key_endpoints'][0]
+    assert 'Primary analysis showed no superiority' in record['key_endpoints'][1]
+    assert '33% attrition' in record['key_endpoints'][2]
+    assert record['endpoint_relevance_tags'] == []
+
+
+def test_chlorella_copy_does_not_turn_subgroups_or_adjunct_trial_into_dose_authority(records):
+    record = records['INGR_CHLORELLA']
+    assert 'has the strongest' not in record['notes']
+    assert 'Effective doses are' not in record['notes']
+    assert 'metformin doses differed' in record['key_endpoints'][1]
+    assert 'do not establish an effective dose threshold' in record['key_endpoints'][2]
+    assert record['endpoint_relevance_tags'] == ['cardiovascular', 'glycemic_control']

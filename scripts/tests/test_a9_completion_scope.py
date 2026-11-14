@@ -31,6 +31,7 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 COMPLETES = [
     pytest.param("a9_partial_full_evidence_328830_raw.json", False, id="multi_panel_beta_authority_complete"),
     pytest.param("a9_completion_2715_raw.json", False, id="sports_adjunct_by_materiality"),
+    pytest.param("a9_completion_12853_raw.json", False, id="title_owner_valerian_review_restored"),
     pytest.param("a9_completion_252445_raw.json", False, id="finished_review_outside_scope"),
     pytest.param("raw_bamboo_252349.json", False, id="finished_authority_no_credit"),
     pytest.param("a9_finished_authority_no_credit_216405_raw.json", False, id="finished_authority_silica"),
@@ -41,7 +42,6 @@ COMPLETES = [
 ]
 HELD = [
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
-    pytest.param("a9_completion_12853_raw.json", EVIDENCE, id="title_owner_valerian"),
     pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
     pytest.param("a9_completion_322514_raw.json", EVIDENCE, id="enzyme_owner_behind_product_row"),
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),

@@ -79,6 +79,62 @@ def _rows_named(cleaned: dict, names) -> list:
     ]
 
 
+@pytest.mark.parametrize('parent_mg,child_mg,notes', [
+    (220, 1.76, '0.8%'), (320, 0.96, 'standardized to 0.3%'),
+])
+def test_registered_marker_percentage_on_child_establishes_disclosure(
+    normalizer, parent_mg, child_mg, notes,
+):
+    child = _row('Valerenic Acid', child_mg, 'mg', category='non-nutrient/non-botanical',
+                 ingredientGroup='Valerenic acid', notes=notes, uniiCode='34NDB285PM')
+    parent = _row('Valerian Root Extract', parent_mg, 'mg', category='botanical',
+                  nestedRows=[child], uniiCode='JWF5YAW3QW')
+    cleaned = normalizer.normalize_product(_make_dsld_product(328079, 'Valerian', [parent]))
+    marker = _rows_named(cleaned, ['Valerenic Acid'])[0]
+    root = _rows_named(cleaned, ['Valerian Root Extract'])[0]
+    assert marker['cleaner_row_role'] == 'standardization_marker'
+    assert marker['score_eligible_by_cleaner'] is False
+    assert marker['quantity'] == child_mg
+    assert marker['uniiCode'] == '34NDB285PM'
+    assert root['quantity'] == parent_mg
+    assert root['canonical_id'] == 'valerian'
+
+
+@pytest.mark.parametrize('case', [
+    'no_percentage', 'wrong_percentage', 'wrong_marker', 'wrong_parent',
+    'missing_parent_mass', 'heavier_child', 'different_serving', 'multiple_servings', 'approximate_amount', 'modified_compound', 'marker_extract', 'negated_marker',
+])
+def test_percentage_marker_role_requires_registered_source_and_comparable_basis(normalizer, case):
+    child = _row('Valerenic Acid', 1.76, 'mg', category='plant', notes='0.8%')
+    parent = _row('Valerian Root Extract', 220, 'mg', category='herb', nestedRows=[child])
+    if case == 'no_percentage':
+        child['notes'] = ''
+    elif case == 'wrong_percentage':
+        child['notes'] = '0.9%'
+    elif case == 'wrong_marker':
+        child['name'] = child['ingredientGroup'] = 'Vitamin D3'
+    elif case in ('modified_compound', 'marker_extract', 'negated_marker'):
+        child['name'] = {'modified_compound': 'Valerenic Acid Methyl Ester',
+                         'marker_extract': 'Valerenic Acid Extract',
+                         'negated_marker': 'Not Valerenic Acid'}[case]
+    elif case == 'wrong_parent':
+        parent['name'] = parent['ingredientGroup'] = 'Milk Thistle Extract'
+    elif case == 'missing_parent_mass':
+        parent['quantity'] = []
+    elif case == 'heavier_child':
+        child['quantity'][0]['quantity'] = 221
+        child['notes'] = '100.4545%'
+    elif case == 'different_serving':
+        child['quantity'][0]['servingSizeQuantity'] = 2
+    elif case == 'approximate_amount':
+        child['quantity'][0]['operator'] = '~'
+    elif case == 'multiple_servings':
+        child['quantity'].append({**child['quantity'][0], 'servingSizeOrder': 2})
+    cleaned = normalizer.normalize_product(_make_dsld_product(328079, 'Valerian', [parent]))
+    row = _rows_named(cleaned, [child['name']])[0]
+    assert row['cleaner_row_role'] != 'standardization_marker'
+
+
 class TestHerbalComplexStandardizedExtracts:
     """216776 Herbal Complex: six dosed standardized extracts, six constituents."""
 

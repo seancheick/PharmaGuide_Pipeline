@@ -106,6 +106,88 @@ owner probes identify KSM-66/CoQ10/beta-alanine15, Boswellia10, CEE2.2; no other
 Only those10 expectations are refreshed through the existing raw-input freeze tool, with causes in
 the existing manifest changelog. Complete recheck remains the qualification result.
 
+## Queue reuse audit, ranks6–25 — November13 (read-only)
+
+This is an owner/receipt inventory, not20 new completed reviews. Queue matching is heuristic and
+misses several existing owners. No points or completion follow from this table.
+
+| Queue identity | Existing owner / minimum remaining work |
+|---|---|
+| fiber | Form-specific Nov2 research exists; umbrella placeholder cannot inherit it. |
+| isoflavones | First structured Evidence conclusion; distinguish named mixtures, foods and isolated compounds. |
+| valerian | INGR_VALERIAN has a finished signed reference-only review; canonical reachability needs real-row verification. |
+| 5_htp | INGR_5HTP exists, with source/applicability gaps; not a new literature search. |
+| acai_berry | Existing pulp-source review; extract/powder applicability remains unresolved. |
+| olive_leaf | olive_leaf_powder has Nov7 source review; canonical/form matching and remaining source scope unfinished. |
+| nattokinase | INGR_NATTOKINASE review complete for exact NSK-SD target engagement; no generic preparation transfer. |
+| lemon_balm | Existing source/access packet; Methods/membership/preparation qualification unfinished. |
+| chamomile | Existing sleep-source packet; retain oral versus inhaled-oil boundary and reconcile anxiety wording. |
+| pine_bark_extract | BRAND_PYCNOGENOL exists; generic placeholder cannot inherit branded findings. |
+| fenugreek | Reuse Nov10 review; quantitative source reconciliation and proprietary preparation scope unfinished. |
+| black_cohosh | Specific signed A048 hold persists; stale favorable-safety copy conflicts with retained source correction. |
+| green_coffee_bean | Existing Nov4 packet; conflicting syntheses, source integrity and standardized preparation scope unfinished. |
+| pumpkin | Existing source separates whole seed and extract; actual seed/flesh/oil/extract rows need scoped assessment. |
+| chlorella | Specific signed A056 hold persists; comparative-strength/universal effective-dose wording needs correction. |
+| dandelion | Related dandelion_root owner cites a fresh-leaf pilot; no blanket canonical alias or root efficacy transfer. |
+| yohimbe | Existing Dose-only source/authority review; finish Evidence separately and preserve safety restrictions. |
+| astragalus | Existing source-specific hold and heterogeneous immune-marker findings; no generic protection activation. |
+| st_johns_wort | Specific signed A113 hold persists; exact extract/population acceptance and independent safety rules remain. |
+| oi_beetroot_powder | Existing literature and INGR_BEETROOT sources; verify preparation correspondence before joining owners. |
+
+Receipts: held_source_closure_20261028 patches and DR_PHAM_RULINGS, evidence_review_batch1_20261102
+research, evidence_backed_970_20261104/decisions/green_coffee_bean.json, and current clinical/literature
+verification provenance. The source agents rechecked live content for16039414/25196580/19678785/
+37952511/29037431 and NCCIH yohimbe; other source-access histories remain dated receipts, not new
+retrieval claims. Prior valid research must be reused, while its unfinished applicability stays honest.
+
+
+## Valerian identity and completed-review wiring — November 13, 2026
+
+Owner: IQM `valerian` aliases/match rules, `EnhancedDSLDNormalizer` authored exclusion,
+`SupplementEnricherV3::_match_quality_map_impl`, and existing `INGR_VALERIAN.canonical_id`.
+Will NOT create: a chemical registry, new marker policy, new review disposition or clinical grade.
+
+FDA https://precision.fda.gov/uniisearch/srs/unii/34NDB285PM and NLM
+https://meshb.nlm.nih.gov/record/ui?ui=C037133 independently identify valerenic acid as the
+C15H22O2 constituent, not whole valerian root. Main and independent receipt agent read both.
+Four chemical aliases no longer establish root identity. Existing parent-local form clues remain
+scoped to an already identified root. Exact material exclusions reject isolated chemical names;
+root notes retain their full ingredient context. Other-ingredient salt exclusions retain their
+original independent-note semantics. A stale cleaner root identity cannot override the authored
+chemical exclusion during Enrich. No blanket constituent-to-marker reclassification was added.
+
+Eight initial cases failed before correction; an independent reviewer then reproduced root-note
+identity loss, which was fixed. Expanded controls cover singular/plural/preparation labels, with
+and without the verified UNII, misleading ingredient groups, stale Enrich identities, preserved
+mass, valid root notes and conflicting material notes. Owner/marker/safety slice123 passed;
+identity integrity124 passed; resolver/cache/form consumers523 passed. Additional final cache and
+UNII controls are recorded in the durable receipts.
+
+The existing INGR_VALERIAN source review is already reference-only/closed_no_credit, authorized
+under the October28 BRIEF and retained patch. Source33086877/PMC7585905 was re-read live by main
+and an independent agent. Its pooled sleep result is not significant; a whole-root subgroup is
+not a universal efficacy conclusion. Only the missing canonical link is added; the existing
+context, reviewer/provenance limitations, source scope and zero-credit decision are unchanged.
+Three resolver regressions failed before that link and pass after it.
+
+Five frozen raw products:12853,213353,328079,333775 and creatine control184096. Identity correction
+keeps actual root warnings/actions/severities and removes only false chemical attribution.
+328079/333775 have nested constituent disclosures, not standalone chemical supplements: existing
+role handling leaves those rows active/unresolved, so both become not_scored with incomplete
+safety assessment. This conservative hold is explicit and constituent-role handling remains open.
+Canonical wiring completes root-only12853/213353 at unchanged scores55.4/57.9 and unchanged safety;
+chemical-containing products remain held. Independent full-record review accepts these effects.
+
+Performance investigation reproduced11082 redundant static-name expansions on a repeated unresolved
+lookup. Existing variant derivation is now a bounded pure string-to-immutable-tuple cache; matching
+order and row-specific exclusions remain live. Warm sodium-alginate/alginic-acid controls pass.
+The five-label full Clean/Enrich/Score/Blob replay is exactly unchanged by this optimization.
+One warmup plus three uncontended runs: baseline median0.455770s; initial correction1.111928s
+(rejected); final0.450986s. Peak RSS442236928→382664704bytes. Frozen raw input hash
+27d1a9db98da890dc5e4ffe6dcf11b49810bfba27373e37aa605913697855b81; fresh input copies per run.
+This bounded measurement does not claim corpus-wide speed. Final local qualification passes564 tests/24 declared opt-in skips in146.73s; skip guard passes.
+These follow-up changes are not covered by the already-green PR477 SHA3a1d85543.
+
 
 ## PR477 authority-row review corrections — November 13, 2026
 
@@ -141,6 +223,31 @@ main contains qualifiedcbb20fe6. Pipeline merge waits for these corrected checks
 resolution. Valerian follow-up stays separately preserved at codex/evidence-valerian/f64572527.
 No rebuild, catalog publication, installed-app delivery or release is claimed.
 
+
+## Black cohosh and Chlorella source corrections — November 13, 2026
+
+Owner: existing INGR_BLACK_COHOSH and INGR_CHLORELLA records in backed_clinical_studies;
+will NOT create a grade, Dose benchmark, registry or new clinical determination. Behavioral
+source-transcription/existing-hold enforcement batch. A048/A056 verification and October28 fifth
+ruling retain specific holds. Parent scoring_eligible=false now makes those holds explicit.
+
+Main and independent source_review read live PubMed abstracts15565808,16039414,17565936,19609225,
+29037431,35331862,23234816. Black-cohosh copy now distinguishes uncontrolled improvement, a null
+whole-population primary analysis with positive subgroup, active-comparator/33%attrition, and
+12-month placebo-null findings; universal safety/regimen claims removed. Chlorella copy retains
+biomarker findings while identifying subgroup limitations, unequal metformin doses in the adjunct
+trial, null lipid outcomes and modeled dose-response limitations. Unsupported longevity goals and
+muscle-recovery attribution removed. Historical effect directions, all references, NCT inventories,
+Dose semantics and empty contexts preserved; no aggregate trial/enrollment validation claimed.
+Both record update dates reflect November13. This is agent source review, not clinician review.
+
+Four regressions failed first;472 source-owner tests pass. Exact data_batch check proves only the
+two named records changed. Scoped strict citation verifier:7claims/7PMIDs pass,0mismatch/drift/ghost
+or missing. Independent applied-diff review passes. Seven frozen labels243701,338997,251578,311326,
+273825 plus312587/293955 controls: public blobs, scores/pillars/status/safety unchanged; five affected
+labels only change internal hold reasons, two controls unchanged. Last_updated metadata corrected
+after this replay; final combined candidate qualification remains pending. No products released.
+Durable receipts and exact apply script: cohosh-chlorella-* under the existing evidence-close folder.
 ### Authority CI completion-copy correction
 
 CI43523089618 shard5 exposed one old zero-credit copy pin for raw312894. Its
@@ -150,3 +257,44 @@ for full20). It remains partial/not_yet_reviewed with the Evidence release
 blocker.2505 remains0. Independent source/production review accepts the exact
 score and blocker assertions; all73 A9 completion-scope tests pass. No production
 change in this correction. f5 local checkpoint passed564 with24declared opt-ins.
+
+### Valerian explicit constituent disclosure — qualified locally
+
+Owner: Clean::_is_standardization_marker_row and existing standardized_botanicals;
+Enrich::_derive_disclosed_marker_percentage now delegates existing max-not-sum
+ratio and whole-word matching to normalization.py. Owner search covered matrix,
+glossary and marker stems. No new registry, public field, tolerance or grade.
+A private transient flag carries raw parent/child proof through existing flattening.
+Clean additionally requires an exact registered child name, exact registered extract
+parent alias, direct child, one identical serving basis, exact quantity operators,
+explicit matching printed percentage and the existing parent mass bound. The
+0.8% form-quality threshold is not used to reject a genuine0.3% disclosure.
+
+Two source-disclosure regressions failed before implementation. Independent review
+found three modified-name false positives; all failed first and exact-name matching
+corrected them. Final owner/identity/Enrich/signoff slice:384passed in65.14s.
+Five frozen full-label replays:328079 restores57.9/complete;333775 restores59.6
+but stayspartial on separate Evidence review. Root and constituent amounts and all
+interaction summaries unchanged; three controls unchanged. Final exact-name guard
+adds zero artifact differences. Independent review accepts source and measured deltas.
+Same five raw inputs, warmup plus three timed runs: median0.496126s/RSS442073088
+before;0.488896s/RSS424476672 after; inputsha27d1a9db98da890dc5e4ffe6dcf11b49810bfba27373e37aa605913697855b81 unchanged.
+No observed regression in this bounded measurement; no corpus speed claim.
+Final seven-label cohosh/chlorella replay equals the earlier reviewed correction
+across full records (zero additional differences). Receipts:valerian-marker-* and
+cohosh-chlorella-final-* under the existing external evidence-close directory.
+
+### Review queue ranks26–50 reuse screen
+
+Read-only record/receipt triage is not25completed reviews. Most are unfinished
+applicability or preparation-specific studies; explicit bromelain/saffron holds
+remain. Psyllium was the strongest reuse hypothesis: stable full raw probes330038
+(huskpowder) and76810(seedhuskpowder) already resolve through INGR_PSYLLIUM_HUSK
+to reviewed human support and complete Evidence.17192 generic Psyllium correctly
+stayspending because source-labelled husk is unresolved. No wiring defect found,
+no new grade or schema change. Generic control is not verified whole seed.
+Receipts:external psyllium-probe/stable.jsonl and full records. Queue is stale;
+recompute only after integrated final rebuild. L-phenylalanine authority and
+horsetail preparation-specific record reconciliation remain investigation candidates.
+
+Combined follow-up checkpoint46bc015e6: `scripts/test.sh local` passes564tests,24declaredopt-ins in152.69s; skipguardpasses. PR478qualifies this source; exactCIpending.

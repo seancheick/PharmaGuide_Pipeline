@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1477,
-      "total_form_aliases": 12301,
+      "total_form_aliases": 12297,
       "parents_with_parent_aliases": 152,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-11-11",
+    "last_updated": "2026-11-13",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -47482,11 +47482,8 @@
         },
         "notes": "Valeriana officinalis root extract standardized to valerenic acids (typically 0.8%). Clinical evidence for mild sleep improvement and anxiety reduction, though results are mixed across meta-analyses. May modulate GABA-A receptors. Generally safe with minimal hangover effect. 300-600 mg before bedtime standard dose. B23 audit 2026-04-25: valerenic acid PK measurable but high variability (PMID:20878691). Standardized > root powder > unspecified by class-extract gradient.",
         "aliases": [
-          "valerenic acid extract",
           "valerian 0.8%",
-          "valerenic acid",
-          "valerian valerenic acid",
-          "valerenic acid 0.8%"
+          "valerian valerenic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47494,7 +47491,12 @@
           "range_low": 0.3,
           "range_high": 0.5,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "valerenic acid extract",
+          "valerenic acid",
+          "valerenic acid 0.8%"
+        ]
       },
       "valerian root powder": {
         "bio_score": 8,
@@ -47535,7 +47537,6 @@
           "valerian root unspecified",
           "Valerian (Valeriana officinalis) (root) supercritical extract",
           "16 mg {Valerian} supercritical extract",
-          "Valerenic Acids",
           "valerian extract",
           "valeriana officinalis extract",
           "valerian root extract"
@@ -47555,7 +47556,25 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        {
+          "term": "valerenic acid",
+          "match_mode": "exact"
+        },
+        {
+          "term": "valerenic acids",
+          "match_mode": "exact"
+        },
+        {
+          "term": "valerenic acid extract",
+          "match_mode": "exact"
+        },
+        {
+          "term": "valerenic acid 0.8%",
+          "match_mode": "exact"
+        }
+      ]
     },
     "category_enum": "herbs",
     "data_quality": {

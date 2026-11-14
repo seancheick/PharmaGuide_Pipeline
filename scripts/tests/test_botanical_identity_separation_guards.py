@@ -36,6 +36,64 @@ def enricher():
     return SupplementEnricherV3()
 
 
+@pytest.mark.parametrize('label', ['Valerenic Acid', 'Valerenic Acids', 'Valerenic Acid Extract', 'Valerenic Acid 0.8%'])
+@pytest.mark.parametrize('group', ['Valerenic Acid', 'Valerian'])
+@pytest.mark.parametrize('unii', ['', '34NDB285PM'])
+def test_isolated_valerenic_acid_does_not_become_whole_root(normalizer, label, group, unii):
+    raw = _perilla_source_product(label)
+    raw['ingredientRows'][0].update(ingredientGroup=group, uniiCode=unii)
+    clean = normalizer.normalize_product(raw)
+    row = clean['activeIngredients'][0]
+    assert row.get('canonical_id') != 'valerian'
+    assert row['quantity'] == 150
+
+
+@pytest.mark.parametrize('canonical', [None, 'valerian'])
+@pytest.mark.parametrize('label', ['Valerenic Acid', 'Valerenic Acids', 'Valerenic Acid Extract', 'Valerenic Acid 0.8%'])
+def test_enrich_does_not_resurrect_root_for_isolated_constituent(enricher, canonical, label):
+    match = enricher._match_quality_map(
+        label, label, enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id=canonical,
+    )
+    assert match is None or match['canonical_id'] != 'valerian'
+
+
+def test_valerian_root_keeps_identity_with_constituent_note(normalizer, enricher):
+    raw = _perilla_source_product('Valerian Root Extract')
+    raw['ingredientRows'][0].update(ingredientGroup='Valerian', notes='valerenic acid')
+    clean = normalizer.normalize_product(raw)
+    assert clean['activeIngredients'][0]['canonical_id'] == 'valerian'
+    match = enricher._match_quality_map(
+        'Valerian Root Extract', 'Valerian', enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id='valerian', row_notes='valerenic acid',
+    )
+    assert match is not None and match['canonical_id'] == 'valerian'
+
+
+def test_enrich_stale_root_identity_preserves_unresolved_chemical_amount(normalizer, enricher):
+    clean = normalizer.normalize_product(_perilla_source_product('Valerenic Acid'))
+    clean['activeIngredients'][0].update(
+        canonical_id='valerian', canonical_source_db='ingredient_quality_map',
+    )
+    enriched, _ = enricher.enrich_product(clean)
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row.get('canonical_id') != 'valerian'
+    assert row['scoreable_identity'] is False
+    assert row['quantity'] == 150
+
+
+def test_substring_material_exclusion_still_reads_notes(enricher):
+    from copy import deepcopy
+
+    quality_map = deepcopy(enricher.databases['ingredient_quality_map'])
+    quality_map['valerian']['match_rules']['negative_match_terms'] = ['leaf material']
+    match = enricher._match_quality_map(
+        'Valerian Root Extract', 'Valerian', quality_map,
+        cleaner_canonical_id='valerian', row_notes='actually leaf material',
+    )
+    assert match is None
+
+
 @pytest.mark.parametrize(
     "label,forbidden",
     [
