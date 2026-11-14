@@ -488,3 +488,30 @@ review and unreadsource guard;16followups pass.16soy source-ID claims (8PMID+8DO
 corrections;31psyllium source-ID claims passed earlier same-run check. Python0new10existing; exact2dataentries.
 Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
 or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
+### PR 481 integration review corrections (November 13, 2026)
+
+Two independently reproduced review findings were corrected before approved integration.
+Owner: `evidence_resolver.py::_held_clinical_source_ids`; evidence: `rg -n
+'_held_clinical_source_ids|reference_source_ids' scripts/evidence_resolver.py
+scripts/clinical_evidence_schema.py`. Will NOT create a second identifier parser or
+relax affirmative source identity. A held reference with a valid PMID and conflicting
+DOI/URL metadata previously lost its hold, even when the PMID remained in the declared
+inventory. Six failing regressions cover eligibility, retraction and concern holds with
+conflicting and malformed URLs. Each independently declared pointer now uses the existing
+parser for holds; inconsistent composite references still cannot establish positive identity.
+
+Owner: existing Bimuno context population and `clinical_applicability.py::assess_context_population`.
+The retained primary Methods exclude pregnancy and lactation. The compressed wording
+`Pregnancy/lactation ... exclusions` failed the lactation parser, granting 5 points on an
+explicit breastfeeding target. Separate source-faithful exclusion sentences fix that case;
+pregnancy and ordinary adult controls remain enforced. This is Evidence population scope,
+not a new personal-safety decision. Only `INGR_BIMUNO_GOS` changed in the curated file.
+
+Independent source/code review accepted both corrections. The three affected owner files
+pass 1,022 tests. Exact before/after raw replay of 29 frozen real labels has zero differences
+across cleaned, enriched, scored and detail-blob records. Counterfactual breastfeeding and
+conflicting-reference cases exercise the repaired paths. Same-input 18-product timing is
+2.975 to 2.966 seconds; inputs remained unchanged. Durable receipts:
+`/Users/seancheick/pg_quality/evidence-close-20261113/bgos-review-fixes-*`.
+
+The combined local checkpoint passed 564 tests with 24 declared opt-ins; the skip guard passed. Python correctness reported zero new findings.

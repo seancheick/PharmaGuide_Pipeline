@@ -54927,7 +54927,7 @@
           },
           "population": {
             "sample_size": 83,
-            "description": "91 randomized;83completed/per-protocol. Adults18–65 with frequent moderate/severe bloating, flatulence or abdominal pain; screened high probability of functional bowel disorder but without diagnosed GI disease. Pregnancy/lactation and specified illness/medication exclusions.",
+            "description": "91 randomized;83completed/per-protocol. Adults18–65 with frequent moderate/severe bloating, flatulence or abdominal pain; screened high probability of functional bowel disorder but without diagnosed GI disease. Pregnant women were excluded. Lactating women were excluded. Specified illness and medication exclusions also applied.",
             "age_group": "adult"
           },
           "study_design": "Single-centre randomized double-blind placebo crossover;2week periods,2week washout; maltodextrin comparator. Main symptom outcomes named in Methods/power calculation, but no explicit primary hierarchy or prospective registry identifier located.",

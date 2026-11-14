@@ -469,7 +469,11 @@ def _held_clinical_source_ids(entry: Mapping[str, Any]) -> frozenset[str]:
     for ref in entry.get("references_structured") or []:
         if isinstance(ref, Mapping) and (ref.get("retracted") or ref.get("expression_of_concern")
                                         or ref.get("scoring_eligible") is False):
-            held.update(reference_source_ids(ref))
+            # Conflicting metadata cannot erase an independently declared hold.
+            # Parse each pointer with the same identity owner; this does not join
+            # inconsistent pointers for affirmative source eligibility.
+            for key in ("pmid", "doi", "url", "source_url"):
+                held.update(reference_source_ids({key: ref.get(key)}))
     for context in entry.get("study_contexts") or []:
         if isinstance(context, Mapping) and context.get("source_integrity") in {"retracted", "expression_of_concern"}:
             held.update(context_source_ids(context))

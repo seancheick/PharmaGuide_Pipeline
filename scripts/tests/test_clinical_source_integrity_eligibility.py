@@ -3515,3 +3515,30 @@ def test_psyllium_authority_keeps_preparation_and_population_bounds(label, group
     assert any(c.get('source_pmids') == ['30239559'] for c in record['study_contexts'])
     held = next(r for r in record['references_structured'] if r.get('pmid') == '18985059')
     assert held['scoring_eligible'] is False
+
+@pytest.mark.parametrize('target', ['Pregnant Women', 'Breastfeeding Women'])
+def test_bimuno_source_exclusions_block_explicit_population_targets(target):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', 'BiMuno B-Galactooligosaccharides', 900)
+    product['targetGroups'] = [target]
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('hold', ['scoring_eligible', 'retracted', 'expression_of_concern'])
+@pytest.mark.parametrize('url', ['https://doi.org/10.1000/conflicting-source', 'https://[invalid'])
+def test_conflicting_reference_cannot_erase_explicit_pmid_hold(monkeypatch, hold, url):
+    import clinical_applicability as ca
+    from clinical_evidence_schema import reference_source_ids
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    record['published_studies'] = ['30108163']
+    reference = {'pmid': '30108163', 'doi': '10.1136/gutjnl-2017-315136', 'url': url,
+                 hold: False if hold == 'scoring_eligible' else True}
+    record['references_structured'] = [reference]
+    # Conflicting metadata remains unusable as affirmative identity evidence.
+    assert reference_source_ids(reference) == frozenset()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    assert not er.clinical_record_sources_eligible(record, context=context, source_pmids=['30108163'])
+    _, product = _joint_row_product('INGR_L_GLUTAMINE', 'l_glutamine', 'L-Glutamine', 5000)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
