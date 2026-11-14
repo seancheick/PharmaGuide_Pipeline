@@ -1543,7 +1543,7 @@ def test_clinical_preparation_exclusion_uses_bound_delivery_source(source_case, 
 
 
 @pytest.mark.parametrize("canonical, retained_source", [
-    ("maca_root", "36593713"), ("olive_leaf_powder", "21036583"),
+    ("maca", "36593713"), ("olive_leaf_powder", "21036583"),
     ("collagen", "33301004"), ("l_proline", "41290715"),
     ("l_phenylalanine", "32560181"), ("lithium", "39356507"),
     ("paba", "14794992"), ("chaga", "18416085"),
@@ -1558,7 +1558,7 @@ def test_read_human_source_facts_preserve_unfinished_ingredient_assessment(canon
     assert "independent" in record["verification_provenance"]["verified_by"].lower()
     if canonical in {"l_proline", "paba"}:
         assert not record["studied_dose_exposure"]
-    if canonical == "maca_root":
+    if canonical == "maca":
         assert record["reason_code"] != "crude_material_lacks_standardization"
         study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "36593713")
         assert "833" in study["dose"] and "5g" in study["dose"].replace(" ", "")
@@ -3383,9 +3383,76 @@ def test_bimuno_review_does_not_finish_other_prebiotic_materials(label):
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
 
 
+
 @pytest.mark.parametrize('label', ['Acacia Fiber', 'Acacia Gum', 'Gum Arabic', 'Acacia senegal'])
 def test_acacia_material_has_finished_nontransfer_from_named_bimuno(label):
     _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', label, 4000)
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+@pytest.mark.parametrize('amount', [500, 4998])
+def test_reviewed_gelatinized_maca_is_preliminary_without_amount_gate(amount):
+    record, product = _joint_row_product('INGR_MACA', 'maca', 'Gelatinized Maca Root Powder', amount)
+    product['product_name'] = 'Gelatinized Maca'
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 5
+    assert record['effect_direction'] == 'positive_weak'
+    context = record['study_contexts'][0]
+    assert context['dose']['values'] == [4.998]
+    assert context['population']['sample_size'] == 88
+    assert any(o['direction'] == 'null' and 'testosterone' in o['name'].lower() for o in context['outcomes'])
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('label', ['Maca Root Powder', 'Maca Extract', 'Black Gelatinized Maca', 'Red Gelatinized Maca'])
+def test_other_maca_preparations_cannot_borrow_gelatinized_trial(label):
+    _, product = _joint_row_product('INGR_MACA', 'maca', label, 4998)
+    product['product_name'] = label
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+def test_gelatinized_maca_male_trial_does_not_finish_womens_review():
+    _, product = _joint_row_product('INGR_MACA', 'maca', 'Gelatinized Maca Root Powder', 4998)
+    product['product_name'] = 'Maca for Women'
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('amount', [100, 4000])
+def test_named_konjac_glucomannan_uses_reviewed_cholesterol_authority(amount):
+    record, product = _joint_row_product('INGR_GLUCOMANNAN', 'fiber', 'Konjac Glucomannan', amount)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 20
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert record['effect_direction'] == 'mixed'
+    authority = next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline')
+    assert authority['dose']['values'] == [4]
+    assert 'sample_size' not in authority['population']
+    assert 'total_enrollment' not in record
+
+
+@pytest.mark.parametrize('label', ['Dietary Fiber', 'Acacia Fiber', 'Other Polysaccharide'])
+def test_glucomannan_authority_cannot_transfer_to_other_fiber(label):
+    _, product = _joint_row_product('INGR_GLUCOMANNAN', 'fiber', label, 4000)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('hold', ['record', 'source'])
+def test_glucomannan_authority_preserves_explicit_holds(monkeypatch, hold):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_GLUCOMANNAN']
+    if hold == 'record':
+        record['scoring_eligible'] = False
+    else:
+        next(r for r in record['references_structured'] if r.get('doi') == '10.2903/j.efsa.2009.1258')['retracted'] = True
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_GLUCOMANNAN', 'fiber', 'Konjac Glucomannan', 4000)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+

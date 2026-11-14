@@ -806,8 +806,13 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
         )
 
     # Crude powders lacking standardization stay applicability unestablished
-    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder", "fiber"]:
+    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder"]:
         _assert_incomplete_source_review(cid)
+    # A named glucomannan review cannot qualify an unspecified fiber row.
+    fiber = er.resolve_evidence_for_canonical("fiber")
+    assert not fiber.points_eligible
+    assert fiber.blocking_reasons == ["clinical_source_row_unresolved"]
+    assert er.compose_product_resolution_state([fiber])[1] is False
 
 
 def test_phase4_batch4_standardized_clinical_canaries():
@@ -2566,11 +2571,14 @@ def test_independently_reviewed_bounded_gaps_finish_without_inventing_null_trial
     assert record["effect_direction"] is None and record["qualifying_human_studies"] == []
 
 
-@pytest.mark.parametrize("canonical", ["l_proline", "chaga", "raspberry_ketones", "maca_root"])
+@pytest.mark.parametrize("canonical", ["l_proline", "chaga", "raspberry_ketones", "maca"])
 def test_read_human_research_with_unfinished_scope_keeps_real_blocker(canonical):
     result = er.resolve_evidence_for_canonical(canonical)
     assert not result.points_eligible
-    assert result.blocking_reasons == ["literature_applicability_unestablished"]
+    expected = "clinical_source_row_unresolved" if canonical == "maca" else "literature_applicability_unestablished"
+    assert result.blocking_reasons == [expected]
+    from assessment_readiness import _resolved_evidence_assessment
+    assert _resolved_evidence_assessment(result)[0] == "not_yet_evaluated"
 
 
 def test_glutathione_canonical_alone_does_not_invent_label_preparation():

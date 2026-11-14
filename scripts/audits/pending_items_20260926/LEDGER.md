@@ -5571,3 +5571,29 @@ not reopen from maintenance citations. Fail-first scope/provenance/registered-ow
 63focused and independent62controls pass, with held/preparation/reference cases preserved. Shared
 literature fact projection retains unresolved source IDs under the existing clinical owner. No
 new owner/status/field. Final combined raw/performance/local/CI qualification pending.
+
+## Scoped maca and glucomannan reviews (November 13, 2026)
+
+Owner: backed_clinical_studies::INGR_MACA / INGR_GLUCOMANNAN, literature_evidence_records::maca,
+and existing context_effect_direction_interpretations; owner searches and source receipts retained
+in next-review. Will NOT create: a canonical, grade, Dose gate, registry or safety conclusion.
+
+Maca36593713: verified gelatinized material,88randomized/80completers, approximately5g/day12weeks;
+AMS positive, secondary IIEF/IPSS positive, testosterone null. Preliminary5 with preparation and
+population boundaries. Four earlier literature source reviews preserved; canonical maca_root aligns
+to actual maca identity. The existing unfinished applicability inventory remains open for excluded
+preparations/populations through the bounded resolver correction, not a new maintenance-citation hold.
+
+Konjac glucomannan: full EFSA1258 DOI10.2903/j.efsa.2009.1258 cholesterol conclusion receives the
+accepted authority20. General-population scope,4g/day source condition retained without a new
+Evidence dose gate or Dose benchmark.2017/2024 lipid reviews retain positive/null/low-certainty facts;
+2014 weight null and GI effects retained. Parent mixed remains; no invented enrollment or study count.
+Independent source and raw-output review completed. Actual reviewer is agent, not clinician.
+
+Qualification:1996 owner tests passed with3 diagnosed issues subsequently fixed;25 follow-up passed.
+10 scoped citation claims passed; Python correctness0new/10existing. Local564passed,24declared opt-ins
+in144.17s; skip guard passed.32 frozen raw records replayed: gelatinized204624/273735 gain5 and finish;
+306225 glucomannan gains20 and finishes. Extract/black/red maca stay held. Safety, warnings, amounts,
+identity, Dose and other pillars unchanged.18 identical enriched performance median2.761951→2.813728s,
+RSS217759744→218120192; inputhash unchanged. Receipts: next-review/scoped-reviews-*.
+CI pending. Separate Bimuno/acacia regression found in481 remains under repair; no integration/release.

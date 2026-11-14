@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
     "last_updated": "2026-11-13",
-    "total_entries": 225,
+    "total_entries": 227,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
@@ -55020,6 +55020,449 @@
           "acacia senegal"
         ]
       }
+    },
+    {
+      "id": "INGR_MACA",
+      "canonical_id": "maca",
+      "standard_name": "Maca",
+      "aliases": [],
+      "study_type": "rct_single",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "36593713"
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "pmid": "36593713",
+          "doi": "10.5534/wjmh.220112",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36593713/",
+          "title": "Efficacy and Safety of Maca (Lepidium meyenii) in Patients with Symptoms of Late-Onset Hypogonadism: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial."
+        }
+      ],
+      "notes": "Preliminary source-matched gelatinized maca evidence for aging-male symptom scores in the studied older men. A single short completer-analysis trial has baseline imbalance and reporting limitations. It does not establish testosterone restoration, fertility, exercise, energy or general safety benefit. Four independently checked November 7 source reviews remain in literature_evidence_records::maca; the historical maca_root key is aligned to the current canonical identity. Those conclusions are preserved rather than promoted to generic or colored-root efficacy. Ordinary powders, extracts, black/red preparations and female-specific products do not inherit this context.",
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "maca_36593713_gelatinized_symptoms",
+          "components": [
+            "INGR_MACA"
+          ],
+          "identity_scope": "botanical_preparation",
+          "identity": {
+            "botanical_species": "Lepidium meyenii",
+            "plant_part": "root/hypocotyl",
+            "preparation": "Gelatinized maca powder;833mg per1000mg capsule;release specification n-benzyl-hexadecanamide115–175micrograms/g. Color unspecified; no black/red/extract equivalence.",
+            "standardization": "n-benzyl-hexadecanamide115–175micrograms/g"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "aging_male_symptoms",
+          "purpose": "symptom_improvement",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "maca_36593713",
+          "population": {
+            "sample_size": 88,
+            "description": "Korean men over40 with AMS≥27;serum testosterone<2ng/mL excluded.88randomized44/44;80completers41maca/39placebo;mean age approximately65. Significant baseline testosterone/lipid imbalances.",
+            "age_group": "adult"
+          },
+          "study_design": "Two-center double-blind randomized placebo-controlled parallel trial;block randomization.12weeks;8lost to follow-up. Reported endpoint analysis uses80completers,not88. Baseline-adjusted between-group table contrasts;statistical Methods incompletely describe adjustment.",
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              4.998
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "Two capsules three times daily before meals.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Six1000mg finished-product capsules daily;each contains833mg maca gelatinizedpowder;authors describe total maca approximately5g/day for12weeks.",
+            "normalization": {
+              "basis": "6x833mg=4998mg=4.998g maca/day;finishedproduct6g is not maca6g.12weeks=84days."
+            },
+            "source_provenance": {
+              "pmid": "36593713",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10307657/",
+              "location": "Primary full XML Methods2–6,Results andTables1–3;retained Nov7receipt36593713_FULLTEXT.xml;freshEuropePMC XML retrieved during this review."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Primary AMS total score change favored maca at12weeks(p<.0001);maca45.61to34.95 versus placebo47.77to48.62.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Secondary total IIEF and IPSS changes favored maca at12weeks(p<.0001 andp=.0001).",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Total and free testosterone between-group changes null(p=.444 and.9184);no testosterone-boosting inference.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root; independent primary-content review by Codex /root/literature_receipts. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods, Results and Tables 1–3 independently read; existing November 7 reviews retained. Primary AMS findings support only a preliminary scoped conclusion. Hormone nulls and ADAM/PSA reporting inconsistencies retained, not used for positive claims."
+          },
+          "limitations": [
+            "Preliminary positive symptom evidence under the accepted rubric: single preparation/population trial, small sample, 12 weeks, completer analysis and baseline imbalances. Not hormone restoration, fertility, exercise or general energy proof.",
+            "No transfer from gelatinized powder to raw powder,extract,isolatedmacamides,Macapure,or black/redvarieties;source color unspecified.",
+            "Two mild gastrointestinal adverse events in maca group;continued participation. No universal safety reassurance or changed safety thresholds.",
+            "ADAM text/table interpretation is internally problematic:placebo positive rates fall more yet text asserts maca superiority. Exclude ADAM from affirmative conclusion. PSA pvalue differs text/table;not used for credit.",
+            "Prior four-source Nov7 review remains valid.25954318overall antidepressant-sexual-dysfunction outcomes null;36110519semen findings mixed/null. These do not establish generalized efficacy or require every candidate paper before a finite scoped review."
+          ],
+          "source_pmids": [
+            "36593713"
+          ]
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "effect_direction_confidence": "low",
+      "total_enrollment": 88,
+      "published_studies_count": 1,
+      "last_updated": "2026-11-13",
+      "key_endpoints": [
+        "Aging-male symptom score in the studied older male population; no testosterone increase established"
+      ],
+      "health_goals_supported": [],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_groups": [
+          [
+            "maca",
+            "lepidium meyenii"
+          ],
+          [
+            "gelatinized",
+            "gelatinised"
+          ]
+        ],
+        "excluded_form_terms": [
+          "extract",
+          "raw maca",
+          "black maca",
+          "red maca",
+          "black gelatinized maca",
+          "red gelatinized maca"
+        ],
+        "require_source_label_form": true,
+        "source_pmids": [
+          "36593713"
+        ],
+        "supported_outcomes": [
+          "aging_male_symptoms"
+        ],
+        "studied_population": "Men over 40 with aging-male symptom scores of at least 27; mean age about 65, with low testosterone below 2 ng/mL excluded. No female or pediatric population transfer.",
+        "reviewed_at": "2026-11-13"
+      }
+    },
+    {
+      "id": "INGR_GLUCOMANNAN",
+      "canonical_id": "fiber",
+      "standard_name": "Konjac glucomannan",
+      "aliases": [
+        "glucomannan",
+        "konjac mannan",
+        "konjac glucomannan"
+      ],
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "28356275",
+        "39385065",
+        "24533610"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "Maintenance of normal blood cholesterol concentrations; no cardiovascular-event conclusion"
+      ],
+      "health_goals_supported": [],
+      "notes": "Named konjac glucomannan authority conclusion, with contemporary mixed/null findings retained. No genericfiber transfer. Agent source review independently checked by Codex /root on2026-11-13; not clinician review. Source daily intake is not an Evidence gate or new Dose/safety threshold.",
+      "study_type": "systematic_review_meta",
+      "last_updated": "2026-11-13",
+      "references_structured": [
+        {
+          "type": "guideline",
+          "authority": "EFSA NDA Panel",
+          "doi": "10.2903/j.efsa.2009.1258",
+          "title": "Scientific Opinion on the substantiation of health claims related to glucomannan and maintenance of normal blood cholesterol concentrations (ID 836, 1560) pursuant to Article 13(1) of Regulation (EC) No 1924/2006",
+          "citation": "EFSA Journal 2009;7(10):1258 (publisher metadata; original PDF prints7(9)).",
+          "url": "https://doi.org/10.2903/j.efsa.2009.1258",
+          "publication_types": [
+            "Scientific Opinion"
+          ],
+          "evidence_grade": "guideline",
+          "supports_claims": [
+            "maintenance_of_normal_blood_cholesterol"
+          ],
+          "verification_source": "Full publisher PDF content from EFSA national focal-point mirror; official EFSA publisher redirect confirms DOI/title; current EU consolidated regulation corroborates authorized condition."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "28356275",
+          "doi": "10.3945/ajcn.116.142158",
+          "title": "A systematic review and meta-analysis of randomized controlled trials of the effect of konjac glucomannan, a viscous soluble fiber, on LDL cholesterol and the new lipid targets non-HDL cholesterol and apolipoprotein B.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28356275/",
+          "scoring_eligible": false,
+          "supports_claims": [],
+          "verification_source": "Live Europe PMC MED identity/content2026-11-13; full primary XML additionally read for39385065."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "39385065",
+          "doi": "10.1186/s12872-024-04223-0",
+          "title": "The effect of glucomannan supplementation on lipid profile in adults: a GRADE-assessed systematic review and meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39385065/",
+          "scoring_eligible": false,
+          "supports_claims": [],
+          "verification_source": "Live Europe PMC MED identity/content2026-11-13; full primary XML additionally read for39385065."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "24533610",
+          "doi": "10.1080/07315724.2014.870013",
+          "title": "The efficacy of glucomannan supplementation in overweight and obesity: a systematic review and meta-analysis of randomized clinical trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24533610/",
+          "scoring_eligible": false,
+          "supports_claims": [],
+          "verification_source": "Live Europe PMC MED identity/content2026-11-13; full primary XML additionally read for39385065."
+        }
+      ],
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Cholesterol authority is positive; same-use pooled evidence has low certainty and null secondary markers, while weight-loss evidence is mixed/null. Keep these facts separate from the source-specific authority tier.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "glucomannan",
+          "konjac mannan"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "cholesterol"
+        ],
+        "studied_population": "General population in the EFSA authority conclusion; no population sample or trial enrollment is assigned to this authority context.",
+        "source_references": [
+          {
+            "doi": "10.2903/j.efsa.2009.1258"
+          }
+        ],
+        "reviewed_at": "2026-11-13"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "glucomannan_efsa_1258_cholesterol",
+          "components": [
+            "INGR_GLUCOMANNAN"
+          ],
+          "source_references": [
+            {
+              "doi": "10.2903/j.efsa.2009.1258",
+              "url": "https://doi.org/10.2903/j.efsa.2009.1258"
+            }
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Konjac glucomannan",
+            "preparation": "Named water-soluble high-molecular-weight glucomannan from Amorphophallus konjac; not unspecified fiber or a different polysaccharide."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "guideline",
+          "component_registration_status": "fully_registered",
+          "condition": "cholesterol",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "efsa_1258_authority_assessment",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Primary EFSA opinion sections1–5 content read; live DOI/publisher identity checked. Current same-use meta-analysis and null limitations reviewed separately. Application of accepted authority rubric independently checked against the full authority opinion and retained same-use findings."
+          },
+          "population": {
+            "description": "General population in the EFSA authority conclusion; no population sample or trial enrollment is assigned to this authority context.",
+            "age_group": "mixed"
+          },
+          "study_design": "EFSA scientific authority assessment, not an additional clinical trial.",
+          "outcomes": [
+            {
+              "name": "Authority conclusion supports maintenance of normal blood cholesterol concentrations.",
+              "hierarchy": "guideline",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              4
+            ],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Daily total in one or more servings; no fixed number of daily administrations required by the authority condition.",
+            "dosage_forms": [
+              "oral food supplements",
+              "oral glucomannan-enriched foods"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Authority condition: at least4g/day glucomannan in one or more servings. This is not a new trial arm.",
+            "normalization": {
+              "basis": "Source condition only; no Evidence amount gate, new Dose benchmark or new safety threshold."
+            },
+            "source_provenance": {
+              "doi": "10.2903/j.efsa.2009.1258",
+              "source_url": "https://doi.org/10.2903/j.efsa.2009.1258",
+              "location": "Full EFSA Journal2009;7(9):1258, sections1–5; printed pages5–8."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "glucomannan",
+              "konjac mannan"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "cholesterol"
+            ],
+            "studied_population": "General population in the EFSA authority conclusion; no population sample or trial enrollment is assigned to this authority context.",
+            "source_references": [
+              {
+                "doi": "10.2903/j.efsa.2009.1258"
+              }
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "limitations": [
+            "Authority conclusion concerns cholesterol, an accepted clinical risk marker; it does not establish reduced cardiovascular events.",
+            "The authority weighed small studies, null individual lipid comparisons, some nonsignificant lipid ratios and absence of a clear dose-response.",
+            "Modern PMID39385065 retains TC/LDL benefit with low certainty and high heterogeneity; do not describe all underlying trials as high-certainty.",
+            "PMID28356275 found LDL/nonHDL benefit but no ApoB effect; sources overlap and are not independent participant cohorts to sum.",
+            "Weight-loss meta-analysis PMID24533610 was null; cholesterol authority is not a uniform weight-loss or all-outcome claim.",
+            "Generic fiber, different polysaccharides and an unidentified konjac blend cannot inherit named glucomannan credit.",
+            "Existing water/swallowing and other safety rules remain independent; this opinion supplies no universal safety clearance."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "glucomannan_28356275_source_review",
+          "components": [
+            "INGR_GLUCOMANNAN"
+          ],
+          "source_pmids": [
+            "28356275"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit review; positive/null findings retained. Not a claim the article is invalid or that glucomannan is ineffective. Twelve trials370participants, adults and children; LDL/nonHDL benefit, ApoB null. Abstract-level review only in this pass, not reconstructed trial extraction."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "28356275",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/28356275/",
+              "location": "Authoritative indexed abstract"
+            }
+          },
+          "limitations": [
+            "Twelve trials370participants, adults and children; LDL/nonHDL benefit, ApoB null. Abstract-level review only in this pass, not reconstructed trial extraction.",
+            "No additive meta-analysis credit or invented independent replication; authority tier already supplies the one ingredient conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "glucomannan_39385065_source_review",
+          "components": [
+            "INGR_GLUCOMANNAN"
+          ],
+          "source_pmids": [
+            "39385065"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit review; positive/null findings retained. Not a claim the article is invalid or that glucomannan is ineffective. Full primary Methods/Results/Conclusion reviewed: TC/LDL/ApoB1 positive; TG/ApoA1/ratios null; very high heterogeneity."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39385065",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39385065/",
+              "location": "Full primary Methods/Results/Conclusion"
+            }
+          },
+          "limitations": [
+            "Full primary Methods/Results/Conclusion reviewed: TC/LDL/ApoB1 positive; TG/ApoA1/ratios null; very high heterogeneity.",
+            "GRADE low forTC/LDL, verylow forTG/HDL. Positive authority conclusion does not erase these limitations. No additional points from this pooled source."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "glucomannan_24533610_source_review",
+          "components": [
+            "INGR_GLUCOMANNAN"
+          ],
+          "source_pmids": [
+            "24533610"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit review; positive/null findings retained. Not a claim the article is invalid or that glucomannan is ineffective. Eight pooledRCTs showed no statistically significant weight difference, MD−0.22kg(95%CI−0.62to0.19); nineeligibletrials. Abstract reviewed, not full Methods."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "24533610",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24533610/",
+              "location": "Authoritative indexed abstract"
+            }
+          },
+          "limitations": [
+            "Eight pooledRCTs showed no statistically significant weight difference, MD−0.22kg(95%CI−0.62to0.19); nineeligibletrials. Abstract reviewed, not full Methods.",
+            "Abdominal discomfort, diarrhea and constipation reported. Preserve null weight finding; do not convert this into null cholesterol or universal safety conclusion."
+          ]
+        }
+      ]
     }
   ]
 }
