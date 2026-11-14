@@ -1158,6 +1158,9 @@ def test_glutamine_interpretation_needs_exact_verified_selected_context():
     forged = copy.deepcopy(selected)
     forged['applicability_assessment']['population_applicability']['context_ids'] = ['different_context']
     assert _entry_raw_points(forged) == 0
+    extra = copy.deepcopy(selected)
+    extra['applicability_assessment']['population_applicability']['context_ids'].append('another_selected_context')
+    assert _entry_raw_points(extra) == 0
     unscoped = {k:v for k,v in selected.items() if k != 'applicability_assessment'}
     assert _entry_raw_points(unscoped) == 0
     assert _entry_raw_points({**selected, 'id':'OTHER_RECORD', 'source_data':'backed_clinical_studies:OTHER_RECORD'}) == 0
@@ -3456,3 +3459,19 @@ def test_glucomannan_authority_preserves_explicit_holds(monkeypatch, hold):
     _, product = _joint_row_product('INGR_GLUCOMANNAN', 'fiber', 'Konjac Glucomannan', 4000)
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
+
+
+@pytest.mark.parametrize('additional_context', [False, True])
+def test_authority_floor_preserves_other_applicable_reviewed_context(monkeypatch, additional_context):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_INULIN']
+    if additional_context:
+        sibling = copy.deepcopy(next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline'))
+        sibling['context_id'] += '_additional_review_test'
+        sibling['condition'] = 'other_reviewed_use_test'
+        record['study_contexts'].append(sibling)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 20

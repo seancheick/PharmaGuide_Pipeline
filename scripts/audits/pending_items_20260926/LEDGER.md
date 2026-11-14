@@ -5599,8 +5599,19 @@ RSS217759744→218120192; inputhash unchanged. Receipts: next-review/scoped-revi
 CI pending. Separate Bimuno/acacia regression found in481 remains under repair; no integration/release.
 
 
+
 PR482 CI43539098167 completed: onlythree stale testexpectations in shards3/5. EFSA1258 is an
 accepted cholesterol surrogate (not exposure-only), unspecifiedfiber remainsheld by missinglabel
 preparation, and configdriftguard now explicitly pins the reviewedglucomannan rule. No runtime/
 clinicalfacts changed in this correction; no broad guard removed.106 affectedtests pass. Prior
 combinedlocal564pass24declaredoptins145.69s and37/32source receipts retained; exactCIrerunpending.
+
+Authority-context selection defect (November13): fullowner in-memory psyllium probes330038/76810
+select both reviewed lipid and proposed FDA contexts, but an exactsingleton guard discards the
+reviewed authority floor. Owner: generic_evidence::_effect_direction_assessment; evidence: actual
+source-bound probe plus fullartifact failfirst1fail/2pass. Floor-only interpretations now require
+membership of their exact approved context; signed multiplier exceptions still require singleton.
+All source identity, matched-row, review/hold, guideline-role and same-source/use conflict checks
+remain.9direct checks and independent27edgecases pass. No newpolicy/field/owner; no dataactivation
+in this atomic fix. Final combined raw/performance/local/CI qualification belongs to the sourcebatch.
+
