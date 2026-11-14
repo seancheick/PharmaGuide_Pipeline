@@ -617,3 +617,36 @@ four-product run succeeded and its source fingerprint remained unchanged. This d
 follow-up reuses the qualified local checkpoint; a fresh exact-head whole-fast CI is required.
 Receipts: next-review/chamomile/ci-failfirst.log, ci-fixes-tests.log,
 ci-fix-qualified.jsonl and ci-fix-full-comparison.json.
+
+## Conflicting olive/zinc source containment (November 13/14, 2026)
+
+Live NIH labels59829,47785 and25486 retain ingredientId292843 with name/form olive leaf/20%
+oleuropein but original same-row notes Zinc Monomethionine (and zinc-like amounts/DVs).
+Official JSONs were fetched and retained; all have empty image links. No exact original label was
+recovered. Do not infer a zinc replacement. Existing IQM olive_leaf negative_match_terms now
+excludes that specific conflicting source phrase. Independent research and root verified the clash.
+
+Two existing identity paths lost the exclusion: retained raw_taxonomy.source_notes were omitted
+from the final shared veto, and non-scoring botanical recognition could restore a rejected candidate
+after its first identity resolution had no candidate. The shared owner now reads both row-owned
+working-note fields only for vetoes; recognition revalidates candidates with authored exclusions
+through that same resolver before restoring identity. No new field, clinical rule or replacement
+identity. Owner: identity_integrity.py::resolve_identity and
+SupplementEnricherV3::_restamp_recognized_non_scorable_identity; existing negative_match_terms owner.
+Will NOT create a new quarantine category, infer zinc quantities or weaken export's row ledger.
+
+Tests reproduced each loss before repair;140 identity cases and396 combined identity/non-scoring/
+source-correction cases pass, plus the real25486 export regression. Independent review accepted
+containment and caught an over-specific reason label, corrected to existing identity_conflict.
+All three real rows now remain identity_conflict with no canonical; their score is withheld and
+identity readiness incomplete.25486 was previously complete; it is now partial. Control216776
+retains its score58.6. Existing detail-blob export rejects all three with UNRESOLVED_SCORE_ACTIVE;
+the failed full/blob replay is an expected refusal, not a green export checkpoint. A separate
+four-product full-stage capture without blob succeeds. Original raw data is unchanged. Fresh full
+catalog handling must account for these source defects; this batch cannot make them release-ready.
+Receipts: next-review/olive-leaf/*identity*, *recognition*, real-conflict-export-test.log,
+and next-review/plant-batch/olive-identity-* . Combined CI/local/performance still pending.
+
+The completed75-label wording-only replay before these identity changes found six olive note
+changes and no score/status/safety/amount/identity changes. Green-coffee wording changed no public
+product fields. Its source fingerprint stayed unchanged throughout capture.

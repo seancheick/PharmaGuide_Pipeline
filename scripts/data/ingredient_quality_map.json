@@ -50844,7 +50844,10 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "zinc monomethionine"
+      ]
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",

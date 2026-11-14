@@ -33,6 +33,55 @@ from identity_integrity import build_canonical_identity_registry, resolve_identi
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
+@pytest.mark.parametrize('notes,conflict', [
+    ('Zinc (Form: as Zinc Monomethionine) ', True),
+    ('Olive leaf extract standardized for Oleuropein', False),
+])
+def test_botanical_recognition_cannot_restore_an_excluded_identity(notes, conflict):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    enricher = SupplementEnricherV3()
+    ingredient = {'name': 'Olive leaf extract', 'raw_source_text': 'Olive leaf extract',
+                  'raw_source_path': 'ingredientRows[0]', 'canonical_id': None,
+                  'canonical_source_db': 'unmapped', 'ingredientGroup': 'Olive ',
+                  'notes': notes, 'quantity': 7.5, 'unit': 'mg',
+                  'forms': [{'prefix': 'standardized for', 'name': 'Oleuropein', 'percent': 20}]}
+    row = dict(ingredient)
+    enricher._restamp_recognized_non_scorable_identity(row, ingredient, None,
+        enricher.databases['ingredient_quality_map'], recognition={
+            'recognition_source': 'standardized_botanicals',
+            'matched_entry_id': 'olive_leaf', 'matched_entry_name': 'Olive Leaf',
+            'recognition_reason': 'botanical_identity'})
+    if conflict:
+        assert row['identity_disposition'] == 'identity_conflict'
+        assert row['canonical_id'] is None
+        assert row['recognized_non_scorable'] is False
+    else:
+        assert row['canonical_id'] == 'olive_leaf'
+    assert row['scoreable_identity'] is False
+    assert ingredient['notes'] == notes
+
+
+def test_conflicting_real_olive_zinc_source_cannot_be_exported_as_complete():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    raw = json.loads((FIXTURES / 'nonscorable_identity_25486_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    conflict = next(row for row in enriched['ingredient_quality_data']['ingredients']
+                    if row.get('raw_source_path') == 'ingredientRows[6]')
+    assert conflict['identity_disposition'] == 'identity_conflict'
+    assert conflict['canonical_id'] is None
+    scored = build_scored_artifact(enriched)
+    assert scored['quality_assessment_status'] == 'partial'
+    # The existing export ledger refuses unresolved active identity.
+    # Do not turn a withheld identity into a completed, non-scorable botanical.
+    with pytest.raises(ValueError, match='UNRESOLVED_SCORE_ACTIVE'):
+        build_detail_blob(enriched, scored)
+    assert raw['ingredientRows'][6]['notes'] == 'Zinc (Form: from Zinc Monomethionine) '
+
+
 @pytest.fixture(scope="module")
 def enrich():
     from enhanced_normalizer import EnhancedDSLDNormalizer
