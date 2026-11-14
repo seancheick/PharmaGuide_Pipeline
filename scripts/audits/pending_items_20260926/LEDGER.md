@@ -5697,3 +5697,13 @@ qualify once against integratedmain; cancellationisnotpass. FinalCI and approval
 Next: reconcile the remaining required-active list with currentblend/materiality rules before
 further long-tail batches; the November12 queue is not a fresh launch-blocker census. No gate change,
 blanketzero, fullcorpusrun or nativeappdelivery claimed. Wildyamclinical packet remains unapplied.
+
+
+November14 user scope/count clarification: first_review_queue metadata already excludes C1 minor
+blend members, so do not describe it as an unfiltered pre-blend-rule queue. Counts are stale due
+November12 outputs and subsequent integrations. Root independently replayed330466 BroccoliPowder5g
+(requiredbroccoli),321397 RawK-Complex(requiredflaxseed,notbroccoli),327405 PerfectFoodBerry(required
+acerola_cherry/barley_grass/rice_bran,notbroccoli). Existing materiality rule is functioning in these
+cases; no globalcensus claim.9/150 entries have delivered merged scoped work: prebiotics,maca,fiber,
+isoflavones,valerian,olive_leaf,chamomile,green_coffee_bean,psyllium. This is not9wholefamiliesclosed;
+first50 screening, source-copy repairs, unapplied packets and yamidentityfix are not counted as reviews.

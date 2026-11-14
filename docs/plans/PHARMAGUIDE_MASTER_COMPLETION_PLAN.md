@@ -7,7 +7,14 @@ this is not installed-app or release acceptance.
 
 The plant reviews retain their scoped conclusions: six Evidence-only score changes and four
 completions among72 exportable frozen labels, plus three explicit olive/zinc identity export holds.
-These bounded results are not a global completion count. The old150 queue predates the blend rule.
+These bounded results are not a global completion count. The150 queue already excludes C1 blend
+members; its November12 inputs and completion counts predate the newly integrated reviews.
+
+Nine of the150 entries have delivered merged work for defined preparations: Bimuno GOS(prebiotics),
+gelatinized maca, konjac glucomannan(fiber), soy-isoflavone extract, existing valerian review wiring,
+olive-leaf extract, oral chamomile extract, decaffeinated green-coffee extract and adult psyllium husk.
+This is not nine entire ingredient families cleared. First50 reuse screens are not completed reviews.
+Inulin is additional work outside the150. No clinical completion is claimed for yam or broccoli.
 
 Separate PR487 fixes conflicting wild-yam identities. Final28-label comparison changes only8
 contradictory source labels, removes their unsupported public54.4 scores, and preserves quantities,
