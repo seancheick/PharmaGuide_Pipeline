@@ -63,6 +63,38 @@ def test_species_exclusion_does_not_reject_common_name_or_accepted_species(notes
     assert decision.scoreable_identity
 
 
+@pytest.mark.parametrize('notes,conflict', [
+    ('Zinc (Form: as Zinc Monomethionine) ', True),
+    ('Zinc (Form: from Zinc Monomethionine) ', True),
+    ('Olive leaf extract standardized for 20% oleuropein', False),
+    ('', False),
+])
+@pytest.mark.parametrize('retained_notes', [False, True])
+@pytest.mark.parametrize('non_scorable', [False, True])
+def test_olive_leaf_does_not_override_conflicting_source_zinc_notes(notes, conflict, retained_notes, non_scorable):
+    import copy
+    import json
+    from pathlib import Path
+    iqm = json.loads((Path(__file__).resolve().parents[1] / 'data/ingredient_quality_map.json').read_text())
+    registry = build_canonical_identity_registry({'ingredient_quality_map': iqm})
+    # NIH ingredientId292843 on real labels59829/47785/25486 has these
+    # contradictory fields. Contain the conflict; do not infer a zinc replacement.
+    row = {'name': 'Olive leaf extract', 'ingredientGroup': 'Olive ',
+           'ingredientId': 292843, 'notes': notes,
+           'forms': [{'prefix': 'standardized for', 'name': 'Oleuropein', 'percent': 20}]}
+    if retained_notes:
+        row['notes'] = None
+        row['raw_taxonomy'] = {'source_notes': notes}
+    original = copy.deepcopy(row)
+    result = resolve_identity(row, 'olive_leaf', lambda _: 'olive_leaf',
+                              taxonomy_coherent=True, canonical_registry=registry,
+                              allow_unscoreable_taxonomy_only=non_scorable)
+    assert result.disposition == ('identity_conflict' if conflict else 'clean')
+    assert result.canonical_id == (None if conflict else 'olive_leaf')
+    assert result.scoreable_identity is (not conflict and not non_scorable)
+    assert row == original
+
+
 def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
     registry = build_canonical_identity_registry(
         {

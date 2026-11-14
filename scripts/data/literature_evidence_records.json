@@ -2130,7 +2130,7 @@
         "unit": "mg",
         "basis": "cga_daily"
       },
-      "applicability_decision": "One RCT (28 adults with mild hypertension) found 140 mg/day chlorogenic acid from green coffee bean extract lowered blood pressure. A meta-analysis of three weight trials, all at high risk of bias, found -2.47 kg versus placebo and called the evidence promising but of poor quality.",
+      "applicability_decision": "A trial in 28 adults with mild hypertension reported blood-pressure decreases within the group taking 140 mg/day chlorogenic acid from green coffee bean extract; its abstract does not report a direct between-group effect. A review of three weight trials, all at high risk of bias, found a pooled difference of -2.47 kg versus placebo with extreme heterogeneity; its chlorogenic-acid-enriched subgroup was not significant. These findings do not establish a general effective-dose benchmark.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -2138,12 +2138,12 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "eaa460e0c7ff8b4ee79728f29aa99251530f01f3d918c50196aebb231b1313e6",
+          "source_sha256": "669766ea8b11a1544b67da38318a7cadbdabbcac005891bd3874228336144985",
           "source_ids": [
             "PMID:20871849",
             "PMID:16820341"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-11-14T02:25:32.584705+00:00",
           "is_complete": true,
           "results": [
             {
@@ -2153,7 +2153,8 @@
               "expression_of_concern": false,
               "has_erratum": false,
               "article_title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
-              "content_sha256": "f25767a3bff009a8af7a26d4e12712caf5627097ff6130a0ca50f6ebdd3a9329"
+              "content_sha256": "f25767a3bff009a8af7a26d4e12712caf5627097ff6130a0ca50f6ebdd3a9329",
+              "notes": "Codex /root factual re-review 2026-11-14: live source content unchanged from valid prior proof. Rebound to corrected comparison-limited rationale after abstract/full-review verification; no Dose policy or Evidence approval change."
             },
             {
               "source_id": "PMID:16820341",
@@ -2162,7 +2163,8 @@
               "expression_of_concern": false,
               "has_erratum": false,
               "article_title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
-              "content_sha256": "d28cc0316eeb64aed099cb8558829935bfc6312c791208bdcf19c40466d8eb2a"
+              "content_sha256": "d28cc0316eeb64aed099cb8558829935bfc6312c791208bdcf19c40466d8eb2a",
+              "notes": "Codex /root factual re-review 2026-11-14: live source content unchanged from valid prior proof. Rebound to corrected comparison-limited rationale after abstract/full-review verification; no Dose policy or Evidence approval change."
             }
           ]
         }
@@ -2180,7 +2182,7 @@
           "PMID:20871849",
           "PMID:16820341"
         ],
-        "rationale": "Source-backed case finding: One RCT (28 adults with mild hypertension) found 140 mg/day chlorogenic acid from green coffee bean extract lowered blood pressure. A meta-analysis of three weight trials, all at high risk of bias, found -2.47 kg versus placebo and called the evidence promising but of poor quality. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
+        "rationale": "Source-backed case finding: A trial in 28 adults with mild hypertension reported blood-pressure decreases within the group taking 140 mg/day chlorogenic acid from green coffee bean extract; its abstract does not report a direct between-group effect. A review of three weight trials, all at high risk of bias, found a pooled difference of -2.47 kg versus placebo with extreme heterogeneity; its chlorogenic-acid-enriched subgroup was not significant. These findings do not establish a general effective-dose benchmark. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
         "owner": "scripts/data/literature_evidence_records.json::green_coffee_bean",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"

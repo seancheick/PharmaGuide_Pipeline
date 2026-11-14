@@ -50727,7 +50727,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Olea europaea leaf extract standardized to oleuropein (typically 18-25%). Oleuropein and hydroxytyrosol provide antioxidant, antimicrobial, and cardiovascular benefits. EFSA-approved health claim for olive polyphenol protection of LDL from oxidation. 500-1000 mg/day typical dose. B23 audit 2026-04-25: oleuropein → HT pre-absorption hydrolysis class-equivalent to plain extract + HT companion (PMID:24158653).",
+        "notes": "Olea europaea leaf extract standardized to oleuropein (typically 18-25%). Oleuropein and hydroxytyrosol provide antioxidant, antimicrobial, and cardiovascular benefits. The EFSA opinion on specified olive oil polyphenols (10.2903/j.efsa.2011.2033) does not establish an authorized LDL-oxidation health claim for olive leaf extract. 500-1000 mg/day typical dose. B23 audit 2026-04-25: oleuropein → HT pre-absorption hydrolysis class-equivalent to plain extract + HT companion (PMID:24158653).",
         "aliases": [
           "olive leaf extract 20% oleuropein",
           "olive leaf (20% oleuropein)",
@@ -50844,7 +50844,10 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "zinc monomethionine"
+      ]
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -51356,7 +51359,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Taraxacum officinale root. Traditional European bitter for digestion and bile flow; rich in inulin and sesquiterpene lactones. The EU herbal monographs give a diuretic indication for the leaf and for root with herb, none for the root alone. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
+        "notes": "Taraxacum officinale root. Traditional European bitter for digestion and bile flow; rich in inulin and sesquiterpene lactones. The final EMA root monograph EMA/HMPC/475726/2020 includes urinary flushing for specified root preparations based on traditional use. This does not establish clinical efficacy for arbitrary root products. Split from dandelion extract on 2026-09-26 so interaction rules follow the plant part; scoring fields unchanged.",
         "aliases": [
           "dandelion root",
           "dandelion root extract",

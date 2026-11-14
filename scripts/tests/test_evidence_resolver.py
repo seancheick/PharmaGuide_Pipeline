@@ -1717,13 +1717,32 @@ def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
 
 
 @pytest.mark.parametrize("canonical", ["green_coffee_bean"])
-def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
+def test_unfinished_mixed_literature_reviews_remain_pending(canonical, monkeypatch):
     from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
 
+    # Exercise the still-open literature owner without its now-qualified native
+    # successor; a new source review must not erase this fallback guard.
+    original = er._backed_studies_index()
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {
+        key: [entry for entry in entries if entry.get("id") != "INGR_GREEN_COFFEE_BEAN"]
+        for key, entries in original.items()
+    })
     result = er.resolve_evidence_for_canonical(canonical)
     assert result.owner_facts["literature_evidence"]["applicability_status"] == "applicability_unestablished"
     assert result.reason_code == "literature_applicability_unestablished"
     assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+
+def test_green_coffee_finished_source_review_does_not_infer_missing_preparation():
+    from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
+
+    result = er.resolve_evidence_for_canonical("green_coffee_bean")
+    assert result.owner_facts["backed_clinical_studies"]["pmids"] == ["29307310"]
+    assert result.reason_code == "clinical_source_row_unresolved"
+    assert not result.points_eligible
+    assert "clinical_source_row_unresolved" in result.blocking_reasons
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
 
 

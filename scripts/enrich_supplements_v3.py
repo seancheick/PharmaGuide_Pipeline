@@ -6295,6 +6295,31 @@ class SupplementEnricherV3:
         )
         matched_entry_id = recognition.get("matched_entry_id")
         matched_entry_name = recognition.get("matched_entry_name")
+        registry = self._current_canonical_identity_registry()
+        recognized_canonical = registry.canonicalize(
+            str(matched_entry_id or ""), str(recognition_source or "")
+        )[0]
+        if registry.negative_match_terms.get(recognized_canonical):
+            # A failed IQM match can leave no supplied identity for the first
+            # resolution. Recognition must not then restore an excluded
+            # candidate without checking the same row's source evidence.
+            recognized_decision = resolve_identity(
+                ingredient, recognized_canonical,
+                self._identity_candidate_resolver(quality_map,
+                    supplied_canonical_id=recognized_canonical),
+                taxonomy_coherent=True, allow_unscoreable_taxonomy_only=True,
+                canonical_registry=registry,
+            )
+            if recognized_decision.disposition == "identity_conflict":
+                self._stamp_iqd_identity(row, ingredient, recognized_decision, None, False)
+                row.update({
+                    "mapped": False, "mapped_identity": False,
+                    "recognized_non_scorable": False,
+                    "role_classification": "active_unmapped",
+                    "identity_confidence": 0.0,
+                    "identity_decision_reason": "identity_conflict",
+                })
+                return
         row.update({
             "recognized_non_scorable": True,
             "recognition_source": recognition_source,

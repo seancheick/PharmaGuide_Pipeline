@@ -566,6 +566,43 @@ Receipts, source texts, raw captures, complete path comparisons and performance 
 
 Final inherited-fix replay equals the independently reviewed47-label candidate with zero complete-record/blob differences. Local checkpoint:564passed,24declaredopt-ins,143.82seconds;skipguardpassed. Python correctness:0new,10existing. Exact data_batch scope:INGR_CHAMOMILE only.
 
+### Olive-leaf authority-copy correction (November 13, 2026)
+
+Owner: `ingredient_quality_map.json::olive_leaf.forms[olive leaf extract standardized].notes`;
+evidence: `rg -n 'EFSA-approved health claim|olive oil' scripts/data/ingredient_quality_map.json`.
+Will NOT create a clinical authority rule, change form ratings or modify the approved consumer note.
+Root and literature_receipts independently checked the official EFSA2033 identity and the
+EU432/2012 olive-oil claim text. The regulation specifies qualifying olive oil; the former
+leaf note incorrectly implied a leaf-extract authority claim. Replaced only that sentence with
+an explicit oil-versus-leaf limitation. Source: https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?from=EN&uri=CELEX%3A32012R0432
+and https://www.efsa.europa.eu/en/efsajournal/pub/2033 . The direct consolidated HTML page
+returned a robot challenge; the official indexed/PDF claim text was available. This is a factual
+attribution correction, not a new clinical recommendation or comprehensive legal-compliance review.
+
+The new regression failed on the original sentence.47 affected IQM/source-note tests pass.
+Exact data_batch scope is olive_leaf only. Four raw label replays (216776,212273,278237,185288)
+show only the intended standardized-leaf notes in216776 changing, apart from known generated
+timestamps; complete score/status/safety/identity/amount records are unchanged. Receipts:
+`next-review/plant-batch/olive-copy-*` under the durable Evidence-close receipt directory.
+
+## Green-coffee comparison wording correction (November 13/14, 2026)
+
+The existing green_coffee_bean literature decision and neutral-Dose rationale overstated
+PMID16820341: the live abstract reports within-active-group BP decreases, without an explicit
+between-group comparison. Both dependent summaries now state that limit. The full 2011 review
+PMID20871849 retains its pooled weight signal, high bias and extreme heterogeneity, including the
+non-significant CGA-enriched subgroup. No preparation, dose policy, eligibility or safety change.
+Root independently read the abstract and full review; agent /root/source_review supplied the same
+correction. Live source content hashes match the valid prior source proof exactly. The real source
+verifier reconfirmed that proof; root explicitly re-reviewed and rebound the corrected rationale
+using the existing fingerprint owner, with factual-review notes. A fresh identity-only scan alone
+cannot match the review title's omitted word 'bean'; it was not treated as a passing fresh identity
+check. Original proof, live articles and new proof are retained in next-review/green-coffee.
+Regression failed on both old summaries; 227 literature/verifier tests pass. data_batch confirms
+only literature_evidence_records[20] changed. The 75-label combined wording replay is in progress;
+this correction is not independently CI-qualified or integrated. It precedes any new clinical
+credit, whose preparation matching and final review remain pending.
+
 ### Chamomile final CI corrections
 Combined CI43545137797 finished with exactly two failures: a non-vocabulary parent outcome
 category and a fixture still describing chamomile as unread. Both reproduced locally before repair.
@@ -580,3 +617,132 @@ four-product run succeeded and its source fingerprint remained unchanged. This d
 follow-up reuses the qualified local checkpoint; a fresh exact-head whole-fast CI is required.
 Receipts: next-review/chamomile/ci-failfirst.log, ci-fixes-tests.log,
 ci-fix-qualified.jsonl and ci-fix-full-comparison.json.
+
+## Conflicting olive/zinc source containment (November 13/14, 2026)
+
+Live NIH labels59829,47785 and25486 retain ingredientId292843 with name/form olive leaf/20%
+oleuropein but original same-row notes Zinc Monomethionine (and zinc-like amounts/DVs).
+Official JSONs were fetched and retained; all have empty image links. No exact original label was
+recovered. Do not infer a zinc replacement. Existing IQM olive_leaf negative_match_terms now
+excludes that specific conflicting source phrase. Independent research and root verified the clash.
+
+Two existing identity paths lost the exclusion: retained raw_taxonomy.source_notes were omitted
+from the final shared veto, and non-scoring botanical recognition could restore a rejected candidate
+after its first identity resolution had no candidate. The shared owner now reads both row-owned
+working-note fields only for vetoes; recognition revalidates candidates with authored exclusions
+through that same resolver before restoring identity. No new field, clinical rule or replacement
+identity. Owner: identity_integrity.py::resolve_identity and
+SupplementEnricherV3::_restamp_recognized_non_scorable_identity; existing negative_match_terms owner.
+Will NOT create a new quarantine category, infer zinc quantities or weaken export's row ledger.
+
+Tests reproduced each loss before repair;140 identity cases and396 combined identity/non-scoring/
+source-correction cases pass, plus the real25486 export regression. Independent review accepted
+containment and caught an over-specific reason label, corrected to existing identity_conflict.
+All three real rows now remain identity_conflict with no canonical; their score is withheld and
+identity readiness incomplete.25486 was previously complete; it is now partial. Control216776
+retains its score58.6. Existing detail-blob export rejects all three with UNRESOLVED_SCORE_ACTIVE;
+the failed full/blob replay is an expected refusal, not a green export checkpoint. A separate
+four-product full-stage capture without blob succeeds. Original raw data is unchanged. Fresh full
+catalog handling must account for these source defects; this batch cannot make them release-ready.
+Receipts: next-review/olive-leaf/*identity*, *recognition*, real-conflict-export-test.log,
+and next-review/plant-batch/olive-identity-* . Combined CI/local/performance still pending.
+
+The completed75-label wording-only replay before these identity changes found six olive note
+changes and no score/status/safety/amount/identity changes. Green-coffee wording changed no public
+product fields. Its source fingerprint stayed unchanged throughout capture.
+
+### Reviewed mixed-context self-conflict defect
+The explicit olive Preliminary interpretation exposed a shared-owner bug: the selected context
+itself was included among purported conflicting sibling reviews. Its accurately retained positive
+24-hour and null nighttime primary BP findings therefore rejected the reviewed floor, yielding6.
+The fix excludes only that exact context object; a distinct same-source/same-use negative review
+still blocks the interpretation. A selected context must independently retain a qualifying positive
+outcome, so a null primary plus positive secondary cannot borrow the floor. No scientific outcome
+or hierarchy was changed. The mechanics regression failed before repair; all6 initial targeted
+cases pass, including three real-source olive amounts, the independent inulin contradiction and
+signed glutamine interpretation guard. Final primary/secondary control also passes. Independent
+source_review confirmed the defect and the object-identity boundary. Combined qualification pending.
+
+
+### Olive-leaf and green-coffee Preliminary review batch (November 13/14)
+Owner: backed_clinical_studies.json::study_contexts and generic_evidence source interpretations;
+existing clinical applicability owns preparation/population boundaries. Will NOT create a new
+clinical registry, Dose benchmark, safety owner or evidence grade.
+
+INGR_OLIVE_LEAF retains eight source contexts. PMID26951205 supports only Preliminary5:
+small placebo-controlled crossover BP improvement, incomplete ambulatory measurements and limited
+compliance; nighttime primary BP is null. Liquid20mL/day and136.2mg oleuropein/6.4mg hydroxytyrosol
+are retained without inventing extract mass. The aqueous-extract null33034707 and six other reviews
+remain explicit no-additional-credit contexts. Historical olive_leaf_powder Dose inventory is
+unchanged. Generic leaf extract is the bounded class, not fruit/oil/pomace/isolated compounds.
+
+INGR_GREEN_COFFEE_BEAN retains three source contexts. PMID29307310 supports Preliminary5 only
+for source-owned decaffeinated bean/seed extract explicitly standardized to chlorogenic acids.
+Primary glucose change was positive but final between-group glucose was not, with placebo worsening;
+weight/BMI were not significant. Eight-week/64-day reporting discrepancy is retained. Older20871849
+high-bias weight review and16820341 within-group abstract do not add credit. No dose/brand/ratio
+threshold is used for Evidence. Neither adult review transfers to children/pregnancy/breastfeeding.
+Root and two independent research agents reviewed these source conclusions; this is agent review,
+not clinician sign-off. Strict scoped verifier passed16 identifier claims; content review is separate.
+
+571 source/config/vocabulary tests passed before the final material-boundary refinement. Independent
+72-product full-record/blob review found six Evidence-only score moves and four newly complete
+products:209382/284248/291377/330148.216776 gains5 but stays partial;212273 gains2.2 through existing
+multi-ingredient aggregation and stays partial. All72 retain identity, amounts, safety and Dose;
+source fingerprints were unchanged throughout capture. No green-coffee product score moved.
+Three known conflicting olive/zinc labels remain separately documented export refusals above.
+
+Independent replay review found37248 could gain a leaf match through 'as Hydroxytyrosol'. Two new
+compound-as regressions failed5 versus0, then passed after existing parent/context exclusions added
+'as hydroxytyrosol' and 'as oleuropein'. Ordinary extract standardized to these markers remains
+eligible.29 plant preparation/population checks now pass. The corrected final replay, controlled
+performance, combined local checkpoint and CI remain pending. Receipts live under
+/Users/seancheick/pg_quality/evidence-close-20261113/next-review/{plant-batch,olive-leaf,green-coffee}.
+
+Final corrected72-label full/blob capture at3e8b44a46 is successful with source_unchanged=true.
+Independent reviewer accepted it: only intended compound-as exclusion metadata/removal versus
+previous72;37248 keeps potassium and all other valid matches, no numeric/status movement.
+Controlled18raw full-stage benchmark against7848d67c2: median5.746735→5.760485s (+0.24%),
+peakRSS438599680→385187840bytes; identical inputhash d9508d52aac27f79fa72f7501e29d3dd19fecda503d4e8e4f4abd4bcb98e983b,
+no input mutation. Each arm had one warmup and three measured passes. Final local/CI pending.
+
+Final local at3e8b44a46:564passed,24declared opt-ins,144.17s; skip guard passed.
+Python correctness0new/10existing. Required CI remains pending.
+
+
+### Dandelion root monograph wording correction — November14
+Owner: ingredient_quality_map.json::dandelion.forms["dandelion root"].notes.
+The note falsely stated that EU monographs give no urinary indication for root alone. Root and
+independent source reviewer checked the official final EMA/HMPC/475726/2020 monograph, adopted
+November24,2021, sections2–4.1. It lists specified root preparations for urinary flushing under
+traditional use, expressly based on long-standing use. The replacement retains that limitation
+and does not assert established clinical efficacy for arbitrary products. Primary source:
+https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-taraxacum-officinale-fh-wigg-radix_en.pdf
+Existing interaction rules already cite the correct root monograph; no safety rule, score, form,
+consumer_note, literature owner or Dose decision changes. Will NOT create a new authority grade
+or infer root efficacy from the uncontrolled fresh-leaf pilot.
+Fail-first note regression reproduced the false sentence;42 IQM owner tests pass. Exact-entry audit
+shows only dandelion changed. Four frozen raw root/leaf products327919/49626/315977/201735 were
+replayed through full records and detail blobs: only327919 note changes; all scored records,
+identity, amounts, readiness and safety are identical. Capture source fingerprints stayed stable.
+Receipts: next-review/dandelion. Display-only qualification still requires branch CI; no broad local
+suite is required for this wording-only follow-up. Nothing released.
+
+### PR485 final CI correction
+Initial exact-head CI43550011176 finished with seven failed tests across six groups. Four assertions
+reported one schema class in INGR_GREEN_COFFEE_BEAN: unsupported rct rather than rct_single,
+missing key_endpoints and empty health_goals_supported. Corrected to the truthful single credited
+trial, existing Blood Sugar Support category, and source-bounded endpoint summaries. Three other
+failures were stale census/fallback assertions: newly qualified green-coffee packet, two reviewed
+BP/glucose surrogate contexts, and the older literature fallback now reached through a native
+successor. Tests retain exact inventories, both older noncredit green sources, mixed findings,
+unfinished literature fallback and an unmocked missing-source-row hold. No clinical guard changed.
+All failing classes reproduced locally.265 schema/record and492 resolver/surrogate checks pass;
+independent review accepted the four-file correction and ran the four changed focused nodes.
+Four raw labels29043/321336/242242/216776 were recaptured: only29043 source summary fields changed
+in enriched/blob data; every scored record is identical. Previous performance and clinical-content
+review remain applicable. Exact-entry audit changes only INGR_GREEN_COFFEE_BEAN. Final local
+rerun and one combined exact-head CI rerun are pending; failed initial CI is not qualification.
+
+Final corrected local checkpoint:564passed/24declared opt-ins in141.50s; skip guard passed.
+Python correctness remains0new/10existing. Exact-head CI rerun follows this correction.

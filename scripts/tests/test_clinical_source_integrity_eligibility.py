@@ -3576,3 +3576,83 @@ def test_chamomile_trial_nonpregnant_population_does_not_credit_prenatal_target(
     product['targetGroups'] = ['Pregnant Women']
     product['fullName'] = 'Prenatal Chamomile Extract'
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def _green_coffee_product(label, amount=400):
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    row = _ingredient(name=label, canonical_id='green_coffee_bean', quantity=amount)
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text=label)
+    return _product(ingredients=[row], matches=[], product_name='Green Coffee Bean Extract',
+                    physicalState={'name': 'Capsule'}, targetGroups=['Adult (18 - 50 Years)'])
+
+
+@pytest.mark.parametrize('amount', [100, 400, 800])
+def test_decaffeinated_standardized_green_coffee_has_preliminary_credit(amount):
+    product = _green_coffee_product('Decaffeinated Green Coffee Bean Extract standardized to chlorogenic acids', amount)
+    result = build_scored_artifact(product)
+    assert result['quality_pillars_v4']['evidence']['score'] == 5
+    assert result['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('label', [
+    'Green Coffee Bean Extract standardized to chlorogenic acids',
+    'Decaffeinated Green Coffee Bean Extract',
+    'Decaffeinated Green Coffee Bean Extract with chlorogenic acids',
+    'Decaffeinated Green Coffee Whole Fruit Extract standardized to chlorogenic acids',
+    'Isolated chlorogenic acid from Decaffeinated Green Coffee Bean Extract standardized to chlorogenic acids',
+    'Decaffeinated Green Coffee Bean Powder standardized to chlorogenic acids',
+])
+def test_green_coffee_review_does_not_transfer_to_unestablished_preparations(label):
+    assert build_scored_artifact(_green_coffee_product(label))['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('population', ['Children 4 to 8 Years', 'Pregnant Women', 'Breastfeeding Women'])
+def test_green_coffee_adult_trial_exclusions_withhold_credit(population):
+    product = _green_coffee_product('Decaffeinated Green Coffee Bean Extract standardized to chlorogenic acids')
+    product['targetGroups'] = [population]
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_green_coffee_preparation_descriptors_cannot_be_borrowed_between_rows():
+    product = _green_coffee_product('Decaffeinated Green Coffee Bean Extract')
+    other = _green_coffee_product('Green Coffee Bean Extract standardized to chlorogenic acids')['ingredient_quality_data']['ingredients_scorable'][0]
+    other['raw_source_path'] = 'ingredientRows[1]'
+    product['ingredient_quality_data']['ingredients_scorable'].append(other)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def _olive_leaf_product(label, amount=500):
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    row = _ingredient(name=label, canonical_id='olive_leaf', quantity=amount)
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text=label)
+    return _product(ingredients=[row], matches=[], product_name='Olive leaf extract',
+                    physicalState={'name': 'Capsule'}, targetGroups=['Adult (18 - 50 Years)'])
+
+
+@pytest.mark.parametrize('amount', [100, 500, 1000])
+def test_olive_leaf_extract_receives_only_preliminary_class_credit(amount):
+    result = build_scored_artifact(_olive_leaf_product('Olive Leaf Extract', amount))
+    assert result['quality_pillars_v4']['evidence']['score'] == 5
+    assert result['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('label', ['Olive Leaf Powder', 'Olive Fruit Extract',
+    'Olive Oil', 'Olive Leaf Extract as Maslinic Acid',
+    'Isolated hydroxytyrosol from Olive Leaf Extract',
+    'Olive Leaf Extract as Hydroxytyrosol',
+    'Olive Leaf Extract as Oleuropein',
+    'Pure oleuropein from Olive Leaf Extract'])
+def test_olive_leaf_extract_review_excludes_other_materials(label):
+    assert build_scored_artifact(_olive_leaf_product(label))['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('population', ['Children 4 to 8 Years', 'Pregnant Women', 'Breastfeeding Women'])
+def test_olive_leaf_adult_male_trial_does_not_credit_excluded_populations(population):
+    product = _olive_leaf_product('Olive Leaf Extract')
+    product['targetGroups'] = [population]
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_olive_leaf_marker_standardization_retains_extract_class_credit():
+    product = _olive_leaf_product('Olive Leaf Extract standardized to oleuropein and hydroxytyrosol')
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 5

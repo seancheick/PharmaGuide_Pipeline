@@ -5654,3 +5654,26 @@ new Dose benchmark. Root and independent agent source/applicability checks compl
 No Safety/identity/amount/Dose/other-pillar movement.531source/config tests plus prenatalcontrol,
 564local tests,24declaredopt-ins,strictscopedcitationcheck passed. RequiredCI and integration
 remain separate. This bounded replay is not a fresh full-catalog census or a release.
+
+
+## November13/14 — integration and next plant batch
+478–481 integrated with Sean approval at main2ac864ed8; exact final481CI43543669474 green.
+482–484 jointly qualified at7848d67c2, CI43546656229 all8+readiness green; approval pending.
+Plant candidate3e8b44a46: scoped olive-leaf/green-coffee Preliminary5, truthful source copy,
+retained source-note identity veto and mixed-context self-conflict repair. Detailed per-entry
+sources, regressions and limitations are in evidence_close_20261113/research.md. Final72raw
+full-record/blob comparison independently accepted: six Evidence-only moves, four completions;
+no other-pillar/safety/identity/amount changes. Final boundary replay removes unsupported37248
+hydroxytyrosol leaf match without numeric/status change. Three separate conflicting olive/zinc
+labels remain explicit export refusals; not successful released products.571source/config tests,
+29final plant boundaries,396identity cases plus real export regression passed. Scoped16source-ID
+checks pass, Python0new10existing, exact2newdataentries.18frozen-input controlled benchmark:
+median5.746735→5.760485s (+0.24%), peakRSS438599680→385187840bytes; inputhash identical/no mutation.
+Final local at3e8b44a46:564passed/24declared opt-ins in144.17s; skip guard passed. CI pending.
+Nothing released. Fresh catalog census and release gates remain.
+
+PR485 initialCI43550011176 failed seven assertions: green-coffee schema metadata and three stale
+review/census pins. All reproduced and repaired without weakening clinical guards;265+492 owner
+checks and independent review pass. Four raw schema-followup products retain identical scored
+records, with only29043 clinical summary fields changed. Final local564passed/24declared opt-ins,
+141.50s, skipguardpassed. Required corrected-headCI pending; initial failure is not qualification.

@@ -1555,16 +1555,28 @@ def resolve_identity(
     if canonical_after and canonical_registry is not None:
         from identity.safety import negative_match_terms_veto
 
-        source_notes = tuple(_text_values(row.get("notes")))
+        # Enrichment replaces display notes but retains the same source row's
+        # working notes in raw_taxonomy. They may veto a candidate, never
+        # establish a replacement identity or borrow from another row.
+        source_note_evidence = tuple(
+            LabelEvidence("notes", note, "source_form")
+            for note in _text_values(row.get("notes"))
+        )
+        raw_taxonomy = row.get("raw_taxonomy")
+        if isinstance(raw_taxonomy, Mapping):
+            source_note_evidence += tuple(
+                LabelEvidence("raw_taxonomy.source_notes", note, "source_form")
+                for note in _text_values(raw_taxonomy.get("source_notes"))
+            )
         if negative_match_terms_veto(
             [item.value for item in evidence if item.kind in {"source_name", "source_form"}]
-            + list(source_notes),
+            + [item.value for item in source_note_evidence],
             canonical_registry.negative_match_terms.get(canonical_after, ()),
         ):
             disposition = "identity_conflict"
             canonical_after = None
             rationale = "An authored source exclusion contradicts the proposed canonical identity."
-            evidence += tuple(LabelEvidence("notes", note, "source_form") for note in source_notes)
+            evidence += source_note_evidence
 
     # A provisional taxonomy match must not replace the literal preparation
     # after the final decision declines to establish its identity. Keep the
