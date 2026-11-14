@@ -1,23 +1,38 @@
-## November 13/14 — Close Evidence qualification
+## November 14 — Close Evidence checkpoint
 
-The accepted ladder and finished-zero app wording are integrated through pipeline477 and app236.
-Approved pipeline478–481 are now integrated at main2ac864ed8: valerian, source links, scoped inulin
-and Bimuno/Acacia.482–484 (maca/glucomannan, soy/psyllium, chamomile) are jointly qualified at
-7848d67c2 with all eight CI groups and readiness green; integration approval is pending.
+The ladder, finished-zero app wording and approved pipeline PRs478–486 are integrated.
+Main8401646b0 contains the qualified final plant batch; CI43553809082 passed all eight groups and
+readiness on7ff63ca68, whose tree equals the integrated tree. App236 remains source-integrated;
+this is not installed-app or release acceptance.
 
-The next plant batch3e8b44a46 records scoped Preliminary5 olive-leaf and green-coffee research,
-corrects unsupported source wording, and contains three contradictory olive/zinc source identities.
-Final72 exportable raw-label captures passed independent review: six Evidence-only score changes,
-four newly complete products, no other-pillar/safety/amount/identity changes. Three additional labels
-are explicit unresolved-source export refusals, not released products. Controlled18-label timing
-is5.747→5.760s (+0.24%), with unchanged inputs and lower peak memory. Final local passed564 checks with24 declared opt-ins; CI is pending.
-These bounded counts are not additive global coverage or installed-app delivery.
+The plant reviews retain their scoped conclusions: six Evidence-only score changes and four
+completions among72 exportable frozen labels, plus three explicit olive/zinc identity export holds.
+These bounded results are not a global completion count. The150 queue already excludes C1 blend
+members; its November12 inputs and completion counts predate the newly integrated reviews.
 
-Owner: existing clinical source/applicability registry, shared identity resolver and generic_evidence
-context interpretations; evidence: per-entry primary sources, fail-first controls and existing
-research/LEDGER receipts. Will NOT create another review store, grade, Dose gate or safety owner.
-The ranked remainder, specific signed holds, one fingerprint-selected rebuild, fresh census,
-release checks, Core/Blob parity and native app verification remain.99%gate is unchanged.
+Nine of the150 entries have delivered merged work for defined preparations: Bimuno GOS(prebiotics),
+gelatinized maca, konjac glucomannan(fiber), soy-isoflavone extract, existing valerian review wiring,
+olive-leaf extract, oral chamomile extract, decaffeinated green-coffee extract and adult psyllium husk.
+This is not nine entire ingredient families cleared. First50 reuse screens are not completed reviews.
+Inulin is additional work outside the150. No clinical completion is claimed for yam or broccoli.
+
+Separate PR487 fixes conflicting wild-yam identities. Final28-label comparison changes only8
+contradictory source labels, removes their unsupported public54.4 scores, and preserves quantities,
+notes and safety status.20controls are unchanged.482owner/preparation tests and local564passed,
+24declaredopt-ins; independent review accepted. Median28-label timing7.242→7.197s, peakRSS393→412MB.
+The two valid yam controls export;8conflicts remain explicit unresolved-identity export refusals.
+FinalCI and main integration approval remain pending for487.
+
+Owner: existing identity exclusions/registry and clinical Evidence applicability owners; evidence:
+source checks, fail-first regressions and frozen real-product receipts in the existing LEDGER.
+Will NOT create a replacement species, scoring policy, registry or public field.
+
+Next checkpoint: finish this bounded fix, then reconcile the remaining required-active review list
+against the current materiality/blend rules before starting further long-tail batches. Inactive
+fillers and minor unamounted blend members must not become efficacy-review requirements. Existing
+blend-only fallback and identity/amount/source/clinical holds remain. No new launch policy is enacted.
+The one final fingerprint-selected rebuild, current census, release checks, Core/Blob parity,
+native light/dark scans and Sean's release/gate decision remain. The99%gate is unchanged.
 
 ## Current scientific completion register
 

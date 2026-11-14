@@ -5677,3 +5677,33 @@ review/census pins. All reproduced and repaired without weakening clinical guard
 checks and independent review pass. Four raw schema-followup products retain identical scored
 records, with only29043 clinical summary fields changed. Final local564passed/24declared opt-ins,
 141.50s, skipguardpassed. Required corrected-headCI pending; initial failure is not qualification.
+
+
+## November14 — approved integration and yam identity correction
+With explicit approval,482–484 integrated atd9240c027 and485–486 at8401646b0. Required catch-up
+candidate7ff63ca68 has identical tree to prior qualified7db846978; final CI43553809082 passed all8
+and readiness. Verify all approved heads contained before deleting temporary branches. No release.
+
+PR487 sourceadcb958ae contains only the next identity correction: wrong opposita→villosa alias,
+authored exclusions on both existing yam records, botanical fallback enforcement and preservation
+of chemical-carrier/marker-standardization cases. Independent source/code/10product review accepted.
+482focused tests and564local passed,24declaredopt-ins/strictskipguardgreen. Full28frozen inputs:
+8conflicting labels public54.4→None with identity_conflict,20controls exactfull-record parity;
+quantities/notes/safety unchanged. Eightconflicts remain explicitUNRESOLVED_SCORE_ACTIVE export
+refusals;2validyam controls export. Controlled28label median7.242290→7.196732seconds,peakRSS
+392790016→412483584bytes; inputshashidentical/no mutation. FirstmanualCI43554475202 cancelled to
+qualify once against integratedmain; cancellationisnotpass. FinalCI and approval for487 pending.
+
+Next: reconcile the remaining required-active list with currentblend/materiality rules before
+further long-tail batches; the November12 queue is not a fresh launch-blocker census. No gate change,
+blanketzero, fullcorpusrun or nativeappdelivery claimed. Wildyamclinical packet remains unapplied.
+
+
+November14 user scope/count clarification: first_review_queue metadata already excludes C1 minor
+blend members, so do not describe it as an unfiltered pre-blend-rule queue. Counts are stale due
+November12 outputs and subsequent integrations. Root independently replayed330466 BroccoliPowder5g
+(requiredbroccoli),321397 RawK-Complex(requiredflaxseed,notbroccoli),327405 PerfectFoodBerry(required
+acerola_cherry/barley_grass/rice_bran,notbroccoli). Existing materiality rule is functioning in these
+cases; no globalcensus claim.9/150 entries have delivered merged scoped work: prebiotics,maca,fiber,
+isoflavones,valerian,olive_leaf,chamomile,green_coffee_bean,psyllium. This is not9wholefamiliesclosed;
+first50 screening, source-copy repairs, unapplied packets and yamidentityfix are not counted as reviews.
