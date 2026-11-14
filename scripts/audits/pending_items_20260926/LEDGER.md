@@ -5615,3 +5615,31 @@ All source identity, matched-row, review/hold, guideline-role and same-source/us
 remain.9direct checks and independent27edgecases pass. No newpolicy/field/owner; no dataactivation
 in this atomic fix. Final combined raw/performance/local/CI qualification belongs to the sourcebatch.
 
+
+
+
+## Soy extract and psyllium authority batch (November13)
+Owner: existing INGR_PSYLLIUM_HUSK and new reviewed entry INGR_SOY_ISOFLAVONES in the existing
+registry; generic_evidence context interpretation; existing source-form applicability. No new
+canonical/registry/grade, dose gate or safety conclusion. Root and independent agents verified
+full Nahas17913408/Taku22433977 and FDA M007; source receipts under next-review.
+Soy source17913408 supports Preliminary5 for the reviewed soybean-isoflavone extract class;
+parent mixed retained with eight sources, nine scoped contexts. Hot-flush positives separate from
+lipid/vaginal nulls, newer mixed/null symptom evidence, depression null, composition-dependent bone
+findings and Alsitan combination.80randomized/76completers,2GIwithdrawals,9/10monthdiscrepancy,
+100mg reported isoflavones/250mgextract retained without aglycone conversion or brand/%gate.
+Independent overmatch probes failed5cases before tightening source-owned extract+soy+isoflavone
+requirements and explicit material exclusions. Source notes on actual269819 bind extract to its
+own row; unrelated rows cannot lend it.16final scopedtests pass; independent boundary reviewaccepts.
+FDA adult husk authority20 coexists with unchanged lipidreview; granular/pediatric/whole-seed
+boundaries and unread18985059 remain. Code membership correction is separate4accd14ab.
+37raw fullartifact/blob:33003886.4→91.4 and7681079.4→84.4 (Evidence15→20,alreadycomplete);
+soy1055partial→complete at unchanged67.6/Evidence15;269819 alreadycomplete75.6/Evidence20unchanged;
+genericpsyllium17192held0unchanged. Safety/warnings/identity/amounts/Dose/otherpillars unchanged.
+18same-input performance2.861568→2.866558s(+0.17%),RSS216186880→215826432,hashunchanged.
+1651ownerspassed with1stalepsycontext-count assertion; corrected to preserve unique lipid-source
+review and unreadsource guard;16followups pass.8soy citationclaims strictpass aftertwo title-copy
+corrections;39psyllium claims passed earlier same-run check. Python0new10existing; exact2dataentries.
+Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
+or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
+

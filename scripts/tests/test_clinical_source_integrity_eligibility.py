@@ -2555,14 +2555,14 @@ def test_psyllium_qualified_lipid_review_does_not_borrow_unread_review_or_counts
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from evidence_resolver import clinical_record_sources_eligible
     record = reviewed_entries()['INGR_PSYLLIUM_HUSK']
-    assert len(record['study_contexts']) == 1
-    context = record['study_contexts'][0]
-    assert context['source_pmids'] == ['30239559']
+    lipid_contexts = [c for c in record['study_contexts'] if c.get('source_pmids') == ['30239559']]
+    assert len(lipid_contexts) == 1
+    context = lipid_contexts[0]
     assert validate_ingredient_context(context, require_complete_review=True) == []
     assert assess_clinical_source_review(record)['is_complete']
     assert clinical_record_sources_eligible(record, context=context, source_pmids=['30239559'])
     assert not clinical_record_sources_eligible(record, context=context, source_pmids=['18985059'])
-    old = next(r for r in record['references_structured'] if r['pmid'] == '18985059')
+    old = next(r for r in record['references_structured'] if r.get('pmid') == '18985059')
     assert old['scoring_eligible'] is False
     assert 'unread' in old['notes'].lower()
     assert record['published_studies_count'] == 1
@@ -3475,3 +3475,43 @@ def test_authority_floor_preserves_other_applicable_reviewed_context(monkeypatch
     _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
     product['physicalState'] = {'name': 'Powder'}
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 20
+
+
+@pytest.mark.parametrize('amount', [10, 60, 100])
+def test_reviewed_soy_isoflavone_extract_has_preliminary_class_credit(amount):
+    import clinical_applicability as ca
+    assert 'INGR_SOY_ISOFLAVONES' in ca.reviewed_entries()
+    record, product = _joint_row_product('INGR_SOY_ISOFLAVONES', 'isoflavones', 'Soybean Isoflavones Extract', amount)
+    product['product_name'] = "Women's Menopause Formula"
+    artifact = build_scored_artifact(product)
+    assert record['effect_direction'] == 'mixed'
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 5
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    source = next(c for c in record['study_contexts'] if c['source_pmids'] == ['17913408'])
+    assert source['population']['sample_size'] == 80
+    assert source['dose']['values'] == [100]
+    assert any('epigastralgia' in note for note in source['limitations'])
+
+
+@pytest.mark.parametrize('label', ['Isoflavones', 'Red Clover Isoflavones', 'Soy Protein', 'Isolated Genistein', 'Soy Protein with Isoflavones', 'Soybean Powder with Isoflavones', 'Isolated Genistein (Soy Isoflavones)', 'Soy Protein Extract with Isoflavones', 'Isolated Genistein from Soy Isoflavones Extract'])
+def test_soy_extract_review_does_not_grant_other_material_credit(label):
+    import clinical_applicability as ca
+    assert 'INGR_SOY_ISOFLAVONES' in ca.reviewed_entries()
+    _, product = _joint_row_product('INGR_SOY_ISOFLAVONES', 'isoflavones', label, 60)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('label,groups,expected', [
+    ('Psyllium Husk', ['Adult (18 - 50 Years)'], 20),
+    ('Granular Psyllium Husk', ['Adult (18 - 50 Years)'], 15),
+    ('Kids Psyllium Husk', ['Children 4 to 8 Years'], 0),
+])
+def test_psyllium_authority_keeps_preparation_and_population_bounds(label, groups, expected):
+    record, product = _joint_row_product('INGR_PSYLLIUM_HUSK', 'psyllium_husk', label, 3000)
+    product['targetGroups'] = groups
+    product['fullName'] = label
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == expected
+    assert any(c.get('source_pmids') == ['30239559'] for c in record['study_contexts'])
+    held = next(r for r in record['references_structured'] if r.get('pmid') == '18985059')
+    assert held['scoring_eligible'] is False

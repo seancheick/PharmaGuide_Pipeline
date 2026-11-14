@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
     "last_updated": "2026-11-13",
-    "total_entries": 227,
+    "total_entries": 228,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
@@ -39511,15 +39511,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Lipid markers: LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B (qualified PMID: 30239559)"
+        "Lipid markers: LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B (qualified PMID: 30239559)",
+        "Authority-recognized relief of occasional constipation for adult psyllium-husk preparations under FDA M007 conditions."
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Qualified retained-source findings concern LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B. These lipid-marker results do not establish cardiovascular event prevention, bowel regularity or glycemic treatment from this source set. The older 18985059 review remains unqualified bibliography; see source-specific limitations. Separately, FDA OTC Monograph M007 recognizes psyllium-husk preparations for relief of occasional constipation under its specified conditions. This authority source is distinct from the lipid-marker review. Preparation, dosage-form, fluid-use and other monograph conditions require their own applicability evaluation; no blanket product compliance, universal regimen or safety clearance is inferred.",
+      "notes": "Qualified retained-source findings concern LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B. These lipid-marker results do not establish cardiovascular event prevention, bowel regularity or glycemic treatment from this source set. The older 18985059 review remains unqualified bibliography; see source-specific limitations. Separately, FDA OTC Monograph M007 recognizes psyllium-husk preparations for relief of occasional constipation under its specified conditions. This authority source is distinct from the lipid-marker review. Preparation, dosage-form, fluid-use and other monograph conditions require their own applicability evaluation; no blanket product compliance, universal regimen or safety clearance is inferred. Separate adult psyllium-husk occasional-constipation authority context records FDA M007 recognition with granular-form exclusion and fluid-use conditions. It does not certify retail monograph compliance; pediatric scope is not activated.",
       "notable_studies": "PMID 30239559 reports positive pooled lipid-marker effects with moderate GRADE certainty for LDL/non-HDL and high certainty for apoB. Mixed adult and pediatric populations, heterogeneous preparations, background therapies and source discrepancies remain explicit. No minimum effective amount or universal regimen was established.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-13",
       "references_structured": [
         {
           "type": "pubmed",
@@ -39600,9 +39601,10 @@
           "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf",
           "published_date": "2023-05-02",
           "evidence_grade": "reference",
-          "scoring_eligible": false,
+          "scoring_eligible": true,
           "supports_claims": [],
-          "notes": "Content verified November 13, 2026 by Codex agent review and independent source_review check. Regulatory recognition of psyllium husk for occasional constipation is separate from the retained lipid synthesis. The monograph excludes specified granular dosage forms; fluid-use and other conditions require separate applicability evaluation. Source retained for authority review; no numerical credit, generic Dose benchmark or product-level monograph compliance is inferred."
+          "notes": "FDA M007 source-qualified for the separate adult psyllium-husk occasional-constipation context. Granular forms excluded; fluid-use and other source conditions retained. Ingredient recognition does not certify retail monograph compliance or personal safety. Existing lipid findings remain distinct.",
+          "type": "guideline"
         }
       ],
       "effect_direction": "positive_strong",
@@ -39742,6 +39744,132 @@
             "Background diets and medications vary. Spence PMID 7661492 includes combination-treatment arms but the relevant comparison must remain psyllium alone versus cellulose; Maciejko PMID 7804477 is adjunctive to cholestyramine. Whole-paper membership does not establish isolated causality for every arm.",
             "Funding across constituent studies was agency, industry, mixed or unreported. Review disclosures include viscous-fiber patent/research interests and food-industry relationships for some authors; do not describe all investigators as having no financial ties.",
             "Main article content was read from a coauthor-profile-hosted publisher-typeset copy whose DOI/title/authors match live official metadata. Official publisher/direct PDF access was blocked; no local original-PDF SHA or independently read supplemental tables/raster forest row transcription is claimed. Published main-text estimates and captions are retained without independent reanalysis."
+          ],
+          "applicability": {
+            "scope": "ingredient",
+            "require_source_label_form": true,
+            "required_form_terms": [
+              "husk",
+              "psyllium fiber",
+              "ispaghula husk"
+            ],
+            "excluded_form_terms": [
+              "whole seed",
+              "whole seeds",
+              "whole-seed"
+            ],
+            "supported_outcomes": [
+              "blood_lipid_parameters"
+            ],
+            "source_pmids": [
+              "30239559"
+            ],
+            "studied_population": "Mixed adult and pediatric cohorts with source-specific ages and lipid outcomes; not infant, pregnancy or lactation qualification.",
+            "reviewed_at": "2026-11-10"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "psyllium_husk_fda_m007_adult_constipation",
+          "components": [
+            "INGR_PSYLLIUM_HUSK"
+          ],
+          "source_references": [
+            {
+              "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf"
+            }
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Plantago ovata husks / psyllium seed husks",
+            "preparation": "Psyllium seed-husk material recognized in FDA M007.10(f)(1) and (7). This context does not extend the existing husk record to whole seeds or granular preparations."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "guideline",
+          "component_registration_status": "fully_registered",
+          "condition": "occasional_constipation",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "fda_m007_psyllium_husk_authority",
+          "clinical_review": {
+            "reviewer": "Codex /root/source_review, independently content-checked by /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official FDA M007 full content read, sections10(f),50(a),52 and footnote4. Independently checked adult-use subset of recognized husk preparations under accepted authority rubric; no retail drug-compliance or safety-clearance claim."
+          },
+          "population": {
+            "age_group": "adult",
+            "description": "Adults only for this bounded authority context. FDA M007 also supplies separate pediatric directions; those are not activated here."
+          },
+          "study_design": "FDA OTC monograph authority recognition under specified conditions of use; not a clinical trial or extra replication.",
+          "outcomes": [
+            {
+              "name": "Authority recognition for relief of occasional constipation (irregularity) under monograph conditions.",
+              "hierarchy": "guideline",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Source specifies divided doses; no single administration frequency assigned.",
+            "dosage_forms": [
+              "oral capsules",
+              "oral powders",
+              "oral tablets",
+              "oral wafers"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "No single assigned trial regimen exists. M007.52(c)(7) adults/children12+ directions:2.5–7.5g per dose, up to30g daily in divided doses. This adult-only context retains regulatory source conditions, not a new Dose benchmark or Evidence amount gate. Dry or incompletely hydrated forms require at least8ounces water/other fluid with each dose under M007.52(c)(1).",
+            "normalization": {
+              "basis": "No scalar assigned arm or universal regimen exists in this authority source; empty values describe that absence, not absence of regulatory directions. Existing Dose policy remains unchanged."
+            },
+            "source_provenance": {
+              "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf",
+              "location": "FDA OTC Monograph M007, M007.10(f)(1)/(7), M007.50(a), M007.52(c)(1)/(7); footnote4 granular exclusion and fluid/choking warnings."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "psyllium husk",
+              "psyllium seed husk",
+              "plantago ovata husk"
+            ],
+            "excluded_form_terms": [
+              "granular",
+              "granule",
+              "granules",
+              "whole seed",
+              "whole seeds"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "Adults; pediatric monograph directions are not activated in this context.",
+            "source_references": [
+              {
+                "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf"
+              }
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "limitations": [
+            "FDA M007 recognizes specified psyllium ingredients for occasional constipation; this context is deliberately limited to adult husk preparations. Separate whole-seed ingredients and pediatric regimens do not inherit this context.",
+            "Granular psyllium dosage forms are not generally recognized as safe and effective OTC laxatives under this monograph; no authority credit from this context for granular forms.",
+            "Dry/incompletely hydrated products require adequate fluid and choking warnings; dysphagia/esophageal obstruction concerns remain. Ingredient-level recognition does not certify product compliance, establish personal suitability, replace warnings or clear safety.",
+            "Source regulatory doses are retained as provenance only, without a new Dose benchmark or Evidence minimum amount.",
+            "Existing lipid review and unread18985059 bibliography/eligibility hold are unchanged. No added trial count or independent replication."
           ]
         }
       ],
@@ -39765,7 +39893,12 @@
           "30239559"
         ],
         "studied_population": "Mixed adult and pediatric cohorts with source-specific ages and lipid outcomes; not infant, pregnancy or lactation qualification.",
-        "reviewed_at": "2026-11-10"
+        "reviewed_at": "2026-11-10",
+        "source_references": [
+          {
+            "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTC%20Monograph_M007-Laxative%20Drug%20Products%20for%20OTC%20Human%20Use%2005.02.2023.pdf"
+          }
+        ]
       },
       "published_studies_count": 1
     },
@@ -55460,6 +55593,502 @@
           "limitations": [
             "Eight pooledRCTs showed no statistically significant weight difference, MD−0.22kg(95%CI−0.62to0.19); nineeligibletrials. Abstract reviewed, not full Methods.",
             "Abdominal discomfort, diarrhea and constipation reported. Preserve null weight finding; do not convert this into null cholesterol or universal safety conclusion."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "INGR_SOY_ISOFLAVONES",
+      "canonical_id": "isoflavones",
+      "standard_name": "Soy isoflavones",
+      "aliases": [
+        "soy isoflavones",
+        "soybean isoflavones",
+        "soy isoflavone extract",
+        "powdered soybean isoflavones extract"
+      ],
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "17913408",
+        "22433977",
+        "40718787",
+        "38825560",
+        "19339127",
+        "37875614",
+        "29849181",
+        "18257146"
+      ],
+      "key_endpoints": [
+        "Limited evidence for menopausal vasomotor symptoms; mixed other outcomes retained"
+      ],
+      "health_goals_supported": [],
+      "notes": "Agent source review by Codex ladder_review, independently checked by literature_receipts and root. Preliminary5 for the reviewed standardized soybean-isoflavone extract class; parent mixed findings retained. No brand, percentage or amount gate; no clinician authorship or general safety conclusion.",
+      "study_type": "rct_single",
+      "last_updated": "2026-11-13",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "pmid": "17913408",
+          "doi": "10.1016/j.maturitas.2007.08.012",
+          "title": "Efficacy and safety of a soy isoflavone extract in postmenopausal women: a randomized, double-blind, and placebo-controlled study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/17913408/",
+          "scoring_eligible": true
+        },
+        {
+          "type": "pubmed",
+          "pmid": "22433977",
+          "doi": "10.1097/gme.0b013e3182410159",
+          "title": "Extracted or synthesized soybean isoflavones reduce menopausal hot flash frequency and severity: systematic review and meta-analysis of randomized controlled trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22433977/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "40718787",
+          "doi": "10.7717/peerj.19715",
+          "title": "Effects of soy isoflavones on menopausal symptoms in perimenopausal women: a systematic review and meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40718787/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "38825560",
+          "doi": "10.1016/j.explore.2024.05.010",
+          "title": "The effect of soy isoflavones given to women in the climacteric period on menopausal symptoms and quality of life: Systematic review and meta-analysis of randomized controlled trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38825560/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "19339127",
+          "doi": "10.1016/j.maturitas.2009.02.008",
+          "title": "Efficacy of soy isoflavones for depressive symptoms of the climacteric syndrome.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19339127/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "37875614",
+          "doi": "10.1007/s00198-023-06944-y",
+          "title": "Isoflavone intervention and its impact on bone mineral density in postmenopausal women: a systematic review and meta-analysis of randomized controlled trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37875614/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "29849181",
+          "doi": "10.1038/s41430-018-0173-3",
+          "title": "Soy germ extract alleviates menopausal hot flushes: placebo-controlled double-blind trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29849181/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "18257146",
+          "doi": "10.1097/gme.0b013e31805c035b",
+          "title": "Daidzein-rich isoflavone aglycones are potentially effective in reducing hot flashes in menopausal women.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18257146/",
+          "scoring_eligible": false
+        }
+      ],
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Isolated standardized extract has weak positive vasomotor evidence; same-use heterogeneous/null findings and different-use depression/lipid nulls retained. No all-purpose efficacy claim.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_groups": [
+          [
+            "soy",
+            "soybean",
+            "soy bean",
+            "glycine max"
+          ],
+          [
+            "isoflavone",
+            "isoflavones"
+          ],
+          [
+            "extract"
+          ]
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "menopausal_symptoms"
+        ],
+        "studied_population": "Postmenopausal women with vasomotor symptoms; no general safety clearance.",
+        "source_pmids": [
+          "17913408"
+        ],
+        "reviewed_at": "2026-11-13",
+        "excluded_form_terms": [
+          "soy protein",
+          "soybean protein",
+          "soy flour",
+          "soybean powder",
+          "soy food",
+          "soy milk",
+          "isolated genistein",
+          "pure genistein",
+          "equol",
+          "red clover"
+        ]
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_17913408_vasomotor",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "17913408"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Standardized soybean isoflavone extract",
+            "preparation": "Glycine max extract with approximately50%genistein and35%daidzein within isoflavone mixture; source descriptor, not required label percentage."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "vasomotor_symptoms",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "nahas_2007_standardized_soy_extract",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full Nahas Methods/Results and Taku source preparation scope checked, together with newer mixed/null symptom findings and known material source limits. Bounded extract-class Preliminary5 accepted under existing rubric; no brand or proportion threshold."
+          },
+          "population": {
+            "description": "Postmenopausal Brazilian women45years or older with at least5daily hot flushes;80 randomized,76 completed.",
+            "age_group": "adult",
+            "sample_size": 80
+          },
+          "study_design": "Randomized double-blind placebo-controlled parallel trial; centralized computerized allocation, matched capsules; completer efficacy analysis.",
+          "outcomes": [
+            {
+              "name": "Hot-flush frequency and severity improved relative to placebo.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              100
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "endpoint_followup_only",
+            "duration_as_printed": {
+              "value": 10,
+              "unit": "months"
+            },
+            "administration_frequency": "Two capsules daily, each50mg reported isoflavones in125mg standardized soy extract.",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "100mg/day reported isoflavones within250mg/day extract. Follow-up10months; efficacy-analysis text requires9months completion.",
+            "normalization": {
+              "basis": "No aglycone conversion, exact-day conversion or Evidence dose threshold. Duration kept as endpoint follow-up because source9/10month language conflicts."
+            },
+            "source_provenance": {
+              "pmid": "17913408",
+              "source_url": "https://doi.org/10.1016/j.maturitas.2007.08.012",
+              "location": "Full primary Methods2.1–2.4 and Results3; printed pages250–254."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_groups": [
+              [
+                "soy",
+                "soybean",
+                "soy bean",
+                "glycine max"
+              ],
+              [
+                "isoflavone",
+                "isoflavones"
+              ],
+              [
+                "extract"
+              ]
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "menopausal_symptoms"
+            ],
+            "studied_population": "Postmenopausal women with vasomotor symptoms; no general safety clearance.",
+            "source_pmids": [
+              "17913408"
+            ],
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "soy protein",
+              "soybean protein",
+              "soy flour",
+              "soybean powder",
+              "soy food",
+              "soy milk",
+              "isolated genistein",
+              "pure genistein",
+              "equol",
+              "red clover"
+            ]
+          },
+          "limitations": [
+            "Small isolated-extract trial;80 randomized40/40,76 completers38/38; efficacy analysis restricted to completers, not all randomized participants.",
+            "Two active-group withdrawals for flatulence and epigastralgia improved after discontinuation. Preserve existing safety owners; no blanket safety conclusion.",
+            "Methods and follow-up describe10months while efficacy-analysis text says completing9months. Preserve both; no invented exact duration in days.",
+            "Reported100mg/day isoflavones in250mg/day standardized extract; do not call this100mg aglycones or import the review's estimated60mg conversion.",
+            "Mixture approximately50%genistein and35%daidzein is a source descriptor, not a label-percentage threshold. No new Evidence dose gate.",
+            "No verified registered primary-outcome hierarchy; hot-flush frequency/severity are clinical study endpoints but hierarchy remains not_reported.",
+            "Mixed/null newer symptom findings, direct depression null and distinct bone-density evidence remain reviewed below. No additive meta-analysis credit.",
+            "Class applicability accepted by independent root: standardized soybean-isoflavone extracts; no exact-brand restriction. No transfer to soy foods/protein, red-clover isoflavones, equol or isolated genistein. Combination-only effects cannot be attributed to soy alone.",
+            "The same paper reports lipid and vaginal null outcomes in a separate noncredit context; these are not hidden or recast as vasomotor outcomes. Kupperman index improved in both arms and is not the positive between-group conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_22433977_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "22433977"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Full primary systematic review Methods/Results/Table1 read. Extracted/synthesized soy isoflavones show positive pooled hot-flush effects, but isolated genistein included, substantial heterogeneity, several high-risk studies and imputed variances. Supports limited evidence without additive credit. Gocan2008 appears same54/82 diary cohort as laterImhof2018; do not count as independent replication."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "22433977",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/22433977/",
+              "location": "Full primary source"
+            }
+          },
+          "limitations": [
+            "Full primary systematic review Methods/Results/Table1 read. Extracted/synthesized soy isoflavones show positive pooled hot-flush effects, but isolated genistein included, substantial heterogeneity, several high-risk studies and imputed variances. Supports limited evidence without additive credit. Gocan2008 appears same54/82 diary cohort as laterImhof2018; do not count as independent replication.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_40718787_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "40718787"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Full primary review read. Composite symptoms/depression/psychosocial/headache/palpitations positive; hot flushes, vasomotor symptoms, insomnia and other endpoints null. Preparations include genistein, soy milk and combinations. Table1 incorrectly omits Imhof coingredients relative to original Methods. Retain mixed results; do not transfer aggregate to every preparation."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40718787",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40718787/",
+              "location": "Full primary source"
+            }
+          },
+          "limitations": [
+            "Full primary review read. Composite symptoms/depression/psychosocial/headache/palpitations positive; hot flushes, vasomotor symptoms, insomnia and other endpoints null. Preparations include genistein, soy milk and combinations. Table1 incorrectly omits Imhof coingredients relative to original Methods. Retain mixed results; do not transfer aggregate to every preparation.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_38825560_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "38825560"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Live indexed abstract verified; full Methods not accessed. Five studies425women; overall symptom and quality-of-life comparisons null, depression positive; reported conflict-of-interest risk. Completed no-additional-credit source disposition preserves positives and limits."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38825560",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38825560/",
+              "location": "Authoritative indexed abstract; access limit retained"
+            }
+          },
+          "limitations": [
+            "Live indexed abstract verified; full Methods not accessed. Five studies425women; overall symptom and quality-of-life comparisons null, depression positive; reported conflict-of-interest risk. Completed no-additional-credit source disposition preserves positives and limits.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_19339127_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "19339127"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Live indexed primary abstract verified; full paper not accessed.84women,120mg extract,16weeks; prespecified between-group CES-D primary comparison null despite within-group improvement. Retain direct depression null, not a vasomotor null or whole-ingredient negative."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "19339127",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/19339127/",
+              "location": "Authoritative indexed abstract; access limit retained"
+            }
+          },
+          "limitations": [
+            "Live indexed primary abstract verified; full paper not accessed.84women,120mg extract,16weeks; prespecified between-group CES-D primary comparison null despite within-group improvement. Retain direct depression null, not a vasomotor null or whole-ingredient negative.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_37875614_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "37875614"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Live indexed abstract verified; full Methods not accessed. Bone mineral density meta-analysis positive with composition-dependent findings, especially genistein-rich preparations. No fracture-prevention conclusion, no isolated-genistein transfer and no extra points. Distinct-use evidence retained rather than omitted."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "37875614",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37875614/",
+              "location": "Authoritative indexed abstract; access limit retained"
+            }
+          },
+          "limitations": [
+            "Live indexed abstract verified; full Methods not accessed. Bone mineral density meta-analysis positive with composition-dependent findings, especially genistein-rich preparations. No fracture-prevention conclusion, no isolated-genistein transfer and no extra points. Distinct-use evidence retained rather than omitted.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_29849181_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "29849181"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Full primary Methods/Results read. Positive hot-flush finding for soy-germ plus vitamins/minerals/trace-element combination; placebo cellulose.192randomized but136primary diary cases54/82 after site data loss. No isolated-soy numerical credit. Likely earlierGocan2008 report not independent replication; open extension not randomized replication."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "29849181",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/29849181/",
+              "location": "Full primary source"
+            }
+          },
+          "limitations": [
+            "Full primary Methods/Results read. Positive hot-flush finding for soy-germ plus vitamins/minerals/trace-element combination; placebo cellulose.192randomized but136primary diary cases54/82 after site data loss. No isolated-soy numerical credit. Likely earlierGocan2008 report not independent replication; open extension not randomized replication.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_18257146_source_review",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "18257146"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed source-level no-additional-credit disposition; not source invalidity, not omission of positive findings, and not a general negative conclusion. Live indexed abstract verified; full text recovery unsuccessful.190randomized,147completed; separate40mg/60mg daidzein-rich arms nonsignificant at12weeks, combined-arm comparison marginallypositive; quality-of-life null. Preserve mixed outcome and23%attrition; no additive credit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "18257146",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/18257146/",
+              "location": "Authoritative indexed abstract; access limit retained"
+            }
+          },
+          "limitations": [
+            "Live indexed abstract verified; full text recovery unsuccessful.190randomized,147completed; separate40mg/60mg daidzein-rich arms nonsignificant at12weeks, combined-arm comparison marginallypositive; quality-of-life null. Preserve mixed outcome and23%attrition; no additive credit.",
+            "No additive points or double-counted trial populations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "soy_isoflavones_17913408_lipid_vaginal_nulls",
+          "components": [
+            "INGR_SOY_ISOFLAVONES"
+          ],
+          "source_pmids": [
+            "17913408"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review, independently checked by /root/literature_receipts and /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full Nahas Methods/Results and Taku source preparation scope checked, together with newer mixed/null symptom findings and known material source limits. Bounded extract-class Preliminary5 accepted under existing rubric; no brand or proportion threshold."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "17913408",
+              "source_url": "https://doi.org/10.1016/j.maturitas.2007.08.012",
+              "location": "Full primary Methods2.1–2.4 and Results3; printed pages250–254."
+            }
+          },
+          "limitations": [
+            "Full primary17913408 Results: no between-group lipid or vaginal endpoint improvement; Kupperman score improved in both arms. Finished noncredit disposition for these separate outcomes, not a rejection of the positive vasomotor result.",
+            "No additional points, replicated trial, cardiovascular benefit or safety clearance."
           ]
         }
       ]
