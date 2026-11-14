@@ -29,6 +29,7 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 
 # Label, and the rows left open on it where the review was never performed.
 COMPLETES = [
+    pytest.param("a9_completion_1055_raw.json", False, id="soy_owner_review_finished"),
     pytest.param("a9_partial_full_evidence_328830_raw.json", False, id="multi_panel_beta_authority_complete"),
     pytest.param("a9_completion_2715_raw.json", False, id="sports_adjunct_by_materiality"),
     pytest.param("a9_completion_12853_raw.json", False, id="title_owner_valerian_review_restored"),
@@ -42,7 +43,6 @@ COMPLETES = [
 ]
 HELD = [
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
-    pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
     pytest.param("a9_completion_322514_raw.json", EVIDENCE, id="enzyme_owner_behind_product_row"),
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),
     pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="blend_is_the_whole_label"),
@@ -179,11 +179,16 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
     evidence = scored["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
     assert any("WHEY" in str(entry) for entry in evidence["recovered_matches"])
 
-    # 256990: the unread members of its 150 mg herbal blend no longer hold it, and
-    # finishing the product never relabels them as reviewed.
+    # 256990: the unfinished lemon-balm review no longer holds this 150 mg
+    # blend. Chamomile has its own completed review; finishing the product
+    # must not relabel lemon balm as reviewed.
     finished = build_scored_artifact(_enrich(pipeline, "a9_completion_256990_raw.json"))
     assert finished["quality_assessment_status"] == "complete"
-    assert {"chamomile", "lemon_balm"} <= {row["canonical_id"] for row in _unreviewed_rows(finished)}
+    assert "lemon_balm" in {row["canonical_id"] for row in _unreviewed_rows(finished)}
+    chamomile = next(row for row in finished["assessment_readiness"]["evidence"]["ingredient_assessments"]
+                     if row["canonical_id"] == "chamomile")
+    assert chamomile["state"] == "evaluated_limited_or_negative"
+    assert chamomile["evidence_ids"] == ["INGR_CHAMOMILE"]
     assert "weren't individually reviewed" in finished["quality_pillars_v4"]["evidence"]["reason"]
 
 

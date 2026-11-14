@@ -824,6 +824,22 @@ def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
 # Universal Evidence Resolver Core
 # ============================================================================
 
+def _literature_owner_facts(entry: Mapping) -> dict:
+    """One projection of the retained literature inventory and provenance."""
+    return {
+        "search_date": entry.get("search_date"),
+        "search_query": entry.get("search_query"),
+        "databases": entry.get("databases_searched"),
+        "records_screened": entry.get("records_screened"),
+        "effect_direction": entry.get("effect_direction"),
+        "applicability_status": entry.get("applicability_status"),
+        "pmids": [s.get("pmid") for s in entry.get("qualifying_human_studies", []) if s.get("pmid")],
+        "studied_dose": entry.get("studied_dose_exposure"),
+        "material_form": entry.get("material_form"),
+        "verification_result": entry.get("verification_result"),
+    }
+
+
 def _clinical_owner_facts(studies: list[dict]) -> dict:
     """Retain eligible citation facts independently of affirmative qualification."""
     excluded_pmids = {
@@ -1353,6 +1369,44 @@ def _resolve_evidence_for_row(
         ]
         noncontributing_complete = [finished and not pending
                                    for finished, pending in zip(noncontributing_complete, unfinished_contexts)]
+        # Preserve an already-open literature applicability review when this
+        # partial native review excludes the row. Finished native coverage or
+        # a general/reference conclusion supersedes that old inventory; merely
+        # adding a maintenance citation never reopens a completed review.
+        if (all(study in valid_studies for study in deduped_studies)
+                and all(decision.get("status") == "not_applicable"
+                        for decision in scope_decisions)
+                and not any(is_reference_only(study)
+                            or any(_reviewed_general_conclusion(context)
+                                   for context in study.get("study_contexts") or [])
+                            for study in deduped_studies)):
+            literature = _load_literature_evidence()
+            pending_review = literature.get(canonical) or literature.get(norm_name) or {}
+            if (literature_review_result(pending_review) == "applicability_unestablished"
+                    and pending_review.get("reason_code") == "clinical_applicability_unreviewed"):
+                from clinical_evidence_schema import reference_source_ids
+                inventory_sources = set().union(*(reference_source_ids(source)
+                    for source in pending_review.get("qualifying_human_studies") or []
+                    if isinstance(source, Mapping)))
+                finished_sources = set()
+                for study in deduped_studies:
+                    declared = declared_source_ids(study)
+                    for context in study.get("study_contexts") or []:
+                        if (not context_review_finished(context)
+                                or validate_ingredient_context(context, require_complete_review=True)):
+                            continue
+                        sources = expand_source_ids(study, context_source_ids(context))
+                        if sources <= declared:
+                            finished_sources.update(sources)
+                if inventory_sources - finished_sources:
+                    owner_facts["literature_evidence"] = _literature_owner_facts(pending_review)
+                    return EvidenceResolution(
+                        canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                        disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                        points_eligible=False, applicability_status="applicability_unestablished",
+                        reason_code="literature_applicability_unestablished", owner_facts=owner_facts,
+                        blocking_reasons=["literature_applicability_unestablished"],
+                    )
         # Global source eligibility cannot hide a finished exact reference
         # when that source's preparation is excluded for this physical row.
         if not valid_studies or all(noncontributing_complete):
@@ -1597,18 +1651,7 @@ def _resolve_evidence_for_row(
             )
 
         matched_owners.append("backed_clinical_studies")
-        owner_facts["literature_evidence"] = {
-            "search_date": lit_entry.get("search_date"),
-            "search_query": lit_entry.get("search_query"),
-            "databases": lit_entry.get("databases_searched"),
-            "records_screened": lit_entry.get("records_screened"),
-            "effect_direction": lit_entry.get("effect_direction"),
-            "applicability_status": lit_entry.get("applicability_status"),
-            "pmids": [s.get("pmid") for s in lit_entry.get("qualifying_human_studies", []) if s.get("pmid")],
-            "studied_dose": lit_entry.get("studied_dose_exposure"),
-            "material_form": lit_entry.get("material_form"),
-            "verification_result": lit_entry.get("verification_result"),
-        }
+        owner_facts["literature_evidence"] = _literature_owner_facts(lit_entry)
 
         # An exact, verified no-transfer review records related research
         # without treating a retail preparation as the one studied.

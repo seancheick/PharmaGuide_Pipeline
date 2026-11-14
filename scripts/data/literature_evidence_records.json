@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-12",
+    "last_updated": "2026-11-13",
     "total_entries": 846,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -31051,7 +31051,7 @@
       "reason_code": "crude_material_lacks_standardization"
     },
     {
-      "canonical_id": "maca_root",
+      "canonical_id": "maca",
       "material_form": "Maca root; exact preparation-specific dried, gelatinized and extracted materials must remain distinct. Existing whole-product labels are not presumed to be extracts.",
       "search_query": "(\"maca root\"[tiab] OR \"Lepidium\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]",
       "search_date": "2026-09-21",

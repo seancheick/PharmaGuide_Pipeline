@@ -1,3 +1,21 @@
+## November 13 — Close Evidence qualification
+
+The accepted ladder and finished-zero app wording are integrated through pipeline477 and app236.
+The following source batches are not integrated or released:478(valerian),479(source references),
+480(exact Orafti GR authority),481(named Bimuno plus Acacia nontransfer) have green exact-headCI
+and their recorded local/product checks; main integration awaits Sean.482(maca/glucomannan and
+preserving explicitly open applicability) has a106-test correction pass for three stale pins and
+CI43540725520 running. The next soy/psyllium batch is under qualification:37raw products, two
+psyllium Evidence15→20 movements and one soy completion with unchangedscore; independent source,
+material-boundary and artifact checks complete, final local/CI pending. These bounded counts are
+not additive global coverage and do not establish installed-app delivery.
+
+Owner: existing clinical source/applicability registry and generic_evidence context interpretations;
+evidence: per-entry primary sources, fail-first controls and existing evidence_close_20261113
+research/LEDGER receipts. Will NOT create: another review store, grade, Dose gate or safety owner.
+The ranked remainder, specific signed holds, one fingerprint-selected rebuild, fresh census,
+release checks, Core/Blob parity and native app verification remain.99%gate is unchanged.
+
 ## Current scientific completion register
 
 Owner: `scripts/evidence_resolver.py::nutrition_authority_for_row` / `resolve_product_evidence`, the existing scoring-input physical partition owner, backed-clinical/literature records and canonical applicability, readiness and native scoring consumers. Evidence: ownership matrix, glossary/caller searches, source content and independent checks. Will NOT create another registry, scoring policy, public state or tracker. Prior integrated batches passed their recorded behavioral gates; the current batch state below distinguishes measured, reviewed and integrated work. This register update changes documentation only.

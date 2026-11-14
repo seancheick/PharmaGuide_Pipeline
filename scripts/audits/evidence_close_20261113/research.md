@@ -421,6 +421,7 @@ prebiotics-review,bgos-before/after comparisons (baseline=maca-bgos-before),bgos
 Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.
 
 
+
 Bimuno CI43536465267 identified two valid regressions for275464, not stale test pins.
 Owner: INGR_BIMUNO_GOS::applicability (parent and two reviewed source contexts); actual label
 Acacia Fiber4g/Acacia senegal and IQM acacia-fiber identity establish distinct material from B-GOS.
@@ -435,6 +436,58 @@ replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia re
 clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
 Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.
 
+## Scoped maca and glucomannan reviews (November 13, 2026)
+
+Owner: backed_clinical_studies::INGR_MACA / INGR_GLUCOMANNAN, literature_evidence_records::maca,
+and existing context_effect_direction_interpretations; owner searches and source receipts retained
+in next-review. Will NOT create: a canonical, grade, Dose gate, registry or safety conclusion.
+
+Maca36593713: verified gelatinized material,88randomized/80completers, approximately5g/day12weeks;
+AMS positive, secondary IIEF/IPSS positive, testosterone null. Preliminary5 with preparation and
+population boundaries. Four earlier literature source reviews preserved; canonical maca_root aligns
+to actual maca identity. The existing unfinished applicability inventory remains open for excluded
+preparations/populations through the bounded resolver correction, not a new maintenance-citation hold.
+
+Konjac glucomannan: full EFSA1258 DOI10.2903/j.efsa.2009.1258 cholesterol conclusion receives the
+accepted authority20. General-population scope,4g/day source condition retained without a new
+Evidence dose gate or Dose benchmark.2017/2024 lipid reviews retain positive/null/low-certainty facts;
+2014 weight null and GI effects retained. Parent mixed remains; no invented enrollment or study count.
+Independent source and raw-output review completed. Actual reviewer is agent, not clinician.
+
+Qualification:1996 owner tests passed with3 diagnosed issues subsequently fixed;25 follow-up passed.
+10 scoped citation claims passed; Python correctness0new/10existing. Local564passed,24declared opt-ins
+in144.17s; skip guard passed.32 frozen raw records replayed: gelatinized204624/273735 gain5 and finish;
+306225 glucomannan gains20 and finishes. Extract/black/red maca stay held. Safety, warnings, amounts,
+identity, Dose and other pillars unchanged.18 identical enriched performance median2.761951→2.813728s,
+RSS217759744→218120192; inputhash unchanged. Receipts: next-review/scoped-reviews-*.
+CI pending. Separate Bimuno/acacia regression found in481 remains under repair; no integration/release.
+
+
+
+## Soy extract and psyllium authority batch (November13)
+Owner: existing INGR_PSYLLIUM_HUSK and new reviewed entry INGR_SOY_ISOFLAVONES in the existing
+registry; generic_evidence context interpretation; existing source-form applicability. No new
+canonical/registry/grade, dose gate or safety conclusion. Root and independent agents verified
+full Nahas17913408/Taku22433977 and FDA M007; source receipts under next-review.
+Soy source17913408 supports Preliminary5 for the reviewed soybean-isoflavone extract class;
+parent mixed retained with eight sources, nine scoped contexts. Hot-flush positives separate from
+lipid/vaginal nulls, newer mixed/null symptom evidence, depression null, composition-dependent bone
+findings and Alsitan combination.80randomized/76completers,2GIwithdrawals,9/10monthdiscrepancy,
+100mg reported isoflavones/250mgextract retained without aglycone conversion or brand/%gate.
+Independent overmatch probes failed5cases before tightening source-owned extract+soy+isoflavone
+requirements and explicit material exclusions. Source notes on actual269819 bind extract to its
+own row; unrelated rows cannot lend it.16final scopedtests pass; independent boundary reviewaccepts.
+FDA adult husk authority20 coexists with unchanged lipidreview; granular/pediatric/whole-seed
+boundaries and unread18985059 remain. Code membership correction is separate4accd14ab.
+37raw fullartifact/blob:33003886.4→91.4 and7681079.4→84.4 (Evidence15→20,alreadycomplete);
+soy1055partial→complete at unchanged67.6/Evidence15;269819 alreadycomplete75.6/Evidence20unchanged;
+genericpsyllium17192held0unchanged. Safety/warnings/identity/amounts/Dose/otherpillars unchanged.
+18same-input performance2.861568→2.866558s(+0.17%),RSS216186880→215826432,hashunchanged.
+1651ownerspassed with1stalepsycontext-count assertion; corrected to preserve unique lipid-source
+review and unreadsource guard;16followups pass.16soy source-ID claims (8PMID+8DOI) strictpass aftertwo title-copy
+corrections;31psyllium source-ID claims passed earlier same-run check. Python0new10existing; exact2dataentries.
+Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
+or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
 ### PR 481 integration review corrections (November 13, 2026)
 
 Two independently reproduced review findings were corrected before approved integration.
@@ -462,3 +515,68 @@ conflicting-reference cases exercise the repaired paths. Same-input 18-product t
 `/Users/seancheick/pg_quality/evidence-close-20261113/bgos-review-fixes-*`.
 
 The combined local checkpoint passed 564 tests with 24 declared opt-ins; the skip guard passed. Python correctness reported zero new findings.
+
+### Chamomile source review (November 13, 2026)
+
+Owner: `backed_clinical_studies.json::INGR_CHAMOMILE`, existing clinical-context
+applicability and `quality_score.json::evidence_magnitudes.generic.context_effect_direction_interpretations`;
+evidence: `rg -n 'INGR_CHAMOMILE|context_effect_direction_interpretations' scripts/data/backed_clinical_studies.json scripts/scoring_v4/config/quality_score.json`.
+Will NOT create another registry, grade, status, dose threshold or safety owner.
+
+The previously unread retained source PMID39106912 was recovered in full. Its ten oral
+trials used heterogeneous preparations; five contributed to the PSQI pool, with high
+heterogeneity and nine trials at high risk of bias. It does not establish universal sleep
+benefit or anxiety efficacy. The unsupported legacy aggregate enrollment/trial counts were
+removed; overlapping reviews are not counted as independent trials. Original structured
+metadata for the retained source and its unchanged neutral Dose proof are preserved.
+
+PMID19593179 supports Preliminary5 for the source-owned oral German chamomile extract
+class under the accepted weak-evidence rubric. Root independently read the primary full
+Methods/Results at https://pmc.ncbi.nlm.nih.gov/articles/PMC3600416/?uid=0c76b720a2a9as16 .
+The small adult GAD trial had a marginal positive primary HAM-A comparison and nonsignificant
+secondary comparisons. The 220–1100mg daily values are verified response-guided titration
+levels, not separately randomized arms or a fixed general Dose benchmark. The existing
+`not_applicable` dose basis avoids falsely recording discrete assigned arms. A prenatal-target
+control confirms that the existing population owner rejects transfer; no new pregnancy policy.
+
+The parent is mixed, not universally positive. Separate finished no-additional-credit source
+contexts retain the null relapse primary endpoint (27912875), null controlled insomnia findings
+(21939549), heterogeneous review (31006899), and inhaled-oil trial (39545336). Abstract-only
+access is stated where full Methods were unavailable. Root and research agents performed the
+review; no clinician authorship is claimed. Source_review independently checked the 2024 and
+2011 full texts and applicability semantics; root supplied the independently read 2009 full text.
+Roman chamomile, essential/leaf oil, isolated apigenin, powder and children do not borrow adult
+extract credit. Existing separate oil holds and neutral Dose policy remain.
+
+Eight new source/material/population cases passed after three positive-extract cases first failed
+on the old record. The complete source-owner file passed514 tests before the inherited hold fixes;
+531 combined source/config tests then passed, plus the prenatal control. The scoped live strict
+citation check passed all13 source-identifier claims, with no title drift or unresolved identifier.
+The unrelated all-citations script covers zero claims in this register and is not counted as proof.
+
+Forty-seven frozen real labels were compared through Clean/Enrich/Score and detail blobs.
+312872 and330559 gain5 and complete;79940 gains5 but remains partial for its separate unreviewed
+plain chamomile row.321971 moves64.7→64.9 (Evidence5→5.2 under existing product aggregation)
+and completes. Infant246009 completes with unchanged total82.4/Evidence16 from its probiotic:
+chamomile is explicitly population-rejected and contributes no credit. No safety, warning,
+identity, amount, Dose or other-pillar changes were found by root or independent review.
+The 47-product same-input timing moves4.900→5.094seconds; inputs remain unchanged.
+Receipts, source texts, raw captures, complete path comparisons and performance measurements:
+`/Users/seancheick/pg_quality/evidence-close-20261113/next-review/chamomile/`.
+
+Final inherited-fix replay equals the independently reviewed47-label candidate with zero complete-record/blob differences. Local checkpoint:564passed,24declaredopt-ins,143.82seconds;skipguardpassed. Python correctness:0new,10existing. Exact data_batch scope:INGR_CHAMOMILE only.
+
+### Chamomile final CI corrections
+Combined CI43545137797 finished with exactly two failures: a non-vocabulary parent outcome
+category and a fixture still describing chamomile as unread. Both reproduced locally before repair.
+Parent category now uses existing Reduce Stress/Anxiety; detailed clinical findings and all
+preparation/population constraints are unchanged. Real256990 now asserts the completed limited
+chamomile decision and exact record ID, while lemon balm remains unread and the disclosure remains.
+609 affected vocabulary/completion/source tests pass. Independent review accepted both fixes.
+Four frozen raw products (256990,312872,79940,246009) have identical complete scored records;
+only the category text changes in three enriched records/detail blobs. Infant246009 is wholly
+unchanged. The first subset replay failed because its manifest retained the old count; the corrected
+four-product run succeeded and its source fingerprint remained unchanged. This display/test-only
+follow-up reuses the qualified local checkpoint; a fresh exact-head whole-fast CI is required.
+Receipts: next-review/chamomile/ci-failfirst.log, ci-fixes-tests.log,
+ci-fix-qualified.jsonl and ci-fix-full-comparison.json.

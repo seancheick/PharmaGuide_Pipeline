@@ -4,6 +4,7 @@ Numbers stay where they are. These tests pin that the fields claiming a finished
 review say otherwise when the release assessment is open or the safety screen
 never read a captured panel. Written against main first, where each one fails.
 """
+import copy
 import json
 import logging
 from pathlib import Path
@@ -13,8 +14,8 @@ import pytest
 from build_final_db import build_decision_highlights, generate_share_metadata
 
 FIXTURES = Path(__file__).parent / "fixtures"
-# 293417 (elderberry) finished on 2026-11-11; 256990 (Centrum Sleep) finished on 2026-11-13
-# when unamounted blend members stopped holding. 1055 keeps credit with an owner review open.
+# 1055 now has a finished soy review. The pending-review fixture explicitly
+# reopens its source decision in memory; the raw label and retained credit stay real.
 PARTIAL_LABEL = "a9_completion_1055_raw.json"
 COMPLETE_LABEL = "form_association_12012_raw.json"
 
@@ -46,10 +47,19 @@ def _score(pipeline, raw):
     return build_scored_artifact(enriched)
 
 
-@pytest.fixture(scope="module")
-def partial_full_evidence(pipeline):
+@pytest.fixture
+def partial_full_evidence(pipeline, monkeypatch):
+    import clinical_applicability as ca
     from scoring_v4.scored_artifact import build_scored_artifact
 
+    records = copy.deepcopy(ca.reviewed_entries())
+    soy = records["INGR_SOY_ISOFLAVONES"]
+    soy["scoring_eligible"] = False
+    for context in soy["study_contexts"]:
+        if context.get("scoring_eligible"):
+            context["scoring_eligible"] = False
+            context["review_status"] = "source_verified_pending_clinical_review"
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
     enriched = _enrich(pipeline, PARTIAL_LABEL)
     return enriched, build_scored_artifact(enriched)
 
@@ -82,7 +92,7 @@ def test_marking_evidence_open_leaves_the_retained_credit_receipt(partial_full_e
     evidence = scored["quality_pillars_v4"]["evidence"]
     entries = evidence["receipt"]["entries"]
     assert abs(sum(entry["points"] for entry in entries) - evidence["score"]) < 0.001
-    assert evidence["evidence_result_state"] == "evaluated_applicable"
+    assert evidence["evidence_result_state"] == "clinical_review_not_covered"
 
 
 # --- Safety screen: an unread panel is not "no known concern" ---------------

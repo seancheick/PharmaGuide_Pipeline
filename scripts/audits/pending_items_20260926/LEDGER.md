@@ -5563,3 +5563,94 @@ replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia re
 219289 remainscomplete82.4. Safety/warnings/amounts/identity/Dose unchanged; only reviewed-state and
 clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
 Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.
+Bounded existing-review preservation: a nonapplicable partial native review must not erase an
+already-recorded unfinished literature applicability assessment. Existing source identity/schema/
+completion helpers determine whether finished native contexts cover that inventory; documented
+general/reference conclusions and applicable contexts keep existing finite completion. This does
+not reopen from maintenance citations. Fail-first scope/provenance/registered-owner regressions;
+63focused and independent62controls pass, with held/preparation/reference cases preserved. Shared
+literature fact projection retains unresolved source IDs under the existing clinical owner. No
+new owner/status/field. Final combined raw/performance/local/CI qualification pending.
+
+## Scoped maca and glucomannan reviews (November 13, 2026)
+
+Owner: backed_clinical_studies::INGR_MACA / INGR_GLUCOMANNAN, literature_evidence_records::maca,
+and existing context_effect_direction_interpretations; owner searches and source receipts retained
+in next-review. Will NOT create: a canonical, grade, Dose gate, registry or safety conclusion.
+
+Maca36593713: verified gelatinized material,88randomized/80completers, approximately5g/day12weeks;
+AMS positive, secondary IIEF/IPSS positive, testosterone null. Preliminary5 with preparation and
+population boundaries. Four earlier literature source reviews preserved; canonical maca_root aligns
+to actual maca identity. The existing unfinished applicability inventory remains open for excluded
+preparations/populations through the bounded resolver correction, not a new maintenance-citation hold.
+
+Konjac glucomannan: full EFSA1258 DOI10.2903/j.efsa.2009.1258 cholesterol conclusion receives the
+accepted authority20. General-population scope,4g/day source condition retained without a new
+Evidence dose gate or Dose benchmark.2017/2024 lipid reviews retain positive/null/low-certainty facts;
+2014 weight null and GI effects retained. Parent mixed remains; no invented enrollment or study count.
+Independent source and raw-output review completed. Actual reviewer is agent, not clinician.
+
+Qualification:1996 owner tests passed with3 diagnosed issues subsequently fixed;25 follow-up passed.
+10 scoped citation claims passed; Python correctness0new/10existing. Local564passed,24declared opt-ins
+in144.17s; skip guard passed.32 frozen raw records replayed: gelatinized204624/273735 gain5 and finish;
+306225 glucomannan gains20 and finishes. Extract/black/red maca stay held. Safety, warnings, amounts,
+identity, Dose and other pillars unchanged.18 identical enriched performance median2.761951→2.813728s,
+RSS217759744→218120192; inputhash unchanged. Receipts: next-review/scoped-reviews-*.
+CI pending. Separate Bimuno/acacia regression found in481 remains under repair; no integration/release.
+
+
+
+PR482 CI43539098167 completed: onlythree stale testexpectations in shards3/5. EFSA1258 is an
+accepted cholesterol surrogate (not exposure-only), unspecifiedfiber remainsheld by missinglabel
+preparation, and configdriftguard now explicitly pins the reviewedglucomannan rule. No runtime/
+clinicalfacts changed in this correction; no broad guard removed.106 affectedtests pass. Prior
+combinedlocal564pass24declaredoptins145.69s and37/32source receipts retained; exactCIrerunpending.
+
+Authority-context selection defect (November13): fullowner in-memory psyllium probes330038/76810
+select both reviewed lipid and proposed FDA contexts, but an exactsingleton guard discards the
+reviewed authority floor. Owner: generic_evidence::_effect_direction_assessment; evidence: actual
+source-bound probe plus fullartifact failfirst1fail/2pass. Floor-only interpretations now require
+membership of their exact approved context; signed multiplier exceptions still require singleton.
+All source identity, matched-row, review/hold, guideline-role and same-source/use conflict checks
+remain.9direct checks and independent27edgecases pass. No newpolicy/field/owner; no dataactivation
+in this atomic fix. Final combined raw/performance/local/CI qualification belongs to the sourcebatch.
+
+
+
+
+## Soy extract and psyllium authority batch (November13)
+Owner: existing INGR_PSYLLIUM_HUSK and new reviewed entry INGR_SOY_ISOFLAVONES in the existing
+registry; generic_evidence context interpretation; existing source-form applicability. No new
+canonical/registry/grade, dose gate or safety conclusion. Root and independent agents verified
+full Nahas17913408/Taku22433977 and FDA M007; source receipts under next-review.
+Soy source17913408 supports Preliminary5 for the reviewed soybean-isoflavone extract class;
+parent mixed retained with eight sources, nine scoped contexts. Hot-flush positives separate from
+lipid/vaginal nulls, newer mixed/null symptom evidence, depression null, composition-dependent bone
+findings and Alsitan combination.80randomized/76completers,2GIwithdrawals,9/10monthdiscrepancy,
+100mg reported isoflavones/250mgextract retained without aglycone conversion or brand/%gate.
+Independent overmatch probes failed5cases before tightening source-owned extract+soy+isoflavone
+requirements and explicit material exclusions. Source notes on actual269819 bind extract to its
+own row; unrelated rows cannot lend it.16final scopedtests pass; independent boundary reviewaccepts.
+FDA adult husk authority20 coexists with unchanged lipidreview; granular/pediatric/whole-seed
+boundaries and unread18985059 remain. Code membership correction is separate4accd14ab.
+37raw fullartifact/blob:33003886.4→91.4 and7681079.4→84.4 (Evidence15→20,alreadycomplete);
+soy1055partial→complete at unchanged67.6/Evidence15;269819 alreadycomplete75.6/Evidence20unchanged;
+genericpsyllium17192held0unchanged. Safety/warnings/identity/amounts/Dose/otherpillars unchanged.
+18same-input performance2.861568→2.866558s(+0.17%),RSS216186880→215826432,hashunchanged.
+1651ownerspassed with1stalepsycontext-count assertion; corrected to preserve unique lipid-source
+review and unreadsource guard;16followups pass.16soy source-ID claims (8PMID+8DOI) strictpass aftertwo title-copy
+corrections;31psyllium source-ID claims passed earlier same-run check. Python0new10existing; exact2dataentries.
+Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
+or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
+
+
+## November 13 — scoped chamomile source review, qualification pending integration
+
+INGR_CHAMOMILE now has six attributable source dispositions, including recovered full39106912,
+with weak adult oral-extract19593179 credit at5. Source-specific mixed/null findings and all
+preparation/population exclusions are retained. No generic powder/oil/infant credit and no
+new Dose benchmark. Root and independent agent source/applicability checks completed.
+47 raw labels:4complete,4score movers; overlap is explained in evidence_close_20261113/research.md.
+No Safety/identity/amount/Dose/other-pillar movement.531source/config tests plus prenatalcontrol,
+564local tests,24declaredopt-ins,strictscopedcitationcheck passed. RequiredCI and integration
+remain separate. This bounded replay is not a fresh full-catalog census or a release.

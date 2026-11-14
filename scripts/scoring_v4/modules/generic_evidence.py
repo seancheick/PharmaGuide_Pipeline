@@ -1903,9 +1903,14 @@ def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
             continue
         decision = entry.get("applicability_assessment") or {}
         population = decision.get("population_applicability") or {}
+        selected_contexts = set(population.get("context_ids") or [])
+        # A reviewed floor can coexist with another applicable conclusion.
+        # Signed multiplier exceptions keep their exact single-context scope.
+        floor_only = policy.get("floor_key") is not None and "multiplier_key" not in policy
+        context_selected = (policy["context_id"] in selected_contexts if floor_only
+                            else selected_contexts == {policy["context_id"]})
         if (decision.get("status") != "applicable" or population.get("state") != "eligible"
-                or set(population.get("context_ids") or []) != {policy["context_id"]}
-                or not entry.get("matched_source_row_refs")):
+                or not context_selected or not entry.get("matched_source_row_refs")):
             continue
         from clinical_applicability import reviewed_entries
         from evidence_resolver import clinical_record_sources_eligible

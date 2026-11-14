@@ -806,8 +806,13 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
         )
 
     # Crude powders lacking standardization stay applicability unestablished
-    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder", "fiber"]:
+    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder"]:
         _assert_incomplete_source_review(cid)
+    # A named glucomannan review cannot qualify an unspecified fiber row.
+    fiber = er.resolve_evidence_for_canonical("fiber")
+    assert not fiber.points_eligible
+    assert fiber.blocking_reasons == ["clinical_source_row_unresolved"]
+    assert er.compose_product_resolution_state([fiber])[1] is False
 
 
 def test_phase4_batch4_standardized_clinical_canaries():
@@ -2566,11 +2571,14 @@ def test_independently_reviewed_bounded_gaps_finish_without_inventing_null_trial
     assert record["effect_direction"] is None and record["qualifying_human_studies"] == []
 
 
-@pytest.mark.parametrize("canonical", ["l_proline", "chaga", "raspberry_ketones", "maca_root"])
+@pytest.mark.parametrize("canonical", ["l_proline", "chaga", "raspberry_ketones", "maca"])
 def test_read_human_research_with_unfinished_scope_keeps_real_blocker(canonical):
     result = er.resolve_evidence_for_canonical(canonical)
     assert not result.points_eligible
-    assert result.blocking_reasons == ["literature_applicability_unestablished"]
+    expected = "clinical_source_row_unresolved" if canonical == "maca" else "literature_applicability_unestablished"
+    assert result.blocking_reasons == [expected]
+    from assessment_readiness import _resolved_evidence_assessment
+    assert _resolved_evidence_assessment(result)[0] == "not_yet_evaluated"
 
 
 def test_glutathione_canonical_alone_does_not_invent_label_preparation():
@@ -2635,3 +2643,36 @@ def test_calcium_glucarate_finished_search_keeps_mixture_rct_and_case_findings_n
     assert result.points_eligible is False
     assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
     assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'
+
+
+@pytest.mark.parametrize('inventory_state', ['unresolved', 'covered', 'maintenance', 'general'])
+@pytest.mark.parametrize('applicable', [False, True])
+def test_existing_unfinished_literature_scope_survives_partial_native_review(monkeypatch, inventory_state, applicable):
+    import clinical_applicability as ca
+    source = _approved_test_source({'id': 'TEST_PARTIAL_REVIEW', 'study_type': 'rct_single',
+                                   'effect_direction': 'positive_weak'})
+    context = source['study_contexts'][0]
+    if inventory_state != 'general':
+        context['identity_scope'] = 'exact_form'
+        context['identity'] = {'chemical_form': 'Specific reviewed preparation'}
+    literature = {
+        'canonical_id': 'synthetic_material',
+        'applicability_status': 'applicability_unestablished' if inventory_state != 'maintenance' else 'reviewed_null_unfavorable',
+        'reason_code': 'clinical_applicability_unreviewed',
+        'qualifying_human_studies': [{'pmid': '28661438' if inventory_state == 'covered' else '24791752'}],
+    }
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': [source]})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'synthetic_material': literature})
+    monkeypatch.setattr(ca, 'assess_clinical_applicability', lambda *a, **kw:
+                        {'status': 'applicable' if applicable else 'not_applicable',
+                         'reason_code': 'reviewed_scope_match' if applicable else 'clinical_form_excluded'})
+    row, product = _excluded_preparation_product('Synthetic Material', 'synthetic_material', 'other preparation')
+    result = er.resolve_evidence_for_row(row, product)
+    assert set(result.matched_owners) <= set(er.OWNER_CAPABILITY_MAP)
+    expected_complete = applicable or inventory_state != 'unresolved'
+    assert er.compose_product_resolution_state([result])[1] is expected_complete
+    if not expected_complete:
+        assert result.reason_code == 'literature_applicability_unestablished'
+        assert result.owner_facts['literature_evidence']['pmids'] == ['24791752']
+        assert result.owner_facts['literature_evidence']['applicability_status'] == 'applicability_unestablished'
