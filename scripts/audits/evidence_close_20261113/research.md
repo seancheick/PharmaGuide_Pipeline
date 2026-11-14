@@ -602,3 +602,18 @@ Regression failed on both old summaries; 227 literature/verifier tests pass. dat
 only literature_evidence_records[20] changed. The 75-label combined wording replay is in progress;
 this correction is not independently CI-qualified or integrated. It precedes any new clinical
 credit, whose preparation matching and final review remain pending.
+
+### Chamomile final CI corrections
+Combined CI43545137797 finished with exactly two failures: a non-vocabulary parent outcome
+category and a fixture still describing chamomile as unread. Both reproduced locally before repair.
+Parent category now uses existing Reduce Stress/Anxiety; detailed clinical findings and all
+preparation/population constraints are unchanged. Real256990 now asserts the completed limited
+chamomile decision and exact record ID, while lemon balm remains unread and the disclosure remains.
+609 affected vocabulary/completion/source tests pass. Independent review accepted both fixes.
+Four frozen raw products (256990,312872,79940,246009) have identical complete scored records;
+only the category text changes in three enriched records/detail blobs. Infant246009 is wholly
+unchanged. The first subset replay failed because its manifest retained the old count; the corrected
+four-product run succeeded and its source fingerprint remained unchanged. This display/test-only
+follow-up reuses the qualified local checkpoint; a fresh exact-head whole-fast CI is required.
+Receipts: next-review/chamomile/ci-failfirst.log, ci-fixes-tests.log,
+ci-fix-qualified.jsonl and ci-fix-full-comparison.json.
