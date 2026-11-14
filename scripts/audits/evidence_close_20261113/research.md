@@ -780,3 +780,13 @@ export or release. Receipts: pg_quality/evidence-close-20261113/next-review/wild
 qualified-after.jsonl and qualified-comparison.json. Exact data_batch check changes wild_yam and
 botanical_ingredients/wild_yam_root only. Python correctness0new/10existing. Local, controlled
 performance and final exact-source CI remain pending at this commit.
+
+
+Yam identity qualification atadcb958ae (same source after merge2490e316c): local564passed,
+24declared opt-ins in168.56s, strict skipguardpassed. Full28frozen-input capture changes exactly the
+8conflicting yam labels;20controls retain full artifact parity. Two yam controls export;8conflicts
+are explicitly refused by existingUNRESOLVED_SCORE_ACTIVE, not silently exported or relabeled.
+Controlled28raw benchmark,onewarmup+threepasses:7.242290→7.196732s median (-0.63%);
+peakRSS392790016→412483584bytes (+5.01%). Inputhashba2d325699fdf08009d76c27124d3b8cfeaee24804bf51820a0521f321205cad,
+unchanged inboth processes. Peakmemory is recorded, not claimed improved; no timing regression.
+Scientific identity review and independent10productreview accepted. FinalCI remains pending.
