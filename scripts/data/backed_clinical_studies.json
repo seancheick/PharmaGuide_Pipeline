@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
     "last_updated": "2026-11-13",
-    "total_entries": 228,
+    "total_entries": 230,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
@@ -56426,6 +56426,744 @@
           "limitations": [
             "Full primary17913408 Results: no between-group lipid or vaginal endpoint improvement; Kupperman score improved in both arms. Finished noncredit disposition for these separate outcomes, not a rejection of the positive vasomotor result.",
             "No additional points, replicated trial, cardiovascular benefit or safety clearance."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "INGR_GREEN_COFFEE_BEAN",
+      "standard_name": "Green Coffee Bean Extract",
+      "aliases": [
+        "green_coffee_bean",
+        "green coffee bean",
+        "green coffee bean extract"
+      ],
+      "evidence_level": "ingredient-human",
+      "study_type": "rct",
+      "published_studies": [
+        "29307310",
+        "20871849",
+        "16820341"
+      ],
+      "score_contribution": "tier_3",
+      "health_goals_supported": [],
+      "last_updated": "2026-11-13",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed; primary publisher content where stated",
+          "pmid": "20871849",
+          "doi": "10.1155/2011/382852",
+          "title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20871849/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed; primary publisher content where stated",
+          "pmid": "16820341",
+          "doi": "10.1080/10641960600798655",
+          "title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16820341/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed; primary publisher content where stated",
+          "pmid": "29307310",
+          "doi": "10.1017/S0007114517003439",
+          "title": "Effects of green coffee extract supplementation on anthropometric indices, glycaemic control, blood pressure, lipid profile, insulin resistance and appetite in patients with the metabolic syndrome: a randomised clinical trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29307310/",
+          "scoring_eligible": true
+        }
+      ],
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "primary_outcome": "Blood Sugar Support",
+      "effect_direction_rationale": "The source-specific primary fasting-glucose change is a weak positive signal, while final glucose, HbA1c, insulin, lipids, weight and BMI comparisons are null or not significant. Older weight evidence is heterogeneous and the older blood-pressure abstract does not establish a direct between-group effect.",
+      "notes": "Preliminary evidence for the source-owned decaffeinated, chlorogenic-acid-standardized green coffee bean extract preparation class in adults with metabolic syndrome, mostly diabetes. Small completer trial, mixed findings and no durable clinical endpoint. This is not established weight-loss efficacy, a general effective-dose threshold or a safety claim.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_groups": [
+          [
+            "green coffee"
+          ],
+          [
+            "bean",
+            "seed"
+          ],
+          [
+            "extract"
+          ],
+          [
+            "decaffeinated",
+            "decaf"
+          ],
+          [
+            "chlorogenic acid",
+            "chlorogenic acids",
+            "cga"
+          ],
+          [
+            "standardized",
+            "standardised",
+            "std",
+            "standardization"
+          ]
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "glycemic_control"
+        ],
+        "studied_population": "Adults aged 18–70 with metabolic syndrome. Fifty participants were randomized and 43 completed the trial (21 extract, 22 placebo). Pregnant women were excluded. Breastfeeding women were excluded. Insulin users and regular coffee consumers were excluded. Changes to relevant medication regimens led to exclusion. Thirty-four of the 43 analyzed participants (79%) had diabetes; nine did not.",
+        "source_pmids": [
+          "29307310"
+        ],
+        "reviewed_at": "2026-11-13",
+        "excluded_form_terms": [
+          "whole fruit",
+          "fruit concentrate",
+          "isolated chlorogenic acid",
+          "pure chlorogenic acid",
+          "caffeine anhydrous"
+        ]
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "green_coffee_29307310_decaffeinated_extract",
+          "components": [
+            "INGR_GREEN_COFFEE_BEAN"
+          ],
+          "source_pmids": [
+            "29307310"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Oral decaffeinated, chlorogenic-acid-standardized green coffee bean extract",
+            "preparation": "Arjuna Natural Extracts Ltd. trial extract; total chlorogenic acids 46.45%, residual caffeine 1.81%, extract ratio 6:1. These are source descriptors, not quantitative label gates."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "roshan_2018_green_coffee_metabolic_syndrome",
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/source_review; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full publisher Methods and Table 4 read; live NCT02764957 specifies fasting blood glucose as primary. Root and independent reviewer verified the primary comparison and limitations; Preliminary 5 under the accepted rubric for the declared preparation scope. Product matching is separately regression-tested."
+          },
+          "population": {
+            "description": "Adults aged 18–70 with metabolic syndrome. Fifty participants were randomized and 43 completed the trial (21 extract, 22 placebo). Pregnant women were excluded. Breastfeeding women were excluded. Insulin users and regular coffee consumers were excluded. Changes to relevant medication regimens led to exclusion. Thirty-four of the 43 analyzed participants (79%) had diabetes; nine did not.",
+            "age_group": "adult",
+            "sample_size": 43
+          },
+          "study_design": "Randomized double-blind placebo-controlled parallel trial; completer analysis. Registered primary outcome: fasting blood glucose.",
+          "outcomes": [
+            {
+              "name": "Fasting blood glucose change: −0.28 mmol/L with extract versus +1.63 mmol/L with placebo, P=0.036. Final absolute between-group glucose comparison P=0.377.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              800
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "administration_frequency": "400 mg capsule twice daily with main meals.",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [
+              "Both groups received dietary recommendations."
+            ],
+            "reported_regimen": "400 mg twice daily (800 mg/day). The abstract and outcome assessments specify eight weeks; Methods prescribe 64 days. No duration conversion or efficacy threshold is inferred.",
+            "source_provenance": {
+              "pmid": "29307310",
+              "source_url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/FF7275B5B0FB8694217E90091834CF90/S0007114517003439a.pdf",
+              "location": "Methods, Table 1 and Table 4; ClinicalTrials.gov NCT02764957 outcomes module for primary hierarchy."
+            },
+            "duration_days": 56,
+            "normalization": {
+              "basis": "Eight-week outcome assessment equals 56 days; Methods separately prescribe 64 days, a retained discrepancy rather than an inferred regimen conversion."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_groups": [
+              [
+                "green coffee"
+              ],
+              [
+                "bean",
+                "seed"
+              ],
+              [
+                "extract"
+              ],
+              [
+                "decaffeinated",
+                "decaf"
+              ],
+              [
+                "chlorogenic acid",
+                "chlorogenic acids",
+                "cga"
+              ],
+              [
+                "standardized",
+                "standardised",
+                "std",
+                "standardization"
+              ]
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "glycemic_control"
+            ],
+            "studied_population": "Adults aged 18–70 with metabolic syndrome. Fifty participants were randomized and 43 completed the trial (21 extract, 22 placebo). Pregnant women were excluded. Breastfeeding women were excluded. Insulin users and regular coffee consumers were excluded. Changes to relevant medication regimens led to exclusion. Thirty-four of the 43 analyzed participants (79%) had diabetes; nine did not.",
+            "source_pmids": [
+              "29307310"
+            ],
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "whole fruit",
+              "fruit concentrate",
+              "isolated chlorogenic acid",
+              "pure chlorogenic acid",
+              "caffeine anhydrous"
+            ]
+          },
+          "limitations": [
+            "Small trial with 43 completers; multiple outcomes and no durable clinical endpoint.",
+            "The registered primary fasting-glucose change favored extract (P=0.036), largely reflecting placebo worsening; the final absolute between-group glucose comparison was not significant (P=0.377).",
+            "Weight change was not significant in Table 4 (P=0.057); the abstract rounds this to P=0.05 and calls it marginal. BMI change P=0.055 was also not significant.",
+            "HbA1c, insulin and lipid changes were not significantly different between groups. Secondary SBP, HOMA-IR and waist changes do not establish diabetes prevention or weight-loss efficacy.",
+            "The paper describes eight weeks of follow-up but its Methods prescribe 64 days. Both groups received dietary recommendations.",
+            "The trial extract was decaffeinated, with 46.45% chlorogenic acids and 1.81% residual caffeine. Decaffeinated does not mean caffeine-free. No Arjuna brand, marker percentage, extract ratio or dose threshold is proposed.",
+            "The older weight review is high risk of bias and extremely heterogeneous; its chlorogenic-acid-enriched subgroup was not significant. The older blood-pressure trial was verified only to abstract level and does not explicitly report a between-group effect.",
+            "Retracted PMID22291473 is not an efficacy source. No general safety conclusion or new warning policy is proposed.",
+            "One participant with a history of stomachache withdrew after stomach irritation. Another reported dizziness that resolved after increasing the interval between daily doses. These are source observations, not a new safety threshold or general safety assurance."
+          ],
+          "condition": "glycemic_control"
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "green_coffee_20871849_source_review",
+          "components": [
+            "INGR_GREEN_COFFEE_BEAN"
+          ],
+          "source_pmids": [
+            "20871849"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/source_review; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full systematic review verified. High-risk studies and extreme heterogeneity; pooled weight signal retained as limited evidence, while the CGA-enriched subgroup is not significant. No additional credit or generic preparation equivalence. Completed no-additional-credit source disposition."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "20871849",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/20871849/",
+              "location": "Full review"
+            }
+          },
+          "limitations": [
+            "Full systematic review verified. High-risk studies and extreme heterogeneity; pooled weight signal retained as limited evidence, while the CGA-enriched subgroup is not significant. No additional credit or generic preparation equivalence."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "green_coffee_16820341_source_review",
+          "components": [
+            "INGR_GREEN_COFFEE_BEAN"
+          ],
+          "source_pmids": [
+            "16820341"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/source_review; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live PubMed abstract verified; full publisher content unavailable. Within-group blood-pressure decreases do not establish an explicit between-group effect. No additional credit inferred from incomplete comparison reporting. Completed no-additional-credit source disposition."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "16820341",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/16820341/",
+              "location": "Abstract only"
+            }
+          },
+          "limitations": [
+            "Live PubMed abstract verified; full publisher content unavailable. Within-group blood-pressure decreases do not establish an explicit between-group effect. No additional credit inferred from incomplete comparison reporting."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "INGR_OLIVE_LEAF",
+      "canonical_id": "olive_leaf",
+      "standard_name": "Olive leaf extract",
+      "aliases": [
+        "olive leaf extract",
+        "Olea europaea leaf extract"
+      ],
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "26951205",
+        "33034707",
+        "21036583",
+        "41805711",
+        "40990594",
+        "40325976",
+        "42303499",
+        "41848522"
+      ],
+      "key_endpoints": [
+        "Weak, mixed blood-pressure evidence for leaf extracts; no general cardiovascular benefit claim."
+      ],
+      "health_goals_supported": [],
+      "notes": "Weak, mixed blood-pressure evidence for the source-qualified olive leaf extract class. Preliminary 5 reflects the small placebo-controlled primary trial with missing measurements and modest compliance, alongside null and active-comparator findings. This does not assert chemical equivalence across extraction methods, an authoritative health claim, a dose threshold or general safety.",
+      "study_type": "rct_single",
+      "last_updated": "2026-11-13",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "pmid": "26951205",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26951205/",
+          "scoring_eligible": true
+        },
+        {
+          "type": "pubmed",
+          "pmid": "33034707",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33034707/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "21036583",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "41805711",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41805711/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "40990594",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "40325976",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40325976/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "42303499",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+          "scoring_eligible": false
+        },
+        {
+          "type": "pubmed",
+          "pmid": "41848522",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41848522/",
+          "scoring_eligible": false
+        }
+      ],
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Small placebo-controlled crossover blood-pressure benefit with missing measurements and limited compliance, alongside an aqueous-extract null and active-comparator limitations.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_groups": [
+          [
+            "olive",
+            "olea europaea"
+          ],
+          [
+            "leaf"
+          ],
+          [
+            "extract",
+            "ext."
+          ]
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "olive fruit",
+          "olive oil",
+          "pomace",
+          "leaf powder",
+          "isolated oleuropein",
+          "pure oleuropein",
+          "isolated hydroxytyrosol",
+          "pure hydroxytyrosol",
+          "maslinic acid",
+          "as hydroxytyrosol",
+          "as oleuropein"
+        ],
+        "supported_outcomes": [
+          "blood_pressure"
+        ],
+        "studied_population": "Adult men with prehypertension. The positive trial enrolled men; it does not establish applicability to pregnancy or breastfeeding.",
+        "source_pmids": [
+          "26951205"
+        ],
+        "reviewed_at": "2026-11-13"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_26951205_blood_pressure",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "26951205"
+          ],
+          "identity_scope": "botanical_preparation",
+          "identity": {
+            "chemical_form": "Olea europaea leaf extract",
+            "preparation": "Comvita concentrated liquid leaf extract in water:glycerine 50:50. Source preparation descriptor, not a mandatory retail brand or constituent percentage.",
+            "botanical_species": "Olea europaea",
+            "plant_part": "leaf"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "blood_pressure",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "lockyer_2016_olive_leaf_crossover",
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods and Results read. Preliminary 5 under the accepted weak-evidence rubric, with completed null findings and source access limits preserved. Root and independent reviewer checked primary source and applicability boundaries."
+          },
+          "population": {
+            "description": "Adult men aged 24–72 years with prehypertension, free of chronic disease and medications affecting blood pressure or lipids. Sixty-one enrolled/allocated; sixty completed, but 24-hour blood-pressure analysis included 45. The study enrolled men and provides no pregnancy or breastfeeding population evidence.",
+            "age_group": "adult",
+            "sample_size": 61
+          },
+          "study_design": "Randomized double-blind placebo-controlled crossover trial; six weeks per period separated by four weeks washout.",
+          "outcomes": [
+            {
+              "name": "24-hour ambulatory systolic and diastolic blood pressure favored leaf extract: differences -3.33 mmHg and -2.42 mmHg, respectively.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Nighttime ambulatory blood pressure did not differ significantly.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "administration_frequency": "10 mL twice daily with food.",
+            "dosage_forms": [
+              "liquid"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "20 mL/day of liquid olive leaf extract supplied 136.2 mg oleuropein and 6.4 mg hydroxytyrosol. Total extract mass was not reported; the liquid volume and constituent amounts are known.",
+            "normalization": {
+              "basis": "No conversion from volume to extract mass without density and concentration. The empty mg values describe unreported extract mass only; the oral liquid regimen is preserved verbatim in reported_regimen. Constituents are not substituted for extract mass."
+            },
+            "source_provenance": {
+              "pmid": "26951205",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5486627/",
+              "location": "Methods: Intervention and study design; Results: blood pressure and compliance."
+            }
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_groups": [
+              [
+                "olive",
+                "olea europaea"
+              ],
+              [
+                "leaf"
+              ],
+              [
+                "extract",
+                "ext."
+              ]
+            ],
+            "require_source_label_form": true,
+            "excluded_form_terms": [
+              "olive fruit",
+              "olive oil",
+              "pomace",
+              "leaf powder",
+              "isolated oleuropein",
+              "pure oleuropein",
+              "isolated hydroxytyrosol",
+              "pure hydroxytyrosol",
+              "maslinic acid",
+              "as hydroxytyrosol",
+              "as oleuropein"
+            ],
+            "supported_outcomes": [
+              "blood_pressure"
+            ],
+            "studied_population": "Adult men with prehypertension. The positive trial enrolled men; it does not establish applicability to pregnancy or breastfeeding.",
+            "source_pmids": [
+              "26951205"
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "limitations": [
+            "Small crossover study, substantial missing ambulatory measurements and approximately 70% active-product compliance.",
+            "Primary blood-pressure findings are surrogate outcomes; no cardiovascular event benefit was demonstrated.",
+            "Nighttime blood-pressure results were null. Secondary lipids improved, while glucose/insulin indices, HDL and most vascular/inflammatory measures were null; IL-8 was exploratory in 19 participants.",
+            "Comvita and Callaghan Innovation funded the study. Minor stomach complaints also occurred with control; this is not a general safety conclusion.",
+            "The separate aqueous-extract trial PMID 33034707 reported null lipid and blood-pressure results. The active-comparator trial PMID 21036583 cannot establish placebo efficacy or captopril equivalence.",
+            "Class-level weak evidence does not assert chemical equivalence of different extraction methods or transfer to fruit, oil, pomace, leaf powder or isolated compounds. No Evidence dose threshold is proposed.",
+            "The modest between-group blood-pressure differences partly reflect control-group worsening; only 45 of 61 enrolled participants contributed the 24-hour ambulatory comparison."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_33034707_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "33034707"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Full primary Methods and Results verified: 77 randomized, 74 completed, otherwise healthy adults aged 18–70 years with overweight/obesity and elevated cholesterol. Pregnancy or lactation was explicitly excluded. Interquim water-extracted leaf material, 500 mg/day, measured 16.7% oleuropein, for eight weeks. Primary lipid outcomes and blood-pressure outcomes were null; nominal four-week effects did not survive multiple-comparison correction. Preserve this completed same-use null; not evidence that every preparation has zero credit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "33034707",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33034707/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Full primary Methods and Results verified: 77 randomized, 74 completed, otherwise healthy adults aged 18–70 years with overweight/obesity and elevated cholesterol. Pregnancy or lactation was explicitly excluded. Interquim water-extracted leaf material, 500 mg/day, measured 16.7% oleuropein, for eight weeks. Primary lipid outcomes and blood-pressure outcomes were null; nominal four-week effects did not survive multiple-comparison correction. Preserve this completed same-use null; not evidence that every preparation has zero credit.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion.",
+            "Withdrawals included suspected olive allergy, initiation of arrhythmia medication and personal reasons. These observations do not establish a new warning threshold or general safety conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_21036583_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "21036583"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Reuse completed November 7 source review and verified full primary text: EFLA 943/Benolea ethanolic dried-leaf extract, 500 mg twice daily for eight weeks, adults aged 25–60 years with stage-1 hypertension. Active captopril comparison, diet advice in both arms, per-protocol analysis. Within-arm blood-pressure improvements do not establish placebo efficacy or therapeutic equivalence; between-group systolic p=.098. Secondary LDL favored olive; triglyceride comparison was null."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "21036583",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Reuse completed November 7 source review and verified full primary text: EFLA 943/Benolea ethanolic dried-leaf extract, 500 mg twice daily for eight weeks, adults aged 25–60 years with stage-1 hypertension. Active captopril comparison, diet advice in both arms, per-protocol analysis. Within-arm blood-pressure improvements do not establish placebo efficacy or therapeutic equivalence; between-group systolic p=.098. Secondary LDL favored olive; triglyceride comparison was null.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_41805711_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "41805711"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Preserve existing completed November 7 source review: mixed leaf-plus-fruit intervention with null primary systolic endpoint. No attribution of a combination result to isolated leaf. Existing full-source receipt retained; not independently reread in this follow-up."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "41805711",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41805711/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Preserve existing completed November 7 source review: mixed leaf-plus-fruit intervention with null primary systolic endpoint. No attribution of a combination result to isolated leaf. Existing full-source receipt retained; not independently reread in this follow-up.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_40990594_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "40990594"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Live authoritative indexed abstract verified: 2025 randomized trial in 621 treated hypertensive participants over 12 weeks reports positive ambulatory blood-pressure findings. Full preparation, dose, attrition and analysis details were not accessed. No additional credit from this abstract-only disposition; the positive finding remains explicit and is not a null or an inference of formulation equivalence."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40990594",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Live authoritative indexed abstract verified: 2025 randomized trial in 621 treated hypertensive participants over 12 weeks reports positive ambulatory blood-pressure findings. Full preparation, dose, attrition and analysis details were not accessed. No additional credit from this abstract-only disposition; the positive finding remains explicit and is not a null or an inference of formulation equivalence.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_40325976_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "40325976"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Live authoritative indexed abstract verified: three-study review with 248 participants reports positive systolic but nonsignificant overall diastolic results. Pooling is described as pre-versus-post, not a verified placebo treatment contrast. Full study membership and preparations were not accessed; no additive credit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40325976",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40325976/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Live authoritative indexed abstract verified: three-study review with 248 participants reports positive systolic but nonsignificant overall diastolic results. Pooling is described as pre-versus-post, not a verified placebo treatment contrast. Full study membership and preparations were not accessed; no additive credit.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_42303499_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "42303499"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Live authoritative indexed abstract verified: 30 randomized trials and 1,726 participants across leaf or pomace; favorable leaf blood-pressure/lipid findings contrasted with largely null pomace findings. Full membership, material mapping and outcome-specific certainty were not accessed; publisher requests returned 403. Preserve positive direction without transferring pomace or assigning additive review credit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "42303499",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Live authoritative indexed abstract verified: 30 randomized trials and 1,726 participants across leaf or pomace; favorable leaf blood-pressure/lipid findings contrasted with largely null pomace findings. Full membership, material mapping and outcome-specific certainty were not accessed; publisher requests returned 403. Preserve positive direction without transferring pomace or assigning additive review credit.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "olive_leaf_41848522_source_review",
+          "components": [
+            "INGR_OLIVE_LEAF"
+          ],
+          "source_pmids": [
+            "41848522"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/literature_receipts; independent full-source review by /root/ladder_review; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed no-additional-credit source disposition. Live authoritative indexed abstract verified: review of 11 randomized trials involving oleuropein or leaf preparations. Parallel continuous interventions largely null for lipid/glycemic endpoints, low-certainty inflammatory findings; short-term studies heterogeneous. Full membership and preparation mapping not accessed. Preserve contrasting metabolic evidence without recasting it as a primary blood-pressure null."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "41848522",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41848522/",
+              "location": "Full primary text or retained prior review where expressly stated; otherwise authoritative indexed abstract."
+            }
+          },
+          "limitations": [
+            "Live authoritative indexed abstract verified: review of 11 randomized trials involving oleuropein or leaf preparations. Parallel continuous interventions largely null for lipid/glycemic endpoints, low-certainty inflammatory findings; short-term studies heterogeneous. Full membership and preparation mapping not accessed. Preserve contrasting metabolic evidence without recasting it as a primary blood-pressure null.",
+            "No additional points, no invented clinical hold, and no generalized negative conclusion."
           ]
         }
       ]

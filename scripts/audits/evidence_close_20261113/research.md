@@ -662,3 +662,39 @@ or hierarchy was changed. The mechanics regression failed before repair; all6 in
 cases pass, including three real-source olive amounts, the independent inulin contradiction and
 signed glutamine interpretation guard. Final primary/secondary control also passes. Independent
 source_review confirmed the defect and the object-identity boundary. Combined qualification pending.
+
+
+### Olive-leaf and green-coffee Preliminary review batch (November 13/14)
+Owner: backed_clinical_studies.json::study_contexts and generic_evidence source interpretations;
+existing clinical applicability owns preparation/population boundaries. Will NOT create a new
+clinical registry, Dose benchmark, safety owner or evidence grade.
+
+INGR_OLIVE_LEAF retains eight source contexts. PMID26951205 supports only Preliminary5:
+small placebo-controlled crossover BP improvement, incomplete ambulatory measurements and limited
+compliance; nighttime primary BP is null. Liquid20mL/day and136.2mg oleuropein/6.4mg hydroxytyrosol
+are retained without inventing extract mass. The aqueous-extract null33034707 and six other reviews
+remain explicit no-additional-credit contexts. Historical olive_leaf_powder Dose inventory is
+unchanged. Generic leaf extract is the bounded class, not fruit/oil/pomace/isolated compounds.
+
+INGR_GREEN_COFFEE_BEAN retains three source contexts. PMID29307310 supports Preliminary5 only
+for source-owned decaffeinated bean/seed extract explicitly standardized to chlorogenic acids.
+Primary glucose change was positive but final between-group glucose was not, with placebo worsening;
+weight/BMI were not significant. Eight-week/64-day reporting discrepancy is retained. Older20871849
+high-bias weight review and16820341 within-group abstract do not add credit. No dose/brand/ratio
+threshold is used for Evidence. Neither adult review transfers to children/pregnancy/breastfeeding.
+Root and two independent research agents reviewed these source conclusions; this is agent review,
+not clinician sign-off. Strict scoped verifier passed16 identifier claims; content review is separate.
+
+571 source/config/vocabulary tests passed before the final material-boundary refinement. Independent
+72-product full-record/blob review found six Evidence-only score moves and four newly complete
+products:209382/284248/291377/330148.216776 gains5 but stays partial;212273 gains2.2 through existing
+multi-ingredient aggregation and stays partial. All72 retain identity, amounts, safety and Dose;
+source fingerprints were unchanged throughout capture. No green-coffee product score moved.
+Three known conflicting olive/zinc labels remain separately documented export refusals above.
+
+Independent replay review found37248 could gain a leaf match through 'as Hydroxytyrosol'. Two new
+compound-as regressions failed5 versus0, then passed after existing parent/context exclusions added
+'as hydroxytyrosol' and 'as oleuropein'. Ordinary extract standardized to these markers remains
+eligible.29 plant preparation/population checks now pass. The corrected final replay, controlled
+performance, combined local checkpoint and CI remain pending. Receipts live under
+/Users/seancheick/pg_quality/evidence-close-20261113/next-review/{plant-batch,olive-leaf,green-coffee}.
