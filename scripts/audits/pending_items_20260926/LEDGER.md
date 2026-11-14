@@ -5531,3 +5531,10 @@ matched/foreign/pending/held DOI regressions fail first then pass. The authority
 general population (EFSA3951 section5), recorded as mixed; no adult-only restriction invented.
 Config1.32.1 preserves historical1.32.0 fingerprint. Source-specific noncredit and real preparation/
 blend no-credit guards remain. Focused61+39 pass; exact follow-up CI pending. No integration/release.
+
+Citation blockers corrected independently: INGR_RICE_PROTEIN23782948 title whitespace now matches
+live NIH text; BacoMind DOI10.3923/jpt.2008.425.434 acknowledged in existing entry-scoped ghost
+review after two agents read official publisher Bacopa identity. No added clinical credit or general
+alias. Two regressions failed before fixes;8citation-owner tests pass. Strict21-claim Bacopa/rice
+check:20OK,1reviewed heuristic suspect,0title/missing-ID failures. This is scoped, not whole-gate
+clearance. Receipts under evidence-close-20261113/citation-fixes; final batchCI still required.
