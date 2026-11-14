@@ -835,6 +835,19 @@
           "multiplier_key": "positive_weak",
           "approved_by": "Sean",
           "approved_at": "2026-11-06"
+        },
+        {
+          "record_id": "INGR_INULIN",
+          "context_id": "ingr_inulin_efsa_3951_orafti_gr_bowel_function",
+          "source_references": [
+            {
+              "doi": "10.2903/j.efsa.2015.3951"
+            }
+          ],
+          "observed_effect_direction": "mixed",
+          "floor_key": "cap_total",
+          "approved_by": "Codex source review with independent check, applying Sean’s accepted authority rubric",
+          "approved_at": "2026-11-13"
         }
       ]
     },

@@ -649,7 +649,8 @@ def qualifying_purpose_outcomes(context: Mapping, *, include_nonpositive: bool =
         return [], False
     outcomes = [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
                 and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES]
-    reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}]
+    reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}
+                or (context.get("evidence_role") == "guideline" and row.get("hierarchy") == "guideline")]
     unresolved_candidates = outcomes
     if context.get("evidence_role") == "direct_rct":
         primary = [row for row in outcomes if row.get("hierarchy") == "primary"]

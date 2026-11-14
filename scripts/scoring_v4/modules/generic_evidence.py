@@ -451,9 +451,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             # Source-review completeness still uses the full canonical record.
             from clinical_evidence_schema import selected_source_references
             source_refs = selected_source_references(reference, context_ids)
-        interpreted_sources = _effect_direction_assessment(entry)["source_pmids"]
+        interpreted_sources = _effect_direction_assessment(entry)["source_ids"]
         if interpreted_sources is not None:
-            source_refs = [ref for ref in source_refs if str(ref.get("pmid")) in interpreted_sources]
+            from clinical_evidence_schema import reference_source_ids
+            source_refs = [ref for ref in source_refs if reference_source_ids(ref) & interpreted_sources]
         receipts.append({"id": _entry_id(entry), "status": decision["status"],
                          "reason_code": decision["reason_code"],
                          "scope_qualification_complete": bool(decision["status"] == "applicable" and population and outcomes),
@@ -1834,7 +1835,8 @@ def _primary_mass_floor(
         if not isinstance(entry, dict):
             continue
         effect = _norm_text(entry.get("effect_direction"))
-        effect_multiplier = _effect_direction_assessment(entry)["multiplier"]
+        interpretation = _effect_direction_assessment(entry)
+        effect_multiplier = interpretation["multiplier"]
         if effect_multiplier <= 0.0:
             continue
         canonical = _canonical_from_entry(entry)
@@ -1882,6 +1884,8 @@ def _primary_mass_floor(
         # direction multipliers and specifically signed context interpretations.
         if base > 0 and effect == "positive_weak":
             candidate = PRIMARY_FLOOR_PRELIMINARY
+        if interpretation.get("floor") is not None:
+            candidate = interpretation["floor"]
         if candidate > floor:
             floor, floor_canon = candidate, canonical
             if receipt is not None:
@@ -1892,7 +1896,7 @@ def _primary_mass_floor(
 def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
     """Read the one config policy without rewriting observed scientific facts."""
     effect = _norm_text(entry.get("effect_direction"))
-    ordinary = {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0), "source_pmids": None}
+    ordinary = {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0), "source_ids": None}
     for policy in _EM.get("context_effect_direction_interpretations", []):
         if (_clinical_source_id(entry) != policy["record_id"]
                 or effect != policy["observed_effect_direction"]):
@@ -1910,12 +1914,37 @@ def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
             continue
         context = next((row for row in reference.get("study_contexts") or []
                         if row.get("context_id") == policy["context_id"]), None)
-        if (context is None or set(context.get("source_pmids") or []) != set(policy["source_pmids"])
-                or not clinical_record_sources_eligible(
-                    reference, context=context, source_pmids=policy["source_pmids"])):
+        from clinical_evidence_schema import context_source_ids, context_source_errors, expand_source_ids
+        sources = expand_source_ids(reference, context_source_ids(policy))
+        if (context is None or context_source_errors(policy)
+                or expand_source_ids(reference, context_source_ids(context)) != sources
+                or not clinical_record_sources_eligible(reference, context=context,
+                    source_pmids=policy.get("source_pmids"), source_references=policy.get("source_references"))):
             continue
-        return {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(policy["multiplier_key"], 0.0),
-                "source_pmids": policy["source_pmids"]}
+        result = {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(policy.get("multiplier_key", effect), 0.0),
+                  "source_ids": sources}
+        floor_key = policy.get("floor_key")
+        if floor_key is not None:
+            if floor_key not in {"cap_total", "primary_floor_strong", "primary_floor_moderate", "primary_floor_preliminary"}:
+                continue
+            # Established credit needs a specifically reviewed authority context;
+            # the presence of a guideline elsewhere never supplies this tier.
+            if floor_key == "cap_total" and context.get("evidence_role") != "guideline":
+                continue
+            from clinical_applicability import qualifying_purpose_outcomes
+            # A selected positive context cannot hide a conflicting review of
+            # the same source and use. Reconcile that finding before reusing
+            # the recorded tier; unrelated uses retain their own assessment.
+            conflicts = [sibling for sibling in reference.get("study_contexts") or []
+                if sibling.get("scoring_eligible") is True
+                and sibling.get("condition") == context.get("condition")
+                and expand_source_ids(reference, context_source_ids(sibling)) & sources
+                and any(outcome.get("direction") in {"null", "mixed", "negative"}
+                        for outcome in qualifying_purpose_outcomes(sibling, include_nonpositive=True)[0])]
+            if conflicts:
+                continue
+            result["floor"] = _EM[floor_key]
+        return result
     return ordinary
 
 

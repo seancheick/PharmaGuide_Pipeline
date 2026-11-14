@@ -3664,3 +3664,13 @@ def test_flat_or_child_policy_keeps_legacy_merge_semantics():
     assert merged['required_form_terms'] == ['extract']
     assert merged['excluded_form_terms'] == ['liposomal']
     assert merged['dosage_forms'] == ['powder']
+
+
+@pytest.mark.parametrize('evidence_role', ['guideline', 'direct_rct'])
+def test_guideline_conclusion_qualifies_only_in_its_authority_context(evidence_role):
+    from clinical_applicability import qualifying_purpose_outcomes
+    context = _native_context(('stool_frequency', 'guideline', 'patient_important', 'positive', {}))
+    context['evidence_role'] = evidence_role
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert [row['name'] for row in outcomes] == (['stool_frequency'] if evidence_role == 'guideline' else [])
+    assert held is False

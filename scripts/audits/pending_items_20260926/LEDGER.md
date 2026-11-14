@@ -5503,3 +5503,23 @@ no rebuild/release. Psyllium3raw probe finds no wiring defect; rank26–50triage
 not completed clinical review. Details/receipts in existing evidence-close research.
 
 Follow-up46bc015e6 localcheckpoint:564pass/24declaredopt-ins,152.69s,skipguardpass. PR478openedagainstmain; exactCIpending, nointegration/releaseclaim.
+
+November13 Close Evidence continuation: pipeline477 merged20aafa9bf and app236 mergedb85aa7a8
+under supplied authorization. PR478/ec2a36d16 all8CI+readiness green43528681544; PR479/bdbbc4e5f
+all8CI+readiness green43530197799,local564pass24declaredopt-ins,18raw full/blob zerochanges.
+Both await requested main-integration approval; no release or installed-app claim.
+
+Current bounded inulin authority batch extends existing source interpretation to the verified
+EFSA/OraftiGR context, retaining parentmixed,all4oldcontexts,Dose/safety and other-preparation holds.
+Fail-first guideline/source/copy/conflicting-conclusion guards; independentreview;1336owner tests
+pass.19rawreplay keepsallscores/completion/safety;onlyconfiglineage and Synergy1diagnostic reasons
+change. NoexactGRretail label found; no currentproductreleaseclaim. Boundedperf2.7864s→2.8346s/RSS
+215891968→217432064. Local/CI pending; research.md contains preciseowners/receipts/limits.
+
+Next review artifacts (unapplied): L-proline fulltext qualified but exploratory-exposure/primary-null
+interpretation awaitsSean; maca gelatinized preparation has reusableNov7sources andnewrootproposal;
+generic citrus no blanketzeroconclusion because21720653 positiveproprietaryblendcompositionunread;
+prebiotics split into BimunoB-GOS/PreticXXOS/BioEcoliansalpha-GOS units. These are not completedqueuecounts.
+Every-heldreview requirement and99%gate/rebuild/releaseacceptance remain open.
+
+Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.

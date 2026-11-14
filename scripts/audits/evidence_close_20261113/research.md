@@ -326,3 +326,55 @@ Combined local and exact-branch CI qualification remain pending. This source-for
 not finish inulin or proline: exact preparation, guideline/exposure scoring and source-bound wording
 still need their separate reviewed activation. The current PMID-only signed glutamine interpretation
 is unchanged; native numerical DOI attribution is not activated by this batch.
+
+### Source-reference qualification completed
+
+PR479 head bdbbc4e5f90d370cb8304b6adef4177671a6fcbb passed all eight shards and Merge readiness
+in run43530197799. Local checks:564 passed,24 declared opt-in skips,skip guard passed. Full raw
+Clean→Enrich→Score→detail-blob comparison:18 products,zero changed records/paths. PR478 also passed
+all eight shards/merge readiness on ec2a36d16 in43528681544. Main-integration approval requested for
+both; neither has been released. PR477 and app236 are already merged under supplied approval.
+
+## Exact Orafti GR authority review and wiring
+
+Owner: existing INGR_INULIN study_contexts/applicability, clinical_applicability::qualifying_purpose_outcomes,
+generic_evidence::_effect_direction_assessment/_primary_mass_floor and quality_score::_pillar_evidence.
+Evidence: caller/config search, reviewed context selection, actual primary source and same-input probes.
+Will NOT create: a registry, essential-nutrient classification, general inulin equivalence, new numerical
+magnitude, Dose benchmark, ingredient amount gate or parallel source-selection rule.
+
+EFSA DOI10.2903/j.efsa.2015.3951 full publisher opinion and live Crossref identity/title independently
+read by root and research agents. Primary material Methods identify Orafti GR as native chicory with
+mean DP10; the source does not establish equivalence to P95/HPX/Synergy1/FOS. Retained existing four
+source contexts and parent mixed finding. The authority condition12g/day stays a source fact; Dose
+remains separate. Known mixed findings and gas from27492975 remain;41233756 is separate FrutafitHD
+same-use evidence, not exact-GR replication. The authority's unpublished2012 study may overlap the
+later27492975 report, so this is authority credit, not added trial-count credit. No safety clearance.
+
+The schema already recognized guideline hierarchy but purpose selection ignored it. A fail-first
+regression now qualifies that hierarchy only in a guideline context. Existing source interpretation
+joins DOI aliases and may select an existing magnitude through floor_key; exact context, canonical
+source, source-row and review/hold qualification remain required. Only the explicit reviewed INGR_INULIN
+context selects cap_total20; a guideline or brand name alone never supplies20. Multiplier-only signed
+glutamine behavior stays unchanged. Public copy identifies the authority basis.
+
+Independent review reproduced a conflicting same-source/use null context being ignored. Its regression
+failed with20, then passed after the recorded-tier owner checked the existing qualifying-outcome view
+for conflicting completed source conclusions. Independent follow-up ran8 controls successfully.
+Focused guards cover record/source holds,pending review,non-authority role,unrelated preparations and
+100mg versus12g Evidence equality. Complete current owner/consumer slice:1336passed28.23s.
+Data_batch proves only backed_clinical_studies/INGR_INULIN changed.
+
+No exact Orafti GR label was found in the current brand corpus search. Actual Jarrow307711 prints
+Orafti Synergy1 and stays held; no current product is claimed released by this scoped review.
+Full19raw replay preserves all scores,completion,safety,warnings and amounts. Expected differences:
+config lineage fingerprints;307711 diagnostic source/preparation reason and rejected-match metadata.
+Its quality remains59.4 and Evidence incomplete. Same18enriched inputs: warmmedian2.7864s→2.8346s,
+RSS215891968→217432064,inputs unchanged. Receipt files:inulin-before/after,comparison,perf andtests under
+/Users/seancheick/pg_quality/evidence-close-20261113. Combined local and exact-candidate CI pending.
+
+The PubMed-wide citation CLI does not cover backed_clinical_studies; its unsupported-file response
+is not a passed verification. The new DOI's live metadata and complete source content were checked
+separately. Existing PubMed source facts/identifiers are retained; no API result was auto-applied.
+
+Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.

@@ -1783,7 +1783,10 @@ def test_trial_family_dedup_keeps_independent_sources_and_identity_scopes(monkey
 def test_inulin_source_completion_preserves_preparation_and_unread_source_holds():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     record = reviewed_entries()['INGR_INULIN']
-    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts'] if c.get('source_pmids')}
+    authority = next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline')
+    assert authority['source_references'][0]['doi'] == '10.2903/j.efsa.2015.3951'
+    assert authority['scoring_eligible'] is True
     for pmid in ('27492975', '38309832'):
         assert contexts[pmid]['review_status'] == 'clinician_approved'
         assert contexts[pmid]['scoring_eligible'] is False
@@ -1794,7 +1797,7 @@ def test_inulin_source_completion_preserves_preparation_and_unread_source_holds(
     assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
     assert len(contexts['38309832']['included_study_pmids']) == 47
     # 35833477 closed as a no-credit source decision on 2026-11-13; source
-    # review is complete, and no context grants credit.
+    # review is complete; the new, separate exact-preparation authority supplies credit.
     assert contexts['35833477']['review_status'] == 'rejected_source'
     assert contexts['35833477']['scoring_eligible'] is False
     assert assess_clinical_source_review(record)['is_complete']
@@ -3283,3 +3286,76 @@ def test_doi_provenance_allows_publisher_locator(non_pubmed_source_record):
     context = non_pubmed_source_record['study_contexts'][0]
     context['dose']['source_provenance']['source_url'] = 'https://publisher.example/article/full.pdf'
     assert validate_ingredient_context(context, require_complete_review=True) == []
+
+
+def test_reviewed_guideline_floor_interpretation_is_bound_to_doi_context(non_pubmed_source_record, monkeypatch):
+    from scoring_v4.modules import generic_evidence as ge
+    record = non_pubmed_source_record
+    context = record['study_contexts'][0]
+    context['evidence_role'] = 'guideline'
+    policy = {'record_id': record['id'], 'context_id': context['context_id'],
+              'source_references': context['source_references'],
+              'observed_effect_direction': record['effect_direction'], 'floor_key': 'cap_total'}
+    monkeypatch.setitem(ge._EM, 'context_effect_direction_interpretations', [policy])
+    entry = {**record, 'matched_source_row_refs': ['ingredientRows[0]'],
+             'applicability_assessment': {'status': 'applicable',
+                 'population_applicability': {'state': 'eligible', 'context_ids': [context['context_id']]}}}
+    assert ge._effect_direction_assessment(entry).get('floor') == 20
+    record['references_structured'][0]['scoring_eligible'] = False
+    assert ge._effect_direction_assessment(entry).get('floor') is None
+
+
+@pytest.mark.parametrize('amount', [100, 12000])
+def test_exact_orafti_gr_gets_reviewed_authority_without_evidence_amount_gate(amount):
+    record, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', amount)
+    product['physicalState'] = {'name': 'Powder'}
+    result = build_scored_artifact(product)
+    evidence = result['quality_pillars_v4']['evidence']
+    assert evidence['score'] == 20
+    assert evidence['reason'].startswith('Established support from a reviewed authority')
+    assert record['effect_direction'] == 'mixed'
+    receipts = result['_v4_module_breakdown']['dimensions']['evidence']['metadata']['contributing_record_assessments']
+    assert [ref.get('doi') for receipt in receipts for ref in receipt['source_references']] == ['10.2903/j.efsa.2015.3951']
+
+
+@pytest.mark.parametrize('label', ['Inulin', 'Fructooligosaccharides', 'Orafti P95', 'Orafti HPX', 'Chicory root fiber'])
+def test_other_fructan_preparations_do_not_borrow_orafti_gr_authority(label):
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', label, 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] < 20
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('hold', ['record', 'source', 'pending_review', 'non_authority'])
+def test_inulin_authority_keeps_record_source_and_review_guards(monkeypatch, hold):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_INULIN']
+    context = next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline')
+    if hold == 'record':
+        record['scoring_eligible'] = False
+    elif hold == 'source':
+        next(r for r in record['references_structured'] if r.get('doi') == '10.2903/j.efsa.2015.3951')['retracted'] = True
+    elif hold == 'pending_review':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    else:
+        context['evidence_role'] = 'direct_rct'
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] < 20
+
+
+def test_inulin_authority_does_not_ignore_conflicting_same_source_conclusion(monkeypatch):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_INULIN']
+    conflicting = copy.deepcopy(next(c for c in record['study_contexts'] if c.get('evidence_role') == 'guideline'))
+    conflicting['context_id'] += '_conflicting_review'
+    conflicting['outcomes'][0]['direction'] = 'null'
+    record['study_contexts'].append(conflicting)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
+    product['physicalState'] = {'name': 'Powder'}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] < 20
