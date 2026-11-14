@@ -54784,7 +54784,13 @@
             "source_pmids": [
               "30109908"
             ],
-            "reviewed_at": "2026-11-13"
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "acacia fiber",
+              "acacia gum",
+              "gum arabic",
+              "acacia senegal"
+            ]
           },
           "population": {
             "sample_size": 83,
@@ -54885,7 +54891,13 @@
             "source_pmids": [
               "26218845"
             ],
-            "reviewed_at": "2026-11-13"
+            "reviewed_at": "2026-11-13",
+            "excluded_form_terms": [
+              "acacia fiber",
+              "acacia gum",
+              "gum arabic",
+              "acacia senegal"
+            ]
           },
           "population": {
             "sample_size": 40,
@@ -54986,7 +54998,7 @@
           ]
         }
       ],
-      "notes": "Preliminary named Bimuno B-GOS evidence from a short randomized crossover trial in symptomatic adults. Per-protocol analysis, uncertain prospective outcome hierarchy and sponsor-linked investigators limit confidence. Other reviewed sources are not independent efficacy replications. No generic GOS, alpha-gluco-oligosaccharide, XOS, FOS, pediatric or finished synbiotic formula transfer; no new Dose benchmark or safety clearance.",
+      "notes": "Preliminary named Bimuno B-GOS evidence from a short randomized crossover trial in symptomatic adults. Per-protocol analysis, uncertain prospective outcome hierarchy and sponsor-linked investigators limit confidence. Other reviewed sources are not independent efficacy replications. No generic GOS, alpha-gluco-oligosaccharide, XOS, FOS, pediatric or finished synbiotic formula transfer; no new Dose benchmark or safety clearance. Acacia fiber (acacia gum/gum arabic) is a distinct polysaccharide material: the named Bimuno trials do not transfer to it; this preparation exclusion finishes at zero under ADR-0007.",
       "applicability": {
         "scope": "ingredient",
         "required_form_terms": [
@@ -55000,7 +55012,13 @@
         "source_pmids": [
           "30109908"
         ],
-        "reviewed_at": "2026-11-13"
+        "reviewed_at": "2026-11-13",
+        "excluded_form_terms": [
+          "acacia fiber",
+          "acacia gum",
+          "gum arabic",
+          "acacia senegal"
+        ]
       }
     }
   ]

@@ -3381,3 +3381,11 @@ def test_bimuno_review_does_not_finish_other_prebiotic_materials(label):
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('label', ['Acacia Fiber', 'Acacia Gum', 'Gum Arabic', 'Acacia senegal'])
+def test_acacia_material_has_finished_nontransfer_from_named_bimuno(label):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', label, 4000)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'

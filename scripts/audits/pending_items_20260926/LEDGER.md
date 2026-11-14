@@ -5548,3 +5548,18 @@ validsourceproposal retained. Global exclusionguard d9426a470 was rejected by br
 reverted28e47ec20: ADR0007 explicitly permits documented namednontransferzero. No policychange.
 
 Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.
+
+
+Bimuno CI43536465267 identified two valid regressions for275464, not stale test pins.
+Owner: INGR_BIMUNO_GOS::applicability (parent and two reviewed source contexts); actual label
+Acacia Fiber4g/Acacia senegal and IQM acacia-fiber identity establish distinct material from B-GOS.
+Independent source_review verified the material exclusion; official identity reference:
+https://eur-lex.europa.eu/legal-content/en/TXT/?uri=CELEX%3A32026R0196 (E414 specification).
+Explicit acacia fiber/acacia gum/gum arabic/Acacia senegal nontransfer uses the existing excluded-form
+owner and ADR0007 finite zero. Required Bimuno term and its source findings remain unchanged.
+Fail-first2fail/1pass; unchanged real-label tests plus Bimuno controls8pass; four alias edgecases
+and named/generic controls10pass. Exact one-entry data_batch check passed. Two frozen fullraw/blob
+replays:275464 remainspartial53.4 due to other unfinished Evidence but Acacia review correctlyfinishes;
+219289 remainscomplete82.4. Safety/warnings/amounts/identity/Dose unchanged; only reviewed-state and
+clinical-record metadata differences. Independent raw/diff review approved. Local/CI rerun pending.
+Receipts: evidence-close-20261113/acacia-fix. No new canonical, clinical policy or warning.
