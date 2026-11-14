@@ -353,6 +353,10 @@ def build_canonical_identity_registry(
             standard_name = str(entry.get("standard_name") or "").strip()
             canonical_id = entry.get("id") or standard_name.lower().replace(" ", "_")
             record_unii(str(canonical_id), entry)
+            match_rules = entry.get("match_rules")
+            if source_db == "botanical_ingredients" and isinstance(match_rules, Mapping) and match_rules.get("negative_match_terms"):
+                canonical, _ = canonical_owner(str(canonical_id), source_db)
+                negative_match_terms[canonical] = tuple(match_rules["negative_match_terms"])
             put(standard_name, canonical_id, source_db, 0)
             for alias in entry.get(alias_key) or ():
                 put(alias, canonical_id, source_db, 1)

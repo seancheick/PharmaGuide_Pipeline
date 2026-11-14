@@ -746,3 +746,37 @@ rerun and one combined exact-head CI rerun are pending; failed initial CI is not
 
 Final corrected local checkpoint:564passed/24declared opt-ins in141.50s; skip guard passed.
 Python correctness remains0new/10existing. Exact-head CI rerun follows this correction.
+
+
+## Wild yam identity containment (November 14)
+
+Owner: IQM::wild_yam.match_rules, botanical_ingredients::wild_yam_root.match_rules,
+identity_integrity::build_canonical_identity_registry and normalizer's final authored exclusion.
+Evidence: rg wild_yam/negative_match_terms and ten frozen raw-label replays. Will NOT create a
+replacement species, clinical grade, parent/equivalence relation or public field.
+
+Kew's [Dioscorea opposita record](https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:318346-1)
+identifies oppositifolia as its accepted name; [D. villosa](https://powo.science.kew.org/taxon/318778-1)
+is a separate species. The IQM villosa owner incorrectly included an explicit opposita alias.
+Eight BulkSupplements raw labels also print opposita in their source forms alongside the villosa
+UNII. Neither field can adjudicate that contradiction. Remove the false alias and author the same
+species exclusion in both existing villosa records, preserving the raw label and unknown identity.
+No new scientific review, clinical score or identifier is added.
+
+The first data-only fix still fell back to botanical wild_yam_root. The shared registry now reads
+explicit botanical exclusions; no exclusion is inferred from common names, UNII or Latin-name
+similarity. Exact botanical names retain contradictory source-species forms. Marker percentages,
+standardization prefixes and exact chemical/carrier identities preserve their existing handling.
+A trial inheritance approach was rejected before commit because it could borrow preparation
+exclusions. Two valerian marker regressions and the existing piperine/olive-oil carrier case caught
+and qualified that boundary. Final identity/preparation slice: 482 passed in55.65s.
+
+Ten original raw labels were frozen once. Eight conflicts294305/294306/294307/294308/311893/311894/
+311895/311896 become canonicalNone/identity_conflict and public54.4→None; each stays partial.
+Their800mg quantities, source rows, notes and safety statuses are preserved. Controls251878/311890
+retain complete artifact parity apart from generated timestamps. Independent agent reviewed all10
+full artifacts and accepted the changes. This is scored-artifact qualification, not a successful
+export or release. Receipts: pg_quality/evidence-close-20261113/next-review/wild-yam/identity,
+qualified-after.jsonl and qualified-comparison.json. Exact data_batch check changes wild_yam and
+botanical_ingredients/wild_yam_root only. Python correctness0new/10existing. Local, controlled
+performance and final exact-source CI remain pending at this commit.

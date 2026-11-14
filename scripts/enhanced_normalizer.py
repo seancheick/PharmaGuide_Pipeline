@@ -8473,15 +8473,31 @@ class EnhancedDSLDNormalizer:
         # Authored exclusions constrain aliases, group fallbacks and UNII.
         # Preserve unresolved preparation or salt identity instead of borrowing
         # a different material's canonical identity.
-        if canonical_source_db in {"ingredient_quality_map", "other_ingredients"}:
+        if canonical_source_db in {"ingredient_quality_map", "other_ingredients", "botanical_ingredients"}:
             identity_entry = (
                 self.ingredient_map.get(canonical_id, {})
                 if canonical_source_db == "ingredient_quality_map"
                 else self.other_ingredients_exact_lookup.get(standard_name.strip().lower(), {})
             )
-            negative_terms = (identity_entry.get("match_rules", {}) or {}).get(
-                "negative_match_terms", []
+            negative_terms = self._canonical_identity_registry.negative_match_terms.get(
+                canonical_id, (identity_entry.get("match_rules", {}) or {}).get("negative_match_terms", [])
             )
+            literal_identity = self._canonical_identity_registry.resolve_preferred(name) == (
+                canonical_id, canonical_source_db
+            )
+            botanical_identity = (
+                (identity_entry.get("gsrs") or {}).get("substance_class") == "structurallyDiverse"
+                or canonical_source_db == "botanical_ingredients"
+            )
+            # Exact botanical names do not erase contradictory source species.
+            # A marker percentage or carrier is not a declaration of species.
+            exclusion_forms = [form.get("name", "") for form in forms_structured
+                if not literal_identity or (
+                    botanical_identity
+                    and form.get("category") in {None, "", "botanical"}
+                    and form.get("percent") in {None, 100, "100"}
+                    and str(form.get("prefix") or "").strip().casefold() in {"", "as"}
+                )]
             if negative_match_terms_veto(
                 [name, (
                     f"{name} {ing.get('notes') or ''}"
@@ -8490,11 +8506,7 @@ class EnhancedDSLDNormalizer:
                 )] + (
                     [botanical_details.get("plantPart", "")]
                     if canonical_source_db == "other_ingredients" else []
-                ) + (
-                    [] if self._canonical_identity_registry.resolve_preferred(name)
-                    == (canonical_id, canonical_source_db)
-                    else [form.get("name", "") for form in forms_structured]
-                ),
+                ) + exclusion_forms,
                 negative_terms,
             ):
                 canonical_id = None

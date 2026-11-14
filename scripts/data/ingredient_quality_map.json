@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1477,
-      "total_form_aliases": 12297,
+      "total_form_aliases": 12296,
       "parents_with_parent_aliases": 152,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60751,7 +60751,6 @@
           "wild yam root extract",
           "mexican wild yam",
           "dioscorea villosa extract",
-          "wild yam (dioscorea opposita) rhizome standardised extract",
           "Mexican Wild Yam (Dioscorea villosa) rhizome standardised extract"
         ],
         "consumer_note": "This label names wild yam without identifying species, root powder, extract, or diosgenin standardization.",
@@ -60777,7 +60776,10 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "medium"
+      "confidence": "medium",
+      "negative_match_terms": [
+        "dioscorea opposita"
+      ]
     },
     "category_enum": "herbs",
     "data_quality": {

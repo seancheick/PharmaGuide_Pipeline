@@ -300,3 +300,40 @@ def test_perilla_review_uses_counted_registry_and_verified_per_use_reference():
     assert record["reference_semantics"]["exposure_basis"] == "per_use"
     assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
     assert verified_reference_citations(record)
+
+
+@pytest.mark.parametrize("placement", ["name", "forms", "notes"])
+def test_opposita_yam_does_not_inherit_villosa_identity(normalizer, enricher, placement):
+    raw = _perilla_source_product("Wild Yam")
+    source = raw["ingredientRows"][0]
+    source.update(ingredientGroup="Wild Yam", uniiCode="IWY3IWX2G8")
+    species = "wild yam (dioscorea opposita) rhizome standardised extract"
+    source[placement] = [{"name": species}] if placement == "forms" else species
+    clean = normalizer.normalize_product(raw)
+    assert clean["activeIngredients"][0].get("canonical_id") not in {"wild_yam", "wild_yam_root"}
+    enriched, _ = enricher.enrich_product(clean)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row.get("canonical_id") not in {"wild_yam", "wild_yam_root"}
+    assert row["scoreable_identity"] is False
+    assert row["quantity"] == 150
+
+
+@pytest.mark.parametrize("label", ["Wild Yam", "Wild Yam (Dioscorea villosa) root extract"])
+def test_villosa_yam_identity_control(normalizer, enricher, label):
+    raw = _perilla_source_product(label)
+    raw["ingredientRows"][0].update(ingredientGroup="Wild Yam", uniiCode="IWY3IWX2G8")
+    clean = normalizer.normalize_product(raw)
+    assert clean["activeIngredients"][0]["canonical_id"] == "wild_yam"
+    enriched, _ = enricher.enrich_product(clean)
+    assert enriched["ingredient_quality_data"]["ingredients"][0]["canonical_id"] == "wild_yam"
+
+
+@pytest.mark.parametrize("label", ["Valerian Root", "Valerian Root Extract"])
+def test_botanical_species_veto_preserves_marker_standardization(normalizer, label):
+    raw = _perilla_source_product(label)
+    raw["ingredientRows"][0].update(ingredientGroup="Valerian", forms=[{
+        "name": "Valerenic Acid", "prefix": "standardized to", "percent": 0.8,
+        "category": "non-nutrient/non-botanical",
+    }])
+    clean = normalizer.normalize_product(raw)
+    assert clean["activeIngredients"][0]["canonical_id"] == "valerian"
