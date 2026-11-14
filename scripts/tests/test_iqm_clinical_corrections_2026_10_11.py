@@ -259,3 +259,15 @@ def test_olive_leaf_does_not_inherit_the_olive_oil_health_claim():
     assert 'olive oil' in row['notes']
     assert 'does not establish' in row['notes']
     assert 'leaf extract' in row['notes']
+
+
+def test_dandelion_root_monograph_is_traditional_use_not_absent_or_clinical_proof():
+    row = _data()['dandelion']['forms']['dandelion root']
+    notes = row['notes'].lower()
+    assert 'none for the root alone' not in notes
+    assert 'ema/hmpc/475726/2020' in notes
+    assert 'traditional use' in notes
+    assert 'urinary' in notes
+    assert 'does not establish clinical efficacy' in notes
+    assert row['bio_score'] == 6
+    assert row['consumer_note_review']['date'] == '2026-08-08'

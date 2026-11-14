@@ -708,3 +708,22 @@ no input mutation. Each arm had one warmup and three measured passes. Final loca
 
 Final local at3e8b44a46:564passed,24declared opt-ins,144.17s; skip guard passed.
 Python correctness0new/10existing. Required CI remains pending.
+
+
+### Dandelion root monograph wording correction — November14
+Owner: ingredient_quality_map.json::dandelion.forms["dandelion root"].notes.
+The note falsely stated that EU monographs give no urinary indication for root alone. Root and
+independent source reviewer checked the official final EMA/HMPC/475726/2020 monograph, adopted
+November24,2021, sections2–4.1. It lists specified root preparations for urinary flushing under
+traditional use, expressly based on long-standing use. The replacement retains that limitation
+and does not assert established clinical efficacy for arbitrary products. Primary source:
+https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-taraxacum-officinale-fh-wigg-radix_en.pdf
+Existing interaction rules already cite the correct root monograph; no safety rule, score, form,
+consumer_note, literature owner or Dose decision changes. Will NOT create a new authority grade
+or infer root efficacy from the uncontrolled fresh-leaf pilot.
+Fail-first note regression reproduced the false sentence;42 IQM owner tests pass. Exact-entry audit
+shows only dandelion changed. Four frozen raw root/leaf products327919/49626/315977/201735 were
+replayed through full records and detail blobs: only327919 note changes; all scored records,
+identity, amounts, readiness and safety are identical. Capture source fingerprints stayed stable.
+Receipts: next-review/dandelion. Display-only qualification still requires branch CI; no broad local
+suite is required for this wording-only follow-up. Nothing released.
