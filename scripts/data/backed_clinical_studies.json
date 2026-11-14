@@ -23272,7 +23272,8 @@
             "basis": "EFSA full publisher opinion sections 1–5 and conclusions independently read; exact Orafti GR native-chicory material bridge checked against primary Methods. Known positive/null same-use evidence and gas findings retained. Applies the accepted authority rubric; no general preparation equivalence or safety clearance."
           },
           "population": {
-            "description": "General population within the authority bowel-function assessment; not a disease-treatment claim."
+            "description": "General population within the authority bowel-function assessment; not a disease-treatment claim.",
+            "age_group": "mixed"
           },
           "study_design": "EFSA scientific authority assessment of human intervention evidence; not an additional trial or meta-analysis.",
           "outcomes": [

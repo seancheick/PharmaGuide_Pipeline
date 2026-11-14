@@ -212,15 +212,16 @@ def test_printed_inulin_child_supports_anchor_without_borrowing_blend_mass(enric
     from dose_assessment import positive_clinical_benchmark
     product = enriched["251338"]
     # The printed Inulin child has no individual amount. Its blend identity
-    # stays available, but cannot borrow the blend mass or clear a source hold.
-    from clinical_applicability import reviewed_entries
+    # stays available, but cannot borrow blend mass or establish exact preparation.
     assert not any(m["id"] == "INGR_INULIN" for m in product["evidence_data"]["clinical_matches"])
     row = next(r for r in get_evidence_subject_rows(product) if r.get("canonical_id") == "inulin")
     assert row["raw_source_path"] == "ingredientRows[7]"
     from scoring_input_contract import is_lent_blend_mass
     assert is_lent_blend_mass(row)
-    from evidence_resolver import clinical_record_sources_eligible
-    assert not clinical_record_sources_eligible(reviewed_entries()["INGR_INULIN"])
+    from evidence_resolver import resolve_evidence_for_row
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible is False
+    assert "clinical_source_label_unresolved" in resolution.blocking_reasons
     assert positive_clinical_benchmark(product, row) is None
 
 

@@ -1208,7 +1208,7 @@ def test_literal_inulin_fos_uses_existing_reviewed_family_scope():
     assert 'backed_clinical_studies' in result.matched_owners
     assert result.applicability_status == 'applicability_unestablished'
     assert result.points_eligible is False
-    assert 'clinical_sources_ineligible' in result.blocking_reasons
+    assert 'clinical_source_label_unresolved' in result.blocking_reasons
     row['raw_source_text'] = 'XOS'
     assert er.resolve_evidence_for_row(row, product).points_eligible is False
 
@@ -1251,8 +1251,8 @@ def test_declared_chicory_root_fiber_retains_reviewed_inulin_family_not_raw_root
     product={'activeIngredients':[row],'ingredient_quality_data':{'ingredients_scorable':[row]}}
     resolved = er.resolve_evidence_for_row(row,product)
     assert 'backed_clinical_studies' in resolved.matched_owners
-    assert resolved.points_eligible is False  # existing clinical context is held
-    assert 'clinical_sources_ineligible' in resolved.blocking_reasons
+    assert resolved.points_eligible is False  # unspecified preparation cannot establish exact Orafti GR applicability
+    assert 'clinical_source_label_unresolved' in resolved.blocking_reasons
     row['raw_source_text']='Chicory root powder';row['name']='Chicory root powder'
     assert er.resolve_evidence_for_row(row,product).points_eligible is False
 

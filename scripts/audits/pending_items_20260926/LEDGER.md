@@ -5523,3 +5523,11 @@ prebiotics split into BimunoB-GOS/PreticXXOS/BioEcoliansalpha-GOS units. These a
 Every-heldreview requirement and99%gate/rebuild/releaseacceptance remain open.
 
 Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.
+
+PR480 qualification follow-up: initial9019d3f39 CI43532973661 exposed a PMID-only integrity
+validator, missing explicit authority age metadata, stale config version and several tests assuming
+all inulin sources remain ineligible. The shared source-identity owner now validates DOI rules;
+matched/foreign/pending/held DOI regressions fail first then pass. The authority target is explicitly
+general population (EFSA3951 section5), recorded as mixed; no adult-only restriction invented.
+Config1.32.1 preserves historical1.32.0 fingerprint. Source-specific noncredit and real preparation/
+blend no-credit guards remain. Focused61+39 pass; exact follow-up CI pending. No integration/release.

@@ -204,3 +204,32 @@ def test_observed_effect_exception_needs_its_approved_record_context_and_source(
     check_clinical_db(findings, {'backed_clinical_studies':[record]}, 'backed_clinical_studies.json')
     enum_errors = [f for f in findings if f.path == '[0].effect_direction']
     assert (not enum_errors) is accepted
+
+
+@pytest.mark.parametrize('mutation,accepted', [
+    (None, True), ('source', False), ('pending', False), ('hold', False),
+])
+def test_observed_effect_exception_accepts_verified_doi_source_only(monkeypatch, mutation, accepted):
+    import copy
+    from clinical_applicability import reviewed_entries
+    from db_integrity_sanity_check import check_clinical_db
+    from scoring_v4.quality_score_config import config
+    record = copy.deepcopy(reviewed_entries()['INGR_INULIN'])
+    context = next(c for c in record['study_contexts']
+                   if c['context_id'] == 'ingr_inulin_efsa_3951_orafti_gr_bowel_function')
+    record['effect_direction'] = 'positive_moderate'
+    policy = dict(record_id=record['id'], context_id=context['context_id'],
+                  source_references=copy.deepcopy(context['source_references']),
+                  observed_effect_direction='positive_moderate')
+    monkeypatch.setitem(config()['evidence_magnitudes']['generic'],
+                        'context_effect_direction_interpretations', [policy])
+    if mutation == 'source':
+        context['source_references'] = [{'doi': '10.2903/j.efsa.2010.1807'}]
+    elif mutation == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    elif mutation == 'hold':
+        context['scoring_eligible'] = False
+    findings = []
+    check_clinical_db(findings, {'backed_clinical_studies': [record]}, 'backed_clinical_studies.json')
+    enum_errors = [f for f in findings if f.path == '[0].effect_direction']
+    assert (not enum_errors) is accepted
