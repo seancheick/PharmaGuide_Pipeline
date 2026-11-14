@@ -484,7 +484,7 @@ soy1055partial→complete at unchanged67.6/Evidence15;269819 alreadycomplete75.6
 genericpsyllium17192held0unchanged. Safety/warnings/identity/amounts/Dose/otherpillars unchanged.
 18same-input performance2.861568→2.866558s(+0.17%),RSS216186880→215826432,hashunchanged.
 1651ownerspassed with1stalepsycontext-count assertion; corrected to preserve unique lipid-source
-review and unreadsource guard;16followups pass.8soy citationclaims strictpass aftertwo title-copy
-corrections;39psyllium claims passed earlier same-run check. Python0new10existing; exact2dataentries.
+review and unreadsource guard;16followups pass.16soy source-ID claims (8PMID+8DOI) strictpass aftertwo title-copy
+corrections;31psyllium source-ID claims passed earlier same-run check. Python0new10existing; exact2dataentries.
 Final local/CI and inherited PR482three stale testpins remain to qualify; this is not integration
 or release. Title-only final punctuation corrections postdate rawsnapshot and do not alter findings.
