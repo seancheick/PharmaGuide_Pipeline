@@ -708,3 +708,23 @@ no input mutation. Each arm had one warmup and three measured passes. Final loca
 
 Final local at3e8b44a46:564passed,24declared opt-ins,144.17s; skip guard passed.
 Python correctness0new/10existing. Required CI remains pending.
+
+
+### PR485 final CI correction
+Initial exact-head CI43550011176 finished with seven failed tests across six groups. Four assertions
+reported one schema class in INGR_GREEN_COFFEE_BEAN: unsupported rct rather than rct_single,
+missing key_endpoints and empty health_goals_supported. Corrected to the truthful single credited
+trial, existing Blood Sugar Support category, and source-bounded endpoint summaries. Three other
+failures were stale census/fallback assertions: newly qualified green-coffee packet, two reviewed
+BP/glucose surrogate contexts, and the older literature fallback now reached through a native
+successor. Tests retain exact inventories, both older noncredit green sources, mixed findings,
+unfinished literature fallback and an unmocked missing-source-row hold. No clinical guard changed.
+All failing classes reproduced locally.265 schema/record and492 resolver/surrogate checks pass;
+independent review accepted the four-file correction and ran the four changed focused nodes.
+Four raw labels29043/321336/242242/216776 were recaptured: only29043 source summary fields changed
+in enriched/blob data; every scored record is identical. Previous performance and clinical-content
+review remain applicable. Exact-entry audit changes only INGR_GREEN_COFFEE_BEAN. Final local
+rerun and one combined exact-head CI rerun are pending; failed initial CI is not qualification.
+
+Final corrected local checkpoint:564passed/24declared opt-ins in141.50s; skip guard passed.
+Python correctness remains0new/10existing. Exact-head CI rerun follows this correction.

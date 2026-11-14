@@ -56439,14 +56439,16 @@
         "green coffee bean extract"
       ],
       "evidence_level": "ingredient-human",
-      "study_type": "rct",
+      "study_type": "rct_single",
       "published_studies": [
         "29307310",
         "20871849",
         "16820341"
       ],
       "score_contribution": "tier_3",
-      "health_goals_supported": [],
+      "health_goals_supported": [
+        "Blood Sugar Support"
+      ],
       "last_updated": "2026-11-13",
       "references_structured": [
         {
@@ -56716,6 +56718,11 @@
             "Live PubMed abstract verified; full publisher content unavailable. Within-group blood-pressure decreases do not establish an explicit between-group effect. No additional credit inferred from incomplete comparison reporting."
           ]
         }
+      ],
+      "key_endpoints": [
+        "PMID29307310: primary fasting-glucose change favored extract, but final between-group glucose did not; small completer analysis with substantial placebo worsening.",
+        "PMID29307310: weight and BMI differences were not significant; HbA1c, insulin and lipid comparisons did not establish benefit.",
+        "PMIDs20871849 and16820341 remain reviewed without additional credit: high-bias heterogeneous weight findings and blood-pressure abstract without a demonstrated direct between-group contrast."
       ]
     },
     {

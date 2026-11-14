@@ -72,7 +72,8 @@ def test_packet_drafts_stay_outside_the_data_file():
     # remain separate, and genuinely unfinished sibling sources stay visible.
     qualified = {"INGR_L_GLUTAMINE": {"30108163"},
                  "INGR_L_TYROSINE": {"24433977", "25598314", "36548401", "42275440"},
-                 "INGR_NATTOKINASE": {"26109079"}}
+                 "INGR_NATTOKINASE": {"26109079"},
+                 "INGR_GREEN_COFFEE_BEAN": {"29307310"}}
     assert packeted & set(reviewed_entries()) == set(qualified)
     from clinical_applicability import assess_clinical_source_review
     for record_id, pmids in qualified.items():
@@ -83,6 +84,13 @@ def test_packet_drafts_stay_outside_the_data_file():
         assert all(context["review_status"] == "clinician_approved" for context in approved)
         assert all("Codex" in context["clinical_review"]["reviewer"] for context in approved)
         assert assess_clinical_source_review(record)["is_complete"]
+        if record_id == "INGR_GREEN_COFFEE_BEAN":
+            secondary = [c for c in record["study_contexts"] if not c["scoring_eligible"]]
+            assert {p for context in secondary for p in context["source_pmids"]} == {
+                "20871849", "16820341",
+            }
+            assert all(context["review_status"] == "rejected_source" for context in secondary)
+            assert record["effect_direction"] == "mixed"
         if record_id == "INGR_L_TYROSINE":
             scoped = next(c for c in record["study_contexts"] if c["source_pmids"] == ["29980424"])
             assert scoped["review_status"] == "rejected_source"
