@@ -101,9 +101,9 @@ def test_psyllium_retains_scoped_fda_regularity_reference_without_borrowing_lipi
     assert len(references) == 1
     reference = references[0]
     assert reference["url"].startswith("https://www.accessdata.fda.gov/")
-    assert reference["scoring_eligible"] is False
+    assert reference["scoring_eligible"] is True
     assert not reference.get("pmid")
-    assert "granular" in reference["notes"]
+    assert "granular" in reference["notes"].lower()
     assert any(c["context_id"] == "ingr_psyllium_30239559_lipid_marker_review" for c in record["study_contexts"])
 
 

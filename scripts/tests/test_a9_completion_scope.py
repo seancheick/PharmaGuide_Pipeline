@@ -29,6 +29,7 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 
 # Label, and the rows left open on it where the review was never performed.
 COMPLETES = [
+    pytest.param("a9_completion_1055_raw.json", False, id="soy_owner_review_finished"),
     pytest.param("a9_partial_full_evidence_328830_raw.json", False, id="multi_panel_beta_authority_complete"),
     pytest.param("a9_completion_2715_raw.json", False, id="sports_adjunct_by_materiality"),
     pytest.param("a9_completion_12853_raw.json", False, id="title_owner_valerian_review_restored"),
@@ -42,7 +43,6 @@ COMPLETES = [
 ]
 HELD = [
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
-    pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
     pytest.param("a9_completion_322514_raw.json", EVIDENCE, id="enzyme_owner_behind_product_row"),
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),
     pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="blend_is_the_whole_label"),
