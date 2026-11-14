@@ -5671,3 +5671,9 @@ checks pass, Python0new10existing, exact2newdataentries.18frozen-input controlle
 median5.746735→5.760485s (+0.24%), peakRSS438599680→385187840bytes; inputhash identical/no mutation.
 Final local at3e8b44a46:564passed/24declared opt-ins in144.17s; skip guard passed. CI pending.
 Nothing released. Fresh catalog census and release gates remain.
+
+PR485 initialCI43550011176 failed seven assertions: green-coffee schema metadata and three stale
+review/census pins. All reproduced and repaired without weakening clinical guards;265+492 owner
+checks and independent review pass. Four raw schema-followup products retain identical scored
+records, with only29043 clinical summary fields changed. Final local564passed/24declared opt-ins,
+141.50s, skipguardpassed. Required corrected-headCI pending; initial failure is not qualification.

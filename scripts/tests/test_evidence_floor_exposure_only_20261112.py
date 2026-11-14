@@ -61,6 +61,8 @@ CLASSIFIED = {
 # A review that makes a context surrogate-only (for example a mixed context losing its
 # functional row) must classify it or add it here.
 ACCEPTED = {
+    ("INGR_GREEN_COFFEE_BEAN", "green_coffee_29307310_decaffeinated_extract"),  # fasting glucose in metabolic syndrome, mostly diabetes
+    ("INGR_OLIVE_LEAF", "olive_leaf_26951205_blood_pressure"),  # blood pressure in prehypertension
     ("INGR_GLUCOMANNAN", "glucomannan_efsa_1258_cholesterol"),  # EFSA recognized normal cholesterol maintenance
     ("BRAND_QUATREFOLIC", "quatrefolic_nonqualifying_merck_folate_rct_23698160"),  # homocysteine in hyperhomocysteinemia
     ("INGR_BACOPA", "ingr_bacopa_24252493_bounded_adult_extract_review"),  # cognitive task
