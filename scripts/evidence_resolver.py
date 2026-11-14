@@ -1295,7 +1295,8 @@ def _resolve_evidence_for_row(
         inventory = [s for s in deduped_studies if s.get("scoring_eligible") is not False]
         if inventory:
             owner_facts["backed_clinical_studies"] = _clinical_owner_facts(inventory)
-        from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
+        from clinical_applicability import (
+            assess_clinical_applicability, assess_clinical_source_review, qualifying_purpose_outcomes)
         # The shared scope owner checks known preparation exclusions before
         # a source hold. A finished material mismatch grants no credit and
         # must not be reopened merely because the source is non-contributing.
@@ -1309,6 +1310,31 @@ def _resolve_evidence_for_row(
             scope_decisions.append(assess_clinical_applicability(
                 product or {"activeIngredients": [row_dict]}, scoped,
                 assess_amount=False, require_claim_alignment=False))
+        # A positive exact-preparation review answers only for its own scope.
+        # Excluding another preparation/population does not review that row's
+        # research. Preserve completed general/reference conclusions and the
+        # existing handling of held sources; neither is a new positive transfer.
+        if (all(study in valid_studies for study in deduped_studies)
+                and all(decision.get("status") == "not_applicable"
+                        and decision.get("reason_code") in (
+                            _CLINICAL_PREPARATION_REJECTIONS | {"clinical_population_mismatch"})
+                        for decision in scope_decisions)
+                and all(not is_reference_only(study)
+                        and not any(_reviewed_general_conclusion(context)
+                                    for context in study.get("study_contexts") or [])
+                        for study in deduped_studies)
+                and any(context.get("scoring_eligible") is True
+                        and context.get("identity_scope") in {"exact_form", "branded_material", "botanical_preparation"}
+                        and qualifying_purpose_outcomes(context)[0]
+                        for study in deduped_studies
+                        for context in study.get("study_contexts") or [])):
+            reasons = list(dict.fromkeys(decision["reason_code"] for decision in scope_decisions))
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code=reasons[0], owner_facts=owner_facts, blocking_reasons=reasons,
+            )
         from probiotic_measurements import context_review_finished, _clinical_review_metadata_valid
         from clinical_evidence_schema import validate_ingredient_context
         unfinished_contexts = []
