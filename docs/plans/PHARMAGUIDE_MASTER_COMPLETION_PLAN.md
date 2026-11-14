@@ -1,18 +1,21 @@
-## November 13 — Close Evidence qualification
+## November 13/14 — Close Evidence qualification
 
 The accepted ladder and finished-zero app wording are integrated through pipeline477 and app236.
-The following source batches are not integrated or released:478(valerian),479(source references),
-480(exact Orafti GR authority),481(named Bimuno plus Acacia nontransfer) have green exact-headCI
-and their recorded local/product checks; main integration awaits Sean.482(maca/glucomannan and
-preserving explicitly open applicability) has a106-test correction pass for three stale pins and
-CI43540725520 running. The next soy/psyllium batch is under qualification:37raw products, two
-psyllium Evidence15→20 movements and one soy completion with unchangedscore; independent source,
-material-boundary and artifact checks complete, final local/CI pending. These bounded counts are
-not additive global coverage and do not establish installed-app delivery.
+Approved pipeline478–481 are now integrated at main2ac864ed8: valerian, source links, scoped inulin
+and Bimuno/Acacia.482–484 (maca/glucomannan, soy/psyllium, chamomile) are jointly qualified at
+7848d67c2 with all eight CI groups and readiness green; integration approval is pending.
 
-Owner: existing clinical source/applicability registry and generic_evidence context interpretations;
-evidence: per-entry primary sources, fail-first controls and existing evidence_close_20261113
-research/LEDGER receipts. Will NOT create: another review store, grade, Dose gate or safety owner.
+The next plant batch3e8b44a46 records scoped Preliminary5 olive-leaf and green-coffee research,
+corrects unsupported source wording, and contains three contradictory olive/zinc source identities.
+Final72 exportable raw-label captures passed independent review: six Evidence-only score changes,
+four newly complete products, no other-pillar/safety/amount/identity changes. Three additional labels
+are explicit unresolved-source export refusals, not released products. Controlled18-label timing
+is5.747→5.760s (+0.24%), with unchanged inputs and lower peak memory. Final local passed564 checks with24 declared opt-ins; CI is pending.
+These bounded counts are not additive global coverage or installed-app delivery.
+
+Owner: existing clinical source/applicability registry, shared identity resolver and generic_evidence
+context interpretations; evidence: per-entry primary sources, fail-first controls and existing
+research/LEDGER receipts. Will NOT create another review store, grade, Dose gate or safety owner.
 The ranked remainder, specific signed holds, one fingerprint-selected rebuild, fresh census,
 release checks, Core/Blob parity and native app verification remain.99%gate is unchanged.
 

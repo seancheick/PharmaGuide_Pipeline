@@ -41,8 +41,10 @@ globally enabling the positive literature path would create unsupported credit. 
 reviews retain actual authorship and independent checks. Specific unresolved clinician holds require
 their actual owner.
 
-The FDA psyllium monograph is retained as a scoped, noncredit source reference. It does not yet grant
-20 or prove that a particular retail product satisfies the monograph.
+The subsequent scoped FDA psyllium review qualifies adult oral psyllium-husk laxative authority
+for20 through the existing authority context owner in PR483. Preparation and population checks
+remain required; this does not certify that a retail product satisfies every monograph condition.
+Its integration status is recorded in the current master completion plan.
 
 ## Release acceptance — decision still outstanding
 

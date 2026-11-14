@@ -698,3 +698,13 @@ compound-as regressions failed5 versus0, then passed after existing parent/conte
 eligible.29 plant preparation/population checks now pass. The corrected final replay, controlled
 performance, combined local checkpoint and CI remain pending. Receipts live under
 /Users/seancheick/pg_quality/evidence-close-20261113/next-review/{plant-batch,olive-leaf,green-coffee}.
+
+Final corrected72-label full/blob capture at3e8b44a46 is successful with source_unchanged=true.
+Independent reviewer accepted it: only intended compound-as exclusion metadata/removal versus
+previous72;37248 keeps potassium and all other valid matches, no numeric/status movement.
+Controlled18raw full-stage benchmark against7848d67c2: median5.746735→5.760485s (+0.24%),
+peakRSS438599680→385187840bytes; identical inputhash d9508d52aac27f79fa72f7501e29d3dd19fecda503d4e8e4f4abd4bcb98e983b,
+no input mutation. Each arm had one warmup and three measured passes. Final local/CI pending.
+
+Final local at3e8b44a46:564passed,24declared opt-ins,144.17s; skip guard passed.
+Python correctness0new/10existing. Required CI remains pending.
