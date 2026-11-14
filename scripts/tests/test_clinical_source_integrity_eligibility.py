@@ -3391,6 +3391,14 @@ def test_acacia_material_has_finished_nontransfer_from_named_bimuno(label):
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
 
 
+@pytest.mark.parametrize('target', ['Pregnant Women', 'Breastfeeding Women'])
+def test_bimuno_source_exclusions_block_explicit_population_targets(target):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', 'BiMuno B-Galactooligosaccharides', 900)
+    product['targetGroups'] = [target]
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
 @pytest.mark.parametrize('hold', ['scoring_eligible', 'retracted', 'expression_of_concern'])
 @pytest.mark.parametrize('url', ['https://doi.org/10.1000/conflicting-source', 'https://[invalid'])
 def test_conflicting_reference_cannot_erase_explicit_pmid_hold(monkeypatch, hold, url):
