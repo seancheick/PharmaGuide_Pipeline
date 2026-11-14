@@ -584,3 +584,21 @@ Exact data_batch scope is olive_leaf only. Four raw label replays (216776,212273
 show only the intended standardized-leaf notes in216776 changing, apart from known generated
 timestamps; complete score/status/safety/identity/amount records are unchanged. Receipts:
 `next-review/plant-batch/olive-copy-*` under the durable Evidence-close receipt directory.
+
+## Green-coffee comparison wording correction (November 13/14, 2026)
+
+The existing green_coffee_bean literature decision and neutral-Dose rationale overstated
+PMID16820341: the live abstract reports within-active-group BP decreases, without an explicit
+between-group comparison. Both dependent summaries now state that limit. The full 2011 review
+PMID20871849 retains its pooled weight signal, high bias and extreme heterogeneity, including the
+non-significant CGA-enriched subgroup. No preparation, dose policy, eligibility or safety change.
+Root independently read the abstract and full review; agent /root/source_review supplied the same
+correction. Live source content hashes match the valid prior source proof exactly. The real source
+verifier reconfirmed that proof; root explicitly re-reviewed and rebound the corrected rationale
+using the existing fingerprint owner, with factual-review notes. A fresh identity-only scan alone
+cannot match the review title's omitted word 'bean'; it was not treated as a passing fresh identity
+check. Original proof, live articles and new proof are retained in next-review/green-coffee.
+Regression failed on both old summaries; 227 literature/verifier tests pass. data_batch confirms
+only literature_evidence_records[20] changed. The 75-label combined wording replay is in progress;
+this correction is not independently CI-qualified or integrated. It precedes any new clinical
+credit, whose preparation matching and final review remain pending.

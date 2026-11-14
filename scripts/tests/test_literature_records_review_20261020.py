@@ -23,6 +23,19 @@ def _study(record, pmid):
     return next(s for s in record["qualifying_human_studies"] if s["pmid"] == pmid)
 
 
+def test_green_coffee_comparison_limits_preserve_neutral_dose(records):
+    from dose_assessment import verified_reference_citations
+    record = records['green_coffee_bean']
+    for text in (record['applicability_decision'], record['reference_semantics']['rationale']):
+        assert 'within the group' in text
+        assert 'does not report a direct between-group effect' in text
+        assert 'chlorogenic-acid-enriched subgroup was not significant' in text
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert record['reference_semantics']['source_ids'] == ['PMID:20871849', 'PMID:16820341']
+    assert record['applicability_status'] == 'applicability_unestablished'
+    assert verified_reference_citations(record)
+
+
 def test_pomegranate_neutral_dose_does_not_assert_unread_extract_dbp_subgroup(records):
     from dose_assessment import verified_reference_citations
     record = records['pomegranate']
