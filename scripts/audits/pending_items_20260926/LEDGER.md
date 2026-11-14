@@ -5538,12 +5538,3 @@ review after two agents read official publisher Bacopa identity. No added clinic
 alias. Two regressions failed before fixes;8citation-owner tests pass. Strict21-claim Bacopa/rice
 check:20OK,1reviewed heuristic suspect,0title/missing-ID failures. This is scoped, not whole-gate
 clearance. Receipts under evidence-close-20261113/citation-fixes; final batchCI still required.
-
-Completion-scope defect: an excluded positive exact-preparation/population trial incorrectly
-finished the other material's entire review. Existing resolver now keeps that row pending unless
-an actual general/reference conclusion covers it; no new status or clinical policy. Fail-first
-regressions include positive plus null excluded-source siblings.65focused controls pass; independent
-review63pass plus both-source-order probe. Existing completed zeros/holds preserved. Maca/Bimuno
-source cases14pass locally; raw/performance/local/CI checkpoint still pending for this batch.
-Owner: scripts/evidence_resolver.py::_resolve_evidence_for_row and existing _reviewed_general_conclusion.
-Will NOT create: another completion owner, pending-source fiction, whole-ingredient zero or new field.

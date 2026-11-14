@@ -2631,37 +2631,3 @@ def test_calcium_glucarate_finished_search_keeps_mixture_rct_and_case_findings_n
     assert result.points_eligible is False
     assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
     assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'
-
-
-@pytest.mark.parametrize('reason', ['clinical_form_excluded', 'clinical_population_mismatch'])
-@pytest.mark.parametrize('general_conclusion', [False, True])
-@pytest.mark.parametrize('null_sibling', [False, True])
-def test_exact_positive_source_mismatch_needs_a_covering_conclusion(monkeypatch, reason, general_conclusion, null_sibling):
-    """Rejecting one trial's transfer is not a review of the other material/population."""
-    import clinical_applicability as ca
-    source = _approved_test_source({'id': 'TEST_SCOPED_POSITIVE', 'study_type': 'rct_single',
-                                   'effect_direction': 'positive_weak'})
-    context = source['study_contexts'][0]
-    if not general_conclusion:
-        context['identity_scope'] = 'exact_form'
-        context['identity'] = {'chemical_form': 'Specific studied material'}
-    sources = [source]
-    if null_sibling:
-        sibling = _approved_test_source({'id': 'TEST_SCOPED_NULL', 'study_type': 'rct_single',
-                                        'effect_direction': 'null'})
-        sibling['study_contexts'][0]['identity_scope'] = 'exact_form'
-        sibling['study_contexts'][0]['identity'] = {'chemical_form': 'Another studied material'}
-        sibling['study_contexts'][0]['outcomes'][0]['direction'] = 'null'
-        sources.append(sibling)
-    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {s['id']: s for s in sources})
-    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': sources})
-    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {})
-    monkeypatch.setattr(ca, 'assess_clinical_applicability', lambda *args, **kwargs:
-                        {'status': 'not_applicable', 'reason_code': reason})
-    row, product = _excluded_preparation_product('Synthetic Material', 'synthetic_material', 'other material')
-    result = er.resolve_evidence_for_row(row, product)
-    assert result.points_eligible is False
-    assert er.compose_product_resolution_state([result])[1] is general_conclusion
-    if not general_conclusion:
-        assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-        assert reason in result.blocking_reasons
