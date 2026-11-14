@@ -113,6 +113,39 @@ def test_config_matches_reviewed_evidence_magnitudes():
         assert {key: value for key, value in EM[mod].items() if not key.startswith("_")} == {k: v for k, v in vals.items() if not k.startswith("_")}, f"evidence_magnitudes.{mod} drifted from reviewed values"
 
 
+def test_reviewed_mixed_context_is_not_its_own_conflicting_review(monkeypatch):
+    import copy
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_CHAMOMILE']
+    context = next(c for c in record['study_contexts']
+                   if c['context_id'] == 'chamomile_19593179_oral_gad')
+    # Synthetic mechanics case: the explicitly reviewed context contains
+    # both positive and null primary observations, with a Preliminary tier.
+    context['outcomes'].append({**context['outcomes'][0],
+                               'name': 'Synthetic null primary observation', 'direction': 'null'})
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    entry = {**record, 'matched_source_row_refs': ['ingredientRows[0]'],
+             'applicability_assessment': {'status': 'applicable',
+                 'population_applicability': {'state': 'eligible',
+                     'context_ids': [context['context_id']]}}}
+    assert generic_evidence._effect_direction_assessment(entry).get('floor') == 5
+
+    # A distinct, conflicting review of this same source/use still blocks
+    # the interpretation. Do not discard or silently reconcile that review.
+    sibling = copy.deepcopy(context)
+    sibling['context_id'] += '_conflicting_review'
+    sibling['outcomes'] = [sibling['outcomes'][-1]]
+    record['study_contexts'].append(sibling)
+    assert generic_evidence._effect_direction_assessment(entry).get('floor') is None
+    record['study_contexts'].remove(sibling)
+    null_primary = context['outcomes'][-1]
+    context['outcomes'] = [null_primary, {**null_primary,
+        'name': 'Synthetic positive secondary observation',
+        'hierarchy': 'secondary', 'direction': 'positive'}]
+    assert generic_evidence._effect_direction_assessment(entry).get('floor') is None
+
+
 def test_runtime_constants_read_from_config_no_drift():
     assert generic_evidence.CAP_TOTAL == 20.0
     assert not hasattr(generic_evidence, "PRIMARY_FLOOR_REPLICATED_STRONG")

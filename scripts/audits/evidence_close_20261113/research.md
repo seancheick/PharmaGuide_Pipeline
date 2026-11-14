@@ -650,3 +650,15 @@ and next-review/plant-batch/olive-identity-* . Combined CI/local/performance sti
 The completed75-label wording-only replay before these identity changes found six olive note
 changes and no score/status/safety/amount/identity changes. Green-coffee wording changed no public
 product fields. Its source fingerprint stayed unchanged throughout capture.
+
+### Reviewed mixed-context self-conflict defect
+The explicit olive Preliminary interpretation exposed a shared-owner bug: the selected context
+itself was included among purported conflicting sibling reviews. Its accurately retained positive
+24-hour and null nighttime primary BP findings therefore rejected the reviewed floor, yielding6.
+The fix excludes only that exact context object; a distinct same-source/same-use negative review
+still blocks the interpretation. A selected context must independently retain a qualifying positive
+outcome, so a null primary plus positive secondary cannot borrow the floor. No scientific outcome
+or hierarchy was changed. The mechanics regression failed before repair; all6 initial targeted
+cases pass, including three real-source olive amounts, the independent inulin contradiction and
+signed glutamine interpretation guard. Final primary/secondary control also passes. Independent
+source_review confirmed the defect and the object-identity boundary. Combined qualification pending.

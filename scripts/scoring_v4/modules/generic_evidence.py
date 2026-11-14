@@ -1937,11 +1937,13 @@ def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
             if floor_key == "cap_total" and context.get("evidence_role") != "guideline":
                 continue
             from clinical_applicability import qualifying_purpose_outcomes
+            if not qualifying_purpose_outcomes(context)[0]:
+                continue
             # A selected positive context cannot hide a conflicting review of
             # the same source and use. Reconcile that finding before reusing
             # the recorded tier; unrelated uses retain their own assessment.
             conflicts = [sibling for sibling in reference.get("study_contexts") or []
-                if sibling.get("scoring_eligible") is True
+                if sibling is not context and sibling.get("scoring_eligible") is True
                 and sibling.get("condition") == context.get("condition")
                 and expand_source_ids(reference, context_source_ids(sibling)) & sources
                 and any(outcome.get("direction") in {"null", "mixed", "negative"}
