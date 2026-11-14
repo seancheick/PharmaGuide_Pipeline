@@ -180,8 +180,12 @@ def test_reviewed_human_research_is_not_reported_as_absent(canonical):
 @pytest.mark.parametrize("name,form", [("XOS", "xylooligosaccharides"), ("GOS", "galactooligosaccharides")])
 def test_prebiotic_family_cannot_inherit_inulin_trial_applicability(name, form):
     result = er.resolve_evidence_for_canonical("prebiotics", name=name, matched_form=form)
-    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    # Neither inulin research nor the separately reviewed named Bimuno material
+    # establishes applicability to an unspecified GOS/XOS preparation.
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert result.points_eligible is False
+    assert "clinical_source_row_unresolved" in result.blocking_reasons
+    assert er.compose_product_resolution_state([result])[1] is False
 
 
 def test_clinical_aggregates_keep_verified_direction_and_no_fabricated_counts():

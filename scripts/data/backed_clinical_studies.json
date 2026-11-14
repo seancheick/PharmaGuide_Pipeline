@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.7.0",
     "last_updated": "2026-11-13",
-    "total_entries": 224,
+    "total_entries": 225,
     "changelog": [
       "2026-11-12 (schema 5.7.0): Evidence-floor rule (Sean, DR_PHAM_ANSWERS_20261112.md Part C). Outcome rows gain optional surrogate_class (exposure, target_engagement, unvalidated_physiological_response) where the qualifying finding measures only the supplied compound or its stores, the material's direct biochemical action, or a physiological change that is not an established clinical measure defining or monitoring the studied condition: INGR_CREATINE_ETHYL_ESTER, INGR_REDUCED_GLUTATHIONE, PRECLIN_BETAINE_HCL, INGR_NATTOKINASE, INGR_CALCIUM_CASEINATE, BRAND_TESNOR (35129040 only), BRAND_PRIMAVIE_SHILAJIT, INGR_BILBERRY, BRAND_KANEKA_UBIQUINOL, BRAND_CARNIPURE (11788381 only), INGR_L_CARNOSINE (27040154 only), PRECLIN_NMN (39531138, no floor effect). Blood pressure, lipids, glycemia in diabetes or prediabetes, TSH, homocysteine in hyperhomocysteinemia and functional measures stay unclassified. Such a finding cannot alone unlock the primary Evidence floor or make it a multiple-trial floor; ordinary Evidence credit and review status are unchanged. Classification is agent review applying Sean's rule with an independent blind double-check, recorded in each classified context's limitations; not a new clinician review. INGR_CREATINE_ETHYL_ESTER clinical_review.basis now names the agent-prepared source reading.",
       "2026-11-12: INGR_CREATINE_ETHYL_ESTER context reviewer corrected to Dr. Pham on Sean's statement (scripts/audits/clinical_review_20261111/DR_PHAM_ANSWERS_20261112.md Part B section 5); the Codex agents' source preparation stays recorded as agent work. key_endpoints now state that strength, power and body composition were measured with no between-group benefit (PMID 19228401, abstract content-checked).",
@@ -54682,6 +54682,325 @@
         "owner": "scripts/data/backed_clinical_studies.json::INGR_RICE_PROTEIN",
         "review_date": "2026-11-10",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      }
+    },
+    {
+      "id": "INGR_BIMUNO_GOS",
+      "canonical_id": "prebiotics",
+      "standard_name": "Bimuno B-GOS",
+      "aliases": [
+        "BiMuno B-Galactooligosaccharides",
+        "Bimuno galactooligosaccharides"
+      ],
+      "study_type": "rct_single",
+      "effect_direction": "positive_weak",
+      "evidence_level": "ingredient-human",
+      "published_studies": [
+        "30109908",
+        "26218845",
+        "19053980"
+      ],
+      "effect_direction_confidence": "low",
+      "last_updated": "2026-11-13",
+      "published_studies_count": 3,
+      "health_goals_supported": [],
+      "key_endpoints": [
+        "Short-term gastrointestinal symptom scores with named Bimuno B-GOS; stool, quality-of-life and mood nulls retained"
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "30109908",
+          "doi": "10.1111/nmo.13440",
+          "title": "Effect of a prebiotic galactooligosaccharide mixture (B-GOS®) on gastrointestinal symptoms in adults selected from a general population who suffer with bloating, abdominal pain, or flatulence.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30109908/",
+          "scoring_eligible": true,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "26218845",
+          "doi": "10.1017/s0007114515001889",
+          "title": "Influence of galacto-oligosaccharide mixture (B-GOS) on gut microbiota, immune parameters and metabonomics in elderly persons.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26218845/",
+          "scoring_eligible": false,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed via Europe PMC MED",
+          "pmid": "19053980",
+          "doi": "10.1111/j.1365-2036.2008.03911.x",
+          "title": "Clinical trial: the effects of a trans-galactooligosaccharide prebiotic on faecal microbiota and symptoms in irritable bowel syndrome.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19053980/",
+          "scoring_eligible": false,
+          "verification_source": "Live Europe PMC MED identity and abstract2026-11-13; saved full primary content for30109908/26218845"
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_30109908_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "30109908"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Bimuno B-GOS galactooligosaccharide mixture supplied by Clasado",
+            "preparation": "Named Bimuno B-GOS oral ingredient; do not extend to generic GOS, alpha-gluco-oligosaccharides, FOS, XOS or other brands."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "gastrointestinal_symptoms",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_30109908",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Saved primary full text read for 30109908 and26218845; live Europe PMC identity/abstract verified for all three sources. Routine application of accepted rubric; independent root check completed against the saved primary Methods, Results and funding disclosures. No claim of record-specific user or physician approval."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "bimuno"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "Adults studied with named Bimuno B-GOS; observed population limitations retained.",
+            "source_pmids": [
+              "30109908"
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "population": {
+            "sample_size": 83,
+            "description": "91 randomized;83completed/per-protocol. Adults18–65 with frequent moderate/severe bloating, flatulence or abdominal pain; screened high probability of functional bowel disorder but without diagnosed GI disease. Pregnancy/lactation and specified illness/medication exclusions.",
+            "age_group": "adult"
+          },
+          "study_design": "Single-centre randomized double-blind placebo crossover;2week periods,2week washout; maltodextrin comparator. Main symptom outcomes named in Methods/power calculation, but no explicit primary hierarchy or prospective registry identifier located.",
+          "outcomes": [
+            {
+              "name": "Bloating, flatulence and abdominal pain scores lower versus placebo at weeks1and2; urgency lower at week2.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Stool frequency/consistency, quality of life and mood did not improve.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              2.75
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 14,
+            "administration_frequency": "Daily, approximately the same time.",
+            "dosage_forms": [
+              "oral powder sachet mixed with water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "2.75g Bimuno powder/day, explicitly providing1.37g active GOS; usual diet and fluid intake maintained.",
+            "normalization": {
+              "basis": "Values retain assigned preparation mass. ActiveGOS is separately stated, not substituted; no Evidence minimum-dose gate or new Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "30109908",
+              "source_url": "https://doi.org/10.1111/nmo.13440",
+              "location": "Full author article Methods2.1–2.4, Figure1, Results3.3–3.4 and Table1."
+            }
+          },
+          "limitations": [
+            "Short two-week periods, selected symptomatic adults and per-protocol analysis83of91; long-term/general-population benefit is unestablished.",
+            "Methods and power calculation identify symptom efficacy, but formal primary endpoint hierarchy and prospective registration were not established; do not invent either.",
+            "Clasado grant and investigator employment disclosed; no independent-team replication established.",
+            "Symptoms improved, but stool/QOL/mood nulls remain; no broad digestive, immune-protection or disease-treatment conclusion.",
+            "Named label219289 explicitly identifies BiMuno B-Galactooligosaccharides. Capsule versus powder and mass differences do not themselves establish chemical nonequivalence and must not gate Evidence. Retail active fraction remains unknown for Dose."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_26218845_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "26218845"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Bimuno B-GOS galactooligosaccharide mixture supplied by Clasado",
+            "preparation": "Named Bimuno B-GOS oral ingredient; do not extend to generic GOS, alpha-gluco-oligosaccharides, FOS, XOS or other brands."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "healthy_elderly_microbiota",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_26218845",
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Saved primary full text read for 30109908 and26218845; live Europe PMC identity/abstract verified for all three sources. Routine application of accepted rubric; independent root check completed against the saved primary Methods, Results and funding disclosures. No claim of record-specific user or physician approval."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "required_form_terms": [
+              "bimuno"
+            ],
+            "require_source_label_form": true,
+            "supported_outcomes": [
+              "digestive"
+            ],
+            "studied_population": "Adults studied with named Bimuno B-GOS; observed population limitations retained.",
+            "source_pmids": [
+              "26218845"
+            ],
+            "reviewed_at": "2026-11-13"
+          },
+          "population": {
+            "sample_size": 40,
+            "description": "Healthy adults65–80; excluded intestinal disorders.",
+            "age_group": "adult"
+          },
+          "study_design": "Randomized double-blind maltodextrin-controlled crossover,10week periods and4week washout. Source reports NCT01303484; registry timing not independently reviewed in this pass.",
+          "outcomes": [
+            {
+              "name": "Bifidobacteria/bacteroides and some immune biomarkers changed; no clinical infection-prevention outcome.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "Bowel function and mood showed no significant intervention effects.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Faecal calprotectin and secretory IgA unchanged.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "C-reactive protein increased; not an anti-inflammatory benefit.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "negative",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              5.5
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 70,
+            "administration_frequency": "Daily, approximately the same time.",
+            "dosage_forms": [
+              "oral powder sachet mixed with water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "5.5g Bimuno B-GOS powder/day; Table1 footnote48%GOS, calculated2.64gactive/day.",
+            "normalization": {
+              "basis": "Values retain assigned preparation mass. ActiveGOS is separately stated, not substituted; no Evidence minimum-dose gate or new Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "26218845",
+              "source_url": "https://doi.org/10.1017/S0007114515001889",
+              "location": "Full publisher article Methods, Table1 footnote, bowel-habit Results and inflammatory-marker Results."
+            }
+          },
+          "limitations": [
+            "Completed no-efficacy-credit source assessment: microbial/immune biomarkers do not establish clinically important protection or symptom benefit.",
+            "Healthy older cohort is not a replication of symptom relief in younger symptomatic adults.",
+            "Clasado supported and participated in design/writing; overlapping investigators.",
+            "Retain increasedCRP and null bowel/mood/calprotectin/sIgA; no blanket anti-inflammatory or safety conclusion."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "bimuno_gos_19053980_abstract_review",
+          "components": [
+            "INGR_BIMUNO_GOS"
+          ],
+          "source_pmids": [
+            "19053980"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root/ladder_review; independently checked by Codex /root; agent review, not clinician review",
+            "reviewed_at": "2026-11-13",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live authoritative abstract and DOI identity reviewed2026-11-13; primary fulltext request403. Completed source-level no-credit decision, not a claim the study is negative. Positive IBS signal remains in narrative; no unread composition/comparator/multiplicity details promoted."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "19053980",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/19053980/",
+              "location": "Live EuropePMC authoritative MED abstract and publisher fulltext access attempt."
+            }
+          },
+          "limitations": [
+            "44RomeIIIBS completers; abstract reports3.5/7gprebiotic arms and7gplacebo with symptom findings. Original preparation/comparator tables not read; no numeric contribution or inferred activeGOSdose.",
+            "2018 primary explicitly relates prior IBS study to B-GOS; not treated as independent-team replication or as fullmethod verification.",
+            "This source-access limitation does not invalidate the separately fully reviewed2018 ingredient finding."
+          ]
+        }
+      ],
+      "notes": "Preliminary named Bimuno B-GOS evidence from a short randomized crossover trial in symptomatic adults. Per-protocol analysis, uncertain prospective outcome hierarchy and sponsor-linked investigators limit confidence. Other reviewed sources are not independent efficacy replications. No generic GOS, alpha-gluco-oligosaccharide, XOS, FOS, pediatric or finished synbiotic formula transfer; no new Dose benchmark or safety clearance.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "bimuno"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Adults with frequent moderate/severe gastrointestinal symptoms; no pediatric population transfer.",
+        "source_pmids": [
+          "30109908"
+        ],
+        "reviewed_at": "2026-11-13"
       }
     }
   ]

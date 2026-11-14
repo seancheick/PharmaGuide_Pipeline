@@ -378,3 +378,44 @@ is not a passed verification. The new DOI's live metadata and complete source co
 separately. Existing PubMed source facts/identifiers are retained; no API result was auto-applied.
 
 Inulin combined local checkpoint:564passed,24declaredopt-ins,142.89s;skipguardpassed. Final diff clarifies that unspecified retail preparation transfer remains unestablished; the new exactGR authority scope is separate. ExactcandidateCI still required.
+
+## Named Bimuno B-GOS review and citation repairs (November 13, 2026)
+
+Owner: existing backed_clinical_studies::INGR_BIMUNO_GOS, clinical_applicability source/preparation
+selection and generic_evidence positive_weak magnitude. Evidence: IQM/prebiotics owner searches,
+primary Methods/Results and actual raw219289 label. Will NOT create: generic-prebiotic equivalence,
+a new canonical, numerical scale, Dose benchmark, amount gate or safety conclusion.
+
+Full primary30109908 explicitly identifies Clasado Bimuno B-GOS.91randomized,83per-protocol,
+two-week crossover periods and two-week washout;2.75gpreparation/1.37gactiveGOS. Bloating,
+flatulence/abdominal-pain between-group scores improve; urgency atweek2; stool/QOL/mood nulls.
+No formal primary hierarchy is invented. Short duration, completer analysis, uncertain prospective
+ranking and commercial/investigator overlap support Preliminary5 under the accepted rubric.
+26218845 (40olderadults,10weekperiods) preserves biomarkers, increasedCRP and clinicalnulls;
+19053980 is a finished abstract-only noncredit source decision preserving positive IBS findings.
+Neither is counted as independent clinical replication. Root and two research agents independently
+checked source identity, preparation, outcomes and limitations. All6scanned citations pass scoped
+strictverification; this is not wholecatalogcitationclearance.
+
+29raw Clean→Enrich→Score→blob comparison against33bef8568: actual219289 prints BiMuno900mg and
+changes partial→complete with score82.4/Evidence16 unchanged (existing probiotic route). Synthetic
+namedmaterial100/900/2750mg cases earn5; genericGOS/XOS/alphaGOS remain unresolved.294036/240067
+remainpartial with unchanged15/16Evidence; pending-state diagnostics become explicit. All29scores,
+safety/warnings, physical identity, amounts and nonEvidencepillars unchanged.18identicalenriched
+performance2.836825→2.896323s median, RSS215941120→210190336; inputhashunchanged. Sourceowner slice
+1968pass with2stale syntheticprebioticstatepins; those2nowpass, retaining nopoints and incomplete
+source-row protections. Pythoncorrectness0new10existing. Local/CI qualification pending.
+
+Two originalcitationblockers corrected separately: rice23782948 titleNBSP→space and BacoMind
+DOI10.3923/jpt.2008.425.434 entry-scoped reviewedghost acknowledgment after officialpublisher
+identitycheck.8tests and21claimstrictscope pass; no efficacy or clinicaleligibility change.
+
+Maca is NOT activated in this batch. Its verifiedgelatinizedsource proposal is retained externally.
+A proposed global exclusion-completion change failed21valid existing-zero controls and contradicted
+ADR0007's namednontransfer rule; it was reverted completely. Existing finishedzero policy remains.
+Maca's old maca_root literature identity and explicitly unfinished applicability inventory require
+bounded owner reconciliation before its proposed context can safely activate. No generic/color/female
+zero or benefit is inferred from that unresolved work. Receipts: evidence-close-20261113/maca-review,
+prebiotics-review,bgos-before/after comparisons (baseline=maca-bgos-before),bgos-owners/local/citations.
+
+Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.

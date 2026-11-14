@@ -5538,3 +5538,13 @@ review after two agents read official publisher Bacopa identity. No added clinic
 alias. Two regressions failed before fixes;8citation-owner tests pass. Strict21-claim Bacopa/rice
 check:20OK,1reviewed heuristic suspect,0title/missing-ID failures. This is scoped, not whole-gate
 clearance. Receipts under evidence-close-20261113/citation-fixes; final batchCI still required.
+
+Bimuno source batch: namedmaterial Preliminary5 with3boundedsourcecontexts, no genericprebiotic
+transfer/Dosegate.29raw comparisons:219289partial→complete score82.4/Evidence16unchanged;
+294036/240067remainpartial with explicitpendingdiagnostics; allscores/safety/identity/amounts preserved.
+1968ownerpass+2correctedstatepins pass;6strictcitationclaims pass.18inputperf2.8368→2.8963s,
+RSS215941120→210190336,inputsunchanged. Localrunning;CIpending. Macaactivation deferred with
+validsourceproposal retained. Global exclusionguard d9426a470 was rejected by broadcontrols and
+reverted28e47ec20: ADR0007 explicitly permits documented namednontransferzero. No policychange.
+
+Bimuno final local checkpoint:564passed,24declaredopt-ins,144.51s;skipguardpassed. ExactcandidateCIpending; no integration/release.

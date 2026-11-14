@@ -3359,3 +3359,25 @@ def test_inulin_authority_does_not_ignore_conflicting_same_source_conclusion(mon
     _, product = _joint_row_product('INGR_INULIN', 'inulin', 'Orafti GR Inulin', 12000)
     product['physicalState'] = {'name': 'Powder'}
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] < 20
+
+
+@pytest.mark.parametrize('amount', [100, 900, 2750])
+def test_named_bimuno_review_is_preliminary_without_amount_gate(amount):
+    record, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', 'BiMuno B-Galactooligosaccharides', amount)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 5
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert record['effect_direction'] == 'positive_weak'
+    source = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30109908'])
+    assert source['population']['sample_size'] == 83
+    assert source['dose']['values'] == [2.75]
+    assert all(o['hierarchy'] == 'not_reported' for o in source['outcomes'])
+    assert any(o['direction'] == 'null' for o in source['outcomes'])
+
+
+@pytest.mark.parametrize('label', ['Galactooligosaccharides', 'PreticX Xylooligosaccharides', 'BioEcolians Alpha Gluco Oligosaccharides'])
+def test_bimuno_review_does_not_finish_other_prebiotic_materials(label):
+    _, product = _joint_row_product('INGR_BIMUNO_GOS', 'prebiotics', label, 900)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
